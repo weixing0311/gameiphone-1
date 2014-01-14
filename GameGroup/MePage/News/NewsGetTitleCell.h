@@ -14,6 +14,8 @@
 @property (assign,nonatomic) id<CellButtonClickDelegate> myDelegate;
 @property (strong,nonatomic) EGOImageView * headImageV;
 @property (strong,nonatomic) UIButton*      headButton;
+
+@property (strong,nonatomic) UIImageView*   authImage;
 @property (strong,nonatomic) UILabel* nickNameLabel;
 @property (strong,nonatomic) UIButton* nickNameButton;
 

@@ -26,6 +26,11 @@
         [self.headButton addTarget:self action:@selector(headButtonClick) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.headButton];
         
+        self.authImage = [[UIImageView alloc] initWithFrame:CGRectMake(70, 5, 20, 20)];
+        self.authImage.backgroundColor = [UIColor clearColor];
+        self.authImage.hidden = YES;
+        [self addSubview:self.authImage];
+        
         self.nickNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 5, 100, 20)];
         [self.nickNameLabel setTextAlignment:NSTextAlignmentLeft];
         [self.nickNameLabel setFont:[UIFont boldSystemFontOfSize:12.0]];
@@ -95,11 +100,16 @@
 
 - (void)refreshCell
 {
+    BOOL isHaveAuth = NO;
+    if (self.authImage.image) {
+        isHaveAuth = YES;
+    }
+    
     CGSize nickSize = [self.nickNameLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:12.0] constrainedToSize:CGSizeMake(100, 25)];
-    self.typeLabel.frame = CGRectMake(75 + nickSize.width, 5, 100, 20);
+    self.nickNameLabel.frame = CGRectMake(70 + (isHaveAuth?25:0), 5, 100, 20);
+    self.typeLabel.frame = CGRectMake(self.nickNameLabel.frame.origin.x + nickSize.width + 5, 5, 100, 20);
     
     self.timeLabel.frame = CGRectMake(0, self.rowHeight - 25, 60, 15);
-//    self.zanLabel.frame = CGRectMake(280, self.rowHeight/2 - 15/2.0, 30, 15);
     self.havePic.frame = CGRectMake(293, self.rowHeight - 25, 17, 13);
     
     CGSize titleSize = [self.bigTitle.text sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(200, 40) lineBreakMode:NSLineBreakByWordWrapping];

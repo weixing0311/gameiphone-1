@@ -369,6 +369,17 @@
         cell.headImageV.imageURL = theUrl;
         
         cell.nickNameLabel.text = [KISDictionaryHaveKey(destDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(destDic, @"nickname");
+        if ([KISDictionaryHaveKey(destDic, @"userid") isEqualToString:@"10000"]) {
+            cell.authImage.hidden = NO;
+            cell.authImage.image = KUIImage(@"red_auth");
+            cell.nickNameLabel.textColor = kColorWithRGB(255, 58, 48, 1.0);
+        }
+        else
+        {
+            cell.authImage.hidden = YES;
+            cell.authImage.image = nil;
+            cell.nickNameLabel.textColor = kColorWithRGB(51, 51, 200, 1.0);
+        }
     }
     else
     {
@@ -378,6 +389,18 @@
         cell.headImageV.imageURL = theUrl;
         
         cell.nickNameLabel.text = [KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(tempDic, @"nickname");
+        
+        if ([KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:@"10000"]) {
+            cell.authImage.hidden = NO;
+            cell.authImage.image = KUIImage(@"red_auth");
+            cell.nickNameLabel.textColor = kColorWithRGB(255, 58, 48, 1.0);
+        }
+        else
+        {
+            cell.authImage.hidden = YES;
+            cell.authImage.image = nil;
+            cell.nickNameLabel.textColor = kColorWithRGB(51, 51, 200, 1.0);
+        }
     }
     if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"type")] isEqualToString:@"3"]) {
         cell.commentLabel.hidden = YES;
