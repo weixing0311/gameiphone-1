@@ -1,0 +1,110 @@
+//
+// Prefix header for all source files of the 'GameGroup' target in the 'GameGroup' project
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_4_0
+#warning "This project uses features only available in iOS SDK 4.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import <SystemConfiguration/SystemConfiguration.h>
+    #import <MobileCoreServices/MobileCoreServices.h>
+    #import "AFNetworking.h"
+    #import "XMPPFramework.h"
+    #import "XMPPHelper.h"
+    #import "SFHFKeychainUtils.h"
+    #import "NetManager.h"
+    #import "BaseViewController.h"
+    #import "TempData.h"
+    #import "MobClick.h"//umeng
+    #import "GetDataAfterManager.h"
+    #import "NSLog.h"
+
+    #define MR_SHORTHAND//避免写MR_前缀
+    #import "CoreData+MagicalRecord.h"
+    #import "DataStoreManager.h"
+
+    #import "NSString+SBJSON.h"
+    #import "CellButtonClickDelegate.h"
+#endif
+
+#define appType @"91"//91、appStore
+
+//常量
+#define BaseClientUrl @"http://58.83.193.120/gamepro/request"//开机联网地址
+
+#define BaseUploadImageUrl  @"http://58.83.193.120/gamepro/fileserver/put"
+#define BaseImageUrl  @"http://58.83.193.120/gamepro/fileserver/get/"
+#define BaseDeleteImageUrl  @"http://58.83.193.120/gamepro/fileserver/delete/"
+
+//#define BaseUploadImageUrl  @"http://123.178.27.74/pet-file-server/put"//宠物
+//#define BaseImageUrl  @"http://123.178.27.74/pet-file-server/get/"//宠物
+
+#define NormalRequestTimeout  60.0f//联网最长时间
+
+#define LOCALTOKEN            @"lovePetLocalToken"
+#define LOCALACCOUNT          @"lovePetLocalAccountCreatedByChongWuQuan"
+#define USERNICKNAME          @"lovepetusernickname"
+
+#define ACCOUNT @"lovePetAccount"
+#define USERNICKNAME  @"lovepetusernickname"
+#define PASSWORD @"lovePetPassword"
+
+#define NUMBERS @"0123456789\n"//只允许输入数字
+#define kAlphaNum   @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"//只允许输入数字和字母
+
+//define sender type 消息发送类型 根据这个存表
+#define COMMONUSER @"commonUser"
+#define PUBLICACCOUNT  @"publicAccount"
+#define SUBSCRIBEDACCOUNT  @"subscribedAccount"
+#define SAYHELLOS @"sayhellos"//关注
+
+#define SYSTEMNOTIFICATION @"systemnoti"
+
+#define OTHERMESSAGE  @"otherMessage"//头衔 角色 战斗力
+#define RECOMMENDFRIEND @"recommendfriend"
+
+//#define ExceptCommonMsgCount 1   //首页除了显示普通用户消息还要显示的其他消息栏，目前只有打招呼一个
+#define ZhaoHuLan  @"新朋友"
+
+#define PhoneNumKey @"phoneKey"//用于判断是否自动登陆
+
+#define NewComment @"newCommentOfMyDynamic"
+
+//#define NotUseSimulator  @"YES"//聊天的录音 只支持真机
+
+#define sorttype_1 @"sorttype_1"//取好友排序方式
+#define sorttype_2 @"sorttype_2"
+#define sorttype_3 @"sorttype_3"
+
+#define haveMyNews @"haveMyNews"//新我的动态
+#define haveFriendNews @"haveFriendNews"//好友动态
+
+//常用方法
+#define KUIImage(name) ([UIImage imageNamed:name])
+#define RootDocPath ([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0])
+#define kColorWithRGB(r, g, b, a) \
+[UIColor colorWithRed:r/255.f green:g/255.f blue:b/255.f alpha:a]
+
+#define UIColorFromRGBA(rgbValue, alphaValue) \
+[UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0x00FF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0x0000FF))/255.0 \
+alpha:alphaValue]
+
+#define kScreenHeigth ([UIScreen mainScreen].bounds.size.height)
+#define kScreenWidth  ([UIScreen mainScreen].bounds.size.width)
+
+
+//判断方法
+#define iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+
+#define KISDictionaryHaveKey(dict,key) [[dict allKeys] containsObject:key] && ([dict objectForKey:key] != (NSString*)[NSNull null]) ? [dict objectForKey:key] : @""
+#define KISEmptyOrEnter(text) ([text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0)
+
+#define KISHighVersion_7 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
