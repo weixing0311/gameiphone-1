@@ -1025,10 +1025,36 @@
     NSString * fromUser = [userInfo objectForKey:@"sender"];
     NSRange range = [fromUser rangeOfString:@"@"];
     fromUser = [fromUser substringToIndex:range.location];
+    NSString * shiptype = KISDictionaryHaveKey(userInfo, @"shiptype");
+    NSString * msg = KISDictionaryHaveKey(userInfo, @"msg");
     
     [self storeNewMessage:userInfo];
-    
-    [self requestPeopleInfoWithName:fromUser ForType:0 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+    NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithCapacity:1];
+
+     if ([shiptype isEqualToString:@"1"]) {
+        if ([DataStoreManager ifIsAttentionWithUserName:fromUser]) {
+            [tempDic addEntriesFromDictionary:[DataStoreManager addPersonToReceivedHellosWithAttention:fromUser]];
+            [tempDic setObject:fromUser forKey:@"fromUser"];
+            [tempDic setObject:msg forKey:@"addtionMsg"];
+            [DataStoreManager addPersonToReceivedHellos:tempDic];
+
+            [DataStoreManager deleteAttentionWithUserName:fromUser];//从关注表删除
+//            [DataStoreManager saveUserInfo:recDict];//存为好友
+            [DataStoreManager saveUserFriendWithAttentionList:fromUser];
+        }
+        else
+        {
+            [self requestPeopleInfoWithName:fromUser ForType:0 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+        }
+     }
+    else if([shiptype isEqualToString:@"3"])//粉丝
+    {
+        [self requestPeopleInfoWithName:fromUser ForType:0 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+    }
+    else
+    {
+        [self requestPeopleInfoWithName:fromUser ForType:0 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+    }
 }
 
 #pragma mark 收到取消关注 删除好友请求
@@ -1037,12 +1063,51 @@
     NSString * fromUser = [userInfo objectForKey:@"sender"];
     NSRange range = [fromUser rangeOfString:@"@"];
     fromUser = [fromUser substringToIndex:range.location];
+    NSString * shiptype = KISDictionaryHaveKey(userInfo, @"shiptype");
+    NSString * msg = KISDictionaryHaveKey(userInfo, @"msg");
     
     [DataStoreManager deleteThumbMsgWithSender:fromUser];
     
     [self storeNewMessage:userInfo];
+    NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    if ([shiptype isEqualToString:@"2"]) {//移到关注表
+        if ([DataStoreManager ifHaveThisFriend:fromUser])
+        {
+            [tempDic addEntriesFromDictionary:[DataStoreManager addPersonToReceivedHellosWithFriend:fromUser]];
+            [tempDic setObject:fromUser forKey:@"fromUser"];
+            [tempDic setObject:msg forKey:@"addtionMsg"];
+            [DataStoreManager addPersonToReceivedHellos:tempDic];
 
-    [self requestPeopleInfoWithName:fromUser ForType:2 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+            [DataStoreManager deleteFriendWithUserName:fromUser];
+            [DataStoreManager saveUserAttentionWithFriendList:fromUser];
+            [self displayMsgsForDefaultView];
+        }
+        else
+        {
+            [self requestPeopleInfoWithName:fromUser ForType:2 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+        }
+    }
+    else if ([shiptype isEqualToString:@"unkown"])
+    {
+        if ([DataStoreManager ifIsFansWithUserName:fromUser])
+        {
+            [tempDic addEntriesFromDictionary:[DataStoreManager addPersonToReceivedHellosWithFans:fromUser]];
+            [tempDic setObject:fromUser forKey:@"fromUser"];
+            [tempDic setObject:msg forKey:@"addtionMsg"];
+            [DataStoreManager addPersonToReceivedHellos:tempDic];
+
+            [DataStoreManager deleteFansWithUserName:fromUser];
+            [self displayMsgsForDefaultView];
+        }
+        else
+        {
+            [self requestPeopleInfoWithName:fromUser ForType:2 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+        }
+    }
+    else
+    {
+        [self requestPeopleInfoWithName:fromUser ForType:2 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+    }
 }
 
 #pragma mark 收到推荐好友
@@ -1071,8 +1136,12 @@
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary * recDict = KISDictionaryHaveKey(responseObject, @"user");
         if (type==0) {//打招呼的 存到粉丝列表里
-            
-            [DataStoreManager saveUserFansInfo:recDict];
+            if ([DataStoreManager ifIsAttentionWithUserName:userName]) {
+                [DataStoreManager deleteAttentionWithUserName:userName];//从关注表删除
+                [DataStoreManager saveUserInfo:recDict];//存为好友
+            }
+            else
+                [DataStoreManager saveUserFansInfo:recDict];
             
             NSDictionary * uDict = [NSDictionary dictionaryWithObjectsAndKeys:[recDict objectForKey:@"username"],@"fromUser",[recDict objectForKey:@"nickname"],@"fromNickname",msg,@"addtionMsg",[recDict objectForKey:@"img"],@"headID", nil];
             [DataStoreManager addPersonToReceivedHellos:uDict];

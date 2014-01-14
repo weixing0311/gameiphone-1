@@ -177,44 +177,47 @@
         [m_myTableView reloadData];
         return;
     }
-    AppDelegate* appDel = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [appDel.xmppHelper addFriend:KISDictionaryHaveKey(tempDic, @"username")];//添加好友请求
+    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
-    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
-
-    [body setStringValue:[NSString stringWithFormat:@"%@关注了您，回复任意字符即可成为朋友",[DataStoreManager queryNickNameForUser:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]]];
-    
-    //生成XML消息文档
-    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
-    //   [mes addAttributeWithName:@"nickname" stringValue:@"aaaa"];
-    //消息类型
-    [mes addAttributeWithName:@"type" stringValue:@"chat"];
-    
-    //发送给谁
-    [mes addAttributeWithName:@"to" stringValue:[KISDictionaryHaveKey(tempDic, @"username") stringByAppendingString:[[TempData sharedInstance] getDomain]]];
-    
-    //   NSLog(@"chatWithUser:%@",chatWithUser);
-    //由谁发送
-    [mes addAttributeWithName:@"from" stringValue:[[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
-    
-    [mes addAttributeWithName:@"img" stringValue:[GameCommon getHeardImgId:KISDictionaryHaveKey(tempDic, @"img")]];
-    [mes addAttributeWithName:@"nickname" stringValue:[KISDictionaryHaveKey(tempDic, @"alias")isEqualToString:@""] ? KISDictionaryHaveKey(tempDic, @"nickname") : KISDictionaryHaveKey(tempDic, @"alias")];
-    
-    [mes addAttributeWithName:@"msgtype" stringValue:@"normalchat"];
-    [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
-    [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];//时间
-    [mes addChild:body];
-    
-    if (![appDel.xmppHelper sendMessage:mes]) {
-        [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
-        return;
+    [paramDict setObject:KISDictionaryHaveKey(tempDic, @"userid")forKey:@"frienduserid"];
+    if ([KISDictionaryHaveKey(tempDic, @"type") isEqualToString:@"1"]) {
+        [paramDict setObject:@"5" forKey:@"type"];
     }
-    [DataStoreManager updateRecommendStatus:@"1" ForPerson:KISDictionaryHaveKey(tempDic, @"username")];
-    [DataStoreManager saveUserAttentionInfo:tempDic];
+    else if ([KISDictionaryHaveKey(tempDic, @"type") isEqualToString:@"2"]) {
+        [paramDict setObject:@"4" forKey:@"type"];
+    }
+    else  {
+        [paramDict setObject:@"3" forKey:@"type"];
+    }
     
-    [tempDic setObject:@"1" forKey:@"state"];
-    [m_tableData replaceObjectAtIndex:row withObject:tempDic];
-    [m_myTableView reloadData];
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:paramDict forKey:@"params"];
+    [postDict setObject:@"109" forKey:@"method"];
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    
+    [hud show:YES];
+    
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        [hud hide:YES];
+        [DataStoreManager updateRecommendStatus:@"1" ForPerson:KISDictionaryHaveKey(tempDic, @"username")];
+        [DataStoreManager saveUserAttentionInfo:tempDic];
+        
+        [tempDic setObject:@"1" forKey:@"state"];
+        [m_tableData replaceObjectAtIndex:row withObject:tempDic];
+        [m_myTableView reloadData];
+        
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+        [hud hide:YES];
+    }];
 }
 #pragma mark  scrollView  delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

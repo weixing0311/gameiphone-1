@@ -346,6 +346,9 @@
             else if ([msgtype isEqualToString:@"sayHello"]){//打招呼的
                 [dict setObject:@"sayHello" forKey:@"msgType"];
                 [dict setObject:msgTime  forKey:@"time"];
+                NSString * shiptype = [GameCommon getHeardImgId:[[message attributeForName:@"shiptype"] stringValue]];
+                [dict setObject:shiptype  forKey:@"shiptype"];
+
 //                [dict setObject:fromNickName  forKey:@"nickname"];
 //                [dict setObject:fromimg  forKey:@"img"];
                 [self.addReqDelegate newAddReq:dict];
@@ -355,6 +358,8 @@
                 [dict setObject:@"deletePerson" forKey:@"msgType"];
                 double newTime = [msgTime doubleValue]/1000;
                 [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
+                NSString * shiptype = [GameCommon getHeardImgId:[[message attributeForName:@"shiptype"] stringValue]];
+                [dict setObject:shiptype  forKey:@"shiptype"];
 //                [dict setObject:fromNickName  forKey:@"nickname"];
 //                [dict setObject:fromimg  forKey:@"img"];
                 

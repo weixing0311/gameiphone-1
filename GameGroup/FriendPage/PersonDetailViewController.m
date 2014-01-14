@@ -565,7 +565,7 @@
     
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
     [postDict setObject:paramDict forKey:@"params"];
-    [postDict setObject:@"110" forKey:@"method"];
+    [postDict setObject:@"109" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
     [hud show:YES];
@@ -636,7 +636,7 @@
                 }
                 else
                     [DataStoreManager saveUserFansInfo:self.hostInfo.infoDic];//加到粉丝里
-                
+                [GameCommon shareGameCommon].fansCount = [NSString stringWithFormat:@"%d", [[GameCommon shareGameCommon].fansCount integerValue] + 1];
                 [self.navigationController popViewControllerAnimated:YES];
                 
             } failure:^(AFHTTPRequestOperation *operation, id error) {
@@ -706,50 +706,44 @@
 
 - (void)attentionClick:(id)sender
 {
-//    AppDelegate* appDel = (AppDelegate*)[UIApplication sharedApplication].delegate;
-//    [appDel.xmppHelper addFriend:self.hostInfo.userName];//添加好友请求
-    [m_delegate.xmppHelper addFriend:self.hostInfo.userName];
+    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
-    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
-    [body setStringValue:[NSString stringWithFormat:@"%@关注了您，相互关注即可成为好友",[DataStoreManager queryNickNameForUser:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]]];
+    [paramDict setObject:self.hostInfo.userId forKey:@"frienduserid"];
+    [paramDict setObject:@"1" forKey:@"type"];
     
-    //生成XML消息文档
-    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
-    //   [mes addAttributeWithName:@"nickname" stringValue:@"aaaa"];
-    //消息类型
-    [mes addAttributeWithName:@"type" stringValue:@"chat"];
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:paramDict forKey:@"params"];
+    [postDict setObject:@"109" forKey:@"method"];
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
-    //发送给谁
-    [mes addAttributeWithName:@"to" stringValue:[self.hostInfo.userName stringByAppendingString:[[TempData sharedInstance] getDomain]]];
+    [hud show:YES];
     
-    //   NSLog(@"chatWithUser:%@",chatWithUser);
-    //由谁发送
-    [mes addAttributeWithName:@"from" stringValue:[[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
-    
-    [mes addAttributeWithName:@"img" stringValue:[GameCommon getHeardImgId:self.hostInfo.headImgStr]];
-    [mes addAttributeWithName:@"nickname" stringValue:[self.hostInfo.alias isEqualToString:@""] ? self.hostInfo.nickName : self.hostInfo.nickName];
-
-    [mes addAttributeWithName:@"msgtype" stringValue:@"sayHello"];
-    [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
-    [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];//时间
-    [mes addChild:body];
-    
-    if (![m_delegate.xmppHelper sendMessage:mes]) {
-        [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
-        return;
-    }
-//    [DataStoreManager saveUserAttentionInfo:self.hostInfo.infoDic];
-    if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
-        NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
-        [dic addEntriesFromDictionary:self.hostInfo.infoDic];
-        [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        [DataStoreManager saveUserAttentionInfo:dic];
-    }
-    else
-        [DataStoreManager saveUserAttentionInfo:self.hostInfo.infoDic];
-    [self showMessageWindowWithContent:@"关注成功" pointY:kScreenHeigth-100];
-    [self.navigationController popViewControllerAnimated:YES];
+        [hud hide:YES];
+        if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
+            NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [dic addEntriesFromDictionary:self.hostInfo.infoDic];
+            [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+            
+            [DataStoreManager saveUserAttentionInfo:dic];
+        }
+        else
+            [DataStoreManager saveUserAttentionInfo:self.hostInfo.infoDic];
+        [self showMessageWindowWithContent:@"关注成功" pointY:kScreenHeigth-100];
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+        [hud hide:YES];
+    }];
 }
 
 - (void)cancelAttentionClick:(id)sender

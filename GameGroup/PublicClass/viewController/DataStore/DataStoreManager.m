@@ -358,6 +358,41 @@
 }
 
 #pragma mark - 存储“好友”的关注人列表
++(void)saveUserAttentionWithFriendList:(NSString*)userName
+{
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
+    DSFriends * dFriend = [DSFriends MR_findFirstWithPredicate:predicate];
+    
+    NSString * myUserName = [GameCommon getNewStringWithId:dFriend.userName];
+    NSString * nickName = [GameCommon getNewStringWithId:dFriend.nickName];
+    NSString * gender = [GameCommon getNewStringWithId:dFriend.gender];
+    NSString * headImgID = [GameCommon getNewStringWithId:dFriend.headImgID];
+    NSString * age = [GameCommon getNewStringWithId:dFriend.age];
+    NSString * userId = [GameCommon getNewStringWithId:dFriend.userId];
+    NSString * alias = [GameCommon getNewStringWithId:dFriend.remarkName];//别名
+    NSString * refreshTime = [GameCommon getNewStringWithId:dFriend.refreshTime];
+    NSString * distance = [GameCommon getNewStringWithId:dFriend.distance];
+    NSString * title = [GameCommon getNewStringWithId:dFriend.achievement];
+    NSString * titleLevel = [GameCommon getNewStringWithId:dFriend.achievementLevel];
+    
+    NSDictionary* titleData = [NSDictionary dictionaryWithObjectsAndKeys:title,@"title",titleLevel,@"rarenum", nil];
+    NSDictionary* titleObjDic = [NSDictionary dictionaryWithObject:titleData forKey:@"titleObj"];
+
+    NSMutableDictionary* myDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [myDic setObject:myUserName forKey:@"username"];
+    [myDic setObject:nickName forKey:@"nickname"];
+    [myDic setObject:gender forKey:@"gender"];
+    [myDic setObject:headImgID forKey:@"img"];
+    [myDic setObject:age forKey:@"age"];
+    [myDic setObject:userId forKey:@"id"];
+    [myDic setObject:alias forKey:@"alias"];
+    [myDic setObject:refreshTime forKey:@"updateUserLocationDate"];
+    [myDic setObject:distance forKey:@"distance"];
+    [myDic setObject:titleObjDic forKey:@"title"];
+
+    [DataStoreManager saveUserAttentionInfo:myDic];
+}
+
 +(void)saveUserAttentionInfo:(NSDictionary *)myInfo
 {
     NSString * myUserName = [GameCommon getNewStringWithId:[myInfo objectForKey:@"username"]];
@@ -594,9 +629,11 @@
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",username];
         DSAttentions * attention = [DSAttentions MR_findFirstWithPredicate:predicate];
-        [attention MR_deleteInContext:localContext];
-        
-        [DataStoreManager cleanIndexWithType:2 nameIndex:attention.nameIndex];
+        if (attention) {
+            [attention MR_deleteInContext:localContext];
+            
+            [DataStoreManager cleanIndexWithType:2 nameIndex:attention.nameIndex];
+        }
     }];
 }
 
@@ -898,9 +935,11 @@
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",username];
         DSFans * fans = [DSFans MR_findFirstWithPredicate:predicate];
-        [fans MR_deleteInContext:localContext];
-        
-        [DataStoreManager cleanIndexWithType:3 nameIndex:fans.nameIndex];
+        if (fans) {
+            [fans MR_deleteInContext:localContext];
+            
+            [DataStoreManager cleanIndexWithType:3 nameIndex:fans.nameIndex];
+        }
     }];
 }
 +(BOOL)ifIsFansWithUserName:(NSString*)userName
@@ -1170,9 +1209,8 @@
         DSFriends * dsfriend = [DSFriends MR_findFirstWithPredicate:predicate];
         if (dsfriend) {
             [dsfriend MR_deleteInContext:localContext];
+            [DataStoreManager cleanIndexWithType:1 nameIndex:dsfriend.nameIndex];
         }
-        
-        [DataStoreManager cleanIndexWithType:1 nameIndex:dsfriend.nameIndex];
     }];
 }
 
@@ -1398,6 +1436,40 @@
         return @"no";
 }
 #pragma mark - 存储个人信息
++(void)saveUserFriendWithAttentionList:(NSString*)userName
+{
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
+    DSAttentions * dAttention = [DSFriends MR_findFirstWithPredicate:predicate];
+    
+    NSString * myUserName = [GameCommon getNewStringWithId:dAttention.userName];
+    NSString * nickName = [GameCommon getNewStringWithId:dAttention.nickName];
+    NSString * gender = [GameCommon getNewStringWithId:dAttention.sex];
+    NSString * headImgID = [GameCommon getNewStringWithId:dAttention.headImgID];
+    NSString * age = [GameCommon getNewStringWithId:dAttention.age];
+    NSString * userId = [GameCommon getNewStringWithId:dAttention.userId];
+    NSString * alias = [GameCommon getNewStringWithId:dAttention.remarkName];//别名
+    NSString * refreshTime = [GameCommon getNewStringWithId:dAttention.refreshTime];
+    NSString * distance = [GameCommon getNewStringWithId:dAttention.distance];
+    NSString * title = [GameCommon getNewStringWithId:dAttention.achievement];
+    NSString * titleLevel = [GameCommon getNewStringWithId:dAttention.achievementLevel];
+    
+    NSDictionary* titleData = [NSDictionary dictionaryWithObjectsAndKeys:title,@"title",titleLevel,@"rarenum", nil];
+    NSDictionary* titleObjDic = [NSDictionary dictionaryWithObject:titleData forKey:@"titleObj"];
+    
+    NSMutableDictionary* myDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [myDic setObject:myUserName forKey:@"username"];
+    [myDic setObject:nickName forKey:@"nickname"];
+    [myDic setObject:gender forKey:@"gender"];
+    [myDic setObject:headImgID forKey:@"img"];
+    [myDic setObject:age forKey:@"age"];
+    [myDic setObject:userId forKey:@"id"];
+    [myDic setObject:alias forKey:@"alias"];
+    [myDic setObject:refreshTime forKey:@"updateUserLocationDate"];
+    [myDic setObject:distance forKey:@"distance"];
+    [myDic setObject:titleObjDic forKey:@"title"];
+    
+    [DataStoreManager saveUserInfo:myDic];
+}
 +(void)saveUserInfo:(NSDictionary *)myInfo
 {
     NSString * myUserName = [GameCommon getNewStringWithId:[myInfo objectForKey:@"username"]];
@@ -1966,6 +2038,45 @@
         DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
         thumbMsgs.unRead = @"0";
      }];
+}
+
++(NSDictionary*)addPersonToReceivedHellosWithFriend:(NSString*)userName//从好友表取内容
+{
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
+    DSFriends * dFriend = [DSFriends MR_findFirstWithPredicate:predicate];
+    
+    NSString * userNickname = [GameCommon getNewStringWithId:dFriend.remarkName];
+    if ([userNickname isEqualToString:@""]) {
+        userNickname = [GameCommon getNewStringWithId:dFriend.nickName];
+    }
+    NSString * headID = [GameCommon getHeardImgId:[GameCommon getNewStringWithId:dFriend.headImgID]];
+    return [NSDictionary dictionaryWithObjectsAndKeys:userNickname,@"fromNickname",headID,@"headID", nil];
+}
+
++(NSDictionary*)addPersonToReceivedHellosWithAttention:(NSString*)userName//从好友表取内容
+{
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
+    DSAttentions * dAttention = [DSAttentions MR_findFirstWithPredicate:predicate];
+    
+    NSString * userNickname = [GameCommon getNewStringWithId:dAttention.remarkName];
+    if ([userNickname isEqualToString:@""]) {
+        userNickname = [GameCommon getNewStringWithId:dAttention.nickName];
+    }
+    NSString * headID = [GameCommon getHeardImgId:[GameCommon getNewStringWithId:dAttention.headImgID]];
+    return [NSDictionary dictionaryWithObjectsAndKeys:userNickname,@"fromNickname",headID,@"headID", nil];
+}
+
++(NSDictionary*)addPersonToReceivedHellosWithFans:(NSString*)userName//从粉丝表取内容
+{
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
+    DSFans * dfans = [DSFans MR_findFirstWithPredicate:predicate];
+    
+    NSString * userNickname = [GameCommon getNewStringWithId:dfans.remarkName];
+    if ([userNickname isEqualToString:@""]) {
+        userNickname = [GameCommon getNewStringWithId:dfans.nickName];
+    }
+    NSString * headID = [GameCommon getHeardImgId:[GameCommon getNewStringWithId:dfans.headImgID]];
+    return [NSDictionary dictionaryWithObjectsAndKeys:userNickname,@"fromNickname",headID,@"headID", nil];
 }
 
 +(void)addPersonToReceivedHellos:(NSDictionary *)userInfoDict
