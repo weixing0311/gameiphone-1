@@ -240,6 +240,17 @@
         
     }];
 }
+
++(void)deleteAllThumbMsg
+{
+    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+        NSArray * thumbMsgs = [DSThumbMsgs MR_findAllInContext:localContext];
+        for (DSThumbMsgs* msg in thumbMsgs) {
+            [msg deleteInContext:localContext];
+        }
+    }];
+}
+
 +(NSMutableArray *)qureyAllCommonMessages:(NSString *)username
 {
     NSMutableArray * allMsgArray = [NSMutableArray array];

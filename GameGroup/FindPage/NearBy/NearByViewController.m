@@ -45,6 +45,24 @@
     m_titleLabel.font = [UIFont boldSystemFontOfSize:20];
     [self.view addSubview:m_titleLabel];
     
+    m_searchType = 2;
+
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:NearByKey] && [[[NSUserDefaults standardUserDefaults] objectForKey:NearByKey] length] > 0) {
+        NSString* type = [[NSUserDefaults standardUserDefaults] objectForKey:NearByKey];
+        if ([type isEqualToString:@"0"]) {
+            m_titleLabel.text = @"附近的玩家(男)";
+            m_searchType = 0;
+        }
+        else if ([type isEqualToString:@"1"]) {
+            m_titleLabel.text = @"附近的玩家(女)";
+            m_searchType = 1;
+        }
+        else if ([type isEqualToString:@"2"]) {
+            m_titleLabel.text = @"附近的玩家";
+            m_searchType = 2;
+        }
+    }
+    
     m_tabelData = [[NSMutableArray alloc] init];
     
     UIButton *menuButton=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -76,7 +94,6 @@
     refreshView.myScrollView = m_myTableView;
     [refreshView stopLoading:NO];
     
-    m_searchType = 3;
     m_totalPage = 0;
     m_currentPage = 0;
     
@@ -104,7 +121,7 @@
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
    
-    if (m_searchType != 3) {
+    if (m_searchType != 2) {
         [paramDict setObject:[NSString stringWithFormat:@"%d", m_searchType] forKey:@"gender"];
     }
     [paramDict setObject:[NSString stringWithFormat:@"%d", m_currentPage] forKey:@"pageIndex"];
@@ -204,8 +221,10 @@
     else//全部
     {
         m_titleLabel.text = @"附近的玩家";
-        m_searchType = 3;
+        m_searchType = 2;
     }
+    [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d", m_searchType] forKey:NearByKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [self getNearByDataByNet];
 }
 
@@ -234,9 +253,6 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     NSDictionary* tempDict = [m_tabelData objectAtIndex:indexPath.row];
     
-    NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")] componentsSeparatedByString:@","];
-    cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""]];
-    
     cell.nameLabel.text = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"alias")] isEqualToString:@""] ? [tempDict objectForKey:@"nickname"] : KISDictionaryHaveKey(tempDict, @"alias");
     cell.gameImg_one.image = KUIImage(@"wow");
     
@@ -256,6 +272,8 @@
         cell.ageLabel.backgroundColor = kColorWithRGB(238, 100, 196, 1.0);
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"people_woman.png"];
     }
+    NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")] componentsSeparatedByString:@","];
+    cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""]];
 
     NSDictionary* titleDic = KISDictionaryHaveKey(tempDict, @"title");
     if ([titleDic isKindOfClass:[NSDictionary class]]) {

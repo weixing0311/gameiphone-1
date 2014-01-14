@@ -70,6 +70,7 @@
         {
             [self setTopViewWithTitle:@"搜索小伙伴ID" withBackButton:YES];
             warnLabel.text = @"输入小伙伴的ID(可在我的详情页面查看)：";
+            searchContent.keyboardType = UIKeyboardTypeNumberPad;
         }   break;
         case SEARCH_TYPE_PHONE:
         {

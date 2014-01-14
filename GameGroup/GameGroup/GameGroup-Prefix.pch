@@ -75,6 +75,8 @@
 
 #define NewComment @"newCommentOfMyDynamic"
 
+#define NearByKey  @"nearBy"//附近的玩家筛选
+
 //#define NotUseSimulator  @"YES"//聊天的录音 只支持真机
 
 #define sorttype_1 @"sorttype_1"//取好友排序方式

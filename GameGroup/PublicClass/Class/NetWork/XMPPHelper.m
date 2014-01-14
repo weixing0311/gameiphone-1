@@ -30,19 +30,6 @@
 @implementation XMPPHelper
 //@synthesize xmppStream,xmppvCardStorage,xmppvCardTempModule,xmppvCardAvatarModule,xmppvCardTemp,account,password,buddyListDelegate,chatDelegate,xmpprosterDelegate,processFriendDelegate,xmpptype,success,fail,regsuccess,regfail,xmppRosterscallback,myVcardTemp,xmppRosterMemoryStorage,xmppRoster;
 
-//-(BOOL)isDisconnected
-//{
-//    return [self.xmppStream isDisconnected];
-//}
-//-(BOOL)isConnecting
-//{
-//    return [self.xmppStream isConnecting];
-//}
-//-(BOOL)isConnected
-//{
-//    return [self.xmppStream isConnected];
-//}
-
 -(void)setupStream
 {
     self.xmppStream = [[XMPPStream alloc] init];
@@ -52,9 +39,9 @@
     [self.xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
     [self.xmppRoster activate:self.xmppStream];
     self.xmppStream.enableBackgroundingOnSocket = YES;
-    self.xmppReconnect = [[XMPPReconnect alloc] initWithDispatchQueue:dispatch_get_main_queue()];
-    [self.xmppReconnect addDelegate:self delegateQueue:dispatch_get_main_queue()];
-    [self.xmppReconnect activate:self.xmppStream];
+//    self.xmppReconnect = [[XMPPReconnect alloc] initWithDispatchQueue:dispatch_get_main_queue()];
+//    [self.xmppReconnect addDelegate:self delegateQueue:dispatch_get_main_queue()];
+//    [self.xmppReconnect activate:self.xmppStream];
 }
 - (void)goOnline {
 	XMPPPresence *presence = [XMPPPresence presence];

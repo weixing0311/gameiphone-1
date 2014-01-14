@@ -235,6 +235,7 @@
 
 - (NSString*)htmlContentWithTitle:(NSString*)title time:(NSString*)time content:(NSString*)content
 {//;width:100%%;height:100%%<div style=\"background-color:#f7f7f7\">
+    content = [content stringByReplacingOccurrencesOfString:@"\n" withString:@"<br>"];
     NSString* str = [NSString stringWithFormat:@"<body bgcolor=\"#f7f7f7\"><font size=\"3\" color=\"#444444\"><center><b>%@</b></center></font><p align=\"right\"><font size=\"3\" color=\"#444444\">%@</font></p><p><font size=\"3\" color=\"#444444\" style=\"line-height:25px\">%@</font></p></body>", title, time, content];
     return str;
 }

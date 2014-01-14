@@ -839,7 +839,15 @@
 -(void)deleteEmojiStr
 {
     if (self.textView.text.length>=1) {
-        self.textView.text = [self.textView.text substringToIndex:(self.textView.text.length-1)];
+//        self.textView.text = [self.textView.text substringToIndex:(self.textView.text.length-1)];
+        NSLog(@"%d" , self.textView.text.length);
+        if ([self.textView.text hasSuffix:@"] "] && [self.textView.text length] >= 5) {
+            self.textView.text = [self.textView.text substringToIndex:(self.textView.text.length-5)];
+        }
+        else
+        {
+            self.textView.text = [self.textView.text substringToIndex:(self.textView.text.length-1)];
+        }
     }
 }
 -(void)addEmojiScrollView

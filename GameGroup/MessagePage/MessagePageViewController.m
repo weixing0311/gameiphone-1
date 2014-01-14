@@ -189,7 +189,8 @@
 {
     if (alertView.tag == 345) {
         if (alertView.cancelButtonIndex != buttonIndex) {
-            
+            [DataStoreManager deleteAllThumbMsg];
+            [self displayMsgsForDefaultView];
         }
     }
 }
@@ -198,7 +199,6 @@
 - (void)sendDeviceToken
 {
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-//    NSDictionary * locationDict = [NSDictionary dictionaryWithObjectsAndKeys:[GameCommon shareGameCommon].deviceToken,@"deviceToken ",@"91", @"appType",nil];//appStore和91
     NSMutableDictionary* locationDict = [NSMutableDictionary dictionaryWithCapacity:1];
     [locationDict setObject:[GameCommon shareGameCommon].deviceToken forKey:@"deviceToken"];
     [locationDict setObject:appType forKey:@"appType"];
@@ -786,12 +786,12 @@
         [self showAlertViewWithTitle:@"提示" message:@"未检测到网络" buttonTitle:@"确定"];
         return;
     }
-//    if ([self isHaveLogin] && [GameCommon testConnection] && ![GameCommon shareGameCommon].isFirst) {
-//        if ([GameCommon shareGameCommon].connectTimes > 3) {
-//            return;
-//        }
-//        [self logInToChatServer];
-//    }
+    if ([self isHaveLogin] && [GameCommon testConnection] && ![GameCommon shareGameCommon].isFirst) {
+        if ([GameCommon shareGameCommon].connectTimes > 3) {
+            return;
+        }
+        [self logInToChatServer];
+    }
 }
 
 #pragma mark 登陆xmpp
