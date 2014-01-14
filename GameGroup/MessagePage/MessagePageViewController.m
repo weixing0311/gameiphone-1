@@ -121,6 +121,7 @@
     [cleanBtn setTitle:@"清空" forState:UIControlStateNormal];
     [cleanBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [cleanBtn setBackgroundColor:[UIColor clearColor]];
+    cleanBtn.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
     [cleanBtn addTarget:self action:@selector(cleanBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cleanBtn];
     
@@ -803,7 +804,8 @@
     [postDict setObject:@"116" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
 //    [postDict setObject:locationDict forKey:@"params"];
-    [hud show:YES];
+    if([GameCommon shareGameCommon].isFirst)
+        [hud show:YES];
 
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"服务器数据 %@", responseObject);
@@ -830,7 +832,7 @@
         titleLabel.text = @"消息";
         
         [[TempData sharedInstance] setOpened:YES];
-        [GameCommon shareGameCommon].connectTimes = 0;
+        [GameCommon shareGameCommon].connectTimes = 0;//断掉自动连接3次
     }fail:^(NSError *result){
         NSLog(@" localizedDescription %@", result.localizedDescription);
         titleLabel.text = @"消息(未连接)";
@@ -905,8 +907,6 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        [GameCommon shareGameCommon].isFirst = NO;//不再请求好友列表
-
         [hud hide:YES];
        
         [self parseFriendsList:KISDictionaryHaveKey(responseObject, @"1")];
@@ -915,6 +915,8 @@
         [self parseFansList:(KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"3"), @"users"))];
         [GameCommon shareGameCommon].fansCount = [GameCommon getNewStringWithId:KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"3"), @"totalResults")];
         [self getChatServer];//登陆xmpp
+        
+        [GameCommon shareGameCommon].isFirst = NO;//不再请求好友列表
 
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         [hud hide:YES];
@@ -1035,6 +1037,8 @@
     NSString * fromUser = [userInfo objectForKey:@"sender"];
     NSRange range = [fromUser rangeOfString:@"@"];
     fromUser = [fromUser substringToIndex:range.location];
+    
+    [DataStoreManager deleteThumbMsgWithSender:fromUser];
     
     [self storeNewMessage:userInfo];
 

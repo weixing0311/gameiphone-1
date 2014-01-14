@@ -476,52 +476,55 @@
 
 - (void)CellOneButtonClick:(NSInteger)rowIndex
 {
-//    NSArray* characterArray = KISDictionaryHaveKey(m_hostInfo.characters, @"1");//魔兽世界
-//    if (![characterArray isKindOfClass:[NSArray class]]) {
-//        return;
-//    }
-//    NSDictionary* tempDic = [characterArray objectAtIndex:rowIndex];
-//    if ([KISDictionaryHaveKey(tempDic, @"failedmsg") isEqualToString:@"404"])//角色不存在
-//    {
-//        [self showAlertViewWithTitle:@"提示" message:@"角色不存在" buttonTitle:@"确定"];
-////        cell.realmLabel.text = @"角色不存在";
-//        return;
-//    }
-//    else
-//    {
-//        NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
-//        NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-//        
-//        [paramDict setObject:@"1" forKey:@"gameid"];
-////        [paramDict setObject:@"1" forKey:@"characterid"];
-//
-//        [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-//        [postDict setObject:paramDict forKey:@"params"];
-//        [postDict setObject:@"123" forKey:@"method"];
-//        [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-//        
-//        [hud show:YES];
-//        
-//        [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//            [hud hide:YES];
-//            NSLog(@"%@", responseObject);
-//            if ([responseObject isKindOfClass:[NSDictionary class]]) {
-//                m_hostInfo = [[HostInfo alloc] initWithHostInfo:responseObject];
-//                
-//                [m_myTableView reloadData];
-//            }
-//        } failure:^(AFHTTPRequestOperation *operation, id error) {
-//            if ([error isKindOfClass:[NSDictionary class]]) {
-//                if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
-//                {
-//                    
-//                    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-//                    [alert show];
-//                }
-//            }
-//            [hud hide:YES];
-//        }];
-//    }
+    NSMutableArray* characterArray = KISDictionaryHaveKey(m_hostInfo.characters, @"1");//魔兽世界
+    if (![characterArray isKindOfClass:[NSArray class]]) {
+        return;
+    }
+    NSDictionary* tempDic = [characterArray objectAtIndex:rowIndex];
+    if ([KISDictionaryHaveKey(tempDic, @"failedmsg") isEqualToString:@"404"])//角色不存在
+    {
+        [self showAlertViewWithTitle:@"提示" message:@"角色不存在" buttonTitle:@"确定"];
+        return;
+    }
+    else
+    {
+        NSDictionary* tempDic = [characterArray objectAtIndex:rowIndex];
+        NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+        NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+        
+        [paramDict setObject:@"1" forKey:@"gameid"];
+        [paramDict setObject:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"id")] forKey:@"characterid"];
+
+        [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+        [postDict setObject:paramDict forKey:@"params"];
+        [postDict setObject:@"123" forKey:@"method"];
+        [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+        
+        [hud show:YES];
+        
+        [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [hud hide:YES];
+            NSLog(@"新角色信息：：：%@", responseObject);
+            if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                [characterArray replaceObjectAtIndex:rowIndex withObject:responseObject];
+                m_hostInfo.characters = [NSDictionary dictionaryWithObject:characterArray forKey:@"1"];
+                
+                NSIndexSet* section = [[NSIndexSet alloc] initWithIndex:2];
+                [m_myTableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
+            }
+            [self getUserInfoByNet];
+        } failure:^(AFHTTPRequestOperation *operation, id error) {
+            if ([error isKindOfClass:[NSDictionary class]]) {
+                if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+                {
+                    
+                    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                    [alert show];
+                }
+            }
+            [hud hide:YES];
+        }];
+    }
 }
 
 //- (NSString*)getCellTitleWithType:(NSString*)type withNick:(NSString*)nickName withUserId:(NSString*)userid

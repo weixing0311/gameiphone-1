@@ -15,7 +15,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         UIView* myView = [[UIView alloc] init];
-        [self addSubview:myView];
 
         self.heardImg = [[UIImageView alloc] initWithFrame:CGRectMake(10, 25.0/2, 35, 35)];
         self.heardImg.backgroundColor = [UIColor clearColor];
@@ -70,15 +69,15 @@
         pveTitle.textColor = UIColorFromRGBA(0xa7a7a7,1.0);
         pveTitle.textAlignment = NSTextAlignmentCenter;
         pveTitle.font = [UIFont boldSystemFontOfSize:13.0];
-        pveTitle.text = @"战斗力";
+        pveTitle.text = @"刷新战斗力";
         [myView addSubview:pveTitle];
         
         self.refreshPVEbtn = [[UIButton alloc] initWithFrame:CGRectMake(200, 0, 100, 60)];
         self.refreshPVEbtn.backgroundColor = [UIColor clearColor];
         [self.refreshPVEbtn addTarget:self action:@selector(refreshPVEbtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        [myView addSubview:self.refreshPVEbtn];
+        [self addSubview:self.refreshPVEbtn];
         
-        self.noCharacterLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 5, 250, 60)];
+        self.noCharacterLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 5, 255, 60)];
         self.noCharacterLabel.backgroundColor = [UIColor clearColor];
         self.noCharacterLabel.textColor = kColorWithRGB(51, 51, 51, 1.0);
         self.noCharacterLabel.font = [UIFont boldSystemFontOfSize:15.0];
@@ -87,6 +86,7 @@
         [myView addSubview:self.noCharacterLabel];
         self.noCharacterLabel.hidden = YES;
         
+        [self addSubview:myView];
     }
     return self;
 }

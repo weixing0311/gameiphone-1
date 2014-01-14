@@ -393,7 +393,7 @@
         if ([KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:@"10000"]) {
             cell.authImage.hidden = NO;
             cell.authImage.image = KUIImage(@"red_auth");
-            cell.nickNameLabel.textColor = kColorWithRGB(255, 58, 48, 1.0);
+            cell.nickNameLabel.textColor = kColorWithRGB(255, 58, 48, 1.0);//84 178 64绿
         }
         else
         {
