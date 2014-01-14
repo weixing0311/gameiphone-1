@@ -78,6 +78,15 @@
         [self.refreshPVEbtn addTarget:self action:@selector(refreshPVEbtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [myView addSubview:self.refreshPVEbtn];
         
+        self.noCharacterLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 5, 250, 60)];
+        self.noCharacterLabel.backgroundColor = [UIColor clearColor];
+        self.noCharacterLabel.textColor = kColorWithRGB(51, 51, 51, 1.0);
+        self.noCharacterLabel.font = [UIFont boldSystemFontOfSize:15.0];
+        self.noCharacterLabel.text = @"暂无角色";
+        self.noCharacterLabel.backgroundColor = [UIColor whiteColor];
+        [myView addSubview:self.noCharacterLabel];
+        self.noCharacterLabel.hidden = YES;
+        
     }
     return self;
 }

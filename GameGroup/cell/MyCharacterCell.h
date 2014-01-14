@@ -20,4 +20,5 @@
 @property(assign,nonatomic)NSInteger rowIndex;
 @property(strong,nonatomic)UIButton* refreshPVEbtn;
 
+@property(strong,nonatomic)UILabel* noCharacterLabel;
 @end
