@@ -267,7 +267,6 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        cell.headImageV.imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseImageUrl,m_hostInfo.headImgArray.count>0? [m_hostInfo.headImgArray objectAtIndex:0]:@""]];
         cell.nameLabel.text = m_hostInfo.nickName;
         cell.gameImg_one.image = KUIImage(@"wow");
         
@@ -289,6 +288,7 @@
         }
         else
             cell.distLabel.text = @"暂无头衔";
+         cell.headImageV.imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseImageUrl,m_hostInfo.headImgArray.count>0? [m_hostInfo.headImgArray objectAtIndex:0]:@""]];
         [cell refreshCell];
         return cell;
     }

@@ -753,19 +753,20 @@
     table_label_five.font = [UIFont boldSystemFontOfSize:15.0];
     [m_step3Scroll addSubview:table_label_five];
 
-    UILabel* table_label_six = [[UILabel alloc] initWithFrame:CGRectMake(20, 281, 80, 38)];
+    UILabel* table_label_two = [[UILabel alloc] initWithFrame:CGRectMake(20, 281, 100, 38)];
+    table_label_two.text = @"密码";
+    table_label_two.textColor = kColorWithRGB(102, 102, 102, 1.0);
+    table_label_two.font = [UIFont boldSystemFontOfSize:15.0];
+    [m_step3Scroll addSubview:table_label_two];
+    
+
+    UILabel* table_label_six = [[UILabel alloc] initWithFrame:CGRectMake(20, 321, 80, 38)];
     table_label_six.text = @"邮箱";
     table_label_six.textColor = kColorWithRGB(102, 102, 102, 1.0);
     table_label_six.font = [UIFont boldSystemFontOfSize:15.0];
     [m_step3Scroll addSubview:table_label_six];
     
-    UILabel* table_label_two = [[UILabel alloc] initWithFrame:CGRectMake(20, 321, 100, 38)];
-    table_label_two.text = @"密码";
-    table_label_two.textColor = kColorWithRGB(102, 102, 102, 1.0);
-    table_label_two.font = [UIFont boldSystemFontOfSize:15.0];
-    [m_step3Scroll addSubview:table_label_two];
-  
-    m_userNameText = [[UITextField alloc] initWithFrame:CGRectMake(100, 200, 180, 40)];
+     m_userNameText = [[UITextField alloc] initWithFrame:CGRectMake(100, 200, 180, 40)];
     m_userNameText.returnKeyType = UIReturnKeyDone;
     m_userNameText.delegate = self;
     m_userNameText.font = [UIFont boldSystemFontOfSize:15.0];
@@ -797,7 +798,17 @@
     toolbar_server.items = @[rb_server];
     m_birthdayText.inputAccessoryView = toolbar_server;//跟着pickview上移
     
-    m_emailText = [[UITextField alloc] initWithFrame:CGRectMake(100, 280, 180, 40)];
+    m_passwordText = [[UITextField alloc] initWithFrame:CGRectMake(100, 280, 180, 40)];
+    m_passwordText.returnKeyType = UIReturnKeyDone;
+    m_passwordText.secureTextEntry = YES;
+    m_passwordText.delegate = self;
+    m_passwordText.font = [UIFont boldSystemFontOfSize:15.0];
+    m_passwordText.textAlignment = NSTextAlignmentRight;
+    m_passwordText.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    m_passwordText.clearButtonMode = UITextFieldViewModeWhileEditing;
+    [m_step3Scroll addSubview:m_passwordText];
+    
+    m_emailText = [[UITextField alloc] initWithFrame:CGRectMake(100, 320, 180, 40)];
     m_emailText.returnKeyType = UIReturnKeyDone;
     m_emailText.keyboardType = UIKeyboardTypeEmailAddress;
     m_emailText.delegate = self;
@@ -807,15 +818,6 @@
     m_emailText.clearButtonMode = UITextFieldViewModeWhileEditing;
     [m_step3Scroll addSubview:m_emailText];
     
-    m_passwordText = [[UITextField alloc] initWithFrame:CGRectMake(100, 320, 180, 40)];
-    m_passwordText.returnKeyType = UIReturnKeyDone;
-    m_passwordText.secureTextEntry = YES;
-    m_passwordText.delegate = self;
-    m_passwordText.font = [UIFont boldSystemFontOfSize:15.0];
-    m_passwordText.textAlignment = NSTextAlignmentRight;
-    m_passwordText.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    m_passwordText.clearButtonMode = UITextFieldViewModeWhileEditing;
-    [m_step3Scroll addSubview:m_passwordText];
 
     UIButton* step3Button = [[UIButton alloc] initWithFrame:CGRectMake(10, 375, 300, 40)];
     [step3Button setBackgroundImage:KUIImage(@"blue_button_normal") forState:UIControlStateNormal];

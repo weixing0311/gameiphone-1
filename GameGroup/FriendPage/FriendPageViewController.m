@@ -73,7 +73,9 @@
 @implementation FriendPageViewController
 
 - (void)viewWillDisappear:(BOOL)animated
-{    
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kFriendHelloReceived object:Nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kDeleteAttention object:Nil];
     [super viewWillDisappear:animated];
 }
 
@@ -81,12 +83,27 @@
 {
     [super viewWillAppear:animated];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sayHelloReceived:) name:kFriendHelloReceived object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deletePersonReceived:) name:kDeleteAttention object:nil];
+    
     [[Custom_tabbar showTabBar] hideTabBar:NO];
     
     if (![self isHaveLogin]) {
         [[Custom_tabbar showTabBar] when_tabbar_is_selected:0];
         return;
     }
+    [self refreshSortType];
+}
+
+#pragma mark 收到验证好友请求
+- (void)sayHelloReceived:(NSNotification*)notification
+{
+    [self refreshSortType];
+}
+
+#pragma mark 收到取消关注 删除好友请求
+-(void)deletePersonReceived:(NSNotification *)notification
+{
     [self refreshSortType];
 }
 
@@ -417,7 +434,7 @@
         m_friendsArray = [NSMutableArray arrayWithArray:[m_friendDict allKeys]];
         [m_friendsArray sortUsingSelector:@selector(compare:)];
         
-        [m_otherSortFriendArray removeAllObjects];
+//        [m_otherSortFriendArray removeAllObjects];
         if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"2"]) {
             m_otherSortFriendArray = [DataStoreManager queryAllFriendsWithOtherSortType:@"distance" ascend:YES];
         }
@@ -501,7 +518,7 @@
         m_attentionsArray = [NSMutableArray arrayWithArray:[m_attentionDict allKeys]];
         [m_attentionsArray sortUsingSelector:@selector(compare:)];
         
-        [m_otherSortAttentionArray removeAllObjects];
+//        [m_otherSortAttentionArray removeAllObjects];
         if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"2"]) {
             m_otherSortAttentionArray = [DataStoreManager queryAllAttentionWithOtherSortType:@"distance" ascend:YES];
         }
@@ -553,6 +570,8 @@
 //                [m_sectionIndexArray_fans removeAllObjects];
 //                [m_sectionArray_fans removeAllObjects];
                 [m_otherSortFansArray removeAllObjects];
+                
+                [m_myFansTableView reloadData];
                 
                 [DataStoreManager cleanFansList];
                 [self parseFansList:[KISDictionaryHaveKey(responseObject, @"3") objectForKey:@"users"]];

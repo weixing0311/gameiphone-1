@@ -84,7 +84,7 @@
     table_label_three.font = [UIFont boldSystemFontOfSize:kLabelFont];
     [self.view addSubview:table_label_three];
     
-    phoneTextField = [[UITextField alloc] initWithFrame:CGRectMake(100, 55 + startX, 200, 40)];
+    phoneTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 55 + startX, 240, 40)];
     phoneTextField.keyboardType = UIKeyboardTypeNumberPad;
     phoneTextField.returnKeyType = UIReturnKeyDone;
     phoneTextField.delegate = self;
@@ -94,7 +94,7 @@
     phoneTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.view addSubview:phoneTextField];
     
-    passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(100, 95 + startX, 200, 40)];
+    passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 95 + startX, 240, 40)];
     passwordTextField.keyboardType = UIKeyboardTypeEmailAddress;
     passwordTextField.secureTextEntry = YES;
     passwordTextField.delegate = self;
