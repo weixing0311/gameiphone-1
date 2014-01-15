@@ -55,6 +55,8 @@
 {
     [super viewWillAppear:animated];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMesgReceived:) name:kNewMessageReceived object:nil];
+
     self.nickName = [DataStoreManager queryRemarkNameForUser:self.chatWithUser];//刷新别名
     titleLabel.text=self.nickName;
     [self.tView reloadData];
@@ -227,7 +229,7 @@
     
    // [self.messageTextField becomeFirstResponder];
     self.appDel = [[UIApplication sharedApplication] delegate];
-    self.appDel.xmppHelper.chatDelegate = self;
+//    self.appDel.xmppHelper.chatDelegate = self;
     
     btnLongTap = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(btnLongTapAction:)];
     btnLongTap.minimumPressDuration = 1;
@@ -948,14 +950,14 @@
     NSString * timeStr = [self CurrentTime:[NSString stringWithFormat:@"%d",(int)nowTime] AndMessageTime:[NSString stringWithFormat:@"%d",[time intValue]]];
     if ([sender isEqualToString:@"you"]) {
         cell.senderAndTimeLabel.text = [NSString stringWithFormat:@"%@ %@", @"我", timeStr];
-        CGRect rect = [self.view convertRect:cell.frame fromView:self.tView];
-        NSLog(@"dsdsdsdsdsd%@",NSStringFromCGRect(rect));
+//        CGRect rect = [self.view convertRect:cell.frame fromView:self.tView];
+//        NSLog(@"dsdsdsdsdsd%@",NSStringFromCGRect(rect));
     }
     else
     {
         cell.senderAndTimeLabel.text = [NSString stringWithFormat:@"%@ %@", self.nickName, timeStr];
-        CGRect rect = [self.view convertRect:cell.frame fromView:self.tView];
-        NSLog(@"dsdsdsdsdsd%@",NSStringFromCGRect(rect));
+//        CGRect rect = [self.view convertRect:cell.frame fromView:self.tView];
+//        NSLog(@"dsdsdsdsdsd%@",NSStringFromCGRect(rect));
     }
     
     return cell;
@@ -1220,52 +1222,54 @@
 -(void)sendMsg:(NSString *)message
 {
     if (message.length > 0) {
-        if (!self.ifFriend) {
-            [self.appDel.xmppHelper addOrDenyFriend:YES user:self.chatWithUser];
-            [DataStoreManager addFriendToLocal:self.chatWithUser];
-            [DataStoreManager updateReceivedHellosStatus:@"accept" ForPerson:self.chatWithUser];
-            
-            NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
-            [body setStringValue:[NSString stringWithFormat:@"我是%@，我关注你啦!",[DataStoreManager queryNickNameForUser:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]]];
-            
-            //生成XML消息文档
-            NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
-            //   [mes addAttributeWithName:@"nickname" stringValue:@"aaaa"];
-            //消息类型
-            [mes addAttributeWithName:@"type" stringValue:@"chat"];
-            
-            //发送给谁
-            [mes addAttributeWithName:@"to" stringValue:[self.chatWithUser stringByAppendingString:[[TempData sharedInstance] getDomain]]];
-            //   NSLog(@"chatWithUser:%@",chatWithUser);
-            //由谁发送
-            [mes addAttributeWithName:@"from" stringValue:[[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
-            
-            [mes addAttributeWithName:@"msgtype" stringValue:@"normalchat"];
-            [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
-            [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];
-            [mes addChild:body];
-            if (![self.appDel.xmppHelper sendMessage:mes]) {
-                [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
-                //Do something when send failed...
-                return;
-            }
-                        
-//            NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        if (![DataStoreManager ifHaveThisFriend:self.chatWithUser]) {
+//        if (!self.ifFriend) {
+//            [self.appDel.xmppHelper addOrDenyFriend:YES user:self.chatWithUser];
+//            [DataStoreManager addFriendToLocal:self.chatWithUser];
+//            [DataStoreManager updateReceivedHellosStatus:@"accept" ForPerson:self.chatWithUser];
 //            
-//            [dictionary setObject:[NSString stringWithFormat:@"您和%@已不是好友了，不能进行聊天",self.nickName] forKey:@"msg"];
-//            [dictionary setObject:@"you" forKey:@"sender"];
-//            //加入发送时间
-//            [dictionary setObject:[GameCommon getCurrentTime] forKey:@"time"];
-//            [dictionary setObject:self.chatWithUser forKey:@"receiver"];
-//            [messages addObject:dictionary];
-//            [self normalMsgToFinalMsg];
+//            NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+//            [body setStringValue:[NSString stringWithFormat:@"我是%@，我关注你啦!",[DataStoreManager queryNickNameForUser:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]]];
+//            
+//            //生成XML消息文档
+//            NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+//            //   [mes addAttributeWithName:@"nickname" stringValue:@"aaaa"];
+//            //消息类型
+//            [mes addAttributeWithName:@"type" stringValue:@"chat"];
+//            
+//            //发送给谁
+//            [mes addAttributeWithName:@"to" stringValue:[self.chatWithUser stringByAppendingString:[[TempData sharedInstance] getDomain]]];
+//            //   NSLog(@"chatWithUser:%@",chatWithUser);
+//            //由谁发送
+//            [mes addAttributeWithName:@"from" stringValue:[[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
+//            
+//            [mes addAttributeWithName:@"msgtype" stringValue:@"normalchat"];
+//            [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
+//            [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];
+//            [mes addChild:body];
+//            if (![self.appDel.xmppHelper sendMessage:mes]) {
+//                [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
+//                //Do something when send failed...
+//                return;
+//            }
+            
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+            
+            [dictionary setObject:[NSString stringWithFormat:@"您和%@还不是好友关系，不能进行聊天",self.nickName] forKey:@"msg"];
+            [dictionary setObject:@"you" forKey:@"sender"];
+            //加入发送时间
+            [dictionary setObject:[GameCommon getCurrentTime] forKey:@"time"];
+            [dictionary setObject:self.chatWithUser forKey:@"receiver"];
+            [messages addObject:dictionary];
+            [self normalMsgToFinalMsg];
 //            [DataStoreManager storeMyMessage:dictionary];
             //重新刷新tableView
             [self.tView reloadData];
             if (messages.count>0) {
                 [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
             }
-            self.ifFriend = YES;
+//            self.ifFriend = YES;
+            return;
         }
       
         //XMPPFramework主要是通过KissXML来生成XML文件
@@ -1328,23 +1332,38 @@
 }
 
 #pragma mark KKMessageDelegate
--(void)newMessageReceived:(NSDictionary *)messageCotent{
-    
-    AudioServicesPlayAlertSound(1003);
-    
-    NSRange range = [[messageCotent objectForKey:@"sender"] rangeOfString:@"@"];
-    NSString * sender = [[messageCotent objectForKey:@"sender"] substringToIndex:range.location];
-     [DataStoreManager storeNewMsgs:messageCotent senderType:COMMONUSER];
+//-(void)newMessageReceived:(NSDictionary *)messageCotent{
+//    
+//    AudioServicesPlayAlertSound(1003);
+//    
+//    NSRange range = [[messageCotent objectForKey:@"sender"] rangeOfString:@"@"];
+//    NSString * sender = [[messageCotent objectForKey:@"sender"] substringToIndex:range.location];
+//     [DataStoreManager storeNewMsgs:messageCotent senderType:COMMONUSER];
+//    if ([sender isEqualToString:self.chatWithUser]) {
+//        [messages addObject:messageCotent];
+//        [self normalMsgToFinalMsg];
+//        [self.tView reloadData];
+//        if (messages.count>0) {
+//            [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//        }
+//    }
+//    
+//}
+- (void)newMesgReceived:(NSNotification*)notification
+{
+    NSDictionary* tempDic = notification.userInfo;
+    NSRange range = [KISDictionaryHaveKey(tempDic,  @"sender") rangeOfString:@"@"];
+    NSString * sender = [KISDictionaryHaveKey(tempDic,  @"sender") substringToIndex:range.location];
     if ([sender isEqualToString:self.chatWithUser]) {
-        [messages addObject:messageCotent];
+        [messages addObject:tempDic];
         [self normalMsgToFinalMsg];
         [self.tView reloadData];
         if (messages.count>0) {
             [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
     }
-    
 }
+
 -(void)makeMsgVStoreMsg:(NSDictionary *)messageContent
 {
     
@@ -1589,6 +1608,7 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [DataStoreManager blankMsgUnreadCountForUser:self.chatWithUser];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNewMessageReceived object:nil];
 }
 //-(KKAppDelegate *)appDelegate{
 //    

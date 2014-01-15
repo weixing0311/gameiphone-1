@@ -63,6 +63,10 @@
     [refreshView stopLoading:NO];
     
     [self getDataByStore];
+    
+    hud = [[MBProgressHUD alloc] init];
+    hud.labelText = @"查询中...";
+    [self.view addSubview:hud];
 }
 
 - (void)getDataByStore
@@ -70,7 +74,7 @@
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSArray * dRecommend = [DSRecommendList MR_findAllInContext:localContext];
         for (DSRecommendList* Recommend in dRecommend) {
-            NSDictionary* tempDic = [NSDictionary dictionaryWithObjectsAndKeys:Recommend.headImgID, @"headImgID", Recommend.nickName, @"nickname", Recommend.userName, @"username", Recommend.state, @"state", Recommend.fromID, @"type", Recommend.fromStr,@"dis",nil];
+            NSDictionary* tempDic = [NSDictionary dictionaryWithObjectsAndKeys:Recommend.headImgID, @"headImgID", Recommend.nickName, @"nickname", Recommend.userName, @"username", Recommend.state, @"state", Recommend.fromID, @"type", Recommend.fromStr,@"dis",Recommend.userid,@"userid",nil];
 //            [m_tableData addObject:tempDic];
             [m_tableData insertObject:tempDic atIndex:0];
         }
@@ -202,8 +206,18 @@
         
         [hud hide:YES];
         [DataStoreManager updateRecommendStatus:@"1" ForPerson:KISDictionaryHaveKey(tempDic, @"username")];
-        [DataStoreManager saveUserAttentionInfo:tempDic];
-        
+        if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"2"])
+        {
+            [self requestPeopleInfoWithName:KISDictionaryHaveKey(tempDic, @"username") ForType:2];
+        }
+        else if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"1"])
+        {
+            if ([DataStoreManager ifIsFansWithUserName:KISDictionaryHaveKey(tempDic, @"username")]) {
+                [DataStoreManager saveUserFriendWithFansList:KISDictionaryHaveKey(tempDic, @"username")];
+            }
+            else
+                [self requestPeopleInfoWithName:KISDictionaryHaveKey(tempDic, @"username") ForType:1];
+        }
         [tempDic setObject:@"1" forKey:@"state"];
         [m_tableData replaceObjectAtIndex:row withObject:tempDic];
         [m_myTableView reloadData];
@@ -219,6 +233,42 @@
         [hud hide:YES];
     }];
 }
+
+-(void)requestPeopleInfoWithName:(NSString *)userName ForType:(int)type
+{
+    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+    [paramDict setObject:userName forKey:@"username"];
+
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:paramDict forKey:@"params"];
+    [postDict setObject:@"106" forKey:@"method"];
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+
+    [hud show:YES];
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [hud hide:YES];
+
+        NSMutableDictionary * recDict = KISDictionaryHaveKey(responseObject, @"user");
+        if ([KISDictionaryHaveKey(responseObject, @"title") isKindOfClass:[NSArray class]] && [KISDictionaryHaveKey(responseObject, @"title") count] != 0) {
+            [recDict setObject:[KISDictionaryHaveKey(responseObject, @"title") objectAtIndex:0] forKey:@"title"];
+        }
+        
+        if ([recDict isKindOfClass:[NSDictionary class]]) {
+            if (type == 2) {//关注
+                [DataStoreManager saveUserAttentionInfo:recDict];
+            }
+            else if (type == 1)
+            {
+                [DataStoreManager saveUserInfo:recDict];
+            }
+        }
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [hud hide:YES];
+    }];
+}
+
 #pragma mark  scrollView  delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {

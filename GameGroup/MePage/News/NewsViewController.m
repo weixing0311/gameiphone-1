@@ -374,6 +374,12 @@
             cell.authImage.image = KUIImage(@"red_auth");
             cell.nickNameLabel.textColor = kColorWithRGB(255, 58, 48, 1.0);
         }
+        else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(destDic, @"superstar")] isEqualToString:@"1"])//superstar
+        {
+            cell.authImage.hidden = NO;
+            cell.authImage.image = KUIImage(@"v_auth");
+            cell.nickNameLabel.textColor = kColorWithRGB(84, 178, 64, 1.0);
+        }
         else
         {
             cell.authImage.hidden = YES;
@@ -393,7 +399,13 @@
         if ([KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:@"10000"]) {
             cell.authImage.hidden = NO;
             cell.authImage.image = KUIImage(@"red_auth");
-            cell.nickNameLabel.textColor = kColorWithRGB(255, 58, 48, 1.0);//84 178 64绿
+            cell.nickNameLabel.textColor = kColorWithRGB(255, 58, 48, 1.0);
+        }
+        else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"superstar")] isEqualToString:@"1"])//superstar
+        {
+            cell.authImage.hidden = NO;
+            cell.authImage.image = KUIImage(@"v_auth");
+            cell.nickNameLabel.textColor = kColorWithRGB(84, 178, 64, 1.0);
         }
         else
         {

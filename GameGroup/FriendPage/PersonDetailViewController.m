@@ -573,18 +573,35 @@
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         [hud hide:YES];
-        [DataStoreManager deleteFansWithUserName:self.userName];
-
-        if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
-            NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
-            [dic addEntriesFromDictionary:self.hostInfo.infoDic];
-            [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
-            
-            [DataStoreManager saveUserInfo:dic];
-        }
-        else
-            [DataStoreManager saveUserInfo:self.hostInfo.infoDic];
         
+        [DataStoreManager deleteFansWithUserName:self.userName];
+        [GameCommon shareGameCommon].fansCount = [NSString stringWithFormat:@"%d", [[GameCommon shareGameCommon].fansCount integerValue] - 1];
+        
+        if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"1"])
+        {
+            if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
+                NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [dic addEntriesFromDictionary:self.hostInfo.infoDic];
+                [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+                
+                [DataStoreManager saveUserInfo:dic];
+            }
+            else
+                [DataStoreManager saveUserInfo:self.hostInfo.infoDic];
+        }
+        else if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"2"])//关注
+        {
+            if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
+                NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [dic addEntriesFromDictionary:self.hostInfo.infoDic];
+                [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+                
+                [DataStoreManager saveUserAttentionInfo:dic];
+            }
+            else
+                [DataStoreManager saveUserAttentionInfo:self.hostInfo.infoDic];
+        }
+        [self showMessageWindowWithContent:@"添加成功" pointY:kScreenHeigth-100];
         [self.navigationController popViewControllerAnimated:YES];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
@@ -626,17 +643,22 @@
             
             [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [hud hide:YES];
+                
+                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];//删除聊天消息
                 [DataStoreManager deleteFriendWithUserName:self.userName];//从表删除
-                if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
-                    NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
-                    [dic addEntriesFromDictionary:self.hostInfo.infoDic];
-                    [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
-                    
-                    [DataStoreManager saveUserFansInfo:dic];
+                if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"3"])
+                {
+                    if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
+                        NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                        [dic addEntriesFromDictionary:self.hostInfo.infoDic];
+                        [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+                        
+                        [DataStoreManager saveUserFansInfo:dic];
+                    }
+                    else
+                        [DataStoreManager saveUserFansInfo:self.hostInfo.infoDic];//加到粉丝里
+                    [GameCommon shareGameCommon].fansCount = [NSString stringWithFormat:@"%d", [[GameCommon shareGameCommon].fansCount integerValue] + 1];
                 }
-                else
-                    [DataStoreManager saveUserFansInfo:self.hostInfo.infoDic];//加到粉丝里
-                [GameCommon shareGameCommon].fansCount = [NSString stringWithFormat:@"%d", [[GameCommon shareGameCommon].fansCount integerValue] + 1];
                 [self.navigationController popViewControllerAnimated:YES];
                 
             } failure:^(AFHTTPRequestOperation *operation, id error) {
@@ -669,6 +691,8 @@
         
         [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
             [hud hide:YES];
+            
+            [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];
 
             ////////////////////////
             [DataStoreManager deleteAttentionWithUserName:self.userName];
@@ -722,15 +746,30 @@
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         [hud hide:YES];
-        if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
-            NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
-            [dic addEntriesFromDictionary:self.hostInfo.infoDic];
-            [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
-            
-            [DataStoreManager saveUserAttentionInfo:dic];
+        if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"2"])
+        {
+            if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
+                NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [dic addEntriesFromDictionary:self.hostInfo.infoDic];
+                [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+                
+                [DataStoreManager saveUserAttentionInfo:dic];
+            }
+            else
+                [DataStoreManager saveUserAttentionInfo:self.hostInfo.infoDic];
         }
-        else
-            [DataStoreManager saveUserAttentionInfo:self.hostInfo.infoDic];
+        else if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"1"])//为好友
+        {
+            if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
+                NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [dic addEntriesFromDictionary:self.hostInfo.infoDic];
+                [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+                
+                [DataStoreManager saveUserInfo:dic];
+            }
+            else
+                [DataStoreManager saveUserInfo:self.hostInfo.infoDic];
+        }
         [self showMessageWindowWithContent:@"关注成功" pointY:kScreenHeigth-100];
         [self.navigationController popViewControllerAnimated:YES];
         

@@ -345,7 +345,9 @@
             }
             else if ([msgtype isEqualToString:@"sayHello"]){//打招呼的
                 [dict setObject:@"sayHello" forKey:@"msgType"];
-                [dict setObject:msgTime  forKey:@"time"];
+//                [dict setObject:msgTime  forKey:@"time"];
+                double newTime = [msgTime doubleValue]/1000;
+                [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
                 NSString * shiptype = [GameCommon getHeardImgId:[[message attributeForName:@"shiptype"] stringValue]];
                 [dict setObject:shiptype  forKey:@"shiptype"];
 

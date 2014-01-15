@@ -13,7 +13,6 @@
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 #import "GetDataAfterManager.h"
-#import "GameCommon.h"
 
 @implementation AppDelegate
 
@@ -37,6 +36,8 @@
     
     [MobClick startWithAppkey:@"52caacec56240b18e2035237"];
 //    [MobClick startWithAppkey:@"xxxxxxxxxxxxxxx" reportPolicy:BATCH   channelId:@""];
+    
+    [GetDataAfterManager shareManageCommon];
     [self.window makeKeyAndVisible];
     
 //    GetDataAfterManager* storeManager = [[GetDataAfterManager alloc] init];//创建

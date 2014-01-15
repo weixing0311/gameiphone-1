@@ -100,6 +100,7 @@
 
 +(NSString *)getMyUserID;
 +(void)saveUserFriendWithAttentionList:(NSString*)userName;
++(void)saveUserFriendWithFansList:(NSString*)userName;
 +(void)saveUserInfo:(NSDictionary *)myInfo;
 +(void)saveMyBackgroungImg:(NSString*)backgroundImg;
 //+(void)storeOnePetInfo:(NSDictionary *)petInfo;

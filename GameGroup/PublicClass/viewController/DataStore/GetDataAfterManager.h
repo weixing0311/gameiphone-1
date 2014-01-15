@@ -7,13 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AppDelegate.h"
 
 #define kNewMessageReceived @"newMessageReceived"
 #define kFriendHelloReceived @"friendHelloReceived"
 
-#define kNewMessageShow @"newMessageShow"
-#define kFriendHelloShow @"friendHelloShow"
+#define kDeleteAttention @"deleteAttentionReceived"
+#define kOtherMessage    @"otherMessage"
+#define kRecommendFriendReceived @"recommendFriendReceived"
 
-@interface GetDataAfterManager : UIViewController
+@interface GetDataAfterManager : NSObject
+
+@property(nonatomic,strong)AppDelegate* appDel;
+
++ (GetDataAfterManager*)shareManageCommon;
 
 @end

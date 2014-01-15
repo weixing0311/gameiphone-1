@@ -36,7 +36,7 @@
 
     [self setTopViewWithTitle:@"最新关注" withBackButton:YES];
     
-    [AFImageRequestOperation addAcceptableContentTypes:[NSSet setWithObject:@"multipart/form-data"]];
+//    [AFImageRequestOperation addAcceptableContentTypes:[NSSet setWithObject:@"multipart/form-data"]];
 
     UIButton *deleteButton=[UIButton buttonWithType:UIButtonTypeCustom];
     deleteButton.frame=CGRectMake(270, startX - 44, 50, 44);
@@ -50,7 +50,7 @@
     m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth)];
     m_myTableView.delegate = self;
     m_myTableView.dataSource = self;
-    m_myTableView.backgroundColor = [UIColor clearColor];
+//    m_myTableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:m_myTableView];
 }
 
@@ -88,18 +88,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    static NSString *identifier = @"myCell";
-//    MyNormalTableCell *cell = (MyNormalTableCell*)[tableView dequeueReusableCellWithIdentifier:identifier];
-//    if (cell == nil) {
-//        cell = [[MyNormalTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-//    }
-//    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//
-//    cell.heardImg.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-//    cell.heardImg.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",[self getHead:[[m_tableData objectAtIndex:indexPath.row] objectForKey:@"headImgID"]]]];
-//    
-//    cell.upLabel.text = [[m_tableData objectAtIndex:indexPath.row] objectForKey:@"nickName"];
-//    cell.downLabel.text = [[m_tableData objectAtIndex:indexPath.row] objectForKey:@"addtionMsg"];
     static NSString *identifier = @"userCell";
     MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {

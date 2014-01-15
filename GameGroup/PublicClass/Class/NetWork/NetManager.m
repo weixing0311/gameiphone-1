@@ -112,7 +112,7 @@ NSString * gen_uuid()
 }
 
 +(void)requestWithURLStrNoController:(NSString *)urlStr Parameters:(NSDictionary *)parameters success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+                 failure:(void (^)(AFHTTPRequestOperation *operation, id error))failure
 {
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:urlStr]];
     [httpClient setParameterEncoding:AFFormURLParameterEncoding];
@@ -127,11 +127,15 @@ NSString * gen_uuid()
         }
         else
         {
-            if ([dict objectForKey:@"entity"]) {
-                failure(operation,[dict objectForKey:@"entity"]);
+            NSDictionary* failDic = [NSDictionary dictionaryWithObjectsAndKeys:KISDictionaryHaveKey(dict, @"entity"), kFailMessageKey, KISDictionaryHaveKey(dict, @"errorcode"), kFailErrorCodeKey, nil];
+
+            if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dict, @"errorcode")] isEqualToString:@"100001"])
+            {//token无效
+                [self getTokenStatusMessage];
+                [GameCommon loginOut];
             }
-            else
-                failure(operation,nil);
+            failure(operation,failDic);
+            
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

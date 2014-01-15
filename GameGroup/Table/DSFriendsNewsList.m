@@ -2,7 +2,7 @@
 //  DSFriendsNewsList.m
 //  GameGroup
 //
-//  Created by Shen Yanping on 14-1-2.
+//  Created by Shen Yanping on 14-1-15.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
@@ -24,7 +24,8 @@
 @dynamic type;
 @dynamic urlLink;
 @dynamic userid;
-@dynamic zannum;
 @dynamic username;
+@dynamic zannum;
+@dynamic superstar;
 
 @end

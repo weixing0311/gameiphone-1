@@ -216,7 +216,6 @@
     refreshView.pullUpDelegate = self;
     refreshView.myScrollView = m_myFansTableView;
     [refreshView stopLoading:NO];
-    [refreshView setRefreshViewFrame];
     
     searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, startX + 40, 320, 44)];
     searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -318,6 +317,8 @@
 
     }
 //    [m_myTableView reloadData];
+    [searchDisplay setActive:NO animated:NO];
+
     [self refreshTopLabel];
 }
 
@@ -688,6 +689,8 @@
     [m_myTableView reloadData];
     [m_myAttentionsTableView reloadData];
     [m_myFansTableView reloadData];
+    [refreshView setRefreshViewFrame];
+
 //
     [self refreshTopLabel];
 }

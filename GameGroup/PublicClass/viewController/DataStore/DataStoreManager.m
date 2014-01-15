@@ -362,7 +362,9 @@
 {
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
     DSFriends * dFriend = [DSFriends MR_findFirstWithPredicate:predicate];
-    
+    if (!dFriend) {
+        return;
+    }
     NSString * myUserName = [GameCommon getNewStringWithId:dFriend.userName];
     NSString * nickName = [GameCommon getNewStringWithId:dFriend.nickName];
     NSString * gender = [GameCommon getNewStringWithId:dFriend.gender];
@@ -1439,9 +1441,11 @@
 +(void)saveUserFriendWithAttentionList:(NSString*)userName
 {
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
-    DSAttentions * dAttention = [DSFriends MR_findFirstWithPredicate:predicate];
-    
-    NSString * myUserName = [GameCommon getNewStringWithId:dAttention.userName];
+    DSAttentions * dAttention = [DSAttentions MR_findFirstWithPredicate:predicate];
+    if (!dAttention) {
+        return;
+    }
+    NSString * myUserName = userName;
     NSString * nickName = [GameCommon getNewStringWithId:dAttention.nickName];
     NSString * gender = [GameCommon getNewStringWithId:dAttention.sex];
     NSString * headImgID = [GameCommon getNewStringWithId:dAttention.headImgID];
@@ -1470,6 +1474,43 @@
     
     [DataStoreManager saveUserInfo:myDic];
 }
++(void)saveUserFriendWithFansList:(NSString*)userName
+{
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
+    DSFans * dfans = [DSFans MR_findFirstWithPredicate:predicate];
+    if (!dfans) {
+        return;
+    }
+    NSString * myUserName = userName;
+    NSString * nickName = [GameCommon getNewStringWithId:dfans.nickName];
+    NSString * gender = [GameCommon getNewStringWithId:dfans.sex];
+    NSString * headImgID = [GameCommon getNewStringWithId:dfans.headImgID];
+    NSString * age = [GameCommon getNewStringWithId:dfans.age];
+    NSString * userId = [GameCommon getNewStringWithId:dfans.userId];
+    NSString * alias = [GameCommon getNewStringWithId:dfans.remarkName];//别名
+    NSString * refreshTime = [GameCommon getNewStringWithId:dfans.refreshTime];
+    NSString * distance = [GameCommon getNewStringWithId:dfans.distance];
+    NSString * title = [GameCommon getNewStringWithId:dfans.achievement];
+    NSString * titleLevel = [GameCommon getNewStringWithId:dfans.achievementLevel];
+    
+    NSDictionary* titleData = [NSDictionary dictionaryWithObjectsAndKeys:title,@"title",titleLevel,@"rarenum", nil];
+    NSDictionary* titleObjDic = [NSDictionary dictionaryWithObject:titleData forKey:@"titleObj"];
+    
+    NSMutableDictionary* myDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [myDic setObject:myUserName forKey:@"username"];
+    [myDic setObject:nickName forKey:@"nickname"];
+    [myDic setObject:gender forKey:@"gender"];
+    [myDic setObject:headImgID forKey:@"img"];
+    [myDic setObject:age forKey:@"age"];
+    [myDic setObject:userId forKey:@"id"];
+    [myDic setObject:alias forKey:@"alias"];
+    [myDic setObject:refreshTime forKey:@"updateUserLocationDate"];
+    [myDic setObject:distance forKey:@"distance"];
+    [myDic setObject:titleObjDic forKey:@"title"];
+    
+    [DataStoreManager saveUserInfo:myDic];
+}
+
 +(void)saveUserInfo:(NSDictionary *)myInfo
 {
     NSString * myUserName = [GameCommon getNewStringWithId:[myInfo objectForKey:@"username"]];
@@ -1840,10 +1881,21 @@
     NSString * type = [GameCommon getNewStringWithId:[dataDic objectForKey:@"type"]];
     NSString * commentObj = [GameCommon getNewStringWithId:[dataDic objectForKey:@"commentObj"]];
     NSString * urlLink = [GameCommon getNewStringWithId:[dataDic objectForKey:@"urlLink"]];
-    NSString * img = [GameCommon getNewStringWithId:[dataDic objectForKey:@"img"]];
     NSString * zannum = [GameCommon getNewStringWithId:[dataDic objectForKey:@"zannum"]];
+   
     NSString * userid = [GameCommon getNewStringWithId:[dataDic objectForKey:@"userid"]];
     NSString * username = [GameCommon getNewStringWithId:[dataDic objectForKey:@"username"]];
+    NSString * img = [GameCommon getNewStringWithId:[dataDic objectForKey:@"img"]];
+    NSString * superStar = [GameCommon getNewStringWithId:[dataDic objectForKey:@"superstar"]];
+    if ([KISDictionaryHaveKey(dataDic, @"destUser") isKindOfClass:[NSDictionary class]])
+    {
+        NSDictionary *destDic = [dataDic objectForKey:@"destUser"];
+        userid = [GameCommon getNewStringWithId:[destDic objectForKey:@"userid"]];
+        username = [GameCommon getNewStringWithId:[destDic objectForKey:@"username"]];
+        img = [GameCommon getNewStringWithId:[destDic objectForKey:@"img"]];
+        superStar = [GameCommon getNewStringWithId:[destDic objectForKey:@"superstar"]];
+    }
+  
 
     if (newsId) {
         [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
@@ -1865,6 +1917,7 @@
             dMyNews.zannum = zannum;
             dMyNews.userid = userid;
             dMyNews.username = username;
+            dMyNews.superstar = superStar;
         }];
     }
 }
@@ -1892,11 +1945,20 @@
     NSString * type = [GameCommon getNewStringWithId:[dataDic objectForKey:@"type"]];
     NSString * commentObj = [GameCommon getNewStringWithId:[dataDic objectForKey:@"commentObj"]];
     NSString * urlLink = [GameCommon getNewStringWithId:[dataDic objectForKey:@"urlLink"]];
-    NSString * img = [GameCommon getNewStringWithId:[dataDic objectForKey:@"img"]];
     NSString * zannum = [GameCommon getNewStringWithId:[dataDic objectForKey:@"zannum"]];
+   
     NSString * userid = [GameCommon getNewStringWithId:[dataDic objectForKey:@"userid"]];
     NSString * username = [GameCommon getNewStringWithId:[dataDic objectForKey:@"username"]];
-
+    NSString * img = [GameCommon getNewStringWithId:[dataDic objectForKey:@"img"]];
+    NSString * superStar = [GameCommon getNewStringWithId:[dataDic objectForKey:@"superstar"]];
+    if ([KISDictionaryHaveKey(dataDic, @"destUser") isKindOfClass:[NSDictionary class]])
+    {
+        NSDictionary *destDic = [dataDic objectForKey:@"destUser"];
+        userid = [GameCommon getNewStringWithId:[destDic objectForKey:@"userid"]];
+        username = [GameCommon getNewStringWithId:[destDic objectForKey:@"username"]];
+        img = [GameCommon getNewStringWithId:[destDic objectForKey:@"img"]];
+        superStar = [GameCommon getNewStringWithId:[destDic objectForKey:@"superstar"]];
+    }
     if (newsId) {
         [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"newsId==[c]%@",newsId];
@@ -2091,16 +2153,16 @@
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
         DSReceivedHellos * dReceivedHellos = [DSReceivedHellos MR_findFirstWithPredicate:predicate];
-//        if (!dReceivedHellos)
-//        {
+        if (!dReceivedHellos)
+        {
             dReceivedHellos = [DSReceivedHellos MR_createInContext:localContext];
-//        }
+        }
         dReceivedHellos.userName = userName;
         dReceivedHellos.nickName = userNickname?userNickname:@"";
         dReceivedHellos.addtionMsg = addtionMsg?addtionMsg:@"";
         dReceivedHellos.headImgID = headID?headID:@"";
         dReceivedHellos.receiveTime = receiveTime;
-        dReceivedHellos.acceptStatus = @"waiting";
+//        dReceivedHellos.acceptStatus = @"waiting";
         if (dReceivedHellos.unreadCount.length>0) {
             dReceivedHellos.unreadCount = [NSString stringWithFormat:@"%d",[dReceivedHellos.unreadCount intValue]+1];
         }
@@ -2154,7 +2216,7 @@
         //        else
         [dict setObject:[[rechellos objectAtIndex:i] headImgID] forKey:@"headImgID"];
         [dict setObject:[[rechellos objectAtIndex:i] addtionMsg] forKey:@"addtionMsg"];
-        [dict setObject:[[rechellos objectAtIndex:i] acceptStatus] forKey:@"acceptStatus"];
+//        [dict setObject:[[rechellos objectAtIndex:i] acceptStatus] forKey:@"acceptStatus"];
         [dict setObject:[[rechellos objectAtIndex:i] receiveTime] forKey:@"receiveTime"];
         [dict setObject:[[rechellos objectAtIndex:i] unreadCount] forKey:@"unread"];
         
@@ -2234,6 +2296,7 @@
     NSString * userName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"username")];
     NSString * userNickname = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"nickname")];
     NSString * fromID = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"type")];
+    NSString * userid = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"userid")];
     NSArray* headArr = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"img")] componentsSeparatedByString:@","];
     NSString * headImgID = [headArr count] != 0 ? [headArr objectAtIndex:0] : @"";
     NSString * fromStr = @"";
@@ -2267,6 +2330,8 @@
         Recommend.headImgID = headImgID;
         Recommend.fromStr = fromStr;
         Recommend.fromID = fromID;
+        Recommend.userid = userid;
+
     }];
 
 }
