@@ -68,11 +68,11 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
 #pragma mark 收到聊天消息或其他消息
 -(void)newMessageReceived:(NSDictionary *)messageContent
 {
-    NSRange range = [[messageContent objectForKey:@"sender"] rangeOfString:@"@"];
-    NSString * sender = [[messageContent objectForKey:@"sender"] substringToIndex:range.location];
-    if (![DataStoreManager ifHaveThisUser:sender]) {//是否为好友 不是就请求资料
-        [self requestPeopleInfoWithName:sender ForType:1 Msg:nil];
-    }
+//    NSRange range = [[messageContent objectForKey:@"sender"] rangeOfString:@"@"];
+//    NSString * sender = [[messageContent objectForKey:@"sender"] substringToIndex:range.location];
+//    if (![DataStoreManager ifHaveThisUser:sender]) {//是否为好友 不是就请求资料
+//        [self requestPeopleInfoWithName:sender ForType:1 Msg:nil];
+//    }
     [self storeNewMessage:messageContent];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNewMessageReceived object:nil userInfo:messageContent];
@@ -226,12 +226,12 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             [DataStoreManager addPersonToReceivedHellos:uDict];
         }
         else if (type==1){//聊天消息
-            if ([DataStoreManager ifIsAttentionWithUserName:userName]) {
-                [DataStoreManager deleteAttentionWithUserName:userName];//从关注表删除
-                [DataStoreManager saveUserInfo:recDict];//存为好友
-            }
-            else
-                [DataStoreManager saveUserFansInfo:recDict];//存为粉丝
+//            if ([DataStoreManager ifIsAttentionWithUserName:userName]) {
+//                [DataStoreManager deleteAttentionWithUserName:userName];//从关注表删除
+//                [DataStoreManager saveUserInfo:recDict];//存为好友
+//            }
+//            else
+//                [DataStoreManager saveUserFansInfo:recDict];//存为粉丝
             
             //            [self displayMsgsForDefaultView];
         }

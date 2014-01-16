@@ -1434,8 +1434,36 @@
                 return dFriend.headImgID;
         }
     }
-    else
-        return @"no";
+    else if([userName isEqualToString:@"15811212096"])//小伙伴
+    {
+        DSFans* fans = [DSFans MR_findFirstWithPredicate:predicate];
+        if (fans && fans.headImgID) {
+            NSRange range=[fans.headImgID rangeOfString:@","];
+            if (range.location!=NSNotFound) {
+                NSArray *imageArray = [fans.headImgID componentsSeparatedByString:@","];
+
+                return [imageArray objectAtIndex:0];
+            }
+            else
+            {
+                return fans.headImgID;
+            }
+        }
+        DSAttentions *attention = [DSAttentions MR_findFirstWithPredicate:predicate];
+        if (attention && attention.headImgID) {
+            NSRange range=[attention.headImgID rangeOfString:@","];
+            if (range.location!=NSNotFound) {
+                NSArray *imageArray = [attention.headImgID componentsSeparatedByString:@","];
+                
+                return [imageArray objectAtIndex:0];
+            }
+            else
+            {
+                return attention.headImgID;
+            }
+        }
+    }
+    return @"no";
 }
 #pragma mark - 存储个人信息
 +(void)saveUserFriendWithAttentionList:(NSString*)userName
@@ -2163,10 +2191,10 @@
         dReceivedHellos.headImgID = headID?headID:@"";
         dReceivedHellos.receiveTime = receiveTime;
 //        dReceivedHellos.acceptStatus = @"waiting";
-        if (dReceivedHellos.unreadCount.length>0) {
-            dReceivedHellos.unreadCount = [NSString stringWithFormat:@"%d",[dReceivedHellos.unreadCount intValue]+1];
-        }
-        else
+//        if (dReceivedHellos.unreadCount.length>0) {
+//            dReceivedHellos.unreadCount = [NSString stringWithFormat:@"%d",[dReceivedHellos.unreadCount intValue]+1];
+//        }
+//        else
             dReceivedHellos.unreadCount = @"1";
         
 //        DSCommonMsgs * commonMsg = [DSCommonMsgs MR_createInContext:localContext];

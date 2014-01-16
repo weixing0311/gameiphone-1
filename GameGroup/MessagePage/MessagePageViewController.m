@@ -251,14 +251,10 @@
 - (void)displayMsgsForDefaultView
 {
     allMsgArray = (NSMutableArray *)[DataStoreManager qureyAllThumbMessages];
-    
-    //暂时只有打招呼，所以insert打招呼一个...
-//    [allMsgArray insertObject:[DataStoreManager qureyLastReceivedHello] atIndex:0];
     [self readAllnickNameAndImage];
     
     allMsgUnreadArray = (NSMutableArray *)[DataStoreManager queryUnreadCountForCommonMsg];
-//    [allMsgUnreadArray insertObject:[DataStoreManager qureyUnreadForReceivedHellos] atIndex:0];
-    //    [allMsgArray insertObject:[DataStoreManager queryLastPublicMsg] atIndex:0];
+
     [m_messageTable reloadData];
     [self displayTabbarNotification];
 }

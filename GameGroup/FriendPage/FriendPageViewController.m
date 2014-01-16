@@ -129,6 +129,8 @@
     
     [self setTopViewWithTitle:@"" withBackButton:NO];
     
+    m_currentPage = 1;
+    
     titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, KISHighVersion_7 ? 20 : 0, 220, 44)];
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.backgroundColor = [UIColor clearColor];
@@ -628,7 +630,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [m_myFansTableView reloadData];
             [self refreshTopLabel];
-            
+            [refreshView setRefreshViewFrame];
         });
     });
     //上拉加载
@@ -753,23 +755,40 @@
 #pragma mark - 搜索
 -(void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
+    if (KISHighVersion_7) {
+        [searchBar setFrame:CGRectMake(0, 20, 320, 44)];
+        searchBar.backgroundImage = [UIImage imageNamed:@"top.png"];
+        [UIView animateWithDuration:0.3 animations:^{
+//            [m_messageTable setFrame:CGRectMake(0, 20, 320, self.view.frame.size.height- 50 - startX)];
+//            m_messageTable.contentOffset = CGPointMake(0, -20);
+        } completion:^(BOOL finished) {
+
+        }];
+    }
 }
 
 -(void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
 {
-    if (KISHighVersion_7) {
-        
-    }
+
 }
 
 -(void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
 {
+    if (KISHighVersion_7) {
+        [UIView animateWithDuration:0.2 animations:^{
+            [searchBar setFrame:CGRectMake(0, 0, 320, 44)];
+            //            [m_messageTable setFrame:CGRectMake(0, startX, 320, self.view.frame.size.height - 50 - startX)];
+        } completion:^(BOOL finished) {
+            searchBar.backgroundImage = nil;
+        }];
+    }
 }
 -(void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView
 {
     if (KISHighVersion_7) {
-//        tableView.backgroundColor = [UIColor grayColor];
-//        [tableView setFrame:CGRectMake(0, 64, 320, self.view.frame.size.height - 50 - 64)];
+        //        tableView.backgroundColor = [UIColor grayColor];
+        [tableView setFrame:CGRectMake(0, 64, 320, self.view.frame.size.height - 50 - 64)];
+        //        [tableView setContentOffset:CGPointMake(0, 20)];
     }
 }
 

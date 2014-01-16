@@ -337,7 +337,12 @@
         if ([type isEqualToString:@"chat"]) {
             if ([msgtype isEqualToString:@"normalchat"]||!msgtype) {//聊天的
                 [dict setObject:@"normalchat" forKey:@"msgType"];
-                [dict setObject:msgTime  forKey:@"time"];
+                if (msgTime.length > 10) {
+                    double newTime = [msgTime doubleValue]/1000;
+                    [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
+                }
+                else
+                    [dict setObject:msgTime  forKey:@"time"];
 //                [dict setObject:fromNickName  forKey:@"nickname"];
 //                [dict setObject:fromimg  forKey:@"img"];
 
@@ -346,21 +351,27 @@
             else if ([msgtype isEqualToString:@"sayHello"]){//打招呼的
                 [dict setObject:@"sayHello" forKey:@"msgType"];
 //                [dict setObject:msgTime  forKey:@"time"];
-                double newTime = [msgTime doubleValue]/1000;
-                [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
-                NSString * shiptype = [GameCommon getHeardImgId:[[message attributeForName:@"shiptype"] stringValue]];
+                if (msgTime.length > 10) {
+                    double newTime = [msgTime doubleValue]/1000;
+                    [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
+                }
+                else
+                    [dict setObject:msgTime  forKey:@"time"];
+                NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
                 [dict setObject:shiptype  forKey:@"shiptype"];
 
-//                [dict setObject:fromNickName  forKey:@"nickname"];
-//                [dict setObject:fromimg  forKey:@"img"];
                 [self.addReqDelegate newAddReq:dict];
             }
             else if([msgtype isEqualToString:@"deletePerson"])//取消关注
             {
                 [dict setObject:@"deletePerson" forKey:@"msgType"];
-                double newTime = [msgTime doubleValue]/1000;
-                [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
-                NSString * shiptype = [GameCommon getHeardImgId:[[message attributeForName:@"shiptype"] stringValue]];
+                if (msgTime.length > 10) {
+                    double newTime = [msgTime doubleValue]/1000;
+                    [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
+                }
+                else
+                    [dict setObject:msgTime  forKey:@"time"];
+                NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
                 [dict setObject:shiptype  forKey:@"shiptype"];
 //                [dict setObject:fromNickName  forKey:@"nickname"];
 //                [dict setObject:fromimg  forKey:@"img"];
@@ -370,9 +381,13 @@
             else if ([msgtype isEqualToString:@"character"] || [msgtype isEqualToString:@"pveScore"] || [msgtype isEqualToString:@"title"])
             {
                 [dict setObject:msgtype forKey:@"msgType"];
-                double newTime = [msgTime doubleValue]/1000;
-                [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
-                NSLog(@"我的时间和标题 %@ %@",[NSString stringWithFormat:@"%.f", newTime], [[message attributeForName:@"title"] stringValue]);
+                if (msgTime.length > 10) {
+                    double newTime = [msgTime doubleValue]/1000;
+                    [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
+                }
+                else
+                    [dict setObject:msgTime  forKey:@"time"];
+
                 [dict setObject:[[message attributeForName:@"title"] stringValue] forKey:@"title"];
 //                [dict setObject:fromNickName  forKey:@"nickname"];
 //                [dict setObject:fromimg  forKey:@"img"];
@@ -382,8 +397,12 @@
             else if ([msgtype isEqualToString:@"recommendfriend"])//好友推荐
             {
                 [dict setObject:msgtype forKey:@"msgType"];
-                double newTime = [msgTime doubleValue]/1000;
-                [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
+                if (msgTime.length > 10) {
+                    double newTime = [msgTime doubleValue]/1000;
+                    [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
+                }
+                else
+                    [dict setObject:msgTime  forKey:@"time"];
                 
                 NSArray* arr = [msg JSONValue];
                 NSString* dis = @"";
@@ -472,8 +491,6 @@
                 
             }
         }
-        
-    
     }
 }
 
