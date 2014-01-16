@@ -1255,7 +1255,8 @@
             
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
             
-            [dictionary setObject:[NSString stringWithFormat:@"您和%@还不是好友关系，不能进行聊天",self.nickName] forKey:@"msg"];
+//            [dictionary setObject:[NSString stringWithFormat:@"您和%@还不是好友关系，不能进行聊天",self.nickName] forKey:@"msg"];
+            [dictionary setObject:[NSString stringWithFormat:@"若要回复消息，请点击右上角图标加%@为好友",self.nickName] forKey:@"msg"];
             [dictionary setObject:@"you" forKey:@"sender"];
             //加入发送时间
             [dictionary setObject:[GameCommon getCurrentTime] forKey:@"time"];

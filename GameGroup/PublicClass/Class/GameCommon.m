@@ -24,8 +24,11 @@ static GameCommon *my_gameCommon = NULL;
         self.isFirst = YES;
         self.deviceToken = @"";
         self.connectTimes = 3;
-//        self.haveMyNews = NO;
-//        self.haveFriendNews = NO;
+        
+        self.friendTableChanged = NO;
+        self.attentionTableChanged = NO;
+        self.fansTableChanged = NO;
+        
         self.fansCount = @"0";
         self.wow_realms = [NSMutableDictionary dictionaryWithCapacity:1];
         self.wow_clazzs = [NSMutableArray arrayWithCapacity:1];
@@ -280,7 +283,7 @@ static GameCommon *my_gameCommon = NULL;
 + (NSString*)getTimeWithMessageTime:(NSString*)messageTime
 {
     NSString* currentString = [GameCommon getCurrentTime];
-    if (messageTime.length < 10 || currentString.length < 10) {
+    if ([NSString stringWithFormat:@"%.f", [messageTime doubleValue]].length < 10 || [NSString stringWithFormat:@"%.f", [currentString doubleValue]].length < 10) {
         return @"未知";
     }
     NSString * finalTime;
@@ -340,7 +343,7 @@ static GameCommon *my_gameCommon = NULL;
 
 - (NSString*)getDataWithTimeInterval:(NSString*)timeInterval
 {
-    if (timeInterval.length < 10) {
+    if ([NSString stringWithFormat:@"%.f", [timeInterval doubleValue]].length < 10) {
         return timeInterval;
     }
     NSString* timeStr = [timeInterval substringToIndex:timeInterval.length-3];

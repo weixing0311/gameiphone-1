@@ -575,6 +575,8 @@
         [hud hide:YES];
         
         [DataStoreManager deleteFansWithUserName:self.userName];
+        [GameCommon shareGameCommon].fansTableChanged = YES;
+
         [GameCommon shareGameCommon].fansCount = [NSString stringWithFormat:@"%d", [[GameCommon shareGameCommon].fansCount integerValue] - 1];
         
         if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"1"])
@@ -588,6 +590,7 @@
             }
             else
                 [DataStoreManager saveUserInfo:self.hostInfo.infoDic];
+            [GameCommon shareGameCommon].friendTableChanged = YES;
         }
         else if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"2"])//关注
         {
@@ -600,6 +603,7 @@
             }
             else
                 [DataStoreManager saveUserAttentionInfo:self.hostInfo.infoDic];
+            [GameCommon shareGameCommon].attentionTableChanged = YES;//有更新
         }
         [self showMessageWindowWithContent:@"添加成功" pointY:kScreenHeigth-100];
         [self.navigationController popViewControllerAnimated:YES];
@@ -646,6 +650,8 @@
                 
                 [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];//删除聊天消息
                 [DataStoreManager deleteFriendWithUserName:self.userName];//从表删除
+                [GameCommon shareGameCommon].friendTableChanged = YES;
+
                 if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"3"])
                 {
                     if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
@@ -657,6 +663,8 @@
                     }
                     else
                         [DataStoreManager saveUserFansInfo:self.hostInfo.infoDic];//加到粉丝里
+                    [GameCommon shareGameCommon].fansTableChanged = YES;
+
                     [GameCommon shareGameCommon].fansCount = [NSString stringWithFormat:@"%d", [[GameCommon shareGameCommon].fansCount integerValue] + 1];
                 }
                 [self.navigationController popViewControllerAnimated:YES];
@@ -696,6 +704,8 @@
 
             ////////////////////////
             [DataStoreManager deleteAttentionWithUserName:self.userName];
+            [GameCommon shareGameCommon].attentionTableChanged = YES;
+
             [self.navigationController popViewControllerAnimated:YES];
             
         } failure:^(AFHTTPRequestOperation *operation, id error) {
@@ -757,6 +767,7 @@
             }
             else
                 [DataStoreManager saveUserAttentionInfo:self.hostInfo.infoDic];
+            [GameCommon shareGameCommon].attentionTableChanged = YES;
         }
         else if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"1"])//为好友
         {
@@ -769,6 +780,7 @@
             }
             else
                 [DataStoreManager saveUserInfo:self.hostInfo.infoDic];
+            [GameCommon shareGameCommon].friendTableChanged = YES;
         }
         [self showMessageWindowWithContent:@"关注成功" pointY:kScreenHeigth-100];
         [self.navigationController popViewControllerAnimated:YES];

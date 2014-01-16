@@ -55,9 +55,9 @@
     [super viewWillAppear:animated];
     
     [[Custom_tabbar showTabBar] hideTabBar:NO];
-    if (![self.appDel.xmppHelper ifXMPPConnected]) {
-        titleLabel.text = @"消息(未连接)";
-    }
+//    if (![self.appDel.xmppHelper ifXMPPConnected]) {
+//        titleLabel.text = @"消息(未连接)";
+//    }
 //    self.appDel.xmppHelper.buddyListDelegate = self;
 //    self.appDel.xmppHelper.chatDelegate = self;
 //    self.appDel.xmppHelper.processFriendDelegate = self;
@@ -97,12 +97,14 @@
     
         [self.view bringSubviewToFront:hud];
         if ([GameCommon shareGameCommon].isFirst) {
+                titleLabel.text = @"消息(连接中...)";
                 [self getFriendByHttp];
                 [self sendDeviceToken];
         }
         else
         {
             if (![self.appDel.xmppHelper ifXMPPConnected]&&![titleLabel.text isEqualToString:@"消息(连接中...)"]) {
+                 titleLabel.text = @"消息(连接中...)";
                 [self getChatServer];
             }
         }
@@ -351,32 +353,32 @@
 #pragma mark 数据存储
 -(void)makeMsgVStoreMsg:(NSDictionary *)messageContent
 {
-    [self storeNewMessage:messageContent];
+//    [self storeNewMessage:messageContent];
 }
-
--(void)storeNewMessage:(NSDictionary *)messageContent
-{
-    NSString * type = KISDictionaryHaveKey(messageContent, @"msgType");
-    type = type?type:@"notype";
-    if ([type isEqualToString:@"reply"]||[type isEqualToString:@"zanDynamic"]) {
-        [DataStoreManager storeNewMsgs:messageContent senderType:SYSTEMNOTIFICATION];//系统消息
-    }
-    else if([type isEqualToString:@"normalchat"])
-    {
-        AudioServicesPlayAlertSound(1007);
-        [DataStoreManager storeNewMsgs:messageContent senderType:COMMONUSER];//普通聊天消息
-    }
-    else if ([type isEqualToString:@"sayHello"] || [type isEqualToString:@"deletePerson"])//关注和取消关注
-    {
-        AudioServicesPlayAlertSound(1007);
-
-        [DataStoreManager storeNewMsgs:messageContent senderType:SAYHELLOS];//打招呼消息
-    }
-    else if([type isEqualToString:@"recommendfriend"])
-    {
-        [DataStoreManager storeNewMsgs:messageContent senderType:RECOMMENDFRIEND];
-    }
-}
+//
+//-(void)storeNewMessage:(NSDictionary *)messageContent
+//{
+//    NSString * type = KISDictionaryHaveKey(messageContent, @"msgType");
+//    type = type?type:@"notype";
+//    if ([type isEqualToString:@"reply"]||[type isEqualToString:@"zanDynamic"]) {
+//        [DataStoreManager storeNewMsgs:messageContent senderType:SYSTEMNOTIFICATION];//系统消息
+//    }
+//    else if([type isEqualToString:@"normalchat"])
+//    {
+//        AudioServicesPlayAlertSound(1007);
+//        [DataStoreManager storeNewMsgs:messageContent senderType:COMMONUSER];//普通聊天消息
+//    }
+//    else if ([type isEqualToString:@"sayHello"] || [type isEqualToString:@"deletePerson"])//关注和取消关注
+//    {
+//        AudioServicesPlayAlertSound(1007);
+//
+//        [DataStoreManager storeNewMsgs:messageContent senderType:SAYHELLOS];//打招呼消息
+//    }
+//    else if([type isEqualToString:@"recommendfriend"])
+//    {
+//        [DataStoreManager storeNewMsgs:messageContent senderType:RECOMMENDFRIEND];
+//    }
+//}
 
 
 #pragma mark 表格
@@ -817,6 +819,7 @@
         if ([GameCommon shareGameCommon].connectTimes > 3) {
             return;
         }
+        [titleLabel setText:@"消息(连接中...)"];
         [self logInToChatServer];
     }
 }

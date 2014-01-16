@@ -11,8 +11,9 @@
 @interface GameCommon : NSObject
 
 @property(nonatomic, strong) NSString*  fansCount;//总粉丝数
-//@property(nonatomic, assign) BOOL haveMyNews;//新我的动态
-//@property(nonatomic, assign) BOOL haveFriendNews;//好友动态
+@property(nonatomic, assign) BOOL friendTableChanged;//好友表有更新 进入联系人页时是否刷新表单
+@property(nonatomic, assign) BOOL attentionTableChanged;//关注表有更新
+@property(nonatomic, assign) BOOL fansTableChanged;//粉丝表有更新
 
 @property(nonatomic, assign) BOOL isFirst;//程序第一次启动 注销再登录也为第一次
 

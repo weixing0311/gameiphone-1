@@ -85,8 +85,9 @@
 {
     [m_remarkText resignFirstResponder];
     if (KISEmptyOrEnter(m_remarkText.text)) {
-        [self showAlertViewWithTitle:@"提示" message:@"请输入备注名称" buttonTitle:@"确定"];
-        return;
+//        [self showAlertViewWithTitle:@"提示" message:@"请输入备注名称" buttonTitle:@"确定"];
+//        return;
+        m_remarkText.text = @"";
     }
     else if([[GameCommon shareGameCommon] unicodeLengthOfString:m_remarkText.text] > 6)
     {

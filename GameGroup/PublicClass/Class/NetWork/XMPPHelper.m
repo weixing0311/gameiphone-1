@@ -337,7 +337,7 @@
         if ([type isEqualToString:@"chat"]) {
             if ([msgtype isEqualToString:@"normalchat"]||!msgtype) {//聊天的
                 [dict setObject:@"normalchat" forKey:@"msgType"];
-                if (msgTime.length > 10) {
+                if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
                     double newTime = [msgTime doubleValue]/1000;
                     [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
                 }
@@ -351,7 +351,7 @@
             else if ([msgtype isEqualToString:@"sayHello"]){//打招呼的
                 [dict setObject:@"sayHello" forKey:@"msgType"];
 //                [dict setObject:msgTime  forKey:@"time"];
-                if (msgTime.length > 10) {
+                if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
                     double newTime = [msgTime doubleValue]/1000;
                     [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
                 }
@@ -365,7 +365,7 @@
             else if([msgtype isEqualToString:@"deletePerson"])//取消关注
             {
                 [dict setObject:@"deletePerson" forKey:@"msgType"];
-                if (msgTime.length > 10) {
+                if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
                     double newTime = [msgTime doubleValue]/1000;
                     [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
                 }
@@ -381,7 +381,7 @@
             else if ([msgtype isEqualToString:@"character"] || [msgtype isEqualToString:@"pveScore"] || [msgtype isEqualToString:@"title"])
             {
                 [dict setObject:msgtype forKey:@"msgType"];
-                if (msgTime.length > 10) {
+                if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
                     double newTime = [msgTime doubleValue]/1000;
                     [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
                 }
@@ -397,7 +397,7 @@
             else if ([msgtype isEqualToString:@"recommendfriend"])//好友推荐
             {
                 [dict setObject:msgtype forKey:@"msgType"];
-                if (msgTime.length > 10) {
+                if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
                     double newTime = [msgTime doubleValue]/1000;
                     [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
                 }
