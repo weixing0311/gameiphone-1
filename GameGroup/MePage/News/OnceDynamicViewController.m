@@ -327,7 +327,7 @@
     else
     {
         UIWebView* mWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, startX + 60, kScreenWidth, kScreenHeigth - 50 - startX - 60-(KISHighVersion_7?0:20))];
-        mWebView.scalesPageToFit = YES;
+//        mWebView.scalesPageToFit = YES;
         mWebView.delegate = self;
         NSURL *requestUrl = [NSURL URLWithString:self.urlLink];
         NSURLRequest *request = [NSURLRequest requestWithURL:requestUrl];

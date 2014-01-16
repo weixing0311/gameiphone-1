@@ -248,7 +248,7 @@
             [hud hide:YES];
 
             NSLog(@"%@", responseObject);
-            
+            [self showMessageWindowWithContent:@"添加成功" pointY:kScreenHeigth-100];
             [self.navigationController popViewControllerAnimated:YES];
             
         } failure:^(AFHTTPRequestOperation *operation, id error) {

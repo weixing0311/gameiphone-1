@@ -515,8 +515,13 @@
         finalTime = @"昨天";
     }
     else
-        finalTime = [NSString stringWithFormat:@"%.f天前",(theCurrentT-theMessageT)/86400];
-    
+    {
+        if ((theCurrentT-theMessageT)/86400 <= 0) {
+            finalTime = @"1天前";
+        }
+        else
+            finalTime = [NSString stringWithFormat:@"%.f天前",(theCurrentT-theMessageT)/86400];
+    }
     return finalTime;
 }
 

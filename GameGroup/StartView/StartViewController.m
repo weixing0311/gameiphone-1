@@ -71,7 +71,7 @@
 //            }
 //            else
 //            {
-                splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start.jpg"]];
+                splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start.png"]];
                 splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
 //            }
         }
@@ -85,7 +85,7 @@
 //        }
 //        else
 //        {
-            splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start.jpg"]];
+            splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start.png"]];
             splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
 //        }
     }
