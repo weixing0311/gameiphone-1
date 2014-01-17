@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "DSSayHellos.h"
-#import "DSArticles.h"
 #import "DSThumbMsgs.h"
 #import "DSThumbPublicMsgs.h"
 

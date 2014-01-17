@@ -2,7 +2,7 @@
 //  DSRecommendList.h
 //  GameGroup
 //
-//  Created by Shen Yanping on 14-1-15.
+//  Created by Shen Yanping on 14-1-17.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
@@ -17,7 +17,8 @@
 @property (nonatomic, retain) NSString * headImgID;
 @property (nonatomic, retain) NSString * nickName;
 @property (nonatomic, retain) NSString * state;
-@property (nonatomic, retain) NSString * userName;
 @property (nonatomic, retain) NSString * userid;
+@property (nonatomic, retain) NSString * userName;
+@property (nonatomic, retain) NSDate * sendTime;
 
 @end

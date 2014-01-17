@@ -2,7 +2,7 @@
 //  DSRecommendList.m
 //  GameGroup
 //
-//  Created by Shen Yanping on 14-1-15.
+//  Created by Shen Yanping on 14-1-17.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
@@ -16,7 +16,8 @@
 @dynamic headImgID;
 @dynamic nickName;
 @dynamic state;
-@dynamic userName;
 @dynamic userid;
+@dynamic userName;
+@dynamic sendTime;
 
 @end

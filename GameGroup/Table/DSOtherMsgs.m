@@ -16,6 +16,5 @@
 @dynamic msgType;
 @dynamic sendTime;
 @dynamic myTitle;
-@dynamic level;
 
 @end

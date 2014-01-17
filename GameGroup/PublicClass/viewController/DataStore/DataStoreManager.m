@@ -543,7 +543,7 @@
         NSString * modTime = [[fri objectAtIndex:i] refreshTime];//
         double distance = [[[fri objectAtIndex:i] distance] doubleValue];//
 
-        if (![userName isEqualToString:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]&&nameK) {
+        if (![userName isEqualToString:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]) {
             NSMutableDictionary * theDict = [NSMutableDictionary dictionary];
             [theDict setObject:userName forKey:@"username"];
             [theDict setObject:nickName?nickName:@"" forKey:@"nickname"];
@@ -801,7 +801,7 @@
         NSString * modTime = [[fri objectAtIndex:i] refreshTime];//
         double distance = [[[fri objectAtIndex:i] distance] doubleValue];//
         NSLog(@"昵称：%@ 距离：%.f",nickName, distance);
-        if (![userName isEqualToString:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]&&nameK) {
+        if (![userName isEqualToString:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]) {
             NSMutableDictionary * theDict = [NSMutableDictionary dictionary];
             [theDict setObject:userName forKey:@"username"];
             [theDict setObject:nickName?nickName:@"" forKey:@"nickname"];
@@ -1101,7 +1101,7 @@
         NSString * modTime = [[fri objectAtIndex:i] refreshTime];//
         double distance = [[[fri objectAtIndex:i] distance] doubleValue];//
 
-        if (![userName isEqualToString:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]&&nameK)
+        if (![userName isEqualToString:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]])
         {
             NSMutableDictionary* theDict = [NSMutableDictionary dictionary];
 
