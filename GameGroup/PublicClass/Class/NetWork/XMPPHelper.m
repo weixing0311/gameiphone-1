@@ -329,34 +329,26 @@
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         [dict setObject:msg forKey:@"msg"];
         [dict setObject:from forKey:@"sender"];
+       
         //[dict setObject:fromNickName forKey:@"nickname"];
         //消息接收到的时间
-        
-        //消息委托(这个后面讲)
+        if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
+            double newTime = [msgTime doubleValue]/1000;
+            [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
+        }
+        else
+            [dict setObject:msgTime  forKey:@"time"];
+
         NSLog(@"theDict%@",dict);
         if ([type isEqualToString:@"chat"]) {
             if ([msgtype isEqualToString:@"normalchat"]||!msgtype) {//聊天的
                 [dict setObject:@"normalchat" forKey:@"msgType"];
-                if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
-                    double newTime = [msgTime doubleValue]/1000;
-                    [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
-                }
-                else
-                    [dict setObject:msgTime  forKey:@"time"];
-//                [dict setObject:fromNickName  forKey:@"nickname"];
-//                [dict setObject:fromimg  forKey:@"img"];
-
+              
                 [self.chatDelegate newMessageReceived:dict];
             }
             else if ([msgtype isEqualToString:@"sayHello"]){//打招呼的
                 [dict setObject:@"sayHello" forKey:@"msgType"];
-//                [dict setObject:msgTime  forKey:@"time"];
-                if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
-                    double newTime = [msgTime doubleValue]/1000;
-                    [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
-                }
-                else
-                    [dict setObject:msgTime  forKey:@"time"];
+
                 NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
                 [dict setObject:shiptype  forKey:@"shiptype"];
 
@@ -365,44 +357,23 @@
             else if([msgtype isEqualToString:@"deletePerson"])//取消关注
             {
                 [dict setObject:@"deletePerson" forKey:@"msgType"];
-                if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
-                    double newTime = [msgTime doubleValue]/1000;
-                    [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
-                }
-                else
-                    [dict setObject:msgTime  forKey:@"time"];
+               
                 NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
                 [dict setObject:shiptype  forKey:@"shiptype"];
-//                [dict setObject:fromNickName  forKey:@"nickname"];
-//                [dict setObject:fromimg  forKey:@"img"];
                 
                 [self.deletePersonDelegate deletePersonReceived:dict];
             }
             else if ([msgtype isEqualToString:@"character"] || [msgtype isEqualToString:@"pveScore"] || [msgtype isEqualToString:@"title"])
             {
                 [dict setObject:msgtype forKey:@"msgType"];
-                if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
-                    double newTime = [msgTime doubleValue]/1000;
-                    [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
-                }
-                else
-                    [dict setObject:msgTime  forKey:@"time"];
-
+              
                 [dict setObject:[[message attributeForName:@"title"] stringValue] forKey:@"title"];
-//                [dict setObject:fromNickName  forKey:@"nickname"];
-//                [dict setObject:fromimg  forKey:@"img"];
                 
                 [self.otherMsgReceiveDelegate otherMessageReceived:dict];
             }
             else if ([msgtype isEqualToString:@"recommendfriend"])//好友推荐
             {
                 [dict setObject:msgtype forKey:@"msgType"];
-                if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
-                    double newTime = [msgTime doubleValue]/1000;
-                    [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
-                }
-                else
-                    [dict setObject:msgTime  forKey:@"time"];
                 
                 NSArray* arr = [msg JSONValue];
                 NSString* dis = @"";
@@ -423,72 +394,27 @@
                 [dict setObject:dis forKey:@"disStr"];
                 [self.recommendReceiveDelegate recommendFriendReceived:dict];
             }
-            else if([msgtype isEqualToString:@"frienddynamicmsg"] || [msgtype isEqualToString:@"mydynamicmsg"])
+            else if([msgtype isEqualToString:@"frienddynamicmsg"] || [msgtype isEqualToString:@"mydynamicmsg"])//动态
             {
                 if ([msgtype isEqualToString:@"frienddynamicmsg"]) {
-                    [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveFriendNews];
-                    [[NSUserDefaults standardUserDefaults] synchronize];                }
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews]) {
+                        
+                        NSInteger unRead = [[[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews] integerValue] + 1;
+                        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d", unRead] forKey:haveFriendNews];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                    else
+                    {
+                        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveFriendNews];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                }
                 else
                 {
                     [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveMyNews];
                     [[NSUserDefaults standardUserDefaults] synchronize];
                 }
                 [[GameCommon shareGameCommon] displayTabbarNotification];
-            }
-            else {/*
-                [dict setObject:[NSString stringWithFormat:@"%lld",[msgTime longLongValue]/1000]  forKey:@"time"];
-                //此处时间应该message里携带，暂时没有，使用当前时间
-                [dict setObject:msgtype forKey:@"msgType"];
-//                msgTime = [NSString stringWithFormat:@"%.0f",[msgTime doubleValue]/1000];
-//                [dict setObject:msgTime forKey:@"time"];
-                if (![from isEqualToString:receiver]&&([msgtype isEqualToString:@"reply"]||[msgtype isEqualToString:@"zanDynamic"])) {
-                    [dict setObject:[[message attributeForName:@"contentType"] stringValue] forKey:@"contentType"];
-                    [dict setObject:[[message attributeForName:@"content"] stringValue] forKey:@"content"];
-                    [dict setObject:[[message attributeForName:@"picID"] stringValue] forKey:@"picID"];
-                    [dict setObject:[[message attributeForName:@"contentID"] stringValue] forKey:@"contentID"];
-                    [dict setObject:[[message attributeForName:@"fromNickname"] stringValue] forKey:@"fromNickname"];
-                    [dict setObject:[[message attributeForName:@"fromHeadImg"] stringValue] forKey:@"fromHeadImg"];
-                    
-                    if ([msgtype isEqualToString:@"reply"]) {
-                        if ([[[message attributeForName:@"contentType"] stringValue] isEqualToString:@"dynamic"]) {
-                            [dict setObject:[NSString stringWithFormat:@"在动态中评论了你:%@",msg] forKey:@"replyContent"];
-                            [dict setObject:@"no" forKey:@"floor"];
-                            [dict setObject:[NSString stringWithFormat:@"%@在动态中评论了你:%@",[[message attributeForName:@"fromNickname"] stringValue],msg] forKey:@"msg"];
-//                            [dict setObject:@"123456789@chongwuquan.com" forKey:@"sender"];
-                            [self.chatDelegate newMessageReceived:dict];
-                        }
-                        else
-                        {
-                            [dict setObject:msg forKey:@"floor"];
-                            [dict setObject:[NSString stringWithFormat:@"在帖子《%@》%d楼中评论了你",[[message attributeForName:@"content"] stringValue],[msg intValue]+1] forKey:@"replyContent"];
-                            
-                            [dict setObject:[NSString stringWithFormat:@"%@在帖子《%@》%d楼中评论了你",[[message attributeForName:@"fromNickname"] stringValue],[[message attributeForName:@"content"] stringValue],[msg intValue]+1] forKey:@"msg"];
-//                            [dict setObject:@"123456789@chongwuquan.com" forKey:@"sender"];
-                            [self.chatDelegate newMessageReceived:dict];
-                        }
-                        
-                    }
-                    else
-                    {
-                        [dict setObject:@"赞了你的动态" forKey:@"replyContent"];
-                        [dict setObject:@"no" forKey:@"floor"];
-                        [dict setObject:[NSString stringWithFormat:@"%@赞了你的动态",[[message attributeForName:@"fromNickname"] stringValue]] forKey:@"msg"];
-//                        [dict setObject:@"123456789@chongwuquan.com" forKey:@"sender"];
-                        [self.chatDelegate newMessageReceived:dict];
-                    }
-                    [dict setObject:@"no" forKey:@"ifRead"];
-                    [self.commentDelegate newCommentReceived:dict];
-                }
-                else if ([msgtype isEqualToString:@"zanPeople"]){
-                    
-                }
-                else if ([msgtype isEqualToString:@"zanPet"]){
-                    
-                }
-                */
-                
-                //评论，回复，赞，在这里解析，或者通用newMessageReceived，在那个方法里解析dict,赞人赞宠物后面处理...
-                
             }
         }
     }

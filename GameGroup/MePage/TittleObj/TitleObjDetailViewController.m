@@ -472,6 +472,7 @@
     }
     
     [m_sortDataArray removeAllObjects];
+    [m_sortTableView reloadData];
     
     isGetForData = NO;
     m_lastPageIndex = -1;

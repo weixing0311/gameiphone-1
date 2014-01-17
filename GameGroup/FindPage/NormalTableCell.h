@@ -13,5 +13,6 @@
 @property(nonatomic, strong)UIImageView*   leftImageView;
 @property(nonatomic, strong)UILabel*       titleLable;
 @property (strong,nonatomic) UIImageView* notiBgV;
+@property (strong,nonatomic) UILabel * unreadCountLabel;
 
 @end

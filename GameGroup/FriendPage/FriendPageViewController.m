@@ -287,8 +287,17 @@
         m_myAttentionsTableView.hidden = YES;
         m_myFansTableView.hidden = YES;
         
-        if ([[m_friendDict allKeys] count] == 0) {
-            [self refreshFriendList:kSegmentFrinds];
+        if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"])
+        {
+            if ([[m_friendDict allKeys] count] == 0) {
+                [self refreshFriendList:kSegmentFrinds];
+            }
+        }
+        else
+        {
+            if ([m_otherSortFriendArray count] == 0) {
+                 [self refreshFriendList:kSegmentFrinds];
+            }
         }
     }
     else if(segButton == m_attentionButton)
@@ -303,8 +312,17 @@
         m_myAttentionsTableView.hidden = NO;
         m_myFansTableView.hidden = YES;
         
-        if ([[m_attentionDict allKeys] count] == 0) {
-            [self refreshFriendList:kSegmentAttention];
+        if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"])
+        {
+            if ([[m_attentionDict allKeys] count] == 0) {
+                [self refreshFriendList:kSegmentAttention];
+            }
+        }
+        else
+        {
+            if ([m_otherSortAttentionArray count] == 0) {
+                 [self refreshFriendList:kSegmentAttention];
+            }
         }
     }
     else
@@ -816,9 +834,6 @@
 //        return [searchResultArray count];
 //    }
     if (tableView == m_myTableView) {
-        if ([m_sectionArray_friend count] == 0) {//首次进入无数据
-            return 0;
-        }
        if(![[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"])
        {
            return [m_otherSortFriendArray count];
@@ -828,9 +843,9 @@
     }
     else if(tableView == m_myAttentionsTableView)
     {
-        if ([m_sectionArray_attention count] == 0) {//首次进入无数据
-            return 0;
-        }
+//        if ([m_sectionArray_attention count] == 0) {//首次进入无数据
+//            return 0;
+//        }
         if(![[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"])
             return [m_otherSortAttentionArray count];
         else
@@ -838,10 +853,6 @@
     }
     else
     {
-//        if ([m_sectionArray_fans count] == 0) {//首次进入无数据
-//            return 0;
-//        }
-//        return [[[m_sectionArray_fans objectAtIndex:section] objectAtIndex:1] count];//0 为index 1为nameKey数组
         return [m_otherSortFansArray count];
     }
 }

@@ -18,11 +18,18 @@
         self.leftImageView.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.leftImageView];
         
-        self.notiBgV = [[UIImageView alloc] initWithFrame:CGRectMake(270, 10, 28, 22)];
-        [self.notiBgV setImage:[UIImage imageNamed:@"redpot"]];
+        self.notiBgV = [[UIImageView alloc] initWithFrame:CGRectMake(265, 11, 28, 22)];
+        [self.notiBgV setImage:[UIImage imageNamed:@"redCB.png"]];
         [self addSubview:self.notiBgV];
         self.notiBgV.hidden = YES;
         
+        self.unreadCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(-1, 0, 30, 22)];
+        [self.unreadCountLabel setBackgroundColor:[UIColor clearColor]];
+        [self.unreadCountLabel setTextAlignment:NSTextAlignmentCenter];
+        [self.unreadCountLabel setTextColor:[UIColor whiteColor]];
+        self.unreadCountLabel.font = [UIFont systemFontOfSize:14.0];
+        [self.notiBgV addSubview:self.unreadCountLabel];
+
         self.titleLable = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, 200, self.frame.size.height)];
         self.titleLable.backgroundColor = [UIColor clearColor];
         self.titleLable.textColor = [UIColor blackColor];

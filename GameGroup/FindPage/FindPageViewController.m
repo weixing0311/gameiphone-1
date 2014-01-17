@@ -96,12 +96,20 @@
         {
             cell.leftImageView.image = KUIImage(@"state_icon");
             cell.titleLable.text = @"好友动态";
-            if ([[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] && [[[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] isEqualToString:@"1"])
+            if ([[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] && ![[[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] isEqualToString:@"0"])
             {
                 cell.notiBgV.hidden = NO;
+                NSString* unCont = [[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews];
+                if ([unCont integerValue] > 99) {
+                     cell.unreadCountLabel.text = @"99";
+                }
+                else
+                    cell.unreadCountLabel.text = unCont;
             }
             else
+            {
                 cell.notiBgV.hidden = YES;
+            }
         } break;
         case 1:
         {
@@ -153,6 +161,7 @@
             
             [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:haveFriendNews];
             [[NSUserDefaults standardUserDefaults] synchronize];
+            
             [[GameCommon shareGameCommon] displayTabbarNotification];
 
         }break;

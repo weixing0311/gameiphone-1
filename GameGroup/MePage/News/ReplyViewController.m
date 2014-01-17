@@ -391,8 +391,9 @@
     [m_replyTabel deselectRowAtIndexPath:indexPath animated:YES];
     
     NSDictionary* tempDict = [m_dataReply objectAtIndex:indexPath.row];
-    NSString* nickName = [KISDictionaryHaveKey(tempDict, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(tempDict, @"nickname");
-    
+//    NSString* nickName = [KISDictionaryHaveKey(tempDict, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(tempDict, @"nickname");
+    NSString* nickName = KISDictionaryHaveKey(tempDict, @"nickname");
+
     self.textView.text = [NSString stringWithFormat:@"回复 %@：", nickName];
     [self.textView becomeFirstResponder];
 }

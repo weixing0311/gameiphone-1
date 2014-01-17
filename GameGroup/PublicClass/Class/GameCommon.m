@@ -502,7 +502,7 @@ static GameCommon *my_gameCommon = NULL;
 {
     if ([[NSUserDefaults standardUserDefaults] objectForKey:haveMyNews])
     {
-        if ([[[NSUserDefaults standardUserDefaults] objectForKey:haveMyNews] isEqualToString:@"1"]) {
+        if (![[[NSUserDefaults standardUserDefaults] objectForKey:haveMyNews] isEqualToString:@"0"]) {
             [[Custom_tabbar showTabBar] notificationWithNumber:NO AndTheNumber:0 OrDot:YES WithButtonIndex:3];
         }
         else
@@ -515,7 +515,7 @@ static GameCommon *my_gameCommon = NULL;
         [[Custom_tabbar showTabBar] removeNotificatonOfIndex:3];
     }
     if ([[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews]) {
-        if ([[[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews] isEqualToString:@"1"]) {
+        if (![[[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews] isEqualToString:@"0"]) {
             [[Custom_tabbar showTabBar] notificationWithNumber:NO AndTheNumber:0 OrDot:YES WithButtonIndex:2];
         }
         else
