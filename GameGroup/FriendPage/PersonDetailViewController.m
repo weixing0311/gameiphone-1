@@ -428,7 +428,7 @@
     TitleObjDetailViewController* detailVC = [[TitleObjDetailViewController alloc] init];
     detailVC.titleObjArray = [NSArray arrayWithObject:[self.hostInfo.achievementArray objectAtIndex:selectBut.tag]];
     detailVC.showIndex = 0;
-    detailVC.isOnlyUpView = YES;
+    detailVC.isFriendTitle = YES;
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 

@@ -130,7 +130,7 @@
     TitleObjDetailViewController* detailVC = [[TitleObjDetailViewController alloc] init];
     detailVC.titleObjArray = m_tableDataArray;
     detailVC.showIndex = indexPath.row;
-    detailVC.isOnlyUpView = NO;
+    detailVC.isFriendTitle = NO;
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 

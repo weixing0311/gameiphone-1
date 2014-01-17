@@ -17,6 +17,6 @@
 @property(nonatomic, strong)NSArray*  titleObjArray;
 @property(nonatomic, assign)NSInteger showIndex;//展示第几个 从0开始
 
-@property(nonatomic, assign)BOOL      isOnlyUpView;//仅展示上部 从好友详情页进入
+@property(nonatomic, assign)BOOL      isFriendTitle;//从好友详情页进入 只展示一个头衔 排名去掉好友排名
 
 @end
