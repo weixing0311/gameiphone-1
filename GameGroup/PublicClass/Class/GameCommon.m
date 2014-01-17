@@ -482,7 +482,7 @@ static GameCommon *my_gameCommon = NULL;
 #pragma mark 是否有网
 + (BOOL)testConnection {
     BOOL result = YES;
-    Reachability *r = [Reachability reachabilityWithHostName:@"www.google.com"];
+    Reachability *r = [Reachability reachabilityWithHostName:@"www.baidu.com"];
     switch ([r currentReachabilityStatus]) {
         case NotReachable:
             result = NO;
@@ -498,7 +498,7 @@ static GameCommon *my_gameCommon = NULL;
 //    if (!reach) {
 //        result = NO;
 //    }
-//    return result;
+    return result;
 }
 
 #pragma mark tabBar小红点
