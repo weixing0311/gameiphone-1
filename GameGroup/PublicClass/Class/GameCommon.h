@@ -11,11 +11,11 @@
 @interface GameCommon : NSObject
 
 @property(nonatomic, strong) NSString*  fansCount;//总粉丝数
-@property(nonatomic, assign) BOOL friendTableChanged;//好友表有更新 进入联系人页时是否刷新表单
-@property(nonatomic, assign) BOOL attentionTableChanged;//关注表有更新
-@property(nonatomic, assign) BOOL fansTableChanged;//粉丝表有更新
+//@property(nonatomic, assign) BOOL friendTableChanged;//好友表有更新 进入联系人页时是否刷新表单
+//@property(nonatomic, assign) BOOL attentionTableChanged;//关注表有更新
+//@property(nonatomic, assign) BOOL fansTableChanged;//粉丝表有更新
 
-@property(nonatomic, assign) BOOL isFirst;//程序第一次启动 注销再登录也为第一次
+//@property(nonatomic, assign) BOOL isFirst;//程序第一次启动 注销再登录也为第一次
 
 @property(nonatomic, strong) NSMutableDictionary* wow_realms;//英雄联盟服务器 注册、搜索时用
 @property(nonatomic, strong) NSMutableArray* wow_clazzs;//职业

@@ -214,6 +214,12 @@
         {
             if ([DataStoreManager ifIsFansWithUserName:KISDictionaryHaveKey(tempDic, @"username")]) {
                 [DataStoreManager saveUserFriendWithFansList:KISDictionaryHaveKey(tempDic, @"username")];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
+                
+                [DataStoreManager deleteFansWithUserName:KISDictionaryHaveKey(tempDic, @"username")];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
             }
             else
                 [self requestPeopleInfoWithName:KISDictionaryHaveKey(tempDic, @"username") ForType:1];
@@ -257,10 +263,12 @@
         if ([recDict isKindOfClass:[NSDictionary class]]) {
             if (type == 2) {//关注
                 [DataStoreManager saveUserAttentionInfo:recDict];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
             }
             else if (type == 1)
             {
                 [DataStoreManager saveUserInfo:recDict];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
             }
         }
 

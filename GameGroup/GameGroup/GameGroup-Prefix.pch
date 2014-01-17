@@ -86,6 +86,11 @@
 #define haveMyNews @"haveMyNews"//新我的动态
 #define haveFriendNews @"haveFriendNews"//好友动态
 
+#define isFirstOpen @"firstOpen"//好友列表等 第一次开启程序时获取 或 换帐号时
+#define FansCount @"fansCount"//粉丝总数
+
+#define kReloadContentKey @"reloadContent"//刷新联系人表的notification
+
 //常用方法
 #define KUIImage(name) ([UIImage imageNamed:name])
 #define RootDocPath ([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0])

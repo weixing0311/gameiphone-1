@@ -96,17 +96,19 @@
         NSLog(@"getMyUserID: %@", [DataStoreManager getMyUserID]);
     
         [self.view bringSubviewToFront:hud];
-        if ([GameCommon shareGameCommon].isFirst) {
+//        if ([GameCommon shareGameCommon].isFirst) {
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:isFirstOpen])
+        {
+            if (![self.appDel.xmppHelper ifXMPPConnected]&&![titleLabel.text isEqualToString:@"消息(连接中...)"]) {
                 titleLabel.text = @"消息(连接中...)";
-                [self getFriendByHttp];
-                [self sendDeviceToken];
+                [self getChatServer];
+            }
         }
         else
         {
-            if (![self.appDel.xmppHelper ifXMPPConnected]&&![titleLabel.text isEqualToString:@"消息(连接中...)"]) {
-                 titleLabel.text = @"消息(连接中...)";
-                [self getChatServer];
-            }
+            titleLabel.text = @"消息(连接中...)";
+            [self getFriendByHttp];
+            [self sendDeviceToken];
         }
         
         [self displayMsgsForDefaultView];
@@ -145,20 +147,20 @@
     [self.view addSubview:m_messageTable];
     m_messageTable.dataSource = self;
     m_messageTable.delegate = self;
-    m_messageTable.contentOffset = CGPointMake(0, 44);
+//    m_messageTable.contentOffset = CGPointMake(0, 44);
     
-    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
-    searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    searchBar.placeholder = @"搜索消息";
-    m_messageTable.tableHeaderView = searchBar;
-    [m_messageTable addSubview:searchBar];
-    searchBar.delegate = self;
-    
-    searchDisplay = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
-    searchDisplay.delegate = self;
-    searchDisplay.searchResultsDataSource = self;
-    searchDisplay.searchResultsDelegate = self;
+//    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+//    searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
+//    searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
+//    searchBar.placeholder = @"搜索消息";
+//    m_messageTable.tableHeaderView = searchBar;
+//    [m_messageTable addSubview:searchBar];
+//    searchBar.delegate = self;
+//    
+//    searchDisplay = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
+//    searchDisplay.delegate = self;
+//    searchDisplay.searchResultsDataSource = self;
+//    searchDisplay.searchResultsDelegate = self;
     
     titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, startX - 44, 320, 44)];
     titleLabel.backgroundColor=[UIColor clearColor];
@@ -169,7 +171,9 @@
     
     self.appDel = [[UIApplication sharedApplication] delegate];
 
-    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:FansCount]) {
+        [GameCommon shareGameCommon].fansCount = [[NSUserDefaults standardUserDefaults] objectForKey:FansCount];
+    }
 //    hud = [[MBProgressHUD alloc] initWithView:self.view];
     UIWindow* window = [UIApplication sharedApplication].keyWindow;
     if (!window)
@@ -815,12 +819,14 @@
         [self showAlertViewWithTitle:@"提示" message:@"未检测到网络" buttonTitle:@"确定"];
         return;
     }
-    if ([self isHaveLogin] && [GameCommon testConnection] && ![GameCommon shareGameCommon].isFirst) {
-        if ([GameCommon shareGameCommon].connectTimes > 3) {
-            return;
+    if ([self isHaveLogin] && [GameCommon testConnection]) {
+        if([[NSUserDefaults standardUserDefaults] objectForKey:isFirstOpen]){
+            if ([GameCommon shareGameCommon].connectTimes > 3) {
+                return;
+            }
+            [titleLabel setText:@"消息(连接中...)"];
+            [self logInToChatServer];
         }
-        [titleLabel setText:@"消息(连接中...)"];
-        [self logInToChatServer];
     }
 }
 
@@ -833,7 +839,11 @@
     [postDict setObject:@"116" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
 //    [postDict setObject:locationDict forKey:@"params"];
-    if([GameCommon shareGameCommon].isFirst)
+//    if([GameCommon shareGameCommon].isFirst)
+    if([[NSUserDefaults standardUserDefaults] objectForKey:isFirstOpen]){
+        
+    }
+    else
         [hud show:YES];
 
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -936,59 +946,58 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        [hud hide:YES];
-       
-        [self parseFriendsList:KISDictionaryHaveKey(responseObject, @"1")];
-        [self parseAttentionList:KISDictionaryHaveKey(responseObject, @"2")];
-    
-        [self parseFansList:(KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"3"), @"users"))];
+//        [self parseFriendsList:KISDictionaryHaveKey(responseObject, @"1")];
+//        [self parseAttentionList:KISDictionaryHaveKey(responseObject, @"2")];
+//    
+//        [self parseFansList:(KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"3"), @"users"))];
+        [self parseContentListWithData:responseObject];
         [GameCommon shareGameCommon].fansCount = [GameCommon getNewStringWithId:KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"3"), @"totalResults")];
-        [self getChatServer];//登陆xmpp
         
-        [GameCommon shareGameCommon].isFirst = NO;//不再请求好友列表
-
+        [[NSUserDefaults standardUserDefaults] setObject:[GameCommon shareGameCommon].fansCount forKey:FansCount];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        //不再请求好友列表
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:isFirstOpen];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         [hud hide:YES];
     }];
 }
 
--(void)parseFriendsList:(id)friendsList
+- (void)parseContentListWithData:(NSDictionary*)dataDic
 {
     [DataStoreManager cleanFriendList];//先清 再存
+    [DataStoreManager cleanAttentionList];
+    [DataStoreManager cleanFansList];
+
+    id friendsList = KISDictionaryHaveKey(dataDic, @"1");
+    id attentionList = KISDictionaryHaveKey(dataDic, @"2");
+    id fansList = KISDictionaryHaveKey(KISDictionaryHaveKey(dataDic, @"3"), @"users");
     dispatch_queue_t queue = dispatch_queue_create("com.living.game", NULL);
     dispatch_async(queue, ^{
+        [hud show:YES];
+        
         if ([friendsList isKindOfClass:[NSDictionary class]]) {
             NSArray* keyArr = [friendsList allKeys];
             for (NSString* key in keyArr) {
                 for (NSMutableDictionary * dict in [friendsList objectForKey:key]) {
-//                    [dict setObject:key forKey:@"nameindex"];
+                    //                    [dict setObject:key forKey:@"nameindex"];
                     [DataStoreManager saveUserInfo:dict];
                 }
             }
-           
         }
         else if([friendsList isKindOfClass:[NSArray class]]){
             for (NSDictionary * dict in friendsList) {
                 [DataStoreManager saveUserInfo:dict];
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-        });
-    });
-}
-
-- (void)parseAttentionList:(id)attentionList
-{
-    [DataStoreManager cleanAttentionList];
-
-    dispatch_queue_t queue = dispatch_queue_create("com.living.game", NULL);
-    dispatch_async(queue, ^{
+        //关注
         if ([attentionList isKindOfClass:[NSDictionary class]]) {
             NSArray* keyArr = [attentionList allKeys];
             for (NSString* key in keyArr) {
                 for (NSMutableDictionary * dict in [attentionList objectForKey:key]) {
-//                    [dict setObject:key forKey:@"nameindex"];
+                    //                    [dict setObject:key forKey:@"nameindex"];
                     [DataStoreManager saveUserAttentionInfo:dict];
                 }
             }
@@ -999,18 +1008,7 @@
                 [DataStoreManager saveUserAttentionInfo:dict];
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-        });
-    });
-}
-
-- (void)parseFansList:(id)fansList
-{
-    [DataStoreManager cleanFansList];
-
-    dispatch_queue_t queue = dispatch_queue_create("com.living.game", NULL);
-    dispatch_async(queue, ^{
+        //粉丝
         if ([fansList isKindOfClass:[NSDictionary class]]) {
             NSArray* keyArr = [fansList allKeys];
             for (NSString* key in keyArr) {
@@ -1025,7 +1023,8 @@
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            
+            [hud hide:YES];
+            [self getChatServer];//登陆xmpp
         });
     });
 }

@@ -50,17 +50,14 @@
     NSMutableArray * m_attentionsArray;
     NSMutableDictionary * m_attentionDict;
 
-    NSMutableArray * m_fansArray;
-    NSMutableDictionary * m_fansDict;
+//    NSMutableArray * m_fansArray;
+//    NSMutableDictionary * m_fansDict;
     
     NSMutableArray * m_sectionArray_friend;
     NSMutableArray * m_sectionIndexArray_friend;
 
     NSMutableArray * m_sectionArray_attention;
     NSMutableArray * m_sectionIndexArray_attention;
-
-//    NSMutableArray * m_sectionArray_fans;
-//    NSMutableArray * m_sectionIndexArray_fans;
     
     NSMutableArray * m_otherSortFriendArray;//除按字母排序外 其他排序使用
     NSMutableArray * m_otherSortAttentionArray;//除按字母排序外 其他排序使用
@@ -72,68 +69,33 @@
 
 @implementation FriendPageViewController
 
-//- (void)viewWillDisappear:(BOOL)animated
-//{
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kFriendHelloReceived object:Nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kDeleteAttention object:Nil];
-//    [super viewWillDisappear:animated];
-//}
-//
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sayHelloReceived:) name:kFriendHelloReceived object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deletePersonReceived:) name:kDeleteAttention object:nil];
-    
+
     [[Custom_tabbar showTabBar] hideTabBar:NO];
     
     if (![self isHaveLogin]) {
         [[Custom_tabbar showTabBar] when_tabbar_is_selected:0];
         return;
     }
-//    [self refreshSortType];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+#pragma mark 刷新表格
+- (void)reloadContentList:(NSNotification*)notification
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kFriendHelloReceived object:Nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kDeleteAttention object:Nil];
-    
-    [super viewDidDisappear:animated];
+    NSString* tabIndex = notification.object?notification.object : @"0";
+    [self refreshSortType:[tabIndex integerValue]];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)refreshSortType:(NSInteger)tabIndex
 {
-    [super viewDidAppear:animated];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sayHelloReceived:) name:kFriendHelloReceived object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deletePersonReceived:) name:kDeleteAttention object:nil];
-    
-    [self refreshSortType];
-}
-
-#pragma mark 收到验证好友请求
-- (void)sayHelloReceived:(NSNotification*)notification
-{
-    [self refreshSortType];
-}
-
-#pragma mark 收到取消关注 删除好友请求
--(void)deletePersonReceived:(NSNotification *)notification
-{
-    [self refreshSortType];
-}
-
-- (void)refreshSortType
-{
-//    [[NSUserDefaults standardUserDefaults] setObject:sort forKey:sorttype_1]
      NSString* sort_1 = [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_1] ? [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_1] : @"1";
      NSString* sort_2 = [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_2] ? [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_2] : @"1";
     [m_sortTypeDic setObject:sort_1 forKey:sorttype_1];
     [m_sortTypeDic setObject:sort_2 forKey:sorttype_2];
     
-    [self refreshFriendList];
+    [self refreshFriendList:tabIndex];
 }
 
 - (void)viewDidLoad
@@ -141,6 +103,8 @@
     [super viewDidLoad];
     
     [self setTopViewWithTitle:@"" withBackButton:NO];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadContentList:) name:kReloadContentKey object:nil];
     
     m_currentPage = 1;
     
@@ -167,8 +131,8 @@
     m_attentionsArray = [NSMutableArray array];
     m_attentionDict = [NSMutableDictionary dictionary];
     
-    m_fansArray = [NSMutableArray array];
-    m_fansDict = [NSMutableDictionary dictionary];
+//    m_fansArray = [NSMutableArray array];
+//    m_fansDict = [NSMutableDictionary dictionary];
     m_otherSortFansArray = [NSMutableArray array];
     
     m_sectionArray_friend = [NSMutableArray array];
@@ -194,7 +158,7 @@
     
     [self addTopView];
     
-    m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40 + 44, 320, self.view.frame.size.height - (40 + 44 + 50 + startX)) style:UITableViewStylePlain];
+    m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40, 320, self.view.frame.size.height - (40 + 50 + startX)) style:UITableViewStylePlain];
     m_myTableView.dataSource = self;
     m_myTableView.delegate = self;
     [self.view addSubview:m_myTableView];
@@ -210,7 +174,7 @@
     slimeView_friend.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
     [m_myTableView addSubview:slimeView_friend];
 
-    m_myAttentionsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40 + 44, 320, self.view.frame.size.height - (40 + 44 + 50 + startX)) style:UITableViewStylePlain];
+    m_myAttentionsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40, 320, self.view.frame.size.height - (40 + 50 + startX)) style:UITableViewStylePlain];
     m_myAttentionsTableView.dataSource = self;
     m_myAttentionsTableView.delegate = self;
     [self.view addSubview:m_myAttentionsTableView];
@@ -227,7 +191,7 @@
     slimeView_attention.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
     [m_myAttentionsTableView addSubview:slimeView_attention];
     
-    m_myFansTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40 + 44, 320, self.view.frame.size.height - (40 + 44 + 50 + startX)) style:UITableViewStylePlain];
+    m_myFansTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40, 320, self.view.frame.size.height - (40 + 50 + startX)) style:UITableViewStylePlain];
     m_myFansTableView.dataSource = self;
     m_myFansTableView.delegate = self;
     [self.view addSubview:m_myFansTableView];
@@ -250,17 +214,19 @@
     refreshView.myScrollView = m_myFansTableView;
     [refreshView stopLoading:NO];
     
-    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, startX + 40, 320, 44)];
-    searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
-    searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    searchBar.placeholder = @"搜索联系人";
-    searchBar.delegate = self;
-    [self.view addSubview:searchBar];
+//    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, startX + 40, 320, 44)];
+//    searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
+//    searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
+//    searchBar.placeholder = @"搜索联系人";
+//    searchBar.delegate = self;
+//    [self.view addSubview:searchBar];
+//    
+//    searchDisplay = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
+//    searchDisplay.delegate = self;
+//    searchDisplay.searchResultsDataSource = self;
+//    searchDisplay.searchResultsDelegate = self;
     
-    searchDisplay = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
-    searchDisplay.delegate = self;
-    searchDisplay.searchResultsDataSource = self;
-    searchDisplay.searchResultsDelegate = self;
+    [self refreshSortType:kSegmentFrinds];
     
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
@@ -321,9 +287,8 @@
         m_myAttentionsTableView.hidden = YES;
         m_myFansTableView.hidden = YES;
         
-        if ([[m_friendDict allKeys] count] == 0 || [GameCommon shareGameCommon].friendTableChanged) {
-            [self refreshFriendList];
-            [GameCommon shareGameCommon].friendTableChanged = NO;
+        if ([[m_friendDict allKeys] count] == 0) {
+            [self refreshFriendList:kSegmentFrinds];
         }
     }
     else if(segButton == m_attentionButton)
@@ -338,9 +303,8 @@
         m_myAttentionsTableView.hidden = NO;
         m_myFansTableView.hidden = YES;
         
-        if ([[m_attentionDict allKeys] count] == 0 || [GameCommon shareGameCommon].attentionTableChanged) {
-            [self refreshFriendList];
-            [GameCommon shareGameCommon].attentionTableChanged = NO;
+        if ([[m_attentionDict allKeys] count] == 0) {
+            [self refreshFriendList:kSegmentAttention];
         }
     }
     else
@@ -355,9 +319,8 @@
         m_myAttentionsTableView.hidden = YES;
         m_myFansTableView.hidden = NO;
         
-        if ([[m_fansDict allKeys] count] == 0 || [GameCommon shareGameCommon].fansTableChanged) {
-            [self refreshFriendList];
-            [GameCommon shareGameCommon].fansTableChanged = NO;
+        if ([m_otherSortFansArray count] == 0) {
+            [self refreshFriendList:kSegmentFans];
         }
     }
     [searchDisplay setActive:NO animated:NO];
@@ -593,10 +556,9 @@
                 return;
             }
             if (m_currentPage == 0) {//默认展示存储的
-                [m_fansArray removeAllObjects];
-                [m_fansDict removeAllObjects];
-//                [m_sectionIndexArray_fans removeAllObjects];
-//                [m_sectionArray_fans removeAllObjects];
+//                [m_fansArray removeAllObjects];
+//                [m_fansDict removeAllObjects];
+
                 [m_otherSortFansArray removeAllObjects];
                 
                 [m_myFansTableView reloadData];
@@ -644,14 +606,9 @@
             }
         }
         //先存后取
-        m_fansDict = [DataStoreManager queryAllFans];
-//        m_sectionArray_fans = [DataStoreManager queryFansSections];
-//        [m_sectionIndexArray_fans removeAllObjects];
-//        for (int i = 0; i < m_sectionArray_fans.count; i++) {
-//            [m_sectionIndexArray_fans addObject:[[m_sectionArray_fans objectAtIndex:i] objectAtIndex:0]];
-//        }
-        m_fansArray = [NSMutableArray arrayWithArray:[m_fansDict allKeys]];
-        [m_fansArray sortUsingSelector:@selector(compare:)];
+//        m_fansDict = [DataStoreManager queryAllFans];
+//        m_fansArray = [NSMutableArray arrayWithArray:[m_fansDict allKeys]];
+//        [m_fansArray sortUsingSelector:@selector(compare:)];
         m_otherSortFansArray = [DataStoreManager queryAllFansWithOtherSortType:@"distance" ascend:YES];
         dispatch_async(dispatch_get_main_queue(), ^{
             [m_myFansTableView reloadData];
@@ -660,82 +617,74 @@
         });
     });
     //上拉加载
-//    [m_fansDict addEntriesFromDictionary: [DataStoreManager queryAllFans]];
-////    [m_sectionArray_fans addObjectsFromArray:[DataStoreManager queryFansSections]];
-//////    [m_sectionIndexArray_fans removeAllObjects];
-////    for (int i = 0; i < [DataStoreManager queryFansSections].count; i++) {
-////        [m_sectionIndexArray_fans addObject:[[[DataStoreManager queryFansSections] objectAtIndex:i] objectAtIndex:0]];
-////    }
-//    [m_fansArray addObjectsFromArray:[m_fansDict allKeys]];
-//    [m_fansArray sortUsingSelector:@selector(compare:)];
-//    
-//    [m_otherSortFansArray addObjectsFromArray:[DataStoreManager queryAllFansWithOtherSortType]];
-//    [m_myFansTableView reloadData];
 }
 
-#pragma mark -刷新好友
--(void)refreshFriendList
+#pragma mark -刷新表格
+-(void)refreshFriendList:(NSInteger)tabIndex
 {
-    if (m_segmentClickIndex == kSegmentFrinds) {
-        m_friendDict = [DataStoreManager queryAllFriends];//所有朋友
-        m_sectionArray_friend = [DataStoreManager querySections];
-        [m_sectionIndexArray_friend removeAllObjects];//存放 index 目前 + M
-        for (int i = 0; i < m_sectionArray_friend.count; i++) {
-            [m_sectionIndexArray_friend addObject:[[m_sectionArray_friend objectAtIndex:i] objectAtIndex:0]];
+    if (tabIndex == kSegmentFrinds) {
+        if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {
+            m_friendDict = [DataStoreManager queryAllFriends];//所有朋友
+            m_sectionArray_friend = [DataStoreManager querySections];
+            [m_sectionIndexArray_friend removeAllObjects];//存放 index 目前 + M
+            for (int i = 0; i < m_sectionArray_friend.count; i++) {
+                [m_sectionIndexArray_friend addObject:[[m_sectionArray_friend objectAtIndex:i] objectAtIndex:0]];
+            }
+            m_friendsArray = [NSMutableArray arrayWithArray:[m_friendDict allKeys]];
+            [m_friendsArray sortUsingSelector:@selector(compare:)];
         }
-        m_friendsArray = [NSMutableArray arrayWithArray:[m_friendDict allKeys]];
-        [m_friendsArray sortUsingSelector:@selector(compare:)];
-
-        if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"2"]) {
+        else
+        {
+            if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"2"]) {
             m_otherSortFriendArray = [DataStoreManager queryAllFriendsWithOtherSortType:@"distance" ascend:YES];
-        }
-        if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"3"]) {
-            m_otherSortFriendArray = [DataStoreManager queryAllFriendsWithOtherSortType:@"achievementLevel" ascend:YES];
-        }
-        if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"4"]) {
-            m_otherSortFriendArray = [DataStoreManager queryAllFriendsWithOtherSortType:@"refreshTime" ascend:NO];
+            }
+            if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"3"]) {
+                m_otherSortFriendArray = [DataStoreManager queryAllFriendsWithOtherSortType:@"achievementLevel" ascend:YES];
+            }
+            if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"4"]) {
+                m_otherSortFriendArray = [DataStoreManager queryAllFriendsWithOtherSortType:@"refreshTime" ascend:NO];
+            }
         }
         [m_myTableView reloadData];
     }
-   else if(kSegmentAttention == m_segmentClickIndex)
+   else if(kSegmentAttention == tabIndex)
    {
-       m_attentionDict = [DataStoreManager queryAllAttention];
-       m_sectionArray_attention = [DataStoreManager queryAttentionSections];
-       [m_sectionIndexArray_attention removeAllObjects];
-       for (int i = 0; i < m_sectionArray_attention.count; i++) {
-           [m_sectionIndexArray_attention addObject:[[m_sectionArray_attention objectAtIndex:i] objectAtIndex:0]];
+        if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"]) {
+           m_attentionDict = [DataStoreManager queryAllAttention];
+           m_sectionArray_attention = [DataStoreManager queryAttentionSections];
+           [m_sectionIndexArray_attention removeAllObjects];
+           for (int i = 0; i < m_sectionArray_attention.count; i++) {
+               [m_sectionIndexArray_attention addObject:[[m_sectionArray_attention objectAtIndex:i] objectAtIndex:0]];
+           }
+           m_attentionsArray = [NSMutableArray arrayWithArray:[m_attentionDict allKeys]];
+           [m_attentionsArray sortUsingSelector:@selector(compare:)];
+        }
+       else
+       {
+            if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"2"]) {
+                m_otherSortAttentionArray = [DataStoreManager queryAllAttentionWithOtherSortType:@"distance" ascend:YES];
+            }
+            if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"3"]) {
+                m_otherSortAttentionArray = [DataStoreManager queryAllAttentionWithOtherSortType:@"achievementLevel" ascend:YES];
+            }
+            if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"4"]) {
+                m_otherSortAttentionArray = [DataStoreManager queryAllAttentionWithOtherSortType:@"refreshTime" ascend:NO];
+            }
        }
-       m_attentionsArray = [NSMutableArray arrayWithArray:[m_attentionDict allKeys]];
-       [m_attentionsArray sortUsingSelector:@selector(compare:)];
-    
-        if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"2"]) {
-            m_otherSortAttentionArray = [DataStoreManager queryAllAttentionWithOtherSortType:@"distance" ascend:YES];
-        }
-        if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"3"]) {
-            m_otherSortAttentionArray = [DataStoreManager queryAllAttentionWithOtherSortType:@"achievementLevel" ascend:YES];
-        }
-        if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"4"]) {
-            m_otherSortAttentionArray = [DataStoreManager queryAllAttentionWithOtherSortType:@"refreshTime" ascend:NO];
-        }
        [m_myAttentionsTableView reloadData];
    }
-    else if(kSegmentFans == m_segmentClickIndex)
+    else if(kSegmentFans == tabIndex)
     {
-        m_fansDict = [DataStoreManager queryAllFans];
-//        m_sectionArray_fans = [DataStoreManager queryFansSections];
-//        [m_sectionIndexArray_fans removeAllObjects];
-//        for (int i = 0; i < m_sectionArray_fans.count; i++) {
-//            [m_sectionIndexArray_fans addObject:[[m_sectionArray_fans objectAtIndex:i] objectAtIndex:0]];
-//        }
-        m_fansArray = [NSMutableArray arrayWithArray:[m_fansDict allKeys]];
-        [m_fansArray sortUsingSelector:@selector(compare:)];
+//        m_fansDict = [DataStoreManager queryAllFans];
+//        m_fansArray = [NSMutableArray arrayWithArray:[m_fansDict allKeys]];
+//        [m_fansArray sortUsingSelector:@selector(compare:)];
     
         m_otherSortFansArray = [DataStoreManager queryAllFansWithOtherSortType:@"distance" ascend:YES];
         
         [m_myFansTableView reloadData];
         [refreshView setRefreshViewFrame];
     }
-//
+
     [self refreshTopLabel];
 }
 
@@ -843,24 +792,24 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"SELF contains[cd] %@",searchBar.text];
-    NSLog(@"%@",searchBar.text);
-    switch (m_segmentClickIndex) {
-        case kSegmentFrinds:
-            searchResultArray = [m_friendsArray filteredArrayUsingPredicate:resultPredicate];
-            break;
-        case kSegmentAttention:
-            searchResultArray = [m_attentionsArray filteredArrayUsingPredicate:resultPredicate];
-            break;
-        case kSegmentFans:
-            searchResultArray = [m_fansArray filteredArrayUsingPredicate:resultPredicate];
-            break;
-        default:
-            break;
-    }
-    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-        return [searchResultArray count];
-    }
+//    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"SELF contains[cd] %@",searchBar.text];
+//    NSLog(@"%@",searchBar.text);
+//    switch (m_segmentClickIndex) {
+//        case kSegmentFrinds:
+//            searchResultArray = [m_friendsArray filteredArrayUsingPredicate:resultPredicate];
+//            break;
+//        case kSegmentAttention:
+//            searchResultArray = [m_attentionsArray filteredArrayUsingPredicate:resultPredicate];
+//            break;
+//        case kSegmentFans:
+//            searchResultArray = [m_fansArray filteredArrayUsingPredicate:resultPredicate];
+//            break;
+//        default:
+//            break;
+//    }
+//    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
+//        return [searchResultArray count];
+//    }
     if (tableView == m_myTableView) {
         if ([m_sectionArray_friend count] == 0) {//首次进入无数据
             return 0;
@@ -906,23 +855,23 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     NSDictionary * tempDict;
-    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-        switch (m_segmentClickIndex) {
-            case kSegmentFrinds:
-                tempDict = [m_friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-                break;
-            case kSegmentAttention:
-                tempDict = [m_attentionDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-                break;
-            case kSegmentFans:
-                tempDict = [m_fansDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-                break;
-            default:
-                break;
-        }
-    }
-    else
-    {
+//    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
+//        switch (m_segmentClickIndex) {
+//            case kSegmentFrinds:
+//                tempDict = [m_friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+//                break;
+//            case kSegmentAttention:
+//                tempDict = [m_attentionDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+//                break;
+//            case kSegmentFans:
+//                tempDict = [m_fansDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+//    else
+//    {
         if (tableView == m_myTableView) {
             if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {//按字母排
                  tempDict = [m_friendDict objectForKey:[[[m_sectionArray_friend objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
@@ -940,11 +889,9 @@
         }
         else
         {
-//            tempDict = [m_fansDict objectForKey:[[[m_sectionArray_fans objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
             tempDict = [m_otherSortFansArray objectAtIndex:indexPath.row];
-
         }
-    }
+//    }
     
     if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"sex")] isEqualToString:@"0"]) {//男♀♂
         cell.ageLabel.text = [@"♂ " stringByAppendingString:[GameCommon getNewStringWithId:[tempDict objectForKey:@"age"]]];
@@ -978,23 +925,23 @@
     [[Custom_tabbar showTabBar] hideTabBar:YES];
     PersonDetailViewController* detailVC = [[PersonDetailViewController alloc] init];
 
-    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-        switch (m_segmentClickIndex) {
-            case kSegmentFrinds:
-                tempDict = [m_friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-                break;
-            case kSegmentAttention:
-                tempDict = [m_attentionDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-                break;
-            case kSegmentFans:
-                tempDict = [m_fansDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-                break;
-            default:
-                break;
-        }
-    }
-    else
-    {
+//    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
+//        switch (m_segmentClickIndex) {
+//            case kSegmentFrinds:
+//                tempDict = [m_friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+//                break;
+//            case kSegmentAttention:
+//                tempDict = [m_attentionDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+//                break;
+//            case kSegmentFans:
+//                tempDict = [m_fansDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+//    else
+//    {
         switch (m_segmentClickIndex) {
             case kSegmentFrinds:
             {
@@ -1016,7 +963,6 @@
             }  break;
             case kSegmentFans:
             {
-//                tempDict = [m_fansDict objectForKey:[[[m_sectionArray_fans objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
                 tempDict = [m_otherSortFansArray objectAtIndex:indexPath.row];
 
                 detailVC.viewType = VIEW_TYPE_FansPage;
@@ -1024,7 +970,7 @@
             default:
                 break;
         }
-    }
+//    }
     detailVC.userName = KISDictionaryHaveKey(tempDict, @"username");
     detailVC.nickName = KISDictionaryHaveKey(tempDict, @"displayName");
     detailVC.isChatPage = NO;

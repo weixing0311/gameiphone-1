@@ -152,7 +152,7 @@
 #pragma mark 弹出显示框
 - (void)showAlertViewWithTitle:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)bTitle
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:bTitle otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:bTitle otherButtonTitles:nil];
     alert.tag = 99999;
     [alert show];
 }

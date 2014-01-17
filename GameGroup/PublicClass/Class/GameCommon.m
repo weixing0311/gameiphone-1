@@ -21,13 +21,13 @@ static GameCommon *my_gameCommon = NULL;
 {
     self = [super init];
     if (self) {
-        self.isFirst = YES;
+//        self.isFirst = YES;
         self.deviceToken = @"";
         self.connectTimes = 3;
         
-        self.friendTableChanged = NO;
-        self.attentionTableChanged = NO;
-        self.fansTableChanged = NO;
+//        self.friendTableChanged = NO;
+//        self.attentionTableChanged = NO;
+//        self.fansTableChanged = NO;
         
         self.fansCount = @"0";
         self.wow_realms = [NSMutableDictionary dictionaryWithCapacity:1];
@@ -537,8 +537,13 @@ static GameCommon *my_gameCommon = NULL;
 #pragma mark 注销
 + (void)loginOut
 {
-    [GameCommon shareGameCommon].isFirst = YES;
+//    [GameCommon shareGameCommon].isFirst = YES;
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:isFirstOpen];
     [GameCommon shareGameCommon].fansCount = @"0";
+//    
+//    [GameCommon shareGameCommon].friendTableChanged = YES;
+//    [GameCommon shareGameCommon].attentionTableChanged = YES;
+//    [GameCommon shareGameCommon].fansTableChanged = YES;
     
     [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:haveMyNews];
     [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:haveFriendNews];
