@@ -578,7 +578,7 @@
 //        [GameCommon shareGameCommon].fansTableChanged = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
         
-        [GameCommon shareGameCommon].fansCount = [NSString stringWithFormat:@"%d", [[GameCommon shareGameCommon].fansCount integerValue] - 1];
+        [[GameCommon shareGameCommon] fansCountChanged:NO];
         
         if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"1"])
         {
@@ -668,10 +668,9 @@
                     }
                     else
                         [DataStoreManager saveUserFansInfo:self.hostInfo.infoDic];//加到粉丝里
-//                    [GameCommon shareGameCommon].fansTableChanged = YES;
                     [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
 
-                    [GameCommon shareGameCommon].fansCount = [NSString stringWithFormat:@"%d", [[GameCommon shareGameCommon].fansCount integerValue] + 1];
+                    [[GameCommon shareGameCommon] fansCountChanged:YES];
                 }
                 [self.navigationController popViewControllerAnimated:YES];
                 

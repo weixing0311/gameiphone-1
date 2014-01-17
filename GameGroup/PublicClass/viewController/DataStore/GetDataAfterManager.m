@@ -98,8 +98,10 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             [DataStoreManager addPersonToReceivedHellos:tempDic];
             
             [DataStoreManager saveUserFriendWithAttentionList:fromUser];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
 
             [DataStoreManager deleteAttentionWithUserName:fromUser];//从关注表删除
+            [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
         }
         else
         {
@@ -139,7 +141,11 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             [DataStoreManager addPersonToReceivedHellos:tempDic];
             
             [DataStoreManager saveUserAttentionWithFriendList:fromUser];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
+
             [DataStoreManager deleteFriendWithUserName:fromUser];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
+
 //            [self displayMsgsForDefaultView];
         }
         else
@@ -156,8 +162,9 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             [tempDic setObject:msg forKey:@"addtionMsg"];
             [DataStoreManager addPersonToReceivedHellos:tempDic];
             
-            [GameCommon shareGameCommon].fansCount = [NSString stringWithFormat:@"%d", [[GameCommon shareGameCommon].fansCount integerValue] - 1];
+            [[GameCommon shareGameCommon] fansCountChanged:NO];
             [DataStoreManager deleteFansWithUserName:fromUser];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
 //            [self displayMsgsForDefaultView];
         }
         else
@@ -178,6 +185,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     AudioServicesPlayAlertSound(1007);
     
     [DataStoreManager storeNewMsgs:info senderType:OTHERMESSAGE];//其他消息
+    [DataStoreManager saveOtherMsgsWithData:info];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kOtherMessage object:nil userInfo:info];
 }
@@ -214,11 +222,14 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
         if (type==0) {//打招呼的 存到粉丝列表里
             if ([DataStoreManager ifIsAttentionWithUserName:userName]) {
                 [DataStoreManager deleteAttentionWithUserName:userName];//从关注表删除
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
+
                 [DataStoreManager saveUserInfo:recDict];//存为好友
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
             }
             else
             {
-                [GameCommon shareGameCommon].fansCount = [NSString stringWithFormat:@"%d", [[GameCommon shareGameCommon].fansCount integerValue] + 1];
+                [[GameCommon shareGameCommon] fansCountChanged:YES];
                 [DataStoreManager saveUserFansInfo:recDict];
             }
             
@@ -239,11 +250,16 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
         {
             if ([DataStoreManager ifHaveThisFriend:userName]) {//移到关注表
                 [DataStoreManager deleteFriendWithUserName:userName];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
+
                 [DataStoreManager saveUserAttentionInfo:recDict];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
+
             }
             if ([DataStoreManager ifIsFansWithUserName:userName]) {//从粉丝表移出
-                [GameCommon shareGameCommon].fansCount = [NSString stringWithFormat:@"%d", [[GameCommon shareGameCommon].fansCount integerValue] - 1];
+                [[GameCommon shareGameCommon] fansCountChanged:NO];
                 [DataStoreManager deleteFansWithUserName:userName];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
             }
             NSDictionary * uDict = [NSDictionary dictionaryWithObjectsAndKeys:[recDict objectForKey:@"username"],@"fromUser",[recDict objectForKey:@"nickname"],@"fromNickname",msg,@"addtionMsg",[recDict objectForKey:@"img"],@"headID", nil];
             [DataStoreManager addPersonToReceivedHellos:uDict];

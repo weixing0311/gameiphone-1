@@ -10,7 +10,7 @@
 
 @interface GameCommon : NSObject
 
-@property(nonatomic, strong) NSString*  fansCount;//总粉丝数
+//@property(nonatomic, strong) NSString*  fansCount;//总粉丝数
 //@property(nonatomic, assign) BOOL friendTableChanged;//好友表有更新 进入联系人页时是否刷新表单
 //@property(nonatomic, assign) BOOL attentionTableChanged;//关注表有更新
 //@property(nonatomic, assign) BOOL fansTableChanged;//粉丝表有更新
@@ -57,6 +57,8 @@
 + (BOOL)testConnection;
 
 -(void)displayTabbarNotification;
+
+- (void)fansCountChanged:(BOOL)addOne;
 
 + (void)loginOut;
 

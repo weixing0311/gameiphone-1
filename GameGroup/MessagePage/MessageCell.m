@@ -25,16 +25,12 @@
         [self.notiBgV setImage:[UIImage imageNamed:@"redCB.png"]];
         self.notiBgV.tag=999;
         [self.contentView addSubview:self.notiBgV];
-//        UILabel * numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(-1, 0, 30, 22)];
-//        [numberLabel setBackgroundColor:[UIColor clearColor]];
-//        [numberLabel setTextColor:[UIColor whiteColor]];
-//        [numberLabel setFont:[UIFont systemFontOfSize:14]];
-//        [numberLabel setTextAlignment:NSTextAlignmentCenter];
-//        [notiBgV addSubview:numberLabel];
-        self.unreadCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(-1, -1, 30, 22)];
+
+        self.unreadCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(-1, 0, 30, 22)];
         [self.unreadCountLabel setBackgroundColor:[UIColor clearColor]];
         [self.unreadCountLabel setTextAlignment:NSTextAlignmentCenter];
         [self.unreadCountLabel setTextColor:[UIColor whiteColor]];
+        self.unreadCountLabel.font = [UIFont systemFontOfSize:14.0];
         [self.notiBgV addSubview:self.unreadCountLabel];
         [self.notiBgV setHidden:YES];
         

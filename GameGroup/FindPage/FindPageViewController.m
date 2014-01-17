@@ -98,7 +98,6 @@
             cell.titleLable.text = @"好友动态";
             if ([[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] && [[[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] isEqualToString:@"1"])
             {
-                
                 cell.notiBgV.hidden = NO;
             }
             else

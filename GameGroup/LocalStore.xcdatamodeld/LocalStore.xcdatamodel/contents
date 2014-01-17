@@ -38,23 +38,6 @@
         <attribute name="senderNickname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="senTime" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
-    <entity name="DSDynamicFriends" representedClassName="DSDynamicFriends" syncable="YES">
-        <attribute name="articleImgID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="articleOverview" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="articleTitle" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="articleURL" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicContent" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicFilesID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicFileType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicLocation" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicTime" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="dynamicType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicURL" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="headImgID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="nickName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
     <entity name="DSFans" representedClassName="DSFans" syncable="YES">
         <attribute name="achievement" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="achievementLevel" optional="YES" attributeType="String" syncable="YES"/>
@@ -115,20 +98,6 @@
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="zannum" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="DSMyDynamic" representedClassName="DSMyDynamic" syncable="YES">
-        <attribute name="articleImgID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="articleOverview" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="articleTitle" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="articleURL" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicContent" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicFileID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicFileType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicLocation" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicTime" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="dynamicType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dynamicURL" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
     <entity name="DSMyNewsList" representedClassName="DSMyNewsList" syncable="YES">
         <attribute name="bigTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="commentObj" optional="YES" attributeType="String" syncable="YES"/>
@@ -149,6 +118,14 @@
     </entity>
     <entity name="DSNameIndex" representedClassName="DSNameIndex" syncable="YES">
         <attribute name="index" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="DSOtherMsgs" representedClassName="DSOtherMsgs" syncable="YES">
+        <attribute name="level" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageuuid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="msgContent" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="msgType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="myTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sendTime" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <entity name="DSPublicMsgs" representedClassName="DSPublicMsgs" syncable="YES">
         <attribute name="articlesID" optional="YES" attributeType="String" syncable="YES"/>
@@ -234,12 +211,10 @@
         <element name="DSAttentionNameIndex" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSAttentions" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSCommonMsgs" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DSDynamicFriends" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSFans" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSFansNameIndex" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSFriends" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSFriendsNewsList" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DSMyDynamic" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSMyNewsList" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSNameIndex" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSPublicMsgs" positionX="0" positionY="0" width="0" height="0"/>
@@ -251,5 +226,6 @@
         <element name="DSThumbPublicMsgs" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSThumbSubscribedMsgs" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSUnreadCount" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DSOtherMsgs" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

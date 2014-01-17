@@ -21,15 +21,10 @@ static GameCommon *my_gameCommon = NULL;
 {
     self = [super init];
     if (self) {
-//        self.isFirst = YES;
+
         self.deviceToken = @"";
         self.connectTimes = 3;
         
-//        self.friendTableChanged = NO;
-//        self.attentionTableChanged = NO;
-//        self.fansTableChanged = NO;
-        
-        self.fansCount = @"0";
         self.wow_realms = [NSMutableDictionary dictionaryWithCapacity:1];
         self.wow_clazzs = [NSMutableArray arrayWithCapacity:1];
     }
@@ -534,13 +529,26 @@ static GameCommon *my_gameCommon = NULL;
     }
 }
 
+#pragma mark 粉丝数变化
+- (void)fansCountChanged:(BOOL)addOne
+{
+    NSString* fansCout = @"";
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:FansCount]) {
+        fansCout = [[NSUserDefaults standardUserDefaults] objectForKey:FansCount];
+    }
+    NSInteger fansInt = addOne ? [fansCout integerValue] + 1 : [fansCout integerValue] - 1;
+    
+    [[NSUserDefaults standardUserDefaults] setValue:[NSString stringWithFormat:@"%d", fansInt] forKey:FansCount];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 #pragma mark 注销
 + (void)loginOut
 {
 //    [GameCommon shareGameCommon].isFirst = YES;
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:isFirstOpen];
-    [GameCommon shareGameCommon].fansCount = @"0";
-//    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:FansCount];
+
 //    [GameCommon shareGameCommon].friendTableChanged = YES;
 //    [GameCommon shareGameCommon].attentionTableChanged = YES;
 //    [GameCommon shareGameCommon].fansTableChanged = YES;
@@ -561,4 +569,6 @@ static GameCommon *my_gameCommon = NULL;
     
     [app.xmppHelper disconnect];
 }
+
+
 @end

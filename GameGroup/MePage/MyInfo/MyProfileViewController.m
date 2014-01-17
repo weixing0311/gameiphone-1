@@ -355,8 +355,8 @@
                 
                 [self refreshMyInfo];
 
-                if([deleteImageIdArray count] > 0)
-                    [self deleteImageIdByNet];//删除
+//                if([deleteImageIdArray count] > 0)
+//                    [self deleteImageIdByNet];//删除
                 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 [hud hide:YES];
@@ -370,11 +370,11 @@
 //        }];
         
     }
-    else if([deleteImageIdArray count] > 0) //有删除
-    {
-        [self deleteImageIdByNet];
-        [self refreshMyInfo];
-    }
+//    else if([deleteImageIdArray count] > 0) //有删除
+//    {
+//        [self deleteImageIdByNet];
+//        [self refreshMyInfo];
+//    }
     else//只是修改顺序
         [self refreshMyInfo];
 }

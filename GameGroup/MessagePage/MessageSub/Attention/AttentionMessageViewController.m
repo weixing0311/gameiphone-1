@@ -47,7 +47,7 @@
     
     m_tableData = (NSMutableArray*)[DataStoreManager queryAllReceivedHellos];
 
-    m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth)];
+    m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth-startX-(KISHighVersion_7?0:20))];
     m_myTableView.delegate = self;
     m_myTableView.dataSource = self;
 //    m_myTableView.backgroundColor = [UIColor whiteColor];

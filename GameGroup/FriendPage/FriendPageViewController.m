@@ -350,7 +350,11 @@
         } break;
         case kSegmentFans:
         {
-            rowNum = [[GameCommon shareGameCommon].fansCount integerValue];
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:FansCount]) {
+                rowNum = [[[NSUserDefaults standardUserDefaults] objectForKey:FansCount] integerValue];
+            }
+            else
+                rowNum = 0;
             titleLabel.text = [NSString stringWithFormat:@"粉丝(%d)", rowNum];
         }break;
         default:
@@ -566,7 +570,8 @@
                 [DataStoreManager cleanFansList];
                 [self parseFansList:[KISDictionaryHaveKey(responseObject, @"3") objectForKey:@"users"]];
                 
-                [GameCommon shareGameCommon].fansCount = [GameCommon getNewStringWithId:KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"3"), @"totalResults")];
+                [[NSUserDefaults standardUserDefaults] setObject:[GameCommon getNewStringWithId:KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"3"), @"totalResults")] forKey:FansCount];
+                [[NSUserDefaults standardUserDefaults] synchronize];
             }
             else
                 [self parseFansList:KISDictionaryHaveKey(responseObject, @"3")];

@@ -7,13 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DSMyDynamic.h"
+
 #import "DSSayHellos.h"
 #import "DSArticles.h"
-#import "DSDynamicFriends.h"
 #import "DSThumbMsgs.h"
 #import "DSThumbPublicMsgs.h"
-//#import "DSComments.h"
+
 #import "DSPublicMsgs.h"
 #import "DSCommonMsgs.h"
 #import "DSReceivedHellos.h"
@@ -33,6 +32,7 @@
 #import "DSFriendsNewsList.h"
 
 #import "DSRecommendList.h"//好友推荐
+#import "DSOtherMsgs.h"
 
 @interface DataStoreManager : NSObject
 +(void)setDefaultDataBase:(NSString *)dataBaseName AndDefaultModel:(NSString *)modelName;
@@ -42,7 +42,6 @@
 +(NSArray *)queryUnreadCountForCommonMsg;
 +(void)deleteAllThumbMsg;
 +(void)deleteThumbMsgWithSender:(NSString *)sender;
-+(void)deleteThumbMsgWithUUID:(NSString *)uuid;
 +(void)deleteMsgsWithSender:(NSString *)sender Type:(NSString *)senderType;
 
 +(NSMutableArray *)qureyAllCommonMessages:(NSString *)username;
@@ -133,5 +132,11 @@
 //好友推荐
 +(void)saveRecommendWithData:(NSDictionary*)dataDic;
 +(void)updateRecommendStatus:(NSString *)theStatus ForPerson:(NSString *)userName;
+
+//角色、头衔、战斗力消息
++(void)saveOtherMsgsWithData:(NSDictionary*)userInfoDict;
++(NSArray *)queryAllOtherMsg;
++(void)cleanOtherMsg;
++(void)deleteOtherMsgWithUUID:(NSString *)uuid;
 
 @end

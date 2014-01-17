@@ -43,7 +43,6 @@
             commonMsg.senderNickname = senderNickname?senderNickname:@"";
             commonMsg.msgContent = msgContent?msgContent:@"";
             commonMsg.senTime = sendTime;
-            
 
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
             
@@ -102,27 +101,18 @@
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",@"1"];
 
             DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
-    //        if (!thumbMsgs)
+            if (!thumbMsgs)
                 thumbMsgs = [DSThumbMsgs MR_createInContext:localContext];
 
-//            if ([msgType isEqualToString:@"character"]) {
-                thumbMsgs.sender = @"1";
-//            }
-//            else if([msgType isEqualToString:@"pveScore"])
-//            {
-//                thumbMsgs.sender = @"2";
-//            }
-//            else if([msgType isEqualToString:@"title"])
-//            {
-//                thumbMsgs.sender = @"3";
-//            }
+            thumbMsgs.sender = @"1";
             thumbMsgs.senderNickname = [msg objectForKey:@"title"];
             thumbMsgs.msgContent = msgContent;
             thumbMsgs.sendTime = sendTime;
             thumbMsgs.senderType = sendertype;
             thumbMsgs.msgType = msgType;
             thumbMsgs.sendTimeStr = [msg objectForKey:@"time"];
-            thumbMsgs.unRead = @"1";
+            int unread = [thumbMsgs.unRead intValue];
+            thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
             thumbMsgs.messageuuid = [[GameCommon shareGameCommon] uuid];
         }];
     }
@@ -206,19 +196,6 @@
         NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
         DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
         [thumbMsgs MR_deleteInContext:localContext];
-    }];
-}
-
-+(void)deleteThumbMsgWithUUID:(NSString *)uuid
-{
-//    NSDate * sendTime = [NSDate dateWithTimeIntervalSince1970:[theTime doubleValue]];
-    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
-        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"messageuuid==[c]%@",uuid];
-        DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
-        if (thumbMsgs) {
-            [thumbMsgs MR_deleteInContext:localContext];
-        }
-        
     }];
 }
 
@@ -1368,6 +1345,9 @@
     if ([userName isEqualToString:@"12345"]) {
         return @"好友推荐";
     }
+    if ([userName isEqualToString:@"1"]) {
+        return @"有新的角色动态";
+    }
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
     DSFriends * dFriend = [DSFriends MR_findFirstWithPredicate:predicate];
     if (dFriend) {//不是好友 就去粉丝、关注列表查
@@ -1992,7 +1972,7 @@
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"newsId==[c]%@",newsId];
             DSFriendsNewsList * dFriendsNews = [DSFriendsNewsList MR_findFirstWithPredicate:predicate];
             if (!dFriendsNews)
-                dFriendsNews = [DSMyNewsList MR_createInContext:localContext];
+                dFriendsNews = [DSFriendsNewsList MR_createInContext:localContext];
             dFriendsNews.heardImgId = heardImgId;
             dFriendsNews.newsId = newsId;
             dFriendsNews.bigTitle = bigTitle;
@@ -2312,12 +2292,6 @@
 }
 
 #pragma mark 好友推荐
-//@property (nonatomic, retain) NSString * fromStr;
-//@property (nonatomic, retain) NSString * state;
-//@property (nonatomic, retain) NSString * fromID;
-//@property (nonatomic, retain) NSString * headImgID;
-//@property (nonatomic, retain) NSString * nickName;
-//@property (nonatomic, retain) NSString * userName;
 //{"regtime":1387173496000,"username":"13371669965","remark":null,"nickname":"Fan","userid":"00000006","type":3,"guild":"黎明之翼"}
 +(void)saveRecommendWithData:(NSDictionary*)userInfoDict
 {
@@ -2373,6 +2347,82 @@
         {
             Recommend.state = theStatus;
         }
+    }];
+}
+
+#pragma mark 头衔、角色、战斗力等消息
+//@dynamic messageuuid;
+//@dynamic msgContent;
+//@dynamic msgType;
+//@dynamic sendTime;
+//@dynamic myTitle;
+
++(void)saveOtherMsgsWithData:(NSDictionary*)userInfoDict
+{
+    NSString* messageuuid = [[GameCommon shareGameCommon] uuid];
+    NSString* msgContent = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"msg")];
+    NSString* msgType = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"msgType")];
+    NSDate * sendTime = [NSDate dateWithTimeIntervalSince1970:[[GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"time")] doubleValue]];
+    NSString* myTitle = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"title")];;
+
+    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+        DSOtherMsgs * otherMsgs = [DSOtherMsgs MR_createInContext:localContext];
+
+        otherMsgs.messageuuid = messageuuid;
+        otherMsgs.msgContent = msgContent;
+        otherMsgs.msgType = msgType;
+        otherMsgs.sendTime = sendTime;
+        otherMsgs.myTitle = myTitle;
+    }];
+}
+
++(NSArray *)queryAllOtherMsg
+{
+    NSArray * otherMsgArr = [DSOtherMsgs MR_findAllSortedBy:@"sendTime" ascending:NO];
+    NSMutableArray * resultArr = [NSMutableArray array];
+    for (int i = 0; i<otherMsgArr.count; i++) {
+        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+        [dict setObject:[[otherMsgArr objectAtIndex:i] messageuuid] forKey:@"messageuuid"];
+        [dict setObject:[[otherMsgArr objectAtIndex:i] msgContent] forKey:@"msgContent"];
+        [dict setObject:[[otherMsgArr objectAtIndex:i] msgType] forKey:@"msgType"];
+        
+        NSDate * tt = [[otherMsgArr objectAtIndex:i] sendTime];
+        NSTimeInterval uu = [tt timeIntervalSince1970];
+        [dict setObject:[NSString stringWithFormat:@"%.f", uu] forKey:@"sendTime"];
+//        [dict setObject:[[otherMsgArr objectAtIndex:i] sendTime] forKey:@"sendTime"];
+        [dict setObject:[[otherMsgArr objectAtIndex:i] myTitle] forKey:@"myTitle"];
+        
+        [resultArr addObject:dict];
+    }
+    return resultArr;
+}
+
+
++(void)cleanOtherMsg
+{
+    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+        NSArray * otherMsgs = [DSOtherMsgs MR_findAllInContext:localContext];
+        for (DSOtherMsgs* other in otherMsgs) {
+            [other deleteInContext:localContext];
+        }
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",@"1"];
+        DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+        if (thumbMsgs)
+        {
+            [thumbMsgs deleteInContext:localContext];
+        }
+    }];
+}
+
++(void)deleteOtherMsgWithUUID:(NSString *)uuid
+{
+    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"messageuuid==[c]%@",uuid];
+        DSOtherMsgs * otherMsgs = [DSOtherMsgs MR_findFirstWithPredicate:predicate];
+        if (otherMsgs) {
+            [otherMsgs MR_deleteInContext:localContext];
+        }
+        
     }];
 }
 
