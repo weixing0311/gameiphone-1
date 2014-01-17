@@ -1305,7 +1305,7 @@
         //发送消息
         
        // [self.appDel.xmppHelper.xmppStream sendElement:mes];
-        if (![self.appDel.xmppHelper sendMessage:mes]) {
+        if (![self.appDel.xmppHelper sendMessage:mes] || ![GameCommon testConnection]) {
             [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
             //Do something when send failed...
             return;

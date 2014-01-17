@@ -18,6 +18,8 @@
 #import "OtherMsgsViewController.h"
 #import "FriendRecommendViewController.h"
 
+//#import "Reachability.h"
+
 @interface MessagePageViewController ()
 {
     UITableView * m_messageTable;
@@ -100,13 +102,18 @@
         if ([[NSUserDefaults standardUserDefaults] objectForKey:isFirstOpen])
         {
             if (![self.appDel.xmppHelper ifXMPPConnected]&&![titleLabel.text isEqualToString:@"消息(连接中...)"]) {
-                titleLabel.text = @"消息(连接中...)";
+//                titleLabel.text = @"消息(连接中...)";
                 [self getChatServer];
+            }
+            else if(![GameCommon testConnection])
+            {
+                titleLabel.text = @"消息(未连接)";
+                [self.appDel.xmppHelper disconnect];
             }
         }
         else
         {
-            titleLabel.text = @"消息(连接中...)";
+            titleLabel.text = @"消息(未连接)";
             [self getFriendByHttp];
             [self sendDeviceToken];
         }
@@ -124,6 +131,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deletePersonReceived:) name:kDeleteAttention object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(otherMessageReceived:) name:kOtherMessage object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recommendFriendReceived:) name:kOtherMessage object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActiveWithNet:) name:@"appBecomeActive" object:nil];
 
     [self setTopViewWithTitle:@"" withBackButton:NO];
     
@@ -180,6 +189,23 @@
     hud = [[MBProgressHUD alloc] initWithWindow:window];
     [window addSubview:hud];
     hud.labelText = @"获取信息中...";
+}
+
+#pragma mark 进入程序网络变化
+- (void)appBecomeActiveWithNet:(NSNotification*)notification
+{
+    NSString* haveNet = notification.object;
+    if ([haveNet isEqualToString:@"1"]) {//有网
+        if (![self.appDel.xmppHelper ifXMPPConnected]&&![titleLabel.text isEqualToString:@"消息(连接中...)"]) {
+
+            [self logInToChatServer];
+        }
+    }
+    else if ([haveNet isEqualToString:@"0"])
+    {
+        titleLabel.text = @"消息(未连接)";
+        [self.appDel.xmppHelper disconnect];
+    }
 }
 
 #pragma mark 收到聊天消息或其他消息
@@ -581,7 +607,7 @@
 
         return;
     }
-    if([[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"recommendfriend"])//好又推荐
+    if([[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"recommendfriend"])//好友推荐
     {
         [[Custom_tabbar showTabBar] hideTabBar:YES];
         
@@ -720,6 +746,7 @@
 
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         [hud hide:YES];
+        titleLabel.text = @"消息(未连接)";
     }];
 
 }
@@ -727,6 +754,7 @@
 -(void)logInToChatServer
 {
 //    [hud show:YES];
+    titleLabel.text = @"消息(连接中...)";
     self.appDel.xmppHelper.notConnect = self;
     self.appDel.xmppHelper.xmpptype = login;
     [self.appDel.xmppHelper connect:[[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]stringByAppendingFormat:@"%@",[[TempData sharedInstance] getDomain]] password:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] host:[[TempData sharedInstance] getServer] success:^(void){

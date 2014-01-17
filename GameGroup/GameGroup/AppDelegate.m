@@ -80,6 +80,8 @@
 {
     //它是类里自带的方法,这个方法得说下，很多人都不知道有什么用，它一般在整个应用程序加载时执行，挂起进入后也会执行，所以很多时候都会使用到，将小红圈清空
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:[NSString stringWithFormat:@"%d",[GameCommon testConnection]]];
 }
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary *)userInfo

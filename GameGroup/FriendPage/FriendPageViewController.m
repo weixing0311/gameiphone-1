@@ -158,7 +158,7 @@
     
     [self addTopView];
     
-    m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40, 320, self.view.frame.size.height - (40 + 50 + startX)) style:UITableViewStylePlain];
+    m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40, 320, self.view.frame.size.height - (40 + 50 + startX))];
     m_myTableView.dataSource = self;
     m_myTableView.delegate = self;
     [self.view addSubview:m_myTableView];
@@ -177,7 +177,7 @@
     m_myAttentionsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40, 320, self.view.frame.size.height - (40 + 50 + startX)) style:UITableViewStylePlain];
     m_myAttentionsTableView.dataSource = self;
     m_myAttentionsTableView.delegate = self;
-    [self.view addSubview:m_myAttentionsTableView];
+//    [self.view addSubview:m_myAttentionsTableView];//提前add会导致好友的索引无法点击
     m_myAttentionsTableView.hidden = YES;
     
     slimeView_attention = [[SRRefreshView alloc] init];
@@ -283,10 +283,11 @@
         m_segmentClickIndex = kSegmentFrinds;
         m_menuButton.hidden = NO;
         
+//        m_myAttentionsTableView.hidden = YES;
         m_myTableView.hidden = NO;
-        m_myAttentionsTableView.hidden = YES;
+        [m_myAttentionsTableView removeFromSuperview];
         m_myFansTableView.hidden = YES;
-        
+
         if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"])
         {
             if ([[m_friendDict allKeys] count] == 0) {
@@ -310,6 +311,9 @@
 
         m_myTableView.hidden = YES;
         m_myAttentionsTableView.hidden = NO;
+
+        [self.view addSubview:m_myAttentionsTableView];
+
         m_myFansTableView.hidden = YES;
         
         if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"])
@@ -1019,9 +1023,9 @@
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-        return nil;
-    }
+//    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
+//        return nil;
+//    }
     if (tableView == m_myTableView) {
         if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {
             return m_sectionIndexArray_friend;
