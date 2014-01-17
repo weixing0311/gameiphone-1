@@ -482,7 +482,7 @@ static GameCommon *my_gameCommon = NULL;
 #pragma mark 是否有网
 + (BOOL)testConnection {
     BOOL result = YES;
-    Reachability *r = [Reachability reachabilityWithHostName:@"www.apple.com"];
+    Reachability *r = [Reachability reachabilityWithHostName:@"www.google.com"];
     switch ([r currentReachabilityStatus]) {
         case NotReachable:
             result = NO;
@@ -494,7 +494,11 @@ static GameCommon *my_gameCommon = NULL;
             result = YES;
             break;
     }
-    return result;
+//    Reachability * reach = [Reachability reachabilityForInternetConnection];
+//    if (!reach) {
+//        result = NO;
+//    }
+//    return result;
 }
 
 #pragma mark tabBar小红点

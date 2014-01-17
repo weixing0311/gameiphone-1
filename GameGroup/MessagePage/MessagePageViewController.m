@@ -136,13 +136,13 @@
 
     [self setTopViewWithTitle:@"" withBackButton:NO];
     
-    UIButton* cleanBtn = [[UIButton alloc] initWithFrame:CGRectMake(320-55, startX-44, 50, 44)];
-    [cleanBtn setTitle:@"清空" forState:UIControlStateNormal];
-    [cleanBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [cleanBtn setBackgroundColor:[UIColor clearColor]];
-    cleanBtn.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
-    [cleanBtn addTarget:self action:@selector(cleanBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:cleanBtn];
+//    UIButton* cleanBtn = [[UIButton alloc] initWithFrame:CGRectMake(320-55, startX-44, 50, 44)];
+//    [cleanBtn setTitle:@"清空" forState:UIControlStateNormal];
+//    [cleanBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [cleanBtn setBackgroundColor:[UIColor clearColor]];
+//    cleanBtn.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
+//    [cleanBtn addTarget:self action:@selector(cleanBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:cleanBtn];
     
     allMsgArray = [NSMutableArray array];
     allMsgUnreadArray = [NSMutableArray array];
