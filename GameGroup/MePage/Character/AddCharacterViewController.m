@@ -135,6 +135,7 @@
     m_roleNameText.textAlignment = NSTextAlignmentRight;
     m_roleNameText.font = [UIFont boldSystemFontOfSize:15.0];
     m_roleNameText.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    m_roleNameText.contentHorizontalAlignment = UIControlContentVerticalAlignmentCenter;
     m_roleNameText.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.view addSubview:m_roleNameText];
     
@@ -362,6 +363,12 @@
 //        }
         return NO;
     }
+    return YES;
+}
+
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSLog(@"%@aaa", textField.text);
     return YES;
 }
 
