@@ -105,11 +105,11 @@
 //                titleLabel.text = @"消息(连接中...)";
                 [self getChatServer];
             }
-            else if(![GameCommon testConnection])
-            {
-                titleLabel.text = @"消息(未连接)";
-                [self.appDel.xmppHelper disconnect];
-            }
+//            else if(![GameCommon testConnection])
+//            {
+//                titleLabel.text = @"消息(未连接)";
+//                [self.appDel.xmppHelper disconnect];
+//            }
         }
         else
         {
