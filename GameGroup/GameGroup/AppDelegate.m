@@ -14,6 +14,8 @@
 #import "DDTTYLogger.h"
 #import "GetDataAfterManager.h"
 
+#import "Reachability.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -52,22 +54,6 @@
     NSString* tokenStr = [deviceToken description];
     //NSLog(@"%d", tokenStr.length);
     [GameCommon shareGameCommon].deviceToken = [tokenStr substringWithRange:NSMakeRange(1, tokenStr.length - 2)];
-//    if (![SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] || ![[NSUserDefaults standardUserDefaults] objectForKey:PhoneNumKey] || [[[NSUserDefaults standardUserDefaults] objectForKey:PhoneNumKey] isEqualToString:@""]) {
-//        return;
-//    }
-//    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-//    NSDictionary * locationDict = [NSDictionary dictionaryWithObjectsAndKeys:[GameCommon shareGameCommon].deviceToken,@"deviceToken ", nil];
-//    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-//    [postDict setObject:[DataStoreManager getMyUserID] forKey:@"userid"];
-//    [postDict setObject:@"140" forKey:@"method"];
-//    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-//    [postDict setObject:locationDict forKey:@"params"];
-//    
-//    [NetManager requestWithURLStrNoController:BaseClientUrl Parameters:postDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        
-//    } failure:^(AFHTTPRequestOperation *operation, id error) {
-//        NSLog(@"deviceToken fail");
-//    }];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
@@ -81,7 +67,30 @@
     //它是类里自带的方法,这个方法得说下，很多人都不知道有什么用，它一般在整个应用程序加载时执行，挂起进入后也会执行，所以很多时候都会使用到，将小红圈清空
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name: kReachabilityChangedNotification
+                                               object: nil];
+    Reachability* hostReach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+    [hostReach startNotifier];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:[NSString stringWithFormat:@"%d",[GameCommon testConnection]]];
+}
+
+-(void)reachabilityChanged:(NSNotification*)note
+{
+//    Reachability * reach = [note object];
+//    
+//    if([reach isReachable])
+//    {
+//        //  NSLog( @"Notification Says Reachable");
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:[NSString stringWithFormat:@"%d",[GameCommon testConnection]]];
+//    }
+//    else
+//    {
+//        //    NSLog( @"Notification Says Unreachable");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:[NSString stringWithFormat:@"%d",[GameCommon testConnection]]];
+//    }
 }
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary *)userInfo

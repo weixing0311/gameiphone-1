@@ -563,7 +563,7 @@ static GameCommon *my_gameCommon = NULL;
     [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:PhoneNumKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [SFHFKeychainUtils deleteItemForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil];
+//    [SFHFKeychainUtils deleteItemForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil];
     [SFHFKeychainUtils deleteItemForUsername:PASSWORD andServiceName:LOCALACCOUNT error:nil];
     [SFHFKeychainUtils deleteItemForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil];
     

@@ -195,7 +195,7 @@
 - (void)appBecomeActiveWithNet:(NSNotification*)notification
 {
     NSString* haveNet = notification.object;
-    if ([haveNet isEqualToString:@"1"]) {//有网
+    if ([haveNet isEqualToString:@"1"] && [self isHaveLogin]) {//有网
         if (![self.appDel.xmppHelper ifXMPPConnected]&&![titleLabel.text isEqualToString:@"消息(连接中...)"]) {
 
             [self logInToChatServer];

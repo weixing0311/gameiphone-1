@@ -90,6 +90,9 @@
     m_myTableView.delegate = self;
     m_myTableView.dataSource = self;
     [self.view addSubview:m_myTableView];
+    UIView* footView = [[UIView alloc] initWithFrame:CGRectMake(0, -2, 320, 2)];
+    footView.backgroundColor = [UIColor whiteColor];
+    m_myTableView.tableFooterView = footView;
     
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];

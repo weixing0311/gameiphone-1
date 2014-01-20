@@ -94,6 +94,8 @@
     phoneTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.view addSubview:phoneTextField];
     
+    phoneTextField.text = [SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil];
+    
     passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 95 + startX, 240, 40)];
     passwordTextField.keyboardType = UIKeyboardTypeEmailAddress;
     passwordTextField.secureTextEntry = YES;

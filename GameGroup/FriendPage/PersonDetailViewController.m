@@ -74,7 +74,7 @@
     [self.view addSubview:m_myScrollView];
     m_myScrollView.backgroundColor = [UIColor clearColor];
     
-    if (self.hostInfo) {//有值
+    if (self.hostInfo) {//有值 查找用户
         [self buildMainView];
         [self setBottomView];
         

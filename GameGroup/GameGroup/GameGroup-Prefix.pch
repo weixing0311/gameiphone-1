@@ -32,7 +32,7 @@
     #import "CellButtonClickDelegate.h"
 #endif
 
-#define appType @"appStore"//91、appStore
+#define appType @"91"//91、appStore
 
 //常量
 #define BaseClientUrl @"http://58.83.193.120/gamepro/request"//开机联网地址
