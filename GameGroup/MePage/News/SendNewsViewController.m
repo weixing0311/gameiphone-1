@@ -60,7 +60,7 @@
     editIV.image = bgImage;
     [self.view addSubview:editIV];
     
-    self.dynamicTV = [[UITextView alloc]initWithFrame:CGRectMake(13.75, 11.75+startX, 292.5,128)];
+    self.dynamicTV = [[UITextView alloc]initWithFrame:CGRectMake(13.75, 11.75+startX, 292.5, 128)];
     _dynamicTV.backgroundColor = [UIColor clearColor];
     _dynamicTV.font = [UIFont systemFontOfSize:13];
     _dynamicTV.delegate = self;
@@ -97,11 +97,11 @@
     }
     else
         _placeholderL.text = @"今天想跟别人说点什么……";
-
+    _placeholderL.font = [UIFont systemFontOfSize:13.0];
     [self.view addSubview:_placeholderL];
     
     PhotoB = [UIButton buttonWithType:UIButtonTypeCustom];
-    PhotoB.frame = CGRectMake(13, 155+startX, 48.5, 48.5);
+    PhotoB.frame = CGRectMake(13, startX + 155, 48.5, 48.5);
     [PhotoB setBackgroundImage:[UIImage imageNamed:@"tianjiazhaopian"] forState:UIControlStateNormal];
     [PhotoB addTarget:self action:@selector(getAnActionSheet) forControlEvents:UIControlEventTouchUpInside];
     PhotoB.hidden = YES;
@@ -116,7 +116,7 @@
         UITapGestureRecognizer*tapGR = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapImage:)];
         [titleimg addGestureRecognizer:tapGR];
 
-        PhotoB.frame = CGRectMake(13 + 48.5 +12.875, 155+startX, 48.5, 48.5);
+        PhotoB.frame = CGRectMake(13 + 48.5 +12.875, startX  + 155, 48.5, 48.5);
         if (self.pictureArray == nil) {
             self.pictureArray = [[NSMutableArray alloc]init];
         }

@@ -315,25 +315,28 @@
 #pragma mark - add
 - (void)addButtonClick:(id)sender
 {
-    UIActionSheet* sheet = [[UIActionSheet alloc] initWithTitle:@"选择类型" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:Nil otherButtonTitles:@"发表动态", @"发表文章",nil];
-    sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-    [sheet showInView:self.view];
+//    UIActionSheet* sheet = [[UIActionSheet alloc] initWithTitle:@"选择类型" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:Nil otherButtonTitles:@"发表动态", @"发表文章",nil];
+//    sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+//    [sheet showInView:self.view];
+    SendNewsViewController* sendNews = [[SendNewsViewController alloc] init];
+    sendNews.delegate = self;
+    [self.navigationController pushViewController:sendNews animated:YES];
 }
 
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 0) {
-        SendNewsViewController* sendNews = [[SendNewsViewController alloc] init];
-        sendNews.delegate = self;
-        [self.navigationController pushViewController:sendNews animated:YES];
-    }
-    else if(1 == buttonIndex)
-    {
-        SendArticleViewController* sendNews = [[SendArticleViewController alloc] init];
-        sendNews.delegate = self;
-        [self.navigationController pushViewController:sendNews animated:YES];
-    }
-}
+//-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//    if (buttonIndex == 0) {
+//        SendNewsViewController* sendNews = [[SendNewsViewController alloc] init];
+//        sendNews.delegate = self;
+//        [self.navigationController pushViewController:sendNews animated:YES];
+//    }
+//    else if(1 == buttonIndex)
+//    {
+//        SendArticleViewController* sendNews = [[SendArticleViewController alloc] init];
+//        sendNews.delegate = self;
+//        [self.navigationController pushViewController:sendNews animated:YES];
+//    }
+//}
 
 #pragma mark - table
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
