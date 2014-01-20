@@ -199,20 +199,7 @@
     m_roleNameText.clearButtonMode = UITextFieldViewModeWhileEditing;
     [m_roleView addSubview:m_roleNameText];
     
-    UILabel* bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 150, 300, 40)];
-    bottomLabel.numberOfLines = 2;
-    bottomLabel.backgroundColor = [UIColor clearColor];
-    bottomLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    bottomLabel.textColor = kColorWithRGB(128.0, 128, 128, 1.0);
-    bottomLabel.text = @"繁体字可使用手写输入法，角色名过于生僻无法输入时，可尝试";
-    [m_roleView addSubview:bottomLabel];
-    
-    UIButton* searchBtn = [CommonControlOrView setButtonWithFrame:CGRectMake(60, 172, 70, 15) title:@"" fontSize:Nil textColor:nil bgImage:KUIImage(@"search_bg") HighImage:KUIImage(@"") selectImage:nil];
-    searchBtn.backgroundColor = [UIColor clearColor];
-    [searchBtn addTarget:self action:@selector(searchButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [m_roleView addSubview:searchBtn];
-    
-    UIButton* okButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 200, 300, 40)];
+    UIButton* okButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 160, 300, 40)];
     [okButton setBackgroundImage:KUIImage(@"blue_button_normal") forState:UIControlStateNormal];
     [okButton setBackgroundImage:KUIImage(@"blue_button_click") forState:UIControlStateHighlighted];
     [okButton setTitle:@"搜 索" forState:UIControlStateNormal];
@@ -220,7 +207,21 @@
     okButton.backgroundColor = [UIColor clearColor];
     [okButton addTarget:self action:@selector(okButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [m_roleView addSubview:okButton];
+
+    UILabel* bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 205, 300, 40)];
+    bottomLabel.numberOfLines = 2;
+    bottomLabel.backgroundColor = [UIColor clearColor];
+    bottomLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    bottomLabel.textColor = kColorWithRGB(128.0, 128, 128, 1.0);
+    bottomLabel.text = @"繁体字可使用手写输入法，角色名过于生僻无法输入时，可尝试";
+    [m_roleView addSubview:bottomLabel];
     
+    UIButton* searchBtn = [CommonControlOrView setButtonWithFrame:CGRectMake(60, 227, 70, 15) title:@"" fontSize:Nil textColor:nil bgImage:KUIImage(@"search_bg") HighImage:KUIImage(@"") selectImage:nil];
+    searchBtn.backgroundColor = [UIColor clearColor];
+    [searchBtn addTarget:self action:@selector(searchButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [m_roleView addSubview:searchBtn];
+    
+
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
     hud.labelText = @"搜索中...";

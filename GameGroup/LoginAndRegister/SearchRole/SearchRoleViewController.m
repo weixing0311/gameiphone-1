@@ -165,21 +165,21 @@
     toolbar_server.items = @[rb_server];
     m_clazzNameText.inputAccessoryView = toolbar_server;//跟着pickview上移
     
-    UILabel* bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, startX + 180, 300, 40)];
-    bottomLabel.numberOfLines = 2;
-    bottomLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    bottomLabel.textColor = kColorWithRGB(128.0, 128, 128, 1.0);
-    bottomLabel.text = @"若公会名过于生僻无法输入，请尝试复制粘贴等方式";
-    bottomLabel.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:bottomLabel];
-    
-    UIButton* okButton = [[UIButton alloc] initWithFrame:CGRectMake(10, startX + 220, 300, 40)];
+    UIButton* okButton = [[UIButton alloc] initWithFrame:CGRectMake(10, startX + 200, 300, 40)];
     [okButton setBackgroundImage:KUIImage(@"blue_button_normal") forState:UIControlStateNormal];
     [okButton setTitle:@"查找相关角色" forState:UIControlStateNormal];
     [okButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     okButton.backgroundColor = [UIColor clearColor];
     [okButton addTarget:self action:@selector(okButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:okButton];
+    
+    UILabel* bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, startX + 240, 300, 40)];
+    bottomLabel.numberOfLines = 2;
+    bottomLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    bottomLabel.textColor = kColorWithRGB(128.0, 128, 128, 1.0);
+    bottomLabel.text = @"若公会名过于生僻无法输入，请尝试复制粘贴等方式";
+    bottomLabel.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:bottomLabel];
 }
 
 - (void)realmSelectClick:(id)sender
