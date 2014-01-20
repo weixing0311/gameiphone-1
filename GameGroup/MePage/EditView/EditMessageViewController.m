@@ -68,6 +68,7 @@
         m_birthDayPick.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 280, 320, 236);
         m_birthDayPick.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
         m_birthDayPick.datePickerMode = UIDatePickerModeDate;
+//        m_birthDayPick.date = [[NSDate alloc] initWithTimeIntervalSince1970:631209600];
         m_contentTextView.inputView = m_birthDayPick;//点击弹出的是pickview
         
         UIToolbar* toolbar_server = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
