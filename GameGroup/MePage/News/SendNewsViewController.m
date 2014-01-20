@@ -130,6 +130,26 @@
     hud.labelText = @"正在为您发布...";
 }
 
+- (void)backButtonClick:(id)sender
+{
+    if (!KISEmptyOrEnter(self.dynamicTV.text) || self.pictureArray.count>0) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您是否放弃当前编辑？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alert.tag = 67;
+        [alert show];
+    }
+    else
+        [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 67) {
+        if (buttonIndex != alertView.cancelButtonIndex) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+}
+
 #pragma mark 保存
 
 - (void)saveMyNews:(id)sender

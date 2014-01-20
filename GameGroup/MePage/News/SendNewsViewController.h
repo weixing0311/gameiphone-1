@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 #import "TableViewDatasourceDidChange.h"
 
-@interface SendNewsViewController : BaseViewController
+@interface SendNewsViewController : BaseViewController<UIAlertViewDelegate>
 
 @property (nonatomic,weak)id<TableViewDatasourceDidChange>delegate;
 @property (nonatomic, strong)UIImage* titleImage;//分享头衔

@@ -8,6 +8,6 @@
 
 #import "BaseViewController.h"
 
-@interface MePageViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, CellButtonClickDelegate>
+@interface MePageViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, CellButtonClickDelegate, UIAlertViewDelegate>
 
 @end

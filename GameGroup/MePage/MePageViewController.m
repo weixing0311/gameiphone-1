@@ -26,6 +26,8 @@
 {
     UITableView*  m_myTableView;
     HostInfo*     m_hostInfo;
+    
+    NSInteger     m_refreshCharaIndex;
 }
 @end
 
@@ -480,50 +482,65 @@
     if (![characterArray isKindOfClass:[NSArray class]]) {
         return;
     }
-    NSDictionary* tempDic = [characterArray objectAtIndex:rowIndex];
-    if ([KISDictionaryHaveKey(tempDic, @"failedmsg") isEqualToString:@"404"])//角色不存在
-    {
-        [self showAlertViewWithTitle:@"提示" message:@"角色不存在" buttonTitle:@"确定"];
-        return;
-    }
-    else
-    {
-        NSDictionary* tempDic = [characterArray objectAtIndex:rowIndex];
-        NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
-        NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-        
-        [paramDict setObject:@"1" forKey:@"gameid"];
-        [paramDict setObject:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"id")] forKey:@"characterid"];
+    m_refreshCharaIndex = rowIndex;
+    
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"是否刷新该角色信息？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alert.tag = 112;
+    [alert show];
+    
+}
 
-        [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-        [postDict setObject:paramDict forKey:@"params"];
-        [postDict setObject:@"123" forKey:@"method"];
-        [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-        
-        [hud show:YES];
-        
-        [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            [hud hide:YES];
-            NSLog(@"新角色信息：：：%@", responseObject);
-            if ([responseObject isKindOfClass:[NSDictionary class]]) {
-                [characterArray replaceObjectAtIndex:rowIndex withObject:responseObject];
-                m_hostInfo.characters = [NSDictionary dictionaryWithObject:characterArray forKey:@"1"];
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 112) {
+        if (buttonIndex != alertView.tag) {
+            NSMutableArray* characterArray = KISDictionaryHaveKey(m_hostInfo.characters, @"1");//魔兽世界
+            NSDictionary* tempDic = [characterArray objectAtIndex:m_refreshCharaIndex];
+            if ([KISDictionaryHaveKey(tempDic, @"failedmsg") isEqualToString:@"404"])//角色不存在
+            {
+                [self showAlertViewWithTitle:@"提示" message:@"角色不存在" buttonTitle:@"确定"];
+                return;
+            }
+            else
+            {
+                NSDictionary* tempDic = [characterArray objectAtIndex:m_refreshCharaIndex];
+                NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+                NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
                 
-                NSIndexSet* section = [[NSIndexSet alloc] initWithIndex:2];
-                [m_myTableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
+                [paramDict setObject:@"1" forKey:@"gameid"];
+                [paramDict setObject:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"id")] forKey:@"characterid"];
+                
+                [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+                [postDict setObject:paramDict forKey:@"params"];
+                [postDict setObject:@"123" forKey:@"method"];
+                [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+                
+                [hud show:YES];
+                
+                [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    [hud hide:YES];
+                    NSLog(@"新角色信息：：：%@", responseObject);
+                    if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                        [characterArray replaceObjectAtIndex:m_refreshCharaIndex withObject:responseObject];
+                        m_hostInfo.characters = [NSDictionary dictionaryWithObject:characterArray forKey:@"1"];
+                        
+                        NSIndexSet* section = [[NSIndexSet alloc] initWithIndex:2];
+                        [m_myTableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
+                    }
+                    //            [self getUserInfoByNet];
+                } failure:^(AFHTTPRequestOperation *operation, id error) {
+                    if ([error isKindOfClass:[NSDictionary class]]) {
+                        if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+                        {
+                            
+                            UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                            [alert show];
+                        }
+                    }
+                    [hud hide:YES];
+                }];
             }
-            [self getUserInfoByNet];
-        } failure:^(AFHTTPRequestOperation *operation, id error) {
-            if ([error isKindOfClass:[NSDictionary class]]) {
-                if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
-                {
-                    
-                    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                    [alert show];
-                }
-            }
-            [hud hide:YES];
-        }];
+        }
     }
 }
 
