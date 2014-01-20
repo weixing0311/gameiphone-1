@@ -466,7 +466,7 @@
         else
         {
             cell.heardImg.image = KUIImage(@"me_email");
-            cell.upLabel.text = @"意见反馈";
+            cell.upLabel.text = @"举报或意见反馈";
             cell.downLabel.text = @"您的声音是鞭策小伙伴前进的动力";
         }
         return cell;
