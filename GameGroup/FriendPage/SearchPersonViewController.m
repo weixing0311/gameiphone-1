@@ -308,13 +308,41 @@
         HostInfo* hostInfo = [[HostInfo alloc] initWithHostInfo:responseObject];
         VC.hostInfo = hostInfo;
         if ([hostInfo.relation isEqualToString:@"1"]) {
-            VC.viewType = VIEW_TYPE_FriendPage;
+            VC.viewType = VIEW_TYPE_FriendPage;//好友
+            
+            if (hostInfo.achievementArray && [hostInfo.achievementArray count] != 0) {
+                NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [dic addEntriesFromDictionary:hostInfo.infoDic];
+                [dic setObject:[hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+                
+                [DataStoreManager saveUserInfo:dic];
+            }
+            else
+                [DataStoreManager saveUserInfo:hostInfo.infoDic];
         }
         else if([hostInfo.relation isEqualToString:@"2"]) {
             VC.viewType = VIEW_TYPE_AttentionPage;
+            if (hostInfo.achievementArray && [hostInfo.achievementArray count] != 0) {
+                NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [dic addEntriesFromDictionary:hostInfo.infoDic];
+                [dic setObject:[hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+                
+                [DataStoreManager saveUserAttentionInfo:dic];
+            }
+            else
+                [DataStoreManager saveUserAttentionInfo:hostInfo.infoDic];
         }
         else if([hostInfo.relation isEqualToString:@"3"]) {
             VC.viewType = VIEW_TYPE_FansPage;
+            if (hostInfo.achievementArray && [hostInfo.achievementArray count] != 0) {
+                NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [dic addEntriesFromDictionary:hostInfo.infoDic];
+                [dic setObject:[hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+                
+                [DataStoreManager saveUserFansInfo:dic];
+            }
+            else
+                [DataStoreManager saveUserFansInfo:hostInfo.infoDic];
         }
         else  {
             VC.viewType = VIEW_TYPE_STRANGER;
@@ -326,14 +354,13 @@
         if ([error isKindOfClass:[NSDictionary class]]) {
             NSString* warn = [error objectForKey:kFailMessageKey];
             if ([[error objectForKey:kFailErrorCodeKey] isEqualToString:@"200002"]) {//用户不存在， 角色存在
-                warn = @"该角色目前尚未在小伙伴注册， 快去邀请他吧， 这样你们就可以聊天了!";
+                warn = @"该角色目前尚未在小伙伴注册，快去邀请他吧，这样你们就可以聊天了!";
             }
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
                 UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", warn] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
-           
         }
         [hud hide:YES];
     }];

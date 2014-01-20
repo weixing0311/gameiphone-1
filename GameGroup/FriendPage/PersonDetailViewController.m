@@ -116,12 +116,39 @@
 
         if ([self.hostInfo.relation isEqualToString:@"1"]) {
             self.viewType = VIEW_TYPE_FriendPage;
+            if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
+                NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [dic addEntriesFromDictionary:self.hostInfo.infoDic];
+                [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+                
+                [DataStoreManager saveUserInfo:dic];
+            }
+            else
+                [DataStoreManager saveUserInfo:self.hostInfo.infoDic];
         }
         else if([self.hostInfo.relation isEqualToString:@"2"]) {
             self.viewType = VIEW_TYPE_AttentionPage;
+            if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
+                NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [dic addEntriesFromDictionary:self.hostInfo.infoDic];
+                [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+                
+                [DataStoreManager saveUserAttentionInfo:dic];
+            }
+            else
+                [DataStoreManager saveUserAttentionInfo:self.hostInfo.infoDic];
         }
         else if([self.hostInfo.relation isEqualToString:@"3"]) {
             self.viewType = VIEW_TYPE_FansPage;
+            if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
+                NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [dic addEntriesFromDictionary:self.hostInfo.infoDic];
+                [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
+                
+                [DataStoreManager saveUserFansInfo:dic];
+            }
+            else
+                [DataStoreManager saveUserFansInfo:self.hostInfo.infoDic];
         }
         else  {
             self.viewType = VIEW_TYPE_STRANGER;
