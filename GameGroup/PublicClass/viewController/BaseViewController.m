@@ -117,15 +117,15 @@
     if (showWindowLabel != nil) {
         [showWindowLabel removeFromSuperview];
     }
-    CGSize contentSize = [content sizeWithFont:[UIFont boldSystemFontOfSize:15.0] constrainedToSize:CGSizeMake(300, 100)];
+    CGSize contentSize = [content sizeWithFont:[UIFont boldSystemFontOfSize:18.0] constrainedToSize:CGSizeMake(300, 100)];
     
     float width = MIN(contentSize.width + 10, 300);
     float showstartX = MAX((320.0 - width)/2, 10.0);//取大者
     
     showWindowLabel = [[UILabel alloc] initWithFrame:CGRectMake(showstartX, pointY, width, contentSize.height + 20)];
     showWindowLabel.backgroundColor = [UIColor blackColor];
-    showWindowLabel.alpha = 0.8;
-    showWindowLabel.font = [UIFont boldSystemFontOfSize:15.0];
+    showWindowLabel.alpha = 0.7;
+    showWindowLabel.font = [UIFont boldSystemFontOfSize:18.0];
     showWindowLabel.textColor = [UIColor whiteColor];
     showWindowLabel.layer.cornerRadius = 5;
     showWindowLabel.textAlignment = NSTextAlignmentCenter;

@@ -63,6 +63,7 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
+        [self showMessageWindowWithContent:@"提交成功" pointY:kScreenHeigth-100];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {

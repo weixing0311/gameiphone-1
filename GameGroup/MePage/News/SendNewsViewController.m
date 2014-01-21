@@ -221,7 +221,7 @@
         {
         }
         else{
-            [self showMessageWindowWithContent:@"发送成功" pointY:kScreenHeigth-100];
+            [self showMessageWindowWithContent:@"已发送        \n\n\n\n" pointY:kScreenHeigth/2-30];
         }
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(AFHTTPRequestOperation *operation, id error) {
