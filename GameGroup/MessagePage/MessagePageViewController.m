@@ -98,18 +98,11 @@
         NSLog(@"getMyUserID: %@", [DataStoreManager getMyUserID]);
     
         [self.view bringSubviewToFront:hud];
-//        if ([GameCommon shareGameCommon].isFirst) {
         if ([[NSUserDefaults standardUserDefaults] objectForKey:isFirstOpen])
         {
             if (![self.appDel.xmppHelper ifXMPPConnected]&&![titleLabel.text isEqualToString:@"消息(连接中...)"]) {
-//                titleLabel.text = @"消息(连接中...)";
                 [self getChatServer];
             }
-//            else if(![GameCommon testConnection])
-//            {
-//                titleLabel.text = @"消息(未连接)";
-//                [self.appDel.xmppHelper disconnect];
-//            }
         }
         else
         {
@@ -704,12 +697,12 @@
 {
     [titleLabel setText:@"消息(未连接)"];
      NSLog(@"未连接上服务器");
-    if (![GameCommon testConnection])
+    if (![GameCommon shareGameCommon].haveNet)
     {
         [self showAlertViewWithTitle:@"提示" message:@"未检测到网络" buttonTitle:@"确定"];
         return;
     }
-    if ([self isHaveLogin] && [GameCommon testConnection]) {
+    if ([self isHaveLogin] && [GameCommon shareGameCommon].haveNet) {
         if([[NSUserDefaults standardUserDefaults] objectForKey:isFirstOpen]){
             if ([GameCommon shareGameCommon].connectTimes > 3) {
                 return;

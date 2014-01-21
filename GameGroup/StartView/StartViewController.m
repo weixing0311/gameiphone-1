@@ -45,40 +45,40 @@
     
     [self firtOpen];
     
-    NSString * openImgStr = [[NSUserDefaults standardUserDefaults] objectForKey:@"OpenImg"];
-    NSString *path1 = [RootDocPath stringByAppendingPathComponent:@"OpenImages"];
-    NSFileManager *fm1 = [NSFileManager defaultManager];
-    if([fm1 fileExistsAtPath:path1] == NO)
-    {
-        [fm1 createDirectoryAtPath:path1 withIntermediateDirectories:YES attributes:nil error:nil];
-    }
-    NSString  *openImgPath = [NSString stringWithFormat:@"%@/openImage.jpg",path1];
-    
-    if (openImgStr) {
-        
-        NSData * nsData= [NSData dataWithContentsOfFile:openImgPath];
-        UIImage * openPic= [UIImage imageWithData:nsData];
-        if (openPic) {
-            splashImageView=[[UIImageView alloc]initWithImage:openPic];
-            splashImageView.frame=CGRectMake(0, 0, 320, 568);
-        }
-        else
-        {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"OpenImg"];
-            if (iPhone5) {
-                splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start_2.png"]];
-                splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
-            }
-            else
-            {
-                splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start.png"]];
-                splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
-            }
-        }
-        
-    }
-    else
-    {
+//    NSString * openImgStr = [[NSUserDefaults standardUserDefaults] objectForKey:@"OpenImg"];
+//    NSString *path1 = [RootDocPath stringByAppendingPathComponent:@"OpenImages"];
+//    NSFileManager *fm1 = [NSFileManager defaultManager];
+//    if([fm1 fileExistsAtPath:path1] == NO)
+//    {
+//        [fm1 createDirectoryAtPath:path1 withIntermediateDirectories:YES attributes:nil error:nil];
+//    }
+//    NSString  *openImgPath = [NSString stringWithFormat:@"%@/openImage.jpg",path1];
+//    
+//    if (openImgStr) {
+//        
+//        NSData * nsData= [NSData dataWithContentsOfFile:openImgPath];
+//        UIImage * openPic= [UIImage imageWithData:nsData];
+//        if (openPic) {
+//            splashImageView=[[UIImageView alloc]initWithImage:openPic];
+//            splashImageView.frame=CGRectMake(0, 0, 320, 568);
+//        }
+//        else
+//        {
+//            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"OpenImg"];
+//            if (iPhone5) {
+//                splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start_2.png"]];
+//                splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
+//            }
+//            else
+//            {
+//                splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start.png"]];
+//                splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
+//            }
+//        }
+//        
+//    }
+//    else
+//    {
         if (iPhone5) {
             splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start_2.png"]];
             splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
@@ -88,7 +88,7 @@
             splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start.png"]];
             splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
         }
-    }
+//    }
     [self.view addSubview:splashImageView];
     [self performSelector:@selector(showLoading:) withObject:nil afterDelay:kStartViewShowTime];
     
@@ -126,59 +126,52 @@
         [self presentViewController:ryc_tabbarController animated:NO completion:^{
             
         }];
-    
-//    }
-//    else
-//    {
-//        IntroduceViewController* vc = [[IntroduceViewController alloc] init];
-//        UINavigationController * navi = [[UINavigationController alloc] initWithRootViewController:vc];
-//        [self presentViewController:navi animated:NO completion:^{
-//        }];
-//    }
-//    AppDelegate* mainDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-//    [mainDelegate showLoading:Nil];
-//
-//    [[[[UIApplication sharedApplication] windows] objectAtIndex:0] makeKeyWindow];
-//    
-//    UIWindow* window = [UIApplication sharedApplication].keyWindow;
-//    if (!window)
-//    {
-//        window = [[UIApplication sharedApplication].windows objectAtIndex:0];
-//    }
-//    window.rootViewController =
 }
 
 #pragma mark 开机联网
 -(void)firtOpen
 {
+    NSMutableDictionary * paramsDic = [NSMutableDictionary dictionary];
+    if ([SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]) {
+        [paramsDic setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    }
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:kOpenData]) {
+        NSDictionary* tempDic = [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData];
+        [paramsDic setObject:KISDictionaryHaveKey(tempDic, @"gamelist_millis") forKey:@"gamelist_millis"];
+        [paramsDic setObject:KISDictionaryHaveKey(tempDic, @"wow_realms_millis") forKey:@"wow_realms_millis"];
+        [paramsDic setObject:KISDictionaryHaveKey(tempDic, @"wow_characterclasses_millis") forKey:@"wow_characterclasses_millis"];
+    }
+    else
+    {
+        [paramsDic setObject:@"" forKey:@"gamelist_millis"];
+        [paramsDic setObject:@"" forKey:@"wow_realms_millis"];
+        [paramsDic setObject:@"" forKey:@"wow_characterclasses_millis"];
+    }
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-//    NSMutableDictionary * userInfoDict = [NSMutableDictionary dictionary];
-//    [postDict setObject:userInfoDict forKey:@"params"];
-    [postDict setObject:@"103" forKey:@"method"];
+    [postDict setObject:paramsDic forKey:@"params"];
+    [postDict setObject:@"142" forKey:@"method"];
   
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         [self openSuccessWithInfo:responseObject From:@"firstOpen"];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"fff");
+
     }];
 }
 
 -(void)openSuccessWithInfo:(NSDictionary *)dict From:(NSString *)where
 {
-    if (([where isEqualToString:@"open"])||([where isEqualToString:@"firstOpen"])) {
-        NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
-        
-        if ([[[dict objectForKey:@"version"] objectForKey:@"gameproVersion"] floatValue] > [version floatValue]) {
-            NSString* appStoreURL = [[dict objectForKey:@"version"] objectForKey:@"iosurl"];
-            [[NSUserDefaults standardUserDefaults] setObject:appStoreURL forKey:@"IOSURL"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"检测到新版本，您要升级吗?" delegate:self cancelButtonTitle:@"立刻升级" otherButtonTitles:@"取消", nil];
-            alert.tag = 21;
-            [alert show];
-        }
+//    NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+    
+    if (KISDictionaryHaveKey(dict, @"clientUpdate")) {
+        [[NSUserDefaults standardUserDefaults] setObject:KISDictionaryHaveKey(dict, @"clientUpdateUrl") forKey:@"IOSURL"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"检测到新版本，您要升级吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"立刻升级", nil];
+        alert.tag = 21;
+        [alert show];
+    }
 //        appStoreURL = [[dict objectForKey:@"version"] objectForKey:@"iosurl"];
 //        [[NSUserDefaults standardUserDefaults] setObject:appStoreURL forKey:@"IOSURL"];
 //        [[NSUserDefaults standardUserDefaults] synchronize];
@@ -187,23 +180,29 @@
 //        if (!openImgStr||![receivedImgStr isEqualToString:openImgStr]) {
 //            [self downloadImageWithID:receivedImgStr Type:@"open" PicName:nil];
 //        }
-        if ([KISDictionaryHaveKey(dict, @"wow_realms") isKindOfClass:[NSDictionary class]]) {//注册服务器数据
-            [[GameCommon shareGameCommon].wow_realms addEntriesFromDictionary:[dict objectForKey:@"wow_realms"]];
-        }
-        if ([KISDictionaryHaveKey(dict, @"wow_characterclasses") isKindOfClass:[NSArray class]]) {
-            [[GameCommon shareGameCommon].wow_clazzs addObjectsFromArray:[dict objectForKey:@"wow_characterclasses"]];
-        }
         
-    }
-    //    NSString * verifyCodeStatus = [dict objectForKey:@"verifyCode"];
-    //    NSString * vd = @"shouldSend";
-    //    if (verifyCodeStatus) {
-    //        if ([verifyCodeStatus isEqualToString:@"disable"]) {
-    //            vd = @"doNotSend";
-    //        }
-    //    }
-    //    [[NSUserDefaults standardUserDefaults] setObject:vd forKey:@"verifyCode"];
-    //    [[NSUserDefaults standardUserDefaults] synchronize];
+        NSMutableDictionary* openData = [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData] ? [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData] : [NSMutableDictionary dictionaryWithCapacity:1];
+        if ([KISDictionaryHaveKey(dict, @"gamelist_update") boolValue]) {
+            [openData setObject:KISDictionaryHaveKey(dict, @"gamelist") forKey:@"gamelist"];
+            [openData setObject:KISDictionaryHaveKey(dict, @"gamelist_millis") forKey:@"gamelist_millis"];
+        }
+        if ([KISDictionaryHaveKey(dict, @"wow_characterclasses_update") boolValue]) {
+            [openData setObject:KISDictionaryHaveKey(dict, @"wow_characterclasses") forKey:@"wow_characterclasses"];
+            [openData setObject:KISDictionaryHaveKey(dict, @"wow_characterclasses_millis") forKey:@"wow_characterclasses_millis"];
+        }
+        if ([KISDictionaryHaveKey(dict, @"wow_realms_update") boolValue]) {
+            [openData setObject:KISDictionaryHaveKey(dict, @"wow_realms") forKey:@"wow_realms"];
+            [openData setObject:KISDictionaryHaveKey(dict, @"wow_realms_millis") forKey:@"wow_realms_millis"];
+        }
+        [[NSUserDefaults standardUserDefaults] setObject:openData forKey:kOpenData];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        if ([KISDictionaryHaveKey(openData, @"wow_realms") isKindOfClass:[NSDictionary class]]) {//注册服务器数据
+            [[GameCommon shareGameCommon].wow_realms addEntriesFromDictionary:KISDictionaryHaveKey(openData, @"wow_realms")];
+        }
+        if ([KISDictionaryHaveKey(openData, @"wow_characterclasses") isKindOfClass:[NSArray class]]) {
+            [[GameCommon shareGameCommon].wow_clazzs addObjectsFromArray:KISDictionaryHaveKey(openData, @"wow_characterclasses")];
+        }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -211,7 +210,11 @@
     if (21 == alertView.tag) {
         if (buttonIndex != alertView.cancelButtonIndex) {
             if ([[NSUserDefaults standardUserDefaults] objectForKey:@"IOSURL"]) {
-                [[UIApplication sharedApplication] openURL:[[NSUserDefaults standardUserDefaults] objectForKey:@"IOSURL"]];
+                NSURL *url = [NSURL URLWithString:[[NSUserDefaults standardUserDefaults] objectForKey:@"IOSURL"]];
+                if([[UIApplication sharedApplication] canOpenURL:url])
+                {
+                    [[UIApplication sharedApplication] openURL:url];
+                }
             }
         }
     }

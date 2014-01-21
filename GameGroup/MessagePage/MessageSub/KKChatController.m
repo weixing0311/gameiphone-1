@@ -887,8 +887,8 @@
     NSString *time = [dict objectForKey:@"time"];
     
     cell.messageContentView.attributedText = [self.finalMessageArray objectAtIndex:indexPath.row];
-
-//    CGSize size = [cell.messageContentView sizeThatFits:CGSizeMake(220, CGFLOAT_MAX)];
+    
+    //    CGSize size = [cell.messageContentView sizeThatFits:CGSizeMake(220, CGFLOAT_MAX)];
     CGSize size = CGSizeMake([[[self.HeightArray objectAtIndex:indexPath.row] objectAtIndex:0] floatValue], [[[self.HeightArray objectAtIndex:indexPath.row] objectAtIndex:1] floatValue]);
    // CGSize size = [cell.messageContentView.attributedText sizeConstrainedToSize:CGSizeMake(220, CGFLOAT_MAX)];
     size.width = size.width<20?20:size.width;
@@ -1004,7 +1004,7 @@
 }
 -(void)endIt:(UIButton *)sender
 {
-    if (tempBtn.highlighted == YES) {
+    if (tempBtn.highlighted == YES) {//长按
         NSLog(@"haha");
         indexPathTo = [NSIndexPath indexPathForRow:(tempBtn.tag-1) inSection:0];
         KKMessageCell * cell = (KKMessageCell *)[self.tView cellForRowAtIndexPath:indexPathTo];
@@ -1305,7 +1305,7 @@
         //发送消息
         
        // [self.appDel.xmppHelper.xmppStream sendElement:mes];
-        if (![self.appDel.xmppHelper sendMessage:mes] || ![GameCommon testConnection]) {
+        if (![self.appDel.xmppHelper sendMessage:mes]) {
             [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
             //Do something when send failed...
             return;

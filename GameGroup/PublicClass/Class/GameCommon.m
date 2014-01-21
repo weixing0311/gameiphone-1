@@ -479,28 +479,6 @@ static GameCommon *my_gameCommon = NULL;
     return @"";
 }
 
-#pragma mark 是否有网
-+ (BOOL)testConnection {
-    BOOL result = YES;
-    Reachability *r = [Reachability reachabilityWithHostName:@"www.baidu.com"];
-    switch ([r currentReachabilityStatus]) {
-        case NotReachable:
-            result = NO;
-            break;
-        case ReachableViaWWAN:
-            result = YES;
-            break;
-        case ReachableViaWiFi:
-            result = YES;
-            break;
-    }
-//    Reachability * reach = [Reachability reachabilityForInternetConnection];
-//    if (!reach) {
-//        result = NO;
-//    }
-    return result;
-}
-
 #pragma mark tabBar小红点
 -(void)displayTabbarNotification
 {

@@ -91,6 +91,8 @@
 
 #define kReloadContentKey @"reloadContent"//刷新联系人表的notification
 
+#define kOpenData @"openData"//开机请求的数据
+
 //常用方法
 #define KUIImage(name) ([UIImage imageNamed:name])
 #define RootDocPath ([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0])
