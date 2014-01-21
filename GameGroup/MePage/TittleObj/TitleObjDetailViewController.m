@@ -340,6 +340,7 @@
         m_friendButton.hidden = YES;
         m_realmButton.frame = CGRectMake(5, 10, (kScreenHeigth-20)/2, 40);
         m_countryButton.frame = CGRectMake(15 + (kScreenHeigth-20)/2, 10, (kScreenHeigth-20)/2, 40);
+        m_realmButton.selected = YES;
         
         m_segmentClickIndex = kSegmentRealm;
     }

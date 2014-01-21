@@ -27,6 +27,8 @@
         textRelease = @"松手开始加载⋯⋯";
         textLoading = @"正在加载⋯⋯";
         
+        self.currentTime = [GameCommon getCurrentTime];
+
         refreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 20)];
         refreshLabel.backgroundColor = [UIColor clearColor];
         refreshLabel.font = [UIFont boldSystemFontOfSize:12.0];
@@ -83,6 +85,8 @@
             [refreshArrow layer].transform = CATransform3DMakeRotation(M_PI * 2, 0, 0, 1);
         }
         [UIView commitAnimations];
+        
+        [self getLastTimeRefresh];
     }
 }
 
@@ -132,10 +136,13 @@
     [refreshArrow layer].transform = CATransform3DMakeRotation(M_PI * 2, 0, 0, 1);
     [UIView commitAnimations];
 	self.myScrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSString *now = [dateFormatter stringFromDate:[NSDate date]];
-	refreshDate.text = [NSString stringWithFormat:@"最后更新时间：%@", now];
+//	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//	[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//    NSString *now = [dateFormatter stringFromDate:[NSDate date]];
+//	refreshDate.text = [NSString stringWithFormat:@"最后更新时间：%@", now];
+    [self getLastTimeRefresh];
+    
+    self.currentTime = [GameCommon getCurrentTime];
     
     if(isHidden)
     {
@@ -146,6 +153,11 @@
         self.hidden = NO;
     }
     isStart = !isHidden;
+}
+
+- (void)getLastTimeRefresh
+{
+    refreshDate.text = [GameCommon getTimeWithMessageTime:self.currentTime];
 }
 
 - (void)stopLoadingComplete:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
