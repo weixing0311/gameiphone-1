@@ -175,7 +175,7 @@
     [window addSubview:showWindowView];
     
     [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideView) object:nil];//取消该方法的调用
-    [self performSelector:@selector(hideWindowView) withObject:nil afterDelay:3.0f];
+    [self performSelector:@selector(hideWindowView) withObject:nil afterDelay:1.0f];
 }
 
 - (void)hideWindowView

@@ -190,8 +190,13 @@
     NSString* haveNet = notification.object;
     if ([haveNet isEqualToString:@"1"] && [self isHaveLogin]) {//有网
         if (![self.appDel.xmppHelper ifXMPPConnected]&&![titleLabel.text isEqualToString:@"消息(连接中...)"]) {
-
-            [self logInToChatServer];
+            if ([[TempData sharedInstance] getServer] && [[TempData sharedInstance] getServer].length > 0) {
+                [self logInToChatServer];
+            }
+            else
+            {
+                [self getChatServer];
+            }
         }
     }
     else if ([haveNet isEqualToString:@"0"])

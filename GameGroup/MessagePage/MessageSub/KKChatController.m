@@ -249,12 +249,12 @@
     theEmojiView.delegate = self;
     [self.view addSubview:theEmojiView];
     theEmojiView.hidden = YES;
-//    
-//    UIMenuItem *copyItem = [[UIMenuItem alloc] initWithTitle:@"复制"action:@selector(copyMsg)];
+    
+    UIMenuItem *copyItem = [[UIMenuItem alloc] initWithTitle:@"复制"action:@selector(copyMsg)];
 //    UIMenuItem *copyItem2 = [[UIMenuItem alloc] initWithTitle:@"转发"action:@selector(transferMsg)];
-//    UIMenuItem *copyItem3 = [[UIMenuItem alloc] initWithTitle:@"删除"action:@selector(deleteMsg)];
-//    menu = [UIMenuController sharedMenuController];
-//    [menu setMenuItems:[NSArray arrayWithObjects:copyItem,copyItem2,copyItem3, nil]];
+    UIMenuItem *copyItem3 = [[UIMenuItem alloc] initWithTitle:@"删除"action:@selector(deleteMsg)];
+    menu = [UIMenuController sharedMenuController];
+    [menu setMenuItems:[NSArray arrayWithObjects:copyItem,copyItem3, nil]];
     
 //    KKAppDelegate *del = [self appDelegate];
 //    del.messageDelegate = self;
@@ -1006,11 +1006,11 @@
 {
     if (tempBtn.highlighted == YES) {//长按
         NSLog(@"haha");
-        indexPathTo = [NSIndexPath indexPathForRow:(tempBtn.tag-1) inSection:0];
+        indexPathTo = [[NSIndexPath indexPathForRow:(tempBtn.tag-1) inSection:0] copy];
         KKMessageCell * cell = (KKMessageCell *)[self.tView cellForRowAtIndexPath:indexPathTo];
-        tempStr = [[messages objectAtIndex:indexPathTo.row] objectForKey:@"msg"];
+        tempStr = [[[messages objectAtIndex:indexPathTo.row] objectForKey:@"msg"] copy];
         CGRect rect = [self.view convertRect:tempBtn.frame fromView:cell.contentView];
-        NSLog(@"ssasasasasa%@",NSStringFromCGRect(rect));
+
         readyIndex = tempBtn.tag-1;
 
 //        [self displayPopLittleViewWithRectX:(rect.origin.x+(rect.size.width-182)/2) RectY:rect.origin.y-54 TheRect:rect];
@@ -1310,8 +1310,6 @@
             //Do something when send failed...
             return;
         }
-        
-        
         
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
         

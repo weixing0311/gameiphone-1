@@ -207,10 +207,12 @@
         if(zanBtn.selected)
         {
             [zanBtn setBackgroundImage:KUIImage(@"zan_hig_1") forState:UIControlStateHighlighted];
+            [self showMessageWindowWithContent:@"已赞" imageType:5];
         }
         else
         {
             [zanBtn setBackgroundImage:KUIImage(@"zan_hig_2") forState:UIControlStateHighlighted];
+            [self showMessageWindowWithContent:@"取消赞" imageType:6];
         }
     
         double allZan = [KISDictionaryHaveKey(responseObject, @"zannum") doubleValue];
@@ -255,7 +257,7 @@
 //        scroll.backgroundColor = [UIColor clearColor];
 //        [self.view addSubview:scroll];
         
-        NSString* loadStr = [self htmlContentWithTitle:KISDictionaryHaveKey(self.dataDic, @"title") time:[NSString stringWithFormat:@"(%@ 发表)", [self getDataWithTime]] content:KISDictionaryHaveKey(self.dataDic, @"msg")];
+        NSString* loadStr = [self htmlContentWithTitle:KISDictionaryHaveKey(self.dataDic, @"title") time:[NSString stringWithFormat:@"%@", [self getDataWithTime]] content:KISDictionaryHaveKey(self.dataDic, @"msg")];
         for(int i = 0; i < [self.headImgArray count]; i++)
         {
             loadStr = [loadStr stringByAppendingString:[self imageHtmlWithId:[self.headImgArray objectAtIndex:i]]];
@@ -674,7 +676,7 @@
     else if([myURL hasPrefix:@"myimage:"])
     {
         NSRange range = [myURL rangeOfString:@":"];
-        if (range.length == 0) {
+        if (range.location == NSNotFound) {
             return NO;
         }
         NSString * imageId = [myURL substringFromIndex:range.location+1];

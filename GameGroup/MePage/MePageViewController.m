@@ -34,7 +34,9 @@
 @implementation MePageViewController
 
 - (void)viewWillDisappear:(BOOL)animated
-{    
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"appBecomeActive" object:Nil];
+
     [super viewWillDisappear:animated];
 }
 
@@ -48,7 +50,20 @@
         [[Custom_tabbar showTabBar] when_tabbar_is_selected:0];
         return;
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActiveWithNet:) name:@"appBecomeActive" object:nil];
+
     [self getUserInfoByNet];
+}
+
+#pragma mark 进入程序网络变化
+- (void)appBecomeActiveWithNet:(NSNotification*)notification
+{
+    NSString* haveNet = notification.object;
+    if ([haveNet isEqualToString:@"1"] && [self isHaveLogin]) {//有网
+        if (m_hostInfo == nil) {
+            [self getUserInfoByNet];
+        }
+    }
 }
 
 - (void)viewDidLoad

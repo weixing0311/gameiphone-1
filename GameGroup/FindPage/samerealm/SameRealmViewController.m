@@ -168,8 +168,21 @@
                 [alert show];
             }
         }
+        else
+        {
+            UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请求数据失败，请检查网络！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            alert.tag = 56;
+            [alert show];
+        }
         [hud hide:YES];
     }];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 56) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)getSameRealmDataByNet
