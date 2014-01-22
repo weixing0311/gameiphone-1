@@ -636,7 +636,7 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
 
         }
-        [self showMessageWindowWithContent:@"添加成功" pointY:kScreenHeigth-100];
+        [self showMessageWindowWithContent:@"添加成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
@@ -817,7 +817,7 @@
 //            [GameCommon shareGameCommon].friendTableChanged = YES;
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
         }
-        [self showMessageWindowWithContent:@"关注成功" pointY:kScreenHeigth-100];
+        [self showMessageWindowWithContent:@"关注成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {

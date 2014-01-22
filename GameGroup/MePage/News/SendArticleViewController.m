@@ -193,7 +193,7 @@
             if (self.delegate&&[self.delegate respondsToSelector:@selector(dynamicListAddOneDynamic:)])
                 [self.delegate dynamicListAddOneDynamic:responseObject];
         }
-        [self showMessageWindowWithContent:@"发送成功" pointY:kScreenHeigth-100];
+        [self showMessageWindowWithContent:@"成功" imageType:0];
 
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(AFHTTPRequestOperation *operation, id error) {
