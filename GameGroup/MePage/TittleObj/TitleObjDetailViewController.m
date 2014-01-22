@@ -150,7 +150,7 @@
 //    [topView addSubview:titleLabel];
     
     m_backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
-    [m_backButton setBackgroundImage:KUIImage(@"back") forState:UIControlStateNormal];
+    [m_backButton setBackgroundImage:KUIImage(@"back_2") forState:UIControlStateNormal];
     [m_backButton setBackgroundImage:KUIImage(@"back_click") forState:UIControlStateHighlighted];
     m_backButton.backgroundColor = [UIColor clearColor];
     [m_backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -158,7 +158,7 @@
     
     m_shareButton =[UIButton buttonWithType:UIButtonTypeCustom];
     m_shareButton.frame=CGRectMake(kScreenHeigth - 50, 0, 50, 44);
-    [m_shareButton setBackgroundImage:KUIImage(@"share_normal") forState:UIControlStateNormal];
+    [m_shareButton setBackgroundImage:KUIImage(@"share_normal2") forState:UIControlStateNormal];
     [m_shareButton setBackgroundImage:KUIImage(@"share_click") forState:UIControlStateHighlighted];
     [self.view addSubview:m_shareButton];
     [m_shareButton addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];

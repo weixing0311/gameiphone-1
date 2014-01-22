@@ -155,7 +155,8 @@
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSArray * dMyNews = [DSMyNewsList MR_findAllInContext:localContext];
         for (DSMyNewsList* news in dMyNews) {
-            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"img", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",news.commentObj, @"commentObj",news.urlLink, @"urlLink",news.img, @"img",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",nil];
+            NSDictionary* commentDic = [NSDictionary dictionaryWithObject:news.commentObj forKey:@"msg"];
+            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"img", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",commentDic, @"commentObj",news.urlLink, @"urlLink",news.img, @"img",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",news.showTitle, @"showtitle",nil];
             [m_newsArray addObject:tempDic];
             if ([news.type isEqualToString:@"5"]) {
                 [m_rowHeigthArray addObject:@"105"];
@@ -173,7 +174,8 @@
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSArray * dFriendsNews = [DSFriendsNewsList MR_findAllInContext:localContext];
         for (DSFriendsNewsList* news in dFriendsNews) {
-            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"img", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",news.commentObj, @"commentObj",news.urlLink, @"urlLink",news.img, @"img",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",nil];
+            NSDictionary* commentDic = [NSDictionary dictionaryWithObject:news.commentObj forKey:@"msg"];
+            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"img", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",commentDic, @"commentObj",news.urlLink, @"urlLink",news.img, @"img",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",news.showTitle, @"showtitle",nil];
             [m_newsArray addObject:tempDic];
             if ([news.type isEqualToString:@"5"]) {
                 [m_rowHeigthArray addObject:@"105"];
@@ -371,7 +373,11 @@
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
         cell.headImageV.imageURL = theUrl;
         
-        cell.nickNameLabel.text = [KISDictionaryHaveKey(destDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(destDic, @"nickname");
+        NSString * nickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(destDic, @"alias")];
+        if ([nickName isEqualToString:@""]) {
+            nickName = KISDictionaryHaveKey(destDic, @"nickname");
+        }
+        cell.nickNameLabel.text = [KISDictionaryHaveKey(destDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" : nickName;
         if ([KISDictionaryHaveKey(destDic, @"userid") isEqualToString:@"10000"]) {
             cell.authImage.hidden = NO;
             cell.authImage.image = KUIImage(@"red_auth");
@@ -397,7 +403,11 @@
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
         cell.headImageV.imageURL = theUrl;
         
-        cell.nickNameLabel.text = [KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(tempDic, @"nickname");
+        NSString * nickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"alias")];
+        if ([nickName isEqualToString:@""]) {
+            nickName = KISDictionaryHaveKey(tempDic, @"nickname");
+        }
+        cell.nickNameLabel.text = [KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :nickName;
         
         if ([KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:@"10000"]) {
             cell.authImage.hidden = NO;

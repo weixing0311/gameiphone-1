@@ -80,6 +80,7 @@
         <attribute name="msg" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="newsId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nickName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="showTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="superstar" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="urlLink" optional="YES" attributeType="String" syncable="YES"/>
@@ -98,6 +99,7 @@
         <attribute name="msg" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="newsId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nickName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="showTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="superstar" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="urlLink" optional="YES" attributeType="String" syncable="YES"/>
@@ -200,6 +202,7 @@
         <element name="DSFriendsNewsList" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSMyNewsList" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSNameIndex" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DSOtherMsgs" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSPublicMsgs" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSReceivedHellos" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSRecommendList" positionX="0" positionY="0" width="0" height="0"/>
@@ -208,6 +211,5 @@
         <element name="DSThumbPublicMsgs" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSThumbSubscribedMsgs" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSUnreadCount" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DSOtherMsgs" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

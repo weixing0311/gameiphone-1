@@ -1882,19 +1882,25 @@
 //    NSString * imageStr = [GameCommon getNewStringWithId:[dataDic objectForKey:@"hide"]];
     NSString * detailPageId = [GameCommon getNewStringWithId:[dataDic objectForKey:@"detailPageId"]];
     NSString * createDate = [GameCommon getNewStringWithId:[dataDic objectForKey:@"createDate"]];
-    NSString * nickName = [GameCommon getNewStringWithId:[dataDic objectForKey:@"alias"]];
-    if ([nickName isEqualToString:@""]) {
-        nickName = [GameCommon getNewStringWithId:[dataDic objectForKey:@"nickname"]];
-    }
+   
     NSString * type = [GameCommon getNewStringWithId:[dataDic objectForKey:@"type"]];
-    NSString * commentObj = [GameCommon getNewStringWithId:[dataDic objectForKey:@"commentObj"]];
+    NSString * commentObj = @"";
+    if ([KISDictionaryHaveKey(dataDic, @"commentObj") isKindOfClass:[NSDictionary class]]) {
+        commentObj = KISDictionaryHaveKey(KISDictionaryHaveKey(dataDic, @"commentObj"), @"msg");
+    }
     NSString * urlLink = [GameCommon getNewStringWithId:[dataDic objectForKey:@"urlLink"]];
     NSString * zannum = [GameCommon getNewStringWithId:[dataDic objectForKey:@"zannum"]];
-   
+    NSString * showTitle = [GameCommon getNewStringWithId:[dataDic objectForKey:@"showtitle"]];
+
     NSString * userid = [GameCommon getNewStringWithId:[dataDic objectForKey:@"userid"]];
     NSString * username = [GameCommon getNewStringWithId:[dataDic objectForKey:@"username"]];
     NSString * img = [GameCommon getNewStringWithId:[dataDic objectForKey:@"img"]];
     NSString * superStar = [GameCommon getNewStringWithId:[dataDic objectForKey:@"superstar"]];
+    
+    NSString * nickName = [GameCommon getNewStringWithId:[dataDic objectForKey:@"alias"]];
+    if ([nickName isEqualToString:@""]) {
+        nickName = [GameCommon getNewStringWithId:[dataDic objectForKey:@"nickname"]];
+    }
     if ([KISDictionaryHaveKey(dataDic, @"destUser") isKindOfClass:[NSDictionary class]])
     {
         NSDictionary *destDic = [dataDic objectForKey:@"destUser"];
@@ -1902,6 +1908,10 @@
         username = [GameCommon getNewStringWithId:[destDic objectForKey:@"username"]];
         img = [GameCommon getNewStringWithId:[destDic objectForKey:@"img"]];
         superStar = [GameCommon getNewStringWithId:[destDic objectForKey:@"superstar"]];
+        nickName = [GameCommon getNewStringWithId:[destDic objectForKey:@"alias"]];
+        if ([nickName isEqualToString:@""]) {
+            nickName = [GameCommon getNewStringWithId:[destDic objectForKey:@"nickname"]];
+        }
     }
   
 
@@ -1926,6 +1936,7 @@
             dMyNews.userid = userid;
             dMyNews.username = username;
             dMyNews.superstar = superStar;
+            dMyNews.showTitle = showTitle;
         }];
     }
 }
@@ -1949,16 +1960,23 @@
     //    NSString * imageStr = [GameCommon getNewStringWithId:[dataDic objectForKey:@"hide"]];
     NSString * detailPageId = [GameCommon getNewStringWithId:[dataDic objectForKey:@"detailPageId"]];
     NSString * createDate = [GameCommon getNewStringWithId:[dataDic objectForKey:@"createDate"]];
-    NSString * nickName = [GameCommon getNewStringWithId:[dataDic objectForKey:@"nickname"]];
     NSString * type = [GameCommon getNewStringWithId:[dataDic objectForKey:@"type"]];
-    NSString * commentObj = [GameCommon getNewStringWithId:[dataDic objectForKey:@"commentObj"]];
+    NSString * commentObj = @"";
+    if ([KISDictionaryHaveKey(dataDic, @"commentObj") isKindOfClass:[NSDictionary class]]) {
+        commentObj = KISDictionaryHaveKey(KISDictionaryHaveKey(dataDic, @"commentObj"), @"msg");
+    }
     NSString * urlLink = [GameCommon getNewStringWithId:[dataDic objectForKey:@"urlLink"]];
     NSString * zannum = [GameCommon getNewStringWithId:[dataDic objectForKey:@"zannum"]];
-   
+    NSString * showTitle = [GameCommon getNewStringWithId:[dataDic objectForKey:@"showtitle"]];
+
     NSString * userid = [GameCommon getNewStringWithId:[dataDic objectForKey:@"userid"]];
     NSString * username = [GameCommon getNewStringWithId:[dataDic objectForKey:@"username"]];
     NSString * img = [GameCommon getNewStringWithId:[dataDic objectForKey:@"img"]];
     NSString * superStar = [GameCommon getNewStringWithId:[dataDic objectForKey:@"superstar"]];
+    NSString * nickName = [GameCommon getNewStringWithId:[dataDic objectForKey:@"alias"]];
+    if ([nickName isEqualToString:@""]) {
+        nickName = [GameCommon getNewStringWithId:[dataDic objectForKey:@"nickname"]];
+    }
     if ([KISDictionaryHaveKey(dataDic, @"destUser") isKindOfClass:[NSDictionary class]])
     {
         NSDictionary *destDic = [dataDic objectForKey:@"destUser"];
@@ -1966,6 +1984,10 @@
         username = [GameCommon getNewStringWithId:[destDic objectForKey:@"username"]];
         img = [GameCommon getNewStringWithId:[destDic objectForKey:@"img"]];
         superStar = [GameCommon getNewStringWithId:[destDic objectForKey:@"superstar"]];
+        nickName = [GameCommon getNewStringWithId:[destDic objectForKey:@"alias"]];
+        if ([nickName isEqualToString:@""]) {
+            nickName = [GameCommon getNewStringWithId:[destDic objectForKey:@"nickname"]];
+        }
     }
     if (newsId) {
         [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
@@ -1988,6 +2010,7 @@
             dFriendsNews.zannum = zannum;
             dFriendsNews.userid = userid;
             dFriendsNews.username = username;
+            dFriendsNews.showTitle = showTitle;
         }];
     }
 }
