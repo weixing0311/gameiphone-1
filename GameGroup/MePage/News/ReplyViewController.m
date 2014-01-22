@@ -251,7 +251,8 @@
             m_pageIndex = 0;
             [self getDataByNet];
             
-            [self showMessageWithContent:@"评论成功" point:CGPointMake(kScreenWidth/2, kScreenHeigth-100)];
+//            [self showMessageWithContent:@"评论成功" point:CGPointMake(kScreenWidth/2, kScreenHeigth-100)];
+            [self showMessageWindowWithContent:@"评论成功" imageType:0];
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
