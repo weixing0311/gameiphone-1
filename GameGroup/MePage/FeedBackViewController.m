@@ -54,6 +54,10 @@
         [self showAlertViewWithTitle:@"提示" message:@"请输入您的反馈意见，谢谢！" buttonTitle:@"确定"];
         return;
     }
+    [m_contentTextView resignFirstResponder];
+    
+    [hud show:YES];
+    
     NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:m_contentTextView.text ,@"msg",@"Platform=iphone", @"detail",nil];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];

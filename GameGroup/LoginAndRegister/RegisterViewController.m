@@ -16,6 +16,8 @@
 
 @interface RegisterViewController ()
 {
+    UILabel*     m_titleLabel;
+    
     NSString*     characterid;//角色id
     
     UIImageView*  m_topImage;
@@ -78,7 +80,15 @@
     m_topImage.image = KUIImage(@"register_step_1");
     [self.view addSubview:m_topImage];
 
-    [self setTopViewWithTitle:@"注册" withBackButton:YES];
+    [self setTopViewWithTitle:@"" withBackButton:YES];
+    
+    m_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, startX - 44, 220, 44)];
+    m_titleLabel.textColor = [UIColor whiteColor];
+    m_titleLabel.backgroundColor = [UIColor clearColor];
+    m_titleLabel.text = @"验证手机";
+    m_titleLabel.textAlignment = NSTextAlignmentCenter;
+    m_titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    [self.view addSubview:m_titleLabel];
     
     [self setMainView];
     [self setStep_1View];
@@ -403,6 +413,7 @@
         m_step1Scroll_verCode.hidden = YES;
         m_step2Scroll.hidden = NO;
         m_topImage.image = KUIImage(@"register_step_2");
+        m_titleLabel.text = @"绑定角色";
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
@@ -614,6 +625,7 @@
         m_step3Scroll.hidden = NO;
         m_topImage.image = KUIImage(@"register_step_3");
         m_userNameText.text = m_roleNameText.text;
+        m_titleLabel.text = @"个人信息";
 
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
