@@ -1141,6 +1141,7 @@
         if (nameK)
             [nameKeyArray addObject:nameK];
         NSString * userName = [[fri objectAtIndex:i] userName];
+        NSString * userid = [[fri objectAtIndex:i] userId];
         NSString * nickName = [[fri objectAtIndex:i] nickName];
         NSString * remarkName = [[fri objectAtIndex:i] remarkName];
         NSString * headImg = [DataStoreManager queryFirstHeadImageForUser:userName];
@@ -1155,6 +1156,7 @@
         if (![userName isEqualToString:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]&&nameK) {
             NSMutableDictionary * friendDict = [NSMutableDictionary dictionary];
             [friendDict setObject:userName forKey:@"username"];
+            [friendDict setObject:userid forKey:@"userid"];
             [friendDict setObject:nickName?nickName:@"" forKey:@"nickname"];
             if (![remarkName isEqualToString:@""]) {
                 [friendDict setObject:remarkName forKey:@"displayName"];    
@@ -1894,7 +1896,7 @@
 
     NSString * userid = [GameCommon getNewStringWithId:[dataDic objectForKey:@"userid"]];
     NSString * username = [GameCommon getNewStringWithId:[dataDic objectForKey:@"username"]];
-    NSString * img = [GameCommon getNewStringWithId:[dataDic objectForKey:@"img"]];
+    NSString * img = [GameCommon getNewStringWithId:[dataDic objectForKey:@"thumb"]];//缩略图
     NSString * superStar = [GameCommon getNewStringWithId:[dataDic objectForKey:@"superstar"]];
     
     NSString * nickName = [GameCommon getNewStringWithId:[dataDic objectForKey:@"alias"]];
@@ -1971,7 +1973,7 @@
 
     NSString * userid = [GameCommon getNewStringWithId:[dataDic objectForKey:@"userid"]];
     NSString * username = [GameCommon getNewStringWithId:[dataDic objectForKey:@"username"]];
-    NSString * img = [GameCommon getNewStringWithId:[dataDic objectForKey:@"img"]];
+    NSString * img = [GameCommon getNewStringWithId:[dataDic objectForKey:@"thumb"]];
     NSString * superStar = [GameCommon getNewStringWithId:[dataDic objectForKey:@"superstar"]];
     NSString * nickName = [GameCommon getNewStringWithId:[dataDic objectForKey:@"alias"]];
     if ([nickName isEqualToString:@""]) {

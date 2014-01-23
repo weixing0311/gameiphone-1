@@ -13,7 +13,9 @@
 #import "PersonTableCell.h"
 
 @interface selectContactPage ()
-
+{
+    NSDictionary * selectDict;
+}
 @end
 
 @implementation selectContactPage
@@ -292,27 +294,34 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSDictionary * tempDict;
+    
     if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-        tempDict = [friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+        selectDict = [friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
     }
     else
     {
-        tempDict = [friendDict objectForKey:[[[sectionArray objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
+        selectDict = [friendDict objectForKey:[[[sectionArray objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
     }
-    [self.contactDelegate getContact:tempDict];
-//    [self dismissModalViewControllerAnimated:YES];
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-//    PersonDetailViewController * detailV = [[PersonDetailViewController alloc] init];
-//    HostInfo * hostInfo = [[HostInfo alloc] initWithHostInfo:tempDict];
-//    detailV.hostInfo = hostInfo;
-//    detailV.needRequest = YES;
-//    [self.navigationController pushViewController:detailV animated:YES];
-//    [self.customTabBarController hidesTabBar:YES animated:YES];
-    
+
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"是否确认发送给 %@?", KISDictionaryHaveKey(selectDict, @"displayName")] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alert.tag = 567;
+    [alert show];
 }
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 567) {
+        if (buttonIndex != alertView.cancelButtonIndex) {
+            [self.contactDelegate getContact:selectDict];
+
+//            [self dismissViewControllerAnimated:YES completion:^{
+//                
+//            }];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+}
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
