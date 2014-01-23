@@ -156,7 +156,7 @@
         NSArray * dMyNews = [DSMyNewsList MR_findAllInContext:localContext];
         for (DSMyNewsList* news in dMyNews) {
             NSDictionary* commentDic = [NSDictionary dictionaryWithObject:news.commentObj forKey:@"msg"];
-            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"img", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",commentDic, @"commentObj",news.urlLink, @"urlLink",news.img, @"img",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",news.showTitle, @"showtitle",nil];
+            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"userimg", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",commentDic, @"commentObj",news.urlLink, @"urlLink",news.img, @"img",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",news.showTitle, @"showtitle",nil];
             [m_newsArray addObject:tempDic];
             if ([news.type isEqualToString:@"5"]) {
                 [m_rowHeigthArray addObject:@"105"];
@@ -175,7 +175,7 @@
         NSArray * dFriendsNews = [DSFriendsNewsList MR_findAllInContext:localContext];
         for (DSFriendsNewsList* news in dFriendsNews) {
             NSDictionary* commentDic = [NSDictionary dictionaryWithObject:news.commentObj forKey:@"msg"];
-            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"img", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",commentDic, @"commentObj",news.urlLink, @"urlLink",news.img, @"img",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",news.showTitle, @"showtitle",nil];
+            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"userimg", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",commentDic, @"commentObj",news.urlLink, @"urlLink",news.img, @"img",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",news.showTitle, @"showtitle",nil];
             [m_newsArray addObject:tempDic];
             if ([news.type isEqualToString:@"5"]) {
                 [m_rowHeigthArray addObject:@"105"];
@@ -259,6 +259,7 @@
         }
         [refreshView stopLoading:NO];
         [_slimeView endRefresh];
+        [refreshView setRefreshViewFrame];
 
         [hud hide:YES];
     }];
@@ -401,7 +402,13 @@
         NSString* imageName = [GameCommon getHeardImgId:KISDictionaryHaveKey(tempDic, @"userimg")];
         NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:imageName]];
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-        cell.headImageV.imageURL = theUrl;
+        
+//        UIImage *getImage = [[EGOImageLoader sharedImageLoader]imageForURL:theUrl shouldLoadWithObserver:nil];//拿到缓存图片
+//        if (getImage != nil) {
+//            cell.headImageV.image = getImage;
+//        }
+//        else
+            cell.headImageV.imageURL = theUrl;
         
         NSString * nickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"alias")];
         if ([nickName isEqualToString:@""]) {

@@ -25,7 +25,8 @@
 @interface KKChatController (){
     
     NSMutableArray *messages;
-    
+    UIMenuItem *copyItem;
+    UIMenuItem *copyItem3;
 }
 
 @end
@@ -250,11 +251,10 @@
     [self.view addSubview:theEmojiView];
     theEmojiView.hidden = YES;
     
-    UIMenuItem *copyItem = [[UIMenuItem alloc] initWithTitle:@"复制"action:@selector(copyMsg)];
+    copyItem = [[UIMenuItem alloc] initWithTitle:@"复制"action:@selector(copyMsg)];
 //    UIMenuItem *copyItem2 = [[UIMenuItem alloc] initWithTitle:@"转发"action:@selector(transferMsg)];
-    UIMenuItem *copyItem3 = [[UIMenuItem alloc] initWithTitle:@"删除"action:@selector(deleteMsg)];
+    copyItem3 = [[UIMenuItem alloc] initWithTitle:@"删除"action:@selector(deleteMsg)];
     menu = [UIMenuController sharedMenuController];
-    [menu setMenuItems:[NSArray arrayWithObjects:copyItem,copyItem3, nil]];
     
 //    KKAppDelegate *del = [self appDelegate];
 //    del.messageDelegate = self;
@@ -743,6 +743,11 @@
 }
 #pragma mark -
 #pragma mark HPExpandingTextView delegate
+- (BOOL)growingTextViewShouldBeginEditing:(HPGrowingTextView *)growingTextView
+{
+    [menu setMenuItems:@[]];
+    return YES;
+}
 //改变键盘高度
 - (void)growingTextView:(HPGrowingTextView *)growingTextView willChangeHeight:(float)height
 {
@@ -1017,6 +1022,9 @@
         
         [self canBecomeFirstResponder];
         [self becomeFirstResponder];
+        
+        [menu setMenuItems:[NSArray arrayWithObjects:copyItem,copyItem3, nil]];
+
         [menu setTargetRect:CGRectMake(rect.origin.x, rect.origin.y, 60, 90) inView:self.view];
         [menu setMenuVisible:YES animated:YES];
     }
