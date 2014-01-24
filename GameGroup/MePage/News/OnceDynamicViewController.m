@@ -109,6 +109,7 @@
             self.dataDic = responseObject;
             
             m_shareButton.hidden = [KISDictionaryHaveKey(responseObject, @"type") integerValue] == 3 ? NO : YES;
+            self.urlLink = [GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"urlLink")];
             
             allPL = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"commentnum")] integerValue];
             
@@ -142,6 +143,7 @@
     headBtn.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
     headBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseImageUrl,[GameCommon getHeardImgId:KISDictionaryHaveKey(self.dataDic, @"userimg")]]];
     headBtn.layer.cornerRadius = 5;
+    headBtn.layer.masksToBounds=YES;
     [headBtn addTarget:self action:@selector(heardImgClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:headBtn];
     
@@ -558,7 +560,7 @@
         titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
         [m_shareView addSubview:titleLabel];
         
-        if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(self.dataDic, @"thumb")].length > 0) {
+        if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(self.dataDic, @"thumb")].length > 0 && ![[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.dataDic, @"thumb")] isEqualToString:@"null"]) {
             EGOImageView* thumb = [[EGOImageView alloc] initWithFrame:CGRectMake(5, titleSize.height + 20, 50, 50)];
             thumb.placeholderImage = KUIImage(@"have_picture");
             NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(self.dataDic, @"thumb")];
@@ -568,6 +570,7 @@
             
             CGSize contentSize = [KISDictionaryHaveKey(self.dataDic, @"msg") sizeWithFont:[UIFont boldSystemFontOfSize:13.0] constrainedToSize:CGSizeMake(210, 200)];
             UILabel* contentLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(60, titleSize.height + 20, 210, contentSize.height) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:13.0] text:KISDictionaryHaveKey(self.dataDic, @"msg") textAlignment:NSTextAlignmentLeft];
+            contentLabel.numberOfLines = 0;
             [m_shareView addSubview:contentLabel];
             
         }
@@ -575,7 +578,8 @@
         {
             CGSize contentSize = [KISDictionaryHaveKey(self.dataDic, @"msg") sizeWithFont:[UIFont boldSystemFontOfSize:13.0] constrainedToSize:CGSizeMake(290, 200)];
 
-            UILabel* contentLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(5, titleSize.height + 20, 290, contentSize.height) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:13.0] text:KISDictionaryHaveKey(self.dataDic, @"msg") textAlignment:NSTextAlignmentRight];
+            UILabel* contentLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(5, titleSize.height + 20, 290, contentSize.height) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:13.0] text:KISDictionaryHaveKey(self.dataDic, @"msg") textAlignment:NSTextAlignmentLeft];
+            contentLabel.numberOfLines = 0;
             [m_shareView addSubview:contentLabel];
         }
         UIButton* cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(15, 255, 120, 35)];

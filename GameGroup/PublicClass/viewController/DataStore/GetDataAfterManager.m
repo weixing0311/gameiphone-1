@@ -45,13 +45,15 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
 {
     NSString * type = KISDictionaryHaveKey(messageContent, @"msgType");
     type = type?type:@"notype";
-    if ([type isEqualToString:@"reply"]||[type isEqualToString:@"zanDynamic"]) {
-        [DataStoreManager storeNewMsgs:messageContent senderType:SYSTEMNOTIFICATION];//系统消息
-    }
-    else if([type isEqualToString:@"normalchat"])
+    if([type isEqualToString:@"normalchat"])
     {
         AudioServicesPlayAlertSound(1007);
         [DataStoreManager storeNewMsgs:messageContent senderType:COMMONUSER];//普通聊天消息
+    }
+    else if([type isEqualToString:@"payloadchat"])
+    {
+        AudioServicesPlayAlertSound(1007);
+        [DataStoreManager storeNewMsgs:messageContent senderType:PAYLOADMSG];//动态消息
     }
     else if ([type isEqualToString:@"sayHello"] || [type isEqualToString:@"deletePerson"])//关注和取消关注
     {

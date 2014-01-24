@@ -24,8 +24,8 @@
     NSRange range = [[msg objectForKey:@"sender"] rangeOfString:@"@"];
     NSString * sender = [[msg objectForKey:@"sender"] substringToIndex:range.location];
     NSString * senderNickname = [msg objectForKey:@"nickname"];
-    NSString * msgContent = [msg objectForKey:@"msg"];
-    NSString * msgType = [msg objectForKey:@"msgType"];
+    NSString * msgContent = KISDictionaryHaveKey(msg, @"msg");
+    NSString * msgType = KISDictionaryHaveKey(msg, @"msgType");
 
     NSDate * sendTime = [NSDate dateWithTimeIntervalSince1970:[[msg objectForKey:@"time"] doubleValue]];
     
@@ -43,6 +43,7 @@
             commonMsg.senderNickname = senderNickname?senderNickname:@"";
             commonMsg.msgContent = msgContent?msgContent:@"";
             commonMsg.senTime = sendTime;
+            commonMsg.msgType = msgType;
 
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
             
@@ -58,21 +59,33 @@
             thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
             thumbMsgs.msgType = msgType;
             thumbMsgs.messageuuid = @"";
-//            if (![self ifHaveThisFriend:sender]) {
-//                [self addFriendToLocal:sender];
-//            }
-            
         }];
     }
-    //公共账号消息存储到DSThumbPuclicMsgs和DSPublicMsgs里面
-    else if ([sendertype isEqualToString:PUBLICACCOUNT]){
-        
-    }
-    //订阅号信息存储到DSThumbSubscribedMsgs和DSSubscribedMsgs里面
-    else if ([sendertype isEqualToString:SUBSCRIBEDACCOUNT]){
-        
-    }
-    else if ([sendertype isEqualToString:SYSTEMNOTIFICATION]){
+    else if ([sendertype isEqualToString:PAYLOADMSG]) {//动态聊天消息
+        [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+            DSCommonMsgs * commonMsg = [DSCommonMsgs MR_createInContext:localContext];//所有消息
+            commonMsg.sender = sender;
+            commonMsg.senderNickname = senderNickname?senderNickname:@"";
+            commonMsg.msgContent = msgContent?msgContent:@"";
+            commonMsg.senTime = sendTime;
+            commonMsg.msgType = msgType;
+            
+            NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
+            
+            NSDictionary* msgDic = [msgContent JSONValue];
+            DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];//消息页展示的内容
+            if (!thumbMsgs)
+                thumbMsgs = [DSThumbMsgs MR_createInContext:localContext];
+            thumbMsgs.sender = sender;
+            thumbMsgs.senderNickname = senderNickname?senderNickname:@"";
+            thumbMsgs.msgContent = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"title")] isEqualToString:@""]?KISDictionaryHaveKey(msgDic, @"msg"):KISDictionaryHaveKey(msgDic, @"title");
+            thumbMsgs.sendTime = sendTime;
+            thumbMsgs.senderType = sendertype;
+            int unread = [thumbMsgs.unRead intValue];
+            thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
+            thumbMsgs.msgType = msgType;
+            thumbMsgs.messageuuid = @"";
+        }];
     }
     else if([sendertype isEqualToString:SAYHELLOS])//关注 或取消关注
     {
@@ -152,7 +165,7 @@
         commonMsg.msgContent = msgContent?msgContent:@"";
         commonMsg.senTime = sendTime;
         commonMsg.receiver = receicer;
-        
+        commonMsg.msgType = @"normalchat";
         
         NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",receicer];
         
@@ -242,6 +255,8 @@
         NSDate * tt = [[commonMsgsArray objectAtIndex:i] senTime];
         NSTimeInterval uu = [tt timeIntervalSince1970];
         [thumbMsgsDict setObject:[NSString stringWithFormat:@"%f",uu] forKey:@"time"];
+        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgType]?[[commonMsgsArray objectAtIndex:i] msgType] : @"" forKey:@"msgType"];
+
         [allMsgArray addObject:thumbMsgsDict];
         
     }
@@ -265,6 +280,7 @@
 {
     NSString * msgContent = [message objectForKey:@"msg"];
     NSDate * sendTime = [NSDate dateWithTimeIntervalSince1970:[[message objectForKey:@"time"] doubleValue]];
+    NSString * msgType = KISDictionaryHaveKey(message, @"msgType");
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSPredicate * predicate;
 
@@ -278,7 +294,14 @@
             }
             else
             {
-                thumbMsgs.msgContent = msgContent;
+                if ([msgType isEqualToString:@"payloadchat"]) {
+                    NSDictionary* dic = [msgContent JSONValue];
+                    thumbMsgs.msgContent = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"title")].length > 0 ? KISDictionaryHaveKey(dic, @"title") : KISDictionaryHaveKey(dic, @"msg");
+                }
+                else
+                {
+                    thumbMsgs.msgContent = msgContent;
+                }
                 thumbMsgs.sendTime = sendTime;
             }
         }
@@ -2020,8 +2043,8 @@
 +(void)cleanFriendsNewsList
 {
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
-        NSArray * dFriendsNews = [DSMyNewsList MR_findAllInContext:localContext];
-        for (DSMyNewsList* news in dFriendsNews) {
+        NSArray * dFriendsNews = [DSFriendsNewsList MR_findAllInContext:localContext];
+        for (DSFriendsNewsList* news in dFriendsNews) {
             [news deleteInContext:localContext];
         }
     }];

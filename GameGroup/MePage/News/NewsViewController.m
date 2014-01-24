@@ -435,7 +435,7 @@
     cell.rowIndex = indexPath.row;
     NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"thumb")];
     NSURL * imgUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
-    if (imgStr.length > 0) {
+    if (imgStr.length > 0 && ![imgStr isEqualToString:@"null"]) {
         cell.havePic.hidden = NO;
         cell.havePic.imageURL = imgUrl;
     }
@@ -539,7 +539,7 @@
  
     OnceDynamicViewController* detailVC = [[OnceDynamicViewController alloc] init];
     detailVC.messageid = KISDictionaryHaveKey(tempDict, @"id");
-    detailVC.urlLink = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"urlLink")];
+//    detailVC.urlLink = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"urlLink")];
     detailVC.delegate = self;
     [self.navigationController pushViewController:detailVC animated:YES];
 }
