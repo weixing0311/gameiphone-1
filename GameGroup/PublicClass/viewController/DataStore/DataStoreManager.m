@@ -1665,79 +1665,6 @@
     }];
 }
 
-/*
-+(void)storePetInfo:(NSDictionary *)myInfo
-{
-//    NSArray * petArray = [myInfo objectForKey:@"petInfoViews"];
-//
-//    for (int i = 0; i<petArray.count; i++) {
-//        NSString * hostName = [myInfo objectForKey:@"username"];
-//        NSString * hostNickName = [myInfo objectForKey:@"nickname"];
-//        NSString * nickName = [[petArray objectAtIndex:i] objectForKey:@"nickname"];
-//        NSString * gender = [[petArray objectAtIndex:i] objectForKey:@"gender"];
-//        NSString * headImgID = [self toString:[[petArray objectAtIndex:i] objectForKey:@"img"]];
-//        NSString * trait = [[petArray objectAtIndex:i] objectForKey:@"trait"];
-//        NSString * type = [self toString:[[petArray objectAtIndex:i] objectForKey:@"type"]];
-//        NSString * age = [self toString:[[petArray objectAtIndex:i] objectForKey:@"birthdate"]];
-//        NSString * petID = [self toString:[[petArray objectAtIndex:i] objectForKey:@"id"]];
-//        NSString * userID = [self toString:[[petArray objectAtIndex:i] objectForKey:@"userid"]];
-//        [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
-//            NSPredicate * predicate = [NSPredicate predicateWithFormat:@"petID==[c]%@",petID];
-//            DSPets * dPet = [DSPets MR_findFirstWithPredicate:predicate];
-//            if (!dPet)
-//                dPet = [DSPets MR_createInContext:localContext];
-//            dPet.friendName = hostName?hostName:@"";
-//            dPet.friendNickname = hostNickName?hostNickName:@"";
-//            dPet.petNickname = nickName?nickName:@"";
-//            dPet.petGender = gender?gender:@"";
-//            dPet.petHeadImgID = headImgID?headImgID:@"";
-//            dPet.petTrait = trait?trait:@"";
-//            dPet.petType = type?type:@"";
-//            dPet.petAge = age?age:@"";
-//            dPet.petID = petID?petID:@"";
-//            dPet.userID = userID?userID:@"";
-//        }];
-//    }
-}
-
-+(void)storeOnePetInfo:(NSDictionary *)petInfo
-{
-
-//    NSString * nickName = [petInfo objectForKey:@"nickname"];
-//    NSString * gender = [petInfo objectForKey:@"gender"];
-//    NSString * headImgID = [self toString:[petInfo objectForKey:@"img"]];
-//    NSString * trait = [petInfo objectForKey:@"trait"];
-//    NSString * type = [self toString:[petInfo objectForKey:@"type"]];
-//    NSString * age = [self toString:[petInfo objectForKey:@"birthdate"]];
-//    NSString * petID = [self toString:[petInfo objectForKey:@"id"]];
-//    NSString * userID = [self toString:[petInfo objectForKey:@"userid"]];
-//    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
-//        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"petID==[c]%@",petID];
-//        DSPets * dPet = [DSPets MR_findFirstWithPredicate:predicate];
-//        if (!dPet)
-//            dPet = [DSPets MR_createInContext:localContext];
-//        dPet.petNickname = nickName?nickName:@"";
-//        dPet.petGender = gender?gender:@"";
-//        dPet.petHeadImgID = headImgID?headImgID:@"";
-//        dPet.petTrait = trait?trait:@"";
-//        dPet.petType = type?type:@"";
-//        dPet.petAge = age?age:@"";
-//        dPet.petID = petID?petID:@"";
-//        dPet.userID = userID?userID:@"";
-//    }];
-}
-
-+(void)deleteOnePetForPetID:(NSString *)petID
-{
-    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
-        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"petID==[c]%@",petID];
-        DSPets * dPet = [DSPets MR_findFirstWithPredicate:predicate];
-        if (dPet) {
-            [dPet MR_deleteInContext:localContext];
-        }
-    }];
-}*/
-
 +(NSMutableDictionary *)queryOneFriendInfoWithUserName:(NSString *)userName
 {
     NSMutableDictionary * dict = [NSMutableDictionary dictionary];
@@ -1789,27 +1716,8 @@
         [dict setObject:@"0" forKey:@"longitude"];
         [dict setObject:dFriend.age forKey:@"birthdate"];
         [dict setObject:dFriend.headImgID forKey:@"img"];
-//        [dict setObject:dFriend.theCity forKey:@"city"];
-//        NSPredicate * predicate2 = [NSPredicate predicateWithFormat:@"userID==[c]%@",dFriend.userId];
-//        NSArray * tempArray = [DSPets MR_findAllWithPredicate:predicate2];
-//        NSMutableArray * petArray = [NSMutableArray array];
-//        for (DSPets * petThis in tempArray) {
-//            NSMutableDictionary * petDict = [NSMutableDictionary dictionary];
-//            [petDict setObject:petThis.petNickname forKey:@"nickname"];
-//            [petDict setObject:petThis.petType forKey:@"type"];
-//            [petDict setObject:petThis.petTrait forKey:@"trait"];
-//            [petDict setObject:petThis.petID forKey:@"id"];
-//            [petDict setObject:petThis.petGender forKey:@"gender"];
-//            [petDict setObject:petThis.petAge forKey:@"birthdate"];
-//            [petDict setObject:petThis.petHeadImgID forKey:@"img"];
-//            [petArray addObject:petDict];
-//            if (petArray.count>=8) {
-//                break;
-//            }
-//        }
-//        [dict setObject:petArray forKey:@"petInfoViews"];
         [dict setObject:dFriend.backgroundImg forKey:@"backgroundImg"];
-        
+        [dict setObject:dFriend.superstar forKey:@"superstar"];
     }
     return dict;
 }

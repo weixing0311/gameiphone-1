@@ -493,7 +493,7 @@
 #pragma mark 分享
 - (void)shareButtonClick:(id)sender
 {
-    if ([KISDictionaryHaveKey(self.dataDic, @"superstar") doubleValue]) {
+    if ([KISDictionaryHaveKey([DataStoreManager queryMyInfo], @"superstar") doubleValue]) {
         UIActionSheet* sheet = [[UIActionSheet alloc] initWithTitle:@"分享类型" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"发送给好友",@"广播给粉丝及好友", nil];
         sheet.tag = 90;
         [sheet showInView:self.view];
@@ -569,16 +569,15 @@
             [m_shareView addSubview:thumb];
             
             CGSize contentSize = [KISDictionaryHaveKey(self.dataDic, @"msg") sizeWithFont:[UIFont boldSystemFontOfSize:13.0] constrainedToSize:CGSizeMake(210, 200)];
-            UILabel* contentLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(60, titleSize.height + 20, 210, contentSize.height) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:13.0] text:KISDictionaryHaveKey(self.dataDic, @"msg") textAlignment:NSTextAlignmentLeft];
+            UILabel* contentLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(60, titleSize.height + 20, 200, contentSize.height) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:13.0] text:KISDictionaryHaveKey(self.dataDic, @"msg") textAlignment:NSTextAlignmentLeft];
             contentLabel.numberOfLines = 0;
             [m_shareView addSubview:contentLabel];
-            
         }
         else
         {
             CGSize contentSize = [KISDictionaryHaveKey(self.dataDic, @"msg") sizeWithFont:[UIFont boldSystemFontOfSize:13.0] constrainedToSize:CGSizeMake(290, 200)];
 
-            UILabel* contentLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(5, titleSize.height + 20, 290, contentSize.height) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:13.0] text:KISDictionaryHaveKey(self.dataDic, @"msg") textAlignment:NSTextAlignmentLeft];
+            UILabel* contentLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(5, titleSize.height + 20, 270, contentSize.height) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:13.0] text:KISDictionaryHaveKey(self.dataDic, @"msg") textAlignment:NSTextAlignmentLeft];
             contentLabel.numberOfLines = 0;
             [m_shareView addSubview:contentLabel];
         }

@@ -58,10 +58,12 @@
         
         self.havePic = [[EGOImageView alloc] initWithFrame:CGRectMake(65, 30, 30, 30)];
         self.havePic.placeholderImage = KUIImage(@"have_picture");
+        self.havePic.layer.cornerRadius = 3;
+        self.havePic.layer.masksToBounds = YES;
         [self addSubview:self.havePic];
         self.havePic.hidden = YES;
         
-        self.bigTitle = [[UILabel alloc] initWithFrame:CGRectMake(60, 20, 235, 40)];
+        self.bigTitle = [[UILabel alloc] initWithFrame:CGRectMake(62, 20, 233, 40)];
         self.bigTitle.numberOfLines = 2;
         [self.bigTitle setTextAlignment:NSTextAlignmentLeft];
         [self.bigTitle setFont:[UIFont boldSystemFontOfSize:13.0]];
@@ -110,11 +112,11 @@
     
     if (self.havePic.hidden) {
 //        self.bigTitle.frame = CGRectMake(70, 28, 200, titleSize.height);
-        self.bigTitle.frame = CGRectMake(60, 25, 235, 40);
+        self.bigTitle.frame = CGRectMake(62, 25, 233, 40);
     }
     else
     {
-        self.bigTitle.frame = CGRectMake(100, 25, 195, 40);
+        self.bigTitle.frame = CGRectMake(100, 25, 193, 40);
     }
     
 //    

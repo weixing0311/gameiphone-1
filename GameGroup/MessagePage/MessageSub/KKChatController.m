@@ -967,7 +967,7 @@
         cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
         NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",self.chatUserImg]];
         cell.headImgV.imageURL = theUrl;
-        bgImage = [[UIImage imageNamed:@"bubble_01.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
+        bgImage = [[UIImage imageNamed:@"bubble_03.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
         
         [cell.bgImageView setFrame:CGRectMake(padding-10+45, padding*2-15, size.width+25, size.height + 20)];
         [cell.bgImageView setBackgroundImage:bgImage forState:UIControlStateNormal];

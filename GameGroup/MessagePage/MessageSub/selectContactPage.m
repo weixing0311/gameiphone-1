@@ -7,7 +7,6 @@
 //
 
 #import "selectContactPage.h"
-#import "AppDelegate.h"
 #import "XMPPHelper.h"
 #import "JSON.h"
 #import "PersonTableCell.h"
@@ -42,8 +41,6 @@
     [self setTopViewWithTitle:@"联系人" withBackButton:YES];
     
     self.hidesBottomBarWhenPushed = YES;
-    self.appDel = [[UIApplication sharedApplication] delegate];
-    [self.view setBackgroundColor:[UIColor whiteColor]];
     
 //    UIImageView *TopBarBGV=[[UIImageView alloc]initWithImage:[UIImage imageNamed:diffH==0?@"topBar1.png":@"topBar2.png"]];
 //    [TopBarBGV setFrame:CGRectMake(0, 0, 320, 44+diffH)];
@@ -92,56 +89,55 @@
     searchDisplay.searchResultsDataSource = self;
     searchDisplay.searchResultsDelegate = self;
     
-    
-    //   [self getFriendsList];
-	// Do any additional setup after loading the view.
+    hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    hud.labelText = @"查询中...";
+    [hud show:YES];
 }
--(void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
-{
-    
-    if (diffH==20.0f) {
-        [searchBar setFrame:CGRectMake(0, 20, 320, 64)];
-        searchBar.backgroundImage = [UIImage imageNamed:@"topBar2.png"];
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.contactsTable setFrame:CGRectMake(0, 64, 320, self.view.frame.size.height-(49+64))];
-        } completion:^(BOOL finished) {
-            
-        }];
-    }
-    
-    
-}
-
--(void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
-{
-    if (diffH==20.0f) {
-        
-    }
-    
-}
--(void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
-{
-    if (diffH==20.0f) {
-        [UIView animateWithDuration:0.2 animations:^{
-            [searchBar setFrame:CGRectMake(0, 64, 320, 44)];
-            [self.contactsTable setFrame:CGRectMake(0, 44+44+diffH, 320, self.view.frame.size.height-(49+44+diffH))];
-        } completion:^(BOOL finished) {
-            searchBar.backgroundImage = nil;
-        }];
-    }
-    
-    
-}
--(void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView
-{
-    
-    if (diffH==20.0f) {
-        //        [tableView setFrame:CGRectMake(0, 20, 320, self.view.frame.size.height-(49+diffH))];
-        //        [tableView setContentOffset:CGPointMake(0, 20)];
-    }
-    
-    
-}
+//-(void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+//{
+//    
+//    if (diffH==20.0f) {
+//        [searchBar setFrame:CGRectMake(0, 20, 320, 64)];
+//        searchBar.backgroundImage = [UIImage imageNamed:@"topBar2.png"];
+//        [UIView animateWithDuration:0.3 animations:^{
+//            [self.contactsTable setFrame:CGRectMake(0, 64, 320, self.view.frame.size.height-(49+64))];
+//        } completion:^(BOOL finished) {
+//            
+//        }];
+////    }
+//}
+//
+//-(void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
+//{
+//    if (diffH==20.0f) {
+//        
+//    }
+//    
+//}
+//-(void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+//{
+//    if (diffH==20.0f) {
+//        [UIView animateWithDuration:0.2 animations:^{
+//            [searchBar setFrame:CGRectMake(0, 64, 320, 44)];
+//            [self.contactsTable setFrame:CGRectMake(0, 44+44+diffH, 320, self.view.frame.size.height-(49+44+diffH))];
+//        } completion:^(BOOL finished) {
+//            searchBar.backgroundImage = nil;
+//        }];
+//    }
+//    
+//    
+//}
+//-(void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView
+//{
+//    
+//    if (diffH==20.0f) {
+//        //        [tableView setFrame:CGRectMake(0, 20, 320, self.view.frame.size.height-(49+diffH))];
+//        //        [tableView setContentOffset:CGPointMake(0, 20)];
+//    }
+//    
+//    
+//}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -160,7 +156,6 @@
 }
 -(void)viewDidAppear:(BOOL)animated
 {
-    
     [self refreshFriendList];
     
     //   [self getFriendInfo:@"england"];
@@ -178,6 +173,7 @@
     friendsArray = [NSMutableArray arrayWithArray:[friendDict allKeys]];
     [friendsArray sortUsingSelector:@selector(compare:)];
     [self.contactsTable reloadData];
+    [hud hide:YES];
 }
 -(void)getFriendInfo:(NSString *)userName withIndex:(int)index
 {
