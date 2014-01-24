@@ -292,22 +292,17 @@
     NSMutableArray * headimg = [NSMutableArray array];
     NSMutableArray * pinyin = [NSMutableArray array];
     for (int i = 0; i<allMsgArray.count; i++) {
-//        NSString * nickName2 = [DataStoreManager queryNickNameForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]];
-//        NSString * nickName2 = @"";
-//        if ([[[allMsgArray objectAtIndex:i] objectForKey:@"sender"] isEqualToString:@"1"]) {//头衔等
-//            nickName2 = [DataStoreManager getOtherMessageTitleWithUUID:[[allMsgArray objectAtIndex:i] objectForKey:@"messageuuid"] type:[[allMsgArray objectAtIndex:i] objectForKey:@"msgType"]];
-//        }
-//        else
-        NSString * nickName2 = [DataStoreManager queryRemarkNameForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]];//别名
+//        NSString * nickName2 = [DataStoreManager queryRemarkNameForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]];//别名
+        NSString * nickName2 = [DataStoreManager queryMsgRemarkNameForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]];
         [nickName addObject:nickName2?nickName2 : @""];
         NSString * pinyin2 = [[GameCommon shareGameCommon] convertChineseToPinYin:nickName2];
         [pinyin addObject:[pinyin2 stringByAppendingFormat:@"+%@",nickName2]];
-        [headimg addObject:[DataStoreManager queryFirstHeadImageForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]]];
+//        [headimg addObject:[DataStoreManager queryFirstHeadImageForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]]];
+        [headimg addObject:[DataStoreManager queryMsgHeadImageForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]]];
     }
     allNickNameArray = nickName;
     allHeadImgArray = headimg;
     pyChineseArray = pinyin;
-    NSLog(@"hhhhhhead:%@",allHeadImgArray);
 }
 
 -(void)displayTabbarNotification

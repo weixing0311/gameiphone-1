@@ -101,7 +101,7 @@
     titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(100, startX - 44, 120, 44)];
     titleLabel.backgroundColor=[UIColor clearColor];
     titleLabel.text=self.nickName;
-    [titleLabel setFont:[UIFont boldSystemFontOfSize:18]];
+    [titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
     titleLabel.textAlignment=NSTextAlignmentCenter;
     titleLabel.textColor=[UIColor whiteColor];
     [self.view addSubview:titleLabel];
@@ -1357,7 +1357,7 @@
 -(void)sendMsg:(NSString *)message
 {
     if (message.length > 0) {
-        if (![DataStoreManager ifHaveThisFriend:self.chatWithUser]) {
+       /* if (![DataStoreManager ifHaveThisFriend:self.chatWithUser]) {
 //        if (!self.ifFriend) {
 //            [self.appDel.xmppHelper addOrDenyFriend:YES user:self.chatWithUser];
 //            [DataStoreManager addFriendToLocal:self.chatWithUser];
@@ -1406,7 +1406,7 @@
             }
 //            self.ifFriend = YES;
             return;
-        }
+        }*/
       
         //XMPPFramework主要是通过KissXML来生成XML文件
         //生成<body>文档
@@ -1429,17 +1429,10 @@
         [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
         [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];
 
-        //    NSLog(@"from:%@",[[NSUserDefaults standardUserDefaults] stringForKey:USERID]);
         //组合
-        
-        //        NSXMLElement * kind = [NSXMLElement elementWithName:@"kind"];
-        //        [kind setStringValue:@"chat"];
         [mes addChild:body];
-        //        [mes addChild:kind];
         
         //发送消息
-        
-       // [self.appDel.xmppHelper.xmppStream sendElement:mes];
         if (![self.appDel.xmppHelper sendMessage:mes]) {
             [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
             //Do something when send failed...

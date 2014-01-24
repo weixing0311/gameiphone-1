@@ -182,8 +182,58 @@
         thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
         thumbMsgs.messageuuid = @"";
     }];
-
 }
+
++(void)storeThumbMsgUser:(NSString*)username nickName:(NSString*)nickName andImg:(NSString*)img
+{
+    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",username];
+        
+        DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+        if (thumbMsgs)
+        {
+            thumbMsgs.senderNickname = nickName;
+            thumbMsgs.senderimg = img;
+        }
+    }];
+}
++(NSString *)queryMsgRemarkNameForUser:(NSString *)userName
+{
+    if ([userName isEqualToString:@"1234"]) {
+        return @"有新的关注消息";
+    }
+    if ([userName isEqualToString:@"12345"]) {
+        return @"好友推荐";
+    }
+    if ([userName isEqualToString:@"1"]) {
+        return @"有新的角色动态";
+    }
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",userName];
+    DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+    if (thumbMsgs) {
+        if (thumbMsgs.senderNickname) {
+            return thumbMsgs.senderNickname;
+        }
+        else
+            return @"";
+    }
+    return @"";
+}
+
++(NSString *)queryMsgHeadImageForUser:(NSString *)userName
+{
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",userName];
+    DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+    if (thumbMsgs) {
+        if (thumbMsgs.senderimg) {
+            return thumbMsgs.senderimg;
+        }
+        else
+            return @"";
+    }
+    return @"";
+}
+
 +(void)blankMsgUnreadCountForUser:(NSString *)username
 {
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
@@ -1439,35 +1489,35 @@
                 return dFriend.headImgID;
         }
     }
-    else if([userName isEqualToString:@"15811212096"])//小伙伴
-    {
-        DSFans* fans = [DSFans MR_findFirstWithPredicate:predicate];
-        if (fans && fans.headImgID) {
-            NSRange range=[fans.headImgID rangeOfString:@","];
-            if (range.location!=NSNotFound) {
-                NSArray *imageArray = [fans.headImgID componentsSeparatedByString:@","];
-
-                return [imageArray objectAtIndex:0];
-            }
-            else
-            {
-                return fans.headImgID;
-            }
-        }
-        DSAttentions *attention = [DSAttentions MR_findFirstWithPredicate:predicate];
-        if (attention && attention.headImgID) {
-            NSRange range=[attention.headImgID rangeOfString:@","];
-            if (range.location!=NSNotFound) {
-                NSArray *imageArray = [attention.headImgID componentsSeparatedByString:@","];
-                
-                return [imageArray objectAtIndex:0];
-            }
-            else
-            {
-                return attention.headImgID;
-            }
-        }
-    }
+//    else if([userName isEqualToString:@"15811212096"])//小伙伴
+//    {
+//        DSFans* fans = [DSFans MR_findFirstWithPredicate:predicate];
+//        if (fans && fans.headImgID) {
+//            NSRange range=[fans.headImgID rangeOfString:@","];
+//            if (range.location!=NSNotFound) {
+//                NSArray *imageArray = [fans.headImgID componentsSeparatedByString:@","];
+//
+//                return [imageArray objectAtIndex:0];
+//            }
+//            else
+//            {
+//                return fans.headImgID;
+//            }
+//        }
+//        DSAttentions *attention = [DSAttentions MR_findFirstWithPredicate:predicate];
+//        if (attention && attention.headImgID) {
+//            NSRange range=[attention.headImgID rangeOfString:@","];
+//            if (range.location!=NSNotFound) {
+//                NSArray *imageArray = [attention.headImgID componentsSeparatedByString:@","];
+//                
+//                return [imageArray objectAtIndex:0];
+//            }
+//            else
+//            {
+//                return attention.headImgID;
+//            }
+//        }
+//    }
     return @"no";
 }
 #pragma mark - 存储个人信息

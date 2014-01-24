@@ -548,6 +548,16 @@
                                      selectImage:Nil];
             [button_left addTarget:self action:@selector(cancelAttentionClick:) forControlEvents:UIControlEventTouchUpInside];
             [m_buttonBgView addSubview:button_left];
+            
+            UIButton* button_right = [CommonControlOrView
+                                      setButtonWithFrame:CGRectMake(10, 10, 40, 30)//120
+                                      title:@""
+                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
+                                      bgImage:KUIImage(@"chat_normal")
+                                      HighImage:KUIImage(@"chat_click")
+                                      selectImage:Nil];
+            [button_right addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
+            [m_buttonBgView addSubview:button_right];
         }  break;
         case VIEW_TYPE_FansPage:
         {
@@ -560,6 +570,16 @@
                                      selectImage:Nil];
             [button_left addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
             [m_buttonBgView addSubview:button_left];
+            
+            UIButton* button_right = [CommonControlOrView
+                                      setButtonWithFrame:CGRectMake(10, 10, 40, 30)//120
+                                      title:@""
+                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
+                                      bgImage:KUIImage(@"chat_normal")
+                                      HighImage:KUIImage(@"chat_click")
+                                      selectImage:Nil];
+            [button_right addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
+            [m_buttonBgView addSubview:button_right];
         }break;
         case VIEW_TYPE_STRANGER:
         {
@@ -572,6 +592,16 @@
                                      selectImage:Nil];
             [button_left addTarget:self action:@selector(attentionClick:) forControlEvents:UIControlEventTouchUpInside];
             [m_buttonBgView addSubview:button_left];
+            
+            UIButton* button_right = [CommonControlOrView
+                                      setButtonWithFrame:CGRectMake(10, 10, 40, 30)//120
+                                      title:@""
+                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
+                                      bgImage:KUIImage(@"chat_normal")
+                                      HighImage:KUIImage(@"chat_click")
+                                      selectImage:Nil];
+            [button_right addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
+            [m_buttonBgView addSubview:button_right];
         }break;
         default:
         {
@@ -765,8 +795,10 @@
     {
         KKChatController * kkchat = [[KKChatController alloc] init];
         kkchat.chatWithUser = self.hostInfo.userName;
-        kkchat.nickName = [DataStoreManager queryRemarkNameForUser:self.userName];
-        kkchat.chatUserImg = [DataStoreManager queryFirstHeadImageForUser:self.hostInfo.userName];
+//        kkchat.nickName = [DataStoreManager queryRemarkNameForUser:self.userName];
+//        kkchat.chatUserImg = [DataStoreManager queryFirstHeadImageForUser:self.hostInfo.userName];
+        kkchat.nickName = self.nickName;
+        kkchat.chatUserImg = [GameCommon getHeardImgId:self.hostInfo.headImgStr];
         [self.navigationController pushViewController:kkchat animated:YES];
     }
 }
