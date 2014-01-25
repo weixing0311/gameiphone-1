@@ -54,10 +54,6 @@
         [self showAlertViewWithTitle:@"提示" message:@"请输入您的反馈意见，谢谢！" buttonTitle:@"确定"];
         return;
     }
-    [m_contentTextView resignFirstResponder];
-    
-    [hud show:YES];
-    
     NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:m_contentTextView.text ,@"msg",@"Platform=iphone", @"detail",nil];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
@@ -67,13 +63,12 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
-        [self showMessageWindowWithContent:@"成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }

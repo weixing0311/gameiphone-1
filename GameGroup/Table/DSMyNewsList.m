@@ -2,7 +2,7 @@
 //  DSMyNewsList.m
 //  GameGroup
 //
-//  Created by Shen Yanping on 14-1-22.
+//  Created by Shen Yanping on 14-1-15.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
@@ -21,12 +21,11 @@
 @dynamic msg;
 @dynamic newsId;
 @dynamic nickName;
-@dynamic superstar;
 @dynamic type;
 @dynamic urlLink;
 @dynamic userid;
 @dynamic username;
 @dynamic zannum;
-@dynamic showTitle;
+@dynamic superstar;
 
 @end

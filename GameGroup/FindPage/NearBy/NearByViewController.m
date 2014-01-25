@@ -112,6 +112,8 @@
         [hud hide:YES];
         [self showAlertViewWithTitle:@"提示" message:@"定位失败，请确认设置->隐私->定位服务中小伙伴的按钮为打开状态" buttonTitle:@"确定"];
     }];
+    
+
 }
 
 - (void)getNearByDataByNet
@@ -175,7 +177,7 @@
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }

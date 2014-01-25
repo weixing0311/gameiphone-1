@@ -10,7 +10,6 @@
 #import "NormalTableCell.h"
 #import "EGOCache.h"
 #import "AppDelegate.h"
-#import "AboutViewController.h"
 
 @interface SetViewController ()
 {
@@ -41,7 +40,7 @@
 {
     switch (section) {
         case 0:
-            return 2;
+            return 1;
             break;
         default:
             return 1;
@@ -70,15 +69,8 @@
     switch (indexPath.section) {
         case 0:
         {
-            if (indexPath.row == 0) {
-                cell.leftImageView.image = KUIImage(@"me_set_delete");
-                cell.titleLable.text = @"关于小伙伴";
-            }
-            else
-            {
-                cell.leftImageView.image = KUIImage(@"me_set_delete");
-                cell.titleLable.text = @"清理缓存";
-            }
+            cell.leftImageView.image = KUIImage(@"me_set_delete");
+            cell.titleLable.text = @"清理缓存";
         } break;
         case 1:
         {
@@ -99,16 +91,9 @@
     switch (indexPath.section) {
         case 0:
         {
-            if (indexPath.row == 0) {
-                AboutViewController* VC = [[AboutViewController alloc] init];
-                [self.navigationController pushViewController:VC animated:YES];
-            }
-            else
-            {
-                UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您确认要清除所有的缓存吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"清除", nil];
-                alert.tag = 110;
-                [alert show];
-            }
+            UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您确认要清除所有的缓存吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"清除", nil];
+            alert.tag = 110;
+            [alert show];
         } break;
         case 1:
         {

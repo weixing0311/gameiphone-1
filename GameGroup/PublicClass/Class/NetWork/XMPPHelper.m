@@ -341,17 +341,9 @@
 
         NSLog(@"theDict%@",dict);
         if ([type isEqualToString:@"chat"]) {
-            if ([msgtype isEqualToString:@"normalchat"]||!msgtype) {//聊天的 或动态
-                NSString* payload = [GameCommon getHeardImgId:[[message elementForName:@"payload"] stringValue]];//是否含payload标签
-                if (payload.length > 0) {
-                    msg= [[message elementForName:@"payload"] stringValue];
-                    [dict setObject:msg forKey:@"msg"];
-
-                    [dict setObject:@"payloadchat" forKey:@"msgType"];
-                }
-                else
-                    [dict setObject:@"normalchat" forKey:@"msgType"];
-
+            if ([msgtype isEqualToString:@"normalchat"]||!msgtype) {//聊天的
+                [dict setObject:@"normalchat" forKey:@"msgType"];
+              
                 [self.chatDelegate newMessageReceived:dict];
             }
             else if ([msgtype isEqualToString:@"sayHello"]){//打招呼的

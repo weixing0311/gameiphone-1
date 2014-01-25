@@ -27,6 +27,6 @@
 - (void)setTopViewWithTitle:(NSString*)titleStr withBackButton:(BOOL)hasBacButton;
 - (void)showAlertViewWithTitle:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)bTitle;
 - (void)showMessageWithContent:(NSString*)content point:(CGPoint)point;
-- (void)showMessageWindowWithContent:(NSString*)content imageType:(NSInteger)imageType;
+- (void)showMessageWindowWithContent:(NSString*)content pointY:(float)pointY;
 
 @end

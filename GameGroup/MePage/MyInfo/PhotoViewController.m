@@ -40,11 +40,6 @@
     _sc.contentOffset = CGPointMake(self.indext*320, 0);
     _sc.contentSize = CGSizeMake(320*self.imgIDArray.count, _sc.frame.size.height);
     [self.view addSubview:_sc];
-    
-    UITapGestureRecognizer* tapOne = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapOne:)];
-    tapOne.numberOfTapsRequired = 1;
-    [_sc addGestureRecognizer:tapOne];
-
     for (int i = 0;i < self.imgIDArray.count;i++) {
         UIScrollView * subSC = [[UIScrollView alloc]initWithFrame:CGRectMake(i*320, 0, 320, _sc.frame.size.height)];
         EGOImageView* imageV = [[EGOImageView alloc]initWithFrame:CGRectMake(110,(_sc.frame.size.height-100)/2 , 100, 100)];
@@ -73,18 +68,17 @@
         subSC.bouncesZoom = NO;
         subSC.delegate = self;
         [_sc addSubview:subSC];
-        
-//        UITapGestureRecognizer* tapOne = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapOne:)];
-//        tapOne.numberOfTapsRequired = 1;
-//        [imageV addGestureRecognizer:tapOne];
-
-//        UITapGestureRecognizer* tapTwo = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapTwo:)];
-//        tapTwo.numberOfTapsRequired = 2;
-//        [imageV addGestureRecognizer:tapTwo];
+        UITapGestureRecognizer* tapOne = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapOne:)];
+        tapOne.numberOfTapsRequired = 1;
+        [imageV addGestureRecognizer:tapOne];
+        UITapGestureRecognizer* tapTwo = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapTwo:)];
+        tapTwo.numberOfTapsRequired = 2;
+        [imageV addGestureRecognizer:tapTwo];
         UILongPressGestureRecognizer* longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
         [imageV addGestureRecognizer:longPress];
         
-//        [tapOne requireGestureRecognizerToFail:tapTwo];
+        [tapOne requireGestureRecognizerToFail:tapTwo];
+        
     }
 }
 
@@ -95,15 +89,19 @@
 }
 -(void)tapOne:(UITapGestureRecognizer*)tap
 {
+//    [self performSelector:@selector(desappear) withObject:nil afterDelay:0.2f];
+    [self desappear];
+}
+-(void)desappear
+{
     self.view.userInteractionEnabled = NO;
     int a = _sc.contentOffset.x/320;
-    [UIView animateWithDuration:0.2 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         ((UIView*)((UIView*)_sc.subviews[a]).subviews[0]).frame = CGRectMake(160,_sc.frame.size.height/2,0,0);
     } completion:^(BOOL finished) {
         [self dismissViewControllerAnimated:NO completion:nil];
     }];
 }
-
 -(void)tapTwo:(UITapGestureRecognizer*)tap
 {
 //    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(desappear) object:nil];

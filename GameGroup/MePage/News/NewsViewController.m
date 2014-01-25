@@ -42,6 +42,7 @@
     NSInteger   m_currentPage;
     
     NSMutableArray*  m_newsArray;
+    NSMutableArray*  m_rowHeigthArray;
     
     PullUpRefreshView      *refreshView;
 
@@ -77,6 +78,7 @@
     isRefresh = YES;//进来刷新
     
     m_newsArray = [[NSMutableArray alloc] init];
+    m_rowHeigthArray = [[NSMutableArray alloc] init];
     
     if (self.myViewType == ME_NEWS_TYPE) {
         [self setTopViewWithTitle:@"我的动态" withBackButton:YES];
@@ -85,8 +87,8 @@
         
         UIButton *addButton=[UIButton buttonWithType:UIButtonTypeCustom];
         addButton.frame=CGRectMake(270, startX - 44, 50, 44);
-        [addButton setBackgroundImage:KUIImage(@"add_news_normal") forState:UIControlStateNormal];
-        [addButton setBackgroundImage:KUIImage(@"add_news_click") forState:UIControlStateHighlighted];
+        [addButton setBackgroundImage:KUIImage(@"add_button_normal") forState:UIControlStateNormal];
+        [addButton setBackgroundImage:KUIImage(@"add_button_click") forState:UIControlStateHighlighted];
         [self.view addSubview:addButton];
         [addButton addTarget:self action:@selector(addButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -153,9 +155,15 @@
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSArray * dMyNews = [DSMyNewsList MR_findAllInContext:localContext];
         for (DSMyNewsList* news in dMyNews) {
-            NSDictionary* commentDic = [NSDictionary dictionaryWithObject:news.commentObj forKey:@"msg"];
-            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"userimg", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",commentDic, @"commentObj",news.urlLink, @"urlLink",news.img, @"thumb",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",news.showTitle, @"showtitle",nil];
+            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"img", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",news.commentObj, @"commentObj",news.urlLink, @"urlLink",news.img, @"img",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",nil];
             [m_newsArray addObject:tempDic];
+            if ([news.type isEqualToString:@"5"]) {
+                [m_rowHeigthArray addObject:@"105"];
+            }
+            else
+            {
+                [m_rowHeigthArray addObject:@"80"];
+            }
         }
     }];
 }
@@ -165,9 +173,15 @@
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSArray * dFriendsNews = [DSFriendsNewsList MR_findAllInContext:localContext];
         for (DSFriendsNewsList* news in dFriendsNews) {
-            NSDictionary* commentDic = [NSDictionary dictionaryWithObject:news.commentObj forKey:@"msg"];
-            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"userimg", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",commentDic, @"commentObj",news.urlLink, @"urlLink",news.img, @"thumb",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",news.showTitle, @"showtitle",nil];
+            NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"img", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",news.commentObj, @"commentObj",news.urlLink, @"urlLink",news.img, @"img",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",nil];
             [m_newsArray addObject:tempDic];
+            if ([news.type isEqualToString:@"5"]) {
+                [m_rowHeigthArray addObject:@"105"];
+            }
+            else
+            {
+                [m_rowHeigthArray addObject:@"80"];
+            }
         }
     }];
 }
@@ -212,11 +226,21 @@
             
             [self refreshNewsListStore:responseObject];
             [m_newsArray removeAllObjects];
+            [m_rowHeigthArray removeAllObjects];
         }
         m_currentPage ++;//从0开始
         
         [m_newsArray addObjectsFromArray:responseObject];
        
+        for (NSDictionary* dic in responseObject) {
+            if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"type")] isEqualToString:@"5"]) {
+                [m_rowHeigthArray addObject:@"105"];
+            }
+            else
+            {
+                [m_rowHeigthArray addObject:@"80"];
+            }
+        }
         [m_myTableView reloadData];
         
         [refreshView stopLoading:NO];
@@ -227,13 +251,12 @@
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }
         [refreshView stopLoading:NO];
         [_slimeView endRefresh];
-        [refreshView setRefreshViewFrame];
 
         [hud hide:YES];
     }];
@@ -327,7 +350,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 90;
+    return [[m_rowHeigthArray objectAtIndex:indexPath.row] intValue];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -337,7 +360,7 @@
     if (cell == nil) {
         cell = [[NewsGetTitleCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.accessoryType = UITableViewCellAccessoryNone;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     NSDictionary* tempDic = [m_newsArray objectAtIndex:indexPath.row];
@@ -348,11 +371,7 @@
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
         cell.headImageV.imageURL = theUrl;
         
-        NSString * nickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(destDic, @"alias")];
-        if ([nickName isEqualToString:@""]) {
-            nickName = KISDictionaryHaveKey(destDic, @"nickname");
-        }
-        cell.nickNameLabel.text = [KISDictionaryHaveKey(destDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" : nickName;
+        cell.nickNameLabel.text = [KISDictionaryHaveKey(destDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(destDic, @"nickname");
         if ([KISDictionaryHaveKey(destDic, @"userid") isEqualToString:@"10000"]) {
             cell.authImage.hidden = NO;
             cell.authImage.image = KUIImage(@"red_auth");
@@ -376,19 +395,9 @@
         NSString* imageName = [GameCommon getHeardImgId:KISDictionaryHaveKey(tempDic, @"userimg")];
         NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:imageName]];
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
+        cell.headImageV.imageURL = theUrl;
         
-//        UIImage *getImage = [[EGOImageLoader sharedImageLoader]imageForURL:theUrl shouldLoadWithObserver:nil];//拿到缓存图片
-//        if (getImage != nil) {
-//            cell.headImageV.image = getImage;
-//        }
-//        else
-            cell.headImageV.imageURL = theUrl;
-        
-        NSString * nickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"alias")];
-        if ([nickName isEqualToString:@""]) {
-            nickName = KISDictionaryHaveKey(tempDic, @"nickname");
-        }
-        cell.nickNameLabel.text = [KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :nickName;
+        cell.nickNameLabel.text = [KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(tempDic, @"nickname");
         
         if ([KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:@"10000"]) {
             cell.authImage.hidden = NO;
@@ -409,35 +418,45 @@
         }
     }
     if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"type")] isEqualToString:@"3"]) {
+        cell.commentLabel.hidden = YES;
+        cell.commentBgImage.hidden = YES;
         cell.typeLabel.text = @"发表了该内容";
     }
     else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"type")] isEqualToString:@"4"]) {
+        cell.commentLabel.hidden = YES;
+        cell.commentBgImage.hidden = YES;
         cell.typeLabel.text = KISDictionaryHaveKey(tempDic, @"showtitle");
     }
     else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"type")] isEqualToString:@"5"]) {
         cell.typeLabel.text = KISDictionaryHaveKey(tempDic, @"showtitle");
+        cell.commentLabel.hidden = NO;
+        cell.commentBgImage.hidden = NO;
+        if ([KISDictionaryHaveKey(tempDic, @"commentObj") isKindOfClass:[NSDictionary class]]) {
+            cell.commentLabel.text = KISDictionaryHaveKey(KISDictionaryHaveKey(tempDic, @"commentObj"), @"msg");
+        }
+        else
+            cell.commentLabel.text = @"";
     }
     NSString* tit = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"title")] isEqualToString:@""] ? KISDictionaryHaveKey(tempDic, @"msg") : KISDictionaryHaveKey(tempDic, @"title");
-    cell.bigTitle.text = tit;
     if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"title")] isEqualToString:@""]) {
-        cell.contentBgImage.hidden = YES;
+//        cell.isShowArticle = NO;
+        cell.bigTitle.text = tit;
+        
     }
     else
     {
-        cell.contentBgImage.hidden = NO;
+//        cell.isShowArticle = YES;
+        cell.bigTitle.text = [NSString stringWithFormat:@"「%@」", tit];
     }
+//    cell.bigTitle.text = tit;
 
     cell.timeLabel.text = [self getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"createDate")]];
-    NSString* zanStr = [self getZanLabelWithNum:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"zannum")]];
-    cell.zanLabel.text = zanStr;
-    cell.zanLabel.hidden = [zanStr isEqualToString:@"0"];
-    
+    cell.zanLabel.text = [self getZanLabelWithNum:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"zannum")]];
+    cell.rowHeight = [[m_rowHeigthArray objectAtIndex:indexPath.row] intValue];
     cell.rowIndex = indexPath.row;
-    NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"thumb")];
-    NSURL * imgUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
-    if (imgStr.length > 0 && ![imgStr isEqualToString:@"null"]) {
+    NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"img")];
+    if (imgStr.length > 0) {
         cell.havePic.hidden = NO;
-        cell.havePic.imageURL = imgUrl;
     }
     else
         cell.havePic.hidden = YES;
@@ -539,7 +558,7 @@
  
     OnceDynamicViewController* detailVC = [[OnceDynamicViewController alloc] init];
     detailVC.messageid = KISDictionaryHaveKey(tempDict, @"id");
-//    detailVC.urlLink = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"urlLink")];
+    detailVC.urlLink = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"urlLink")];
     detailVC.delegate = self;
     [self.navigationController pushViewController:detailVC animated:YES];
 }

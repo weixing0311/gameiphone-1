@@ -20,5 +20,5 @@ typedef enum
 @interface EditMessageViewController : BaseViewController<UITextViewDelegate, UIAlertViewDelegate>
 
 @property(nonatomic,assign)EditType editType;
-//@property(nonatomic,strong)NSString* placeHold;
+
 @end

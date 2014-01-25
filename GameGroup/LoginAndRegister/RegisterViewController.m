@@ -16,8 +16,6 @@
 
 @interface RegisterViewController ()
 {
-    UILabel*     m_titleLabel;
-    
     NSString*     characterid;//角色id
     
     UIImageView*  m_topImage;
@@ -80,15 +78,7 @@
     m_topImage.image = KUIImage(@"register_step_1");
     [self.view addSubview:m_topImage];
 
-    [self setTopViewWithTitle:@"" withBackButton:YES];
-    
-    m_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, startX - 44, 220, 44)];
-    m_titleLabel.textColor = [UIColor whiteColor];
-    m_titleLabel.backgroundColor = [UIColor clearColor];
-    m_titleLabel.text = @"验证手机";
-    m_titleLabel.textAlignment = NSTextAlignmentCenter;
-    m_titleLabel.font = [UIFont boldSystemFontOfSize:20];
-    [self.view addSubview:m_titleLabel];
+    [self setTopViewWithTitle:@"注册" withBackButton:YES];
     
     [self setMainView];
     [self setStep_1View];
@@ -265,7 +255,7 @@
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }
@@ -340,7 +330,7 @@
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }
@@ -413,13 +403,12 @@
         m_step1Scroll_verCode.hidden = YES;
         m_step2Scroll.hidden = NO;
         m_topImage.image = KUIImage(@"register_step_2");
-        m_titleLabel.text = @"绑定角色";
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }
@@ -625,7 +614,6 @@
         m_step3Scroll.hidden = NO;
         m_topImage.image = KUIImage(@"register_step_3");
         m_userNameText.text = m_roleNameText.text;
-        m_titleLabel.text = @"个人信息";
 
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
@@ -636,7 +624,7 @@
             }
             else if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }
@@ -799,10 +787,8 @@
     m_birthDayPick = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, 320, 200)];
     [m_birthDayPick setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]];
     m_birthDayPick.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 280, 320, 236);
-//    m_birthDayPick.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+    m_birthDayPick.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
     m_birthDayPick.datePickerMode = UIDatePickerModeDate;
-    m_birthDayPick.date = [[NSDate alloc] initWithTimeIntervalSince1970:631123200];
-    m_birthDayPick.maximumDate = [NSDate date];
     m_birthdayText.inputView = m_birthDayPick;//点击弹出的是pickview
     
     UIToolbar* toolbar_server = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
@@ -1065,7 +1051,7 @@
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }

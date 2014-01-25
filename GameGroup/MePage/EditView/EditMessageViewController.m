@@ -66,18 +66,14 @@
         m_birthDayPick = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, 320, 200)];
         [m_birthDayPick setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]];
         m_birthDayPick.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 280, 320, 236);
-//        m_birthDayPick.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+        m_birthDayPick.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
         m_birthDayPick.datePickerMode = UIDatePickerModeDate;
-        
-        m_birthDayPick.date = [[NSDate alloc] initWithTimeIntervalSince1970:631123200];
-        m_birthDayPick.maximumDate = [NSDate date];
-
+//        m_birthDayPick.date = [[NSDate alloc] initWithTimeIntervalSince1970:631209600];
         m_contentTextView.inputView = m_birthDayPick;//点击弹出的是pickview
         
-
         UIToolbar* toolbar_server = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
         toolbar_server.tintColor = [UIColor blackColor];
-        UIBarButtonItem*rb_server = [[UIBarButtonItem alloc]initWithTitle:@"选择" style:UIBarButtonItemStyleDone target:self action:@selector(selectBirthdayOK)];
+        UIBarButtonItem*rb_server = [[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStyleDone target:self action:@selector(selectBirthdayOK)];
         rb_server.tintColor = [UIColor blackColor];
         toolbar_server.items = @[rb_server];
         m_contentTextView.inputAccessoryView = toolbar_server;//跟着pickview上移
@@ -172,7 +168,7 @@
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }

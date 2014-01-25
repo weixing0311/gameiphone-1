@@ -36,9 +36,6 @@
 +(void)setDefaultDataBase:(NSString *)dataBaseName AndDefaultModel:(NSString *)modelName;
 +(void)storeNewMsgs:(NSDictionary *)msg senderType:(NSString *)sendertype;
 +(void)storeMyMessage:(NSDictionary *)message;
-+(void)storeThumbMsgUser:(NSString*)username nickName:(NSString*)nickName andImg:(NSString*)img;
-+(NSString *)queryMsgRemarkNameForUser:(NSString *)userName;
-+(NSString *)queryMsgHeadImageForUser:(NSString *)userName;
 +(void)blankMsgUnreadCountForUser:(NSString *)username;
 +(NSArray *)queryUnreadCountForCommonMsg;
 +(void)deleteAllThumbMsg;

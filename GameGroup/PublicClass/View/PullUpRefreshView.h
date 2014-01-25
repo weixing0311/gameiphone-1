@@ -46,8 +46,6 @@
 @property (nonatomic, copy) NSString *textLoading;
 @property (nonatomic, assign) NSInteger  viewMaxY;
 
-@property (nonatomic, retain) NSString* currentTime;
-
 - (void)refresh ;
 - (void)startLoading;
 - (void)stopLoading:(BOOL)isHidden;
