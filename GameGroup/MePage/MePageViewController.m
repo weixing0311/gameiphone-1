@@ -34,7 +34,9 @@
 @implementation MePageViewController
 
 - (void)viewWillDisappear:(BOOL)animated
-{    
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"appBecomeActive" object:Nil];
+
     [super viewWillDisappear:animated];
 }
 
@@ -48,7 +50,20 @@
         [[Custom_tabbar showTabBar] when_tabbar_is_selected:0];
         return;
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActiveWithNet:) name:@"appBecomeActive" object:nil];
+
     [self getUserInfoByNet];
+}
+
+#pragma mark 进入程序网络变化
+- (void)appBecomeActiveWithNet:(NSNotification*)notification
+{
+    NSString* haveNet = notification.object;
+    if ([haveNet isEqualToString:@"1"] && [self isHaveLogin]) {//有网
+        if (m_hostInfo == nil) {
+            [self getUserInfoByNet];
+        }
+    }
 }
 
 - (void)viewDidLoad
@@ -88,13 +103,14 @@
             m_hostInfo = [[HostInfo alloc] initWithHostInfo:responseObject];
 
             [m_myTableView reloadData];
+            
+            [DataStoreManager saveUserInfo:KISDictionaryHaveKey(responseObject, @"user")];
         }
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }
@@ -493,7 +509,7 @@
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.tag == 112) {
-        if (buttonIndex != alertView.tag) {
+        if (buttonIndex != alertView.cancelButtonIndex) {
             NSMutableArray* characterArray = KISDictionaryHaveKey(m_hostInfo.characters, @"1");//魔兽世界
             NSDictionary* tempDic = [characterArray objectAtIndex:m_refreshCharaIndex];
             if ([KISDictionaryHaveKey(tempDic, @"failedmsg") isEqualToString:@"404"])//角色不存在
@@ -533,7 +549,7 @@
                         if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
                         {
                             
-                            UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                            UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                             [alert show];
                         }
                     }

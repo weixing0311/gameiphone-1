@@ -45,13 +45,15 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
 {
     NSString * type = KISDictionaryHaveKey(messageContent, @"msgType");
     type = type?type:@"notype";
-    if ([type isEqualToString:@"reply"]||[type isEqualToString:@"zanDynamic"]) {
-        [DataStoreManager storeNewMsgs:messageContent senderType:SYSTEMNOTIFICATION];//系统消息
-    }
-    else if([type isEqualToString:@"normalchat"])
+    if([type isEqualToString:@"normalchat"])
     {
         AudioServicesPlayAlertSound(1007);
         [DataStoreManager storeNewMsgs:messageContent senderType:COMMONUSER];//普通聊天消息
+    }
+    else if([type isEqualToString:@"payloadchat"])
+    {
+        AudioServicesPlayAlertSound(1007);
+        [DataStoreManager storeNewMsgs:messageContent senderType:PAYLOADMSG];//动态消息
     }
     else if ([type isEqualToString:@"sayHello"] || [type isEqualToString:@"deletePerson"])//关注和取消关注
     {
@@ -70,10 +72,16 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
 {
     NSRange range = [[messageContent objectForKey:@"sender"] rangeOfString:@"@"];
     NSString * sender = [[messageContent objectForKey:@"sender"] substringToIndex:range.location];
+    
+    [self storeNewMessage:messageContent];
+
     if (![DataStoreManager ifHaveThisUser:sender]) {//是否为好友 不是就请求资料
         [self requestPeopleInfoWithName:sender ForType:1 Msg:nil];
     }
-    [self storeNewMessage:messageContent];
+    else
+    {
+        [DataStoreManager storeThumbMsgUser:sender nickName:[DataStoreManager queryRemarkNameForUser:sender] andImg:[DataStoreManager queryFirstHeadImageForUser:sender]];
+    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNewMessageReceived object:nil userInfo:messageContent];
 }
@@ -237,19 +245,23 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             [DataStoreManager addPersonToReceivedHellos:uDict];
         }
         else if (type==1){//聊天消息
-            if ([DataStoreManager ifIsAttentionWithUserName:userName]) {
-                [DataStoreManager deleteAttentionWithUserName:userName];//从关注表删除
-                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
-
-                [DataStoreManager saveUserInfo:recDict];//存为好友
-                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
+//            if ([DataStoreManager ifIsAttentionWithUserName:userName]) {
+//                [DataStoreManager deleteAttentionWithUserName:userName];//从关注表删除
+//                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
+//
+//                [DataStoreManager saveUserInfo:recDict];//存为好友
+//                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
+//            }
+//            else
+//            {
+//                [DataStoreManager saveUserFansInfo:recDict];//存为粉丝
+//                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
+//            }
+            NSString* nickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"alias")];
+            if ([nickName isEqualToString:@""]) {
+                nickName = KISDictionaryHaveKey(recDict, @"nickname");
             }
-            else
-            {
-                [DataStoreManager saveUserFansInfo:recDict];//存为粉丝
-                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
-            }
-            //            [self displayMsgsForDefaultView];
+            [DataStoreManager storeThumbMsgUser:userName nickName:nickName andImg:[GameCommon getHeardImgId:[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"img")]]];
         }
         else if (type == 2)//取消关注 删除
         {

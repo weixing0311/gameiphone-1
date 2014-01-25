@@ -7,13 +7,14 @@
 //
 
 #import "selectContactPage.h"
-#import "AppDelegate.h"
 #import "XMPPHelper.h"
 #import "JSON.h"
 #import "PersonTableCell.h"
 
 @interface selectContactPage ()
-
+{
+    NSDictionary * selectDict;
+}
 @end
 
 @implementation selectContactPage
@@ -40,8 +41,6 @@
     [self setTopViewWithTitle:@"联系人" withBackButton:YES];
     
     self.hidesBottomBarWhenPushed = YES;
-    self.appDel = [[UIApplication sharedApplication] delegate];
-    [self.view setBackgroundColor:[UIColor whiteColor]];
     
 //    UIImageView *TopBarBGV=[[UIImageView alloc]initWithImage:[UIImage imageNamed:diffH==0?@"topBar1.png":@"topBar2.png"]];
 //    [TopBarBGV setFrame:CGRectMake(0, 0, 320, 44+diffH)];
@@ -90,56 +89,55 @@
     searchDisplay.searchResultsDataSource = self;
     searchDisplay.searchResultsDelegate = self;
     
-    
-    //   [self getFriendsList];
-	// Do any additional setup after loading the view.
+    hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    hud.labelText = @"查询中...";
+    [hud show:YES];
 }
--(void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
-{
-    
-    if (diffH==20.0f) {
-        [searchBar setFrame:CGRectMake(0, 20, 320, 64)];
-        searchBar.backgroundImage = [UIImage imageNamed:@"topBar2.png"];
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.contactsTable setFrame:CGRectMake(0, 64, 320, self.view.frame.size.height-(49+64))];
-        } completion:^(BOOL finished) {
-            
-        }];
-    }
-    
-    
-}
-
--(void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
-{
-    if (diffH==20.0f) {
-        
-    }
-    
-}
--(void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
-{
-    if (diffH==20.0f) {
-        [UIView animateWithDuration:0.2 animations:^{
-            [searchBar setFrame:CGRectMake(0, 64, 320, 44)];
-            [self.contactsTable setFrame:CGRectMake(0, 44+44+diffH, 320, self.view.frame.size.height-(49+44+diffH))];
-        } completion:^(BOOL finished) {
-            searchBar.backgroundImage = nil;
-        }];
-    }
-    
-    
-}
--(void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView
-{
-    
-    if (diffH==20.0f) {
-        //        [tableView setFrame:CGRectMake(0, 20, 320, self.view.frame.size.height-(49+diffH))];
-        //        [tableView setContentOffset:CGPointMake(0, 20)];
-    }
-    
-    
-}
+//-(void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+//{
+//    
+//    if (diffH==20.0f) {
+//        [searchBar setFrame:CGRectMake(0, 20, 320, 64)];
+//        searchBar.backgroundImage = [UIImage imageNamed:@"topBar2.png"];
+//        [UIView animateWithDuration:0.3 animations:^{
+//            [self.contactsTable setFrame:CGRectMake(0, 64, 320, self.view.frame.size.height-(49+64))];
+//        } completion:^(BOOL finished) {
+//            
+//        }];
+////    }
+//}
+//
+//-(void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
+//{
+//    if (diffH==20.0f) {
+//        
+//    }
+//    
+//}
+//-(void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+//{
+//    if (diffH==20.0f) {
+//        [UIView animateWithDuration:0.2 animations:^{
+//            [searchBar setFrame:CGRectMake(0, 64, 320, 44)];
+//            [self.contactsTable setFrame:CGRectMake(0, 44+44+diffH, 320, self.view.frame.size.height-(49+44+diffH))];
+//        } completion:^(BOOL finished) {
+//            searchBar.backgroundImage = nil;
+//        }];
+//    }
+//    
+//    
+//}
+//-(void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView
+//{
+//    
+//    if (diffH==20.0f) {
+//        //        [tableView setFrame:CGRectMake(0, 20, 320, self.view.frame.size.height-(49+diffH))];
+//        //        [tableView setContentOffset:CGPointMake(0, 20)];
+//    }
+//    
+//    
+//}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -158,7 +156,6 @@
 }
 -(void)viewDidAppear:(BOOL)animated
 {
-    
     [self refreshFriendList];
     
     //   [self getFriendInfo:@"england"];
@@ -176,6 +173,7 @@
     friendsArray = [NSMutableArray arrayWithArray:[friendDict allKeys]];
     [friendsArray sortUsingSelector:@selector(compare:)];
     [self.contactsTable reloadData];
+    [hud hide:YES];
 }
 -(void)getFriendInfo:(NSString *)userName withIndex:(int)index
 {
@@ -276,18 +274,12 @@
         cell.ageLabel.backgroundColor = kColorWithRGB(238, 100, 196, 1.0);
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"people_woman.png"];
     }
-    
-    NSDictionary* titleDic = KISDictionaryHaveKey(tempDict, @"title");
-    if ([titleDic isKindOfClass:[NSDictionary class]]) {
-        cell.distLabel.text = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"title")] isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(KISDictionaryHaveKey(titleDic, @"titleObj"), @"title");
-        cell.distLabel.textColor = [GameCommon getAchievementColorWithLevel:[KISDictionaryHaveKey(KISDictionaryHaveKey(titleDic, @"titleObj"), @"rarenum") integerValue]];
-    }
-    else
-    {
-        cell.distLabel.text = @"暂无头衔";
-        cell.distLabel.textColor = [UIColor blackColor];
-    }
-    
+    cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]]];
+    cell.nameLabel.text = [tempDict objectForKey:@"displayName"];
+    cell.gameImg_one.image = KUIImage(@"wow");
+    cell.distLabel.text = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
+    cell.distLabel.textColor = [GameCommon getAchievementColorWithLevel:[KISDictionaryHaveKey(tempDict, @"achievementLevel") integerValue]];
+        
     cell.timeLabel.text = [GameCommon getTimeAndDistWithTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"updateUserLocationDate")] Dis:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"distance")]];
     
     [cell refreshCell];
@@ -298,27 +290,34 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSDictionary * tempDict;
+    
     if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-        tempDict = [friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+        selectDict = [friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
     }
     else
     {
-        tempDict = [friendDict objectForKey:[[[sectionArray objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
+        selectDict = [friendDict objectForKey:[[[sectionArray objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
     }
-    [self.contactDelegate getContact:tempDict];
-//    [self dismissModalViewControllerAnimated:YES];
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-//    PersonDetailViewController * detailV = [[PersonDetailViewController alloc] init];
-//    HostInfo * hostInfo = [[HostInfo alloc] initWithHostInfo:tempDict];
-//    detailV.hostInfo = hostInfo;
-//    detailV.needRequest = YES;
-//    [self.navigationController pushViewController:detailV animated:YES];
-//    [self.customTabBarController hidesTabBar:YES animated:YES];
-    
+
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"是否确认发送给 %@?", KISDictionaryHaveKey(selectDict, @"displayName")] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alert.tag = 567;
+    [alert show];
 }
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 567) {
+        if (buttonIndex != alertView.cancelButtonIndex) {
+            [self.contactDelegate getContact:selectDict];
+
+//            [self dismissViewControllerAnimated:YES completion:^{
+//                
+//            }];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+}
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {

@@ -190,8 +190,13 @@
     NSString* haveNet = notification.object;
     if ([haveNet isEqualToString:@"1"] && [self isHaveLogin]) {//有网
         if (![self.appDel.xmppHelper ifXMPPConnected]&&![titleLabel.text isEqualToString:@"消息(连接中...)"]) {
-
-            [self logInToChatServer];
+            if ([[TempData sharedInstance] getServer] && [[TempData sharedInstance] getServer].length > 0) {
+                [self logInToChatServer];
+            }
+            else
+            {
+                [self getChatServer];
+            }
         }
     }
     else if ([haveNet isEqualToString:@"0"])
@@ -287,22 +292,17 @@
     NSMutableArray * headimg = [NSMutableArray array];
     NSMutableArray * pinyin = [NSMutableArray array];
     for (int i = 0; i<allMsgArray.count; i++) {
-//        NSString * nickName2 = [DataStoreManager queryNickNameForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]];
-//        NSString * nickName2 = @"";
-//        if ([[[allMsgArray objectAtIndex:i] objectForKey:@"sender"] isEqualToString:@"1"]) {//头衔等
-//            nickName2 = [DataStoreManager getOtherMessageTitleWithUUID:[[allMsgArray objectAtIndex:i] objectForKey:@"messageuuid"] type:[[allMsgArray objectAtIndex:i] objectForKey:@"msgType"]];
-//        }
-//        else
-        NSString * nickName2 = [DataStoreManager queryRemarkNameForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]];//别名
+//        NSString * nickName2 = [DataStoreManager queryRemarkNameForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]];//别名
+        NSString * nickName2 = [DataStoreManager queryMsgRemarkNameForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]];
         [nickName addObject:nickName2?nickName2 : @""];
         NSString * pinyin2 = [[GameCommon shareGameCommon] convertChineseToPinYin:nickName2];
         [pinyin addObject:[pinyin2 stringByAppendingFormat:@"+%@",nickName2]];
-        [headimg addObject:[DataStoreManager queryFirstHeadImageForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]]];
+//        [headimg addObject:[DataStoreManager queryFirstHeadImageForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]]];
+        [headimg addObject:[DataStoreManager queryMsgHeadImageForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]]];
     }
     allNickNameArray = nickName;
     allHeadImgArray = headimg;
     pyChineseArray = pinyin;
-    NSLog(@"hhhhhhead:%@",allHeadImgArray);
 }
 
 -(void)displayTabbarNotification
@@ -735,7 +735,7 @@
         
         [[TempData sharedInstance] SetServer:KISDictionaryHaveKey(responseObject, @"address") TheDomain:KISDictionaryHaveKey(responseObject, @"name")];//得到域名
         [self logInToChatServer];
-        [self getMyUserInfoFromNet];//获得“我”信息
+//        [self getMyUserInfoFromNet];//获得“我”信息
 
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         [hud hide:YES];
@@ -765,26 +765,26 @@
 }
 
 
-- (void)getMyUserInfoFromNet
-{
-    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
-    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-    
-    [paramDict setObject:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil] forKey:@"username"];
-    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-    [postDict setObject:paramDict forKey:@"params"];
-    [postDict setObject:@"106" forKey:@"method"];
-    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-    
-    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    
-        [DataStoreManager saveUserInfo:KISDictionaryHaveKey(responseObject, @"user")];
-        
-    } failure:^(AFHTTPRequestOperation *operation, id error) {
-
-    }];
-
-}
+//- (void)getMyUserInfoFromNet
+//{
+//    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+//    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+//    
+//    [paramDict setObject:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil] forKey:@"username"];
+//    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+//    [postDict setObject:paramDict forKey:@"params"];
+//    [postDict setObject:@"106" forKey:@"method"];
+//    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+//    
+//    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//    
+//        [DataStoreManager saveUserInfo:KISDictionaryHaveKey(responseObject, @"user")];
+//        
+//    } failure:^(AFHTTPRequestOperation *operation, id error) {
+//
+//    }];
+//
+//}
 
 //#pragma mark 收到聊天消息或其他消息
 //-(void)newMessageReceived:(NSDictionary *)messageContent

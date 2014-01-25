@@ -54,6 +54,8 @@
     BOOL            isShowSend;//是否提示发布成功
     
     UIView*         bgView;//action出来时另外半边
+    
+    UIView*         m_warnView;//发表成功提示语
 }
 @end
 
@@ -81,8 +83,8 @@
     
     if (isShowSend)
     {
-        [self showMessageWithContent:@"发表成功" point:CGPointMake(kScreenHeigth/2, kScreenWidth - 50)];
-
+//        [self showMessageWithContent:@"发表成功" point:CGPointMake(kScreenHeigth/2, kScreenWidth - 50)];
+        [self showWarnView];
         isShowSend = NO;
     }
 }
@@ -133,6 +135,41 @@
     hud.labelText = @"查询中...";
 }
 
+- (void)showWarnView
+{
+    if (m_warnView != nil) {
+        [m_warnView removeFromSuperview];
+    }
+    m_warnView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 120, 100)];
+    m_warnView.center = CGPointMake(kScreenHeigth/2, kScreenWidth/2);
+    m_warnView.backgroundColor = [UIColor blackColor];
+    m_warnView.layer.cornerRadius = 5;
+    m_warnView.layer.masksToBounds = YES;
+    m_warnView.alpha = 0.7;
+    [self.view addSubview:m_warnView];
+    
+    UIImageView* warnImage = [[UIImageView alloc] initWithFrame:CGRectMake(95.0/2, 25, 25, 25)];
+    warnImage.backgroundColor = [UIColor clearColor];
+    [m_warnView addSubview:warnImage];
+    warnImage.image = KUIImage(@"show_success");
+
+    UILabel* showLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, 120, 25)];
+    showLabel.backgroundColor = [UIColor clearColor];
+    showLabel.font = [UIFont boldSystemFontOfSize:15.0];
+    showLabel.textColor = [UIColor whiteColor];
+    showLabel.textAlignment = NSTextAlignmentCenter;
+    showLabel.text = @"发表成功";
+    [m_warnView addSubview:showLabel];
+    
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideView) object:nil];//取消该方法的调用
+    [self performSelector:@selector(hideView) withObject:nil afterDelay:2.0f];
+}
+
+- (void)hideView
+{
+    m_warnView.frame = CGRectZero;
+}
+
 - (void)setTopView
 {
 //    topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenHeigth, 44)];
@@ -150,7 +187,7 @@
 //    [topView addSubview:titleLabel];
     
     m_backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
-    [m_backButton setBackgroundImage:KUIImage(@"back") forState:UIControlStateNormal];
+    [m_backButton setBackgroundImage:KUIImage(@"back_2") forState:UIControlStateNormal];
     [m_backButton setBackgroundImage:KUIImage(@"back_click") forState:UIControlStateHighlighted];
     m_backButton.backgroundColor = [UIColor clearColor];
     [m_backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -158,7 +195,7 @@
     
     m_shareButton =[UIButton buttonWithType:UIButtonTypeCustom];
     m_shareButton.frame=CGRectMake(kScreenHeigth - 50, 0, 50, 44);
-    [m_shareButton setBackgroundImage:KUIImage(@"share_normal") forState:UIControlStateNormal];
+    [m_shareButton setBackgroundImage:KUIImage(@"share_normal2") forState:UIControlStateNormal];
     [m_shareButton setBackgroundImage:KUIImage(@"share_click") forState:UIControlStateHighlighted];
     [self.view addSubview:m_shareButton];
     [m_shareButton addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -340,6 +377,7 @@
         m_friendButton.hidden = YES;
         m_realmButton.frame = CGRectMake(5, 10, (kScreenHeigth-20)/2, 40);
         m_countryButton.frame = CGRectMake(15 + (kScreenHeigth-20)/2, 10, (kScreenHeigth-20)/2, 40);
+        m_realmButton.selected = YES;
         
         m_segmentClickIndex = kSegmentRealm;
     }
@@ -618,7 +656,7 @@
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }

@@ -11,7 +11,7 @@
 @interface BaseViewController ()
 {
     UILabel* showLabel;//黑底白字 提示文字
-    UILabel* showWindowLabel;//黑底白字 提示文字 window
+    UIView* showWindowView;//黑底白字 提示文字 window
 }
 @end
 
@@ -112,24 +112,58 @@
 }
 
 #pragma mark window提示
-- (void)showMessageWindowWithContent:(NSString*)content pointY:(float)pointY
+- (void)showMessageWindowWithContent:(NSString*)content imageType:(NSInteger)imageType
 {
-    if (showWindowLabel != nil) {
-        [showWindowLabel removeFromSuperview];
+    if (showWindowView != nil) {
+        [showWindowView removeFromSuperview];
     }
-    CGSize contentSize = [content sizeWithFont:[UIFont boldSystemFontOfSize:15.0] constrainedToSize:CGSizeMake(300, 100)];
+//    CGSize contentSize = [content sizeWithFont:[UIFont boldSystemFontOfSize:18.0] constrainedToSize:CGSizeMake(300, 100)];
+//    
+//    float width = MIN(contentSize.width + 10, 300);
+//    float showstartX = MAX((320.0 - width)/2, 10.0);//取大者
+    showWindowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 120, 100)];
+    showWindowView.center = self.view.center;
+    showWindowView.backgroundColor = [UIColor blackColor];
+    showWindowView.layer.cornerRadius = 5;
+    showWindowView.layer.masksToBounds = YES;
+    showWindowView.alpha = 0.7;
     
-    float width = MIN(contentSize.width + 10, 300);
-    float showstartX = MAX((320.0 - width)/2, 10.0);//取大者
+    UIImageView* warnImage = [[UIImageView alloc] initWithFrame:CGRectMake(95.0/2, 25, 25, 25)];
+    warnImage.backgroundColor = [UIColor clearColor];
+    [showWindowView addSubview:warnImage];
+    switch (imageType) {
+        case 0://成功
+            warnImage.image = KUIImage(@"show_success");
+            break;
+        case 1://加好友
+            warnImage.image = KUIImage(@"show_add");
+            break;
+        case 2:
+            warnImage.image = KUIImage(@"show_noadd");
+            break;
+        case 3://加关注
+            warnImage.image = KUIImage(@"show_attention");
+            break;
+        case 4:
+            warnImage.image = KUIImage(@"show_noattention");
+            break;
+        case 5://赞
+            warnImage.image = KUIImage(@"show_zan");
+            break;
+        case 6:
+            warnImage.image = KUIImage(@"show_nozan");
+            break;
+        default:
+            break;
+    }
     
-    showWindowLabel = [[UILabel alloc] initWithFrame:CGRectMake(showstartX, pointY, width, contentSize.height + 20)];
-    showWindowLabel.backgroundColor = [UIColor blackColor];
-    showWindowLabel.alpha = 0.8;
+    UILabel* showWindowLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, 120, 25)];
+    showWindowLabel.backgroundColor = [UIColor clearColor];
     showWindowLabel.font = [UIFont boldSystemFontOfSize:15.0];
     showWindowLabel.textColor = [UIColor whiteColor];
-    showWindowLabel.layer.cornerRadius = 5;
     showWindowLabel.textAlignment = NSTextAlignmentCenter;
     showWindowLabel.text = content;
+    [showWindowView addSubview:showWindowLabel];
     
     [[[[UIApplication sharedApplication] windows] objectAtIndex:0] makeKeyWindow];
 
@@ -138,15 +172,18 @@
     {
         window = [[UIApplication sharedApplication].windows objectAtIndex:0];
     }
-    [window addSubview:showWindowLabel];
+    [window addSubview:showWindowView];
     
     [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideView) object:nil];//取消该方法的调用
-    [self performSelector:@selector(hideWindowView) withObject:nil afterDelay:3.0f];
+    [self performSelector:@selector(hideWindowView) withObject:nil afterDelay:1.0f];
 }
 
 - (void)hideWindowView
 {
-    showWindowLabel.frame = CGRectZero;
+//    showWindowView.frame = CGRectZero;
+    if (showWindowView != nil) {
+        [showWindowView removeFromSuperview];
+    }
 }
 
 #pragma mark 弹出显示框

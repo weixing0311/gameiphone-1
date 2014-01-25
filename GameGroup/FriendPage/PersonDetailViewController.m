@@ -160,7 +160,7 @@
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }
@@ -548,6 +548,16 @@
                                      selectImage:Nil];
             [button_left addTarget:self action:@selector(cancelAttentionClick:) forControlEvents:UIControlEventTouchUpInside];
             [m_buttonBgView addSubview:button_left];
+            
+            UIButton* button_right = [CommonControlOrView
+                                      setButtonWithFrame:CGRectMake(10, 10, 40, 30)//120
+                                      title:@""
+                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
+                                      bgImage:KUIImage(@"chat_normal")
+                                      HighImage:KUIImage(@"chat_click")
+                                      selectImage:Nil];
+            [button_right addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
+            [m_buttonBgView addSubview:button_right];
         }  break;
         case VIEW_TYPE_FansPage:
         {
@@ -560,6 +570,16 @@
                                      selectImage:Nil];
             [button_left addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
             [m_buttonBgView addSubview:button_left];
+            
+            UIButton* button_right = [CommonControlOrView
+                                      setButtonWithFrame:CGRectMake(10, 10, 40, 30)//120
+                                      title:@""
+                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
+                                      bgImage:KUIImage(@"chat_normal")
+                                      HighImage:KUIImage(@"chat_click")
+                                      selectImage:Nil];
+            [button_right addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
+            [m_buttonBgView addSubview:button_right];
         }break;
         case VIEW_TYPE_STRANGER:
         {
@@ -572,6 +592,16 @@
                                      selectImage:Nil];
             [button_left addTarget:self action:@selector(attentionClick:) forControlEvents:UIControlEventTouchUpInside];
             [m_buttonBgView addSubview:button_left];
+            
+            UIButton* button_right = [CommonControlOrView
+                                      setButtonWithFrame:CGRectMake(10, 10, 40, 30)//120
+                                      title:@""
+                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
+                                      bgImage:KUIImage(@"chat_normal")
+                                      HighImage:KUIImage(@"chat_click")
+                                      selectImage:Nil];
+            [button_right addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
+            [m_buttonBgView addSubview:button_right];
         }break;
         default:
         {
@@ -636,14 +666,14 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
 
         }
-        [self showMessageWindowWithContent:@"添加成功" pointY:kScreenHeigth-100];
+        [self showMessageWindowWithContent:@"添加成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }
@@ -705,7 +735,7 @@
                 if ([error isKindOfClass:[NSDictionary class]]) {
                     if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
                     {
-                        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                         [alert show];
                     }
                 }
@@ -745,7 +775,7 @@
             if ([error isKindOfClass:[NSDictionary class]]) {
                 if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
                 {
-                    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                     [alert show];
                 }
             }
@@ -765,8 +795,10 @@
     {
         KKChatController * kkchat = [[KKChatController alloc] init];
         kkchat.chatWithUser = self.hostInfo.userName;
-        kkchat.nickName = [DataStoreManager queryRemarkNameForUser:self.userName];
-        kkchat.chatUserImg = [DataStoreManager queryFirstHeadImageForUser:self.hostInfo.userName];
+//        kkchat.nickName = [DataStoreManager queryRemarkNameForUser:self.userName];
+//        kkchat.chatUserImg = [DataStoreManager queryFirstHeadImageForUser:self.hostInfo.userName];
+        kkchat.nickName = self.nickName;
+        kkchat.chatUserImg = [GameCommon getHeardImgId:self.hostInfo.headImgStr];
         [self.navigationController pushViewController:kkchat animated:YES];
     }
 }
@@ -817,14 +849,14 @@
 //            [GameCommon shareGameCommon].friendTableChanged = YES;
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
         }
-        [self showMessageWindowWithContent:@"关注成功" pointY:kScreenHeigth-100];
+        [self showMessageWindowWithContent:@"关注成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
         }

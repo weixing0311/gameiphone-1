@@ -59,8 +59,7 @@
 
 //define sender type 消息发送类型 根据这个存表
 #define COMMONUSER @"commonUser"
-#define PUBLICACCOUNT  @"publicAccount"
-#define SUBSCRIBEDACCOUNT  @"subscribedAccount"
+#define PAYLOADMSG  @"payloadmsg"
 #define SAYHELLOS @"sayhellos"//关注
 
 #define SYSTEMNOTIFICATION @"systemnoti"

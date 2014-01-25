@@ -11,6 +11,6 @@
 #import "PullUpRefreshView.h"
 #import "SRRefreshView.h"
 
-@interface SameRealmViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, SelectViewDelegate, PullUpDelegate, SRRefreshDelegate>
+@interface SameRealmViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, SelectViewDelegate, PullUpDelegate, SRRefreshDelegate, UIAlertViewDelegate>
 
 @end

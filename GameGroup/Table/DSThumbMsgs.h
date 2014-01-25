@@ -2,7 +2,7 @@
 //  DSThumbMsgs.h
 //  GameGroup
 //
-//  Created by Shen Yanping on 14-1-7.
+//  Created by Shen Yanping on 14-1-24.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
@@ -12,6 +12,7 @@
 
 @interface DSThumbMsgs : NSManagedObject
 
+@property (nonatomic, retain) NSString * messageuuid;
 @property (nonatomic, retain) NSString * msgContent;
 @property (nonatomic, retain) NSString * msgType;
 @property (nonatomic, retain) NSString * receiver;
@@ -21,6 +22,6 @@
 @property (nonatomic, retain) NSDate * sendTime;
 @property (nonatomic, retain) NSString * sendTimeStr;
 @property (nonatomic, retain) NSString * unRead;
-@property (nonatomic, retain) NSString * messageuuid;
+@property (nonatomic, retain) NSString * senderimg;
 
 @end

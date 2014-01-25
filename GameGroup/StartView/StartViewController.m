@@ -165,12 +165,16 @@
 {
 //    NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
     
-    if (KISDictionaryHaveKey(dict, @"clientUpdate")) {
+    if ([KISDictionaryHaveKey(dict, @"clientUpdate") doubleValue]) {
         [[NSUserDefaults standardUserDefaults] setObject:KISDictionaryHaveKey(dict, @"clientUpdateUrl") forKey:@"IOSURL"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"检测到新版本，您要升级吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"立刻升级", nil];
         alert.tag = 21;
         [alert show];
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"IOSURL"];
     }
 //        appStoreURL = [[dict objectForKey:@"version"] objectForKey:@"iosurl"];
 //        [[NSUserDefaults standardUserDefaults] setObject:appStoreURL forKey:@"IOSURL"];

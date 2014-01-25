@@ -17,7 +17,7 @@
 @protocol getContact <NSObject>
 -(void)getContact:(NSDictionary *)userDict;
 @end
-@interface selectContactPage : BaseViewController<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UISearchDisplayDelegate>
+@interface selectContactPage : BaseViewController<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UISearchDisplayDelegate,UIAlertViewDelegate>
 {
     UISearchBar * searchBar;
     UISearchDisplayController * searchDisplay;
