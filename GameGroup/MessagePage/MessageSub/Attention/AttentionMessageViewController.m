@@ -54,6 +54,12 @@
     [self.view addSubview:m_myTableView];
 }
 
+- (void)backButtonClick:(id)sender
+{
+    m_myTableView.editing = NO;
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)deleteButtonClick:(id)sender
 {
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您确认要清除吗？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];

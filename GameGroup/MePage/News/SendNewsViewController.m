@@ -172,23 +172,50 @@
         }
         hud.labelText = @"上传图片中...";
         [hud show:YES];
-
-        [NetManager uploadImages:imageArray WithURLStr:BaseUploadImageUrl ImageName:nameArray TheController:self Progress:nil Success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {//上传图片
-            [hud hide:YES];
-
-            self.imageId = [[NSMutableString alloc]init];
-            for (NSString*a in responseObject) {
-                [_imageId appendFormat:@"%@,",[responseObject objectForKey:a]];
-            }
-            [self publishWithImageString:_imageId];
-            
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [hud hide:YES];
-        }];
+        [self publishOnePicture:0 image:imageArray imageName:nameArray reponseStrDic:[NSMutableDictionary dictionaryWithCapacity:1]];
+//        [NetManager uploadImages:imageArray WithURLStr:BaseUploadImageUrl ImageName:nameArray TheController:self Progress:nil Success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {//上传图片
+//            [hud hide:YES];
+//
+//            self.imageId = [[NSMutableString alloc]init];
+//            for (NSString*a in responseObject) {
+//                [_imageId appendFormat:@"%@,",[responseObject objectForKey:a]];
+//            }
+//            [self publishWithImageString:_imageId];
+//            
+//        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//            [hud hide:YES];
+//        }];
     }else
     {
         [self publishWithImageString:@""];
     }
+}
+
+-(void)publishOnePicture:(NSInteger)picIndex image:(NSArray*)imageArray imageName:(NSArray*)imageNameArray reponseStrDic:(NSMutableDictionary*)reponseStrArray
+{
+    [NetManager uploadImage:[imageArray objectAtIndex:picIndex] WithURLStr:BaseUploadImageUrl ImageName:[imageNameArray objectAtIndex:picIndex] TheController:self Progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite){
+        hud.labelText = [NSString stringWithFormat:@"上传第%d张 %.2f％", picIndex+1,((double)totalBytesWritten/(double)totalBytesExpectedToWrite) * 100];
+    }Success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *response = [GameCommon getNewStringWithId:responseObject];//图片id
+        [reponseStrArray setObject:response forKey:[imageNameArray objectAtIndex:picIndex]];
+        if (reponseStrArray.count != imageArray.count) {
+            NSLog(@"aaaaaaaaa");
+            [self publishOnePicture:(picIndex+1) image:imageArray imageName:imageNameArray reponseStrDic:reponseStrArray];
+        }
+        else
+        {
+            [hud hide:YES];
+            NSLog(@"reponseStrArray %@", reponseStrArray);
+            self.imageId = [[NSMutableString alloc]init];
+            for (NSString*a in reponseStrArray) {
+                [_imageId appendFormat:@"%@,",[reponseStrArray objectForKey:a]];
+            }
+            [self publishWithImageString:_imageId];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [hud hide:YES];
+        [self showAlertViewWithTitle:@"提示" message:@"上传图片失败" buttonTitle:@"确定"];
+    }];
 }
 
 -(void)publishWithImageString:(NSString*)imageID
@@ -253,6 +280,11 @@
 -(void)getAnActionSheet
 {
     if (_pictureArray.count<9) {
+        [_dynamicTV resignFirstResponder];
+        if (self.addActionSheet != nil) {
+            [_addActionSheet showInView:self.view];
+            return;
+        }
         self.addActionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"相册", nil];
         [_addActionSheet showInView:self.view];
     }
@@ -261,7 +293,6 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (actionSheet == _addActionSheet) {
-        [_dynamicTV resignFirstResponder];
         switch (buttonIndex) {
             case 0:
             {
@@ -318,7 +349,7 @@
             PhotoB.hidden = NO;
         }
     }
-    [self.dynamicTV becomeFirstResponder];
+//    [self.dynamicTV becomeFirstResponder];
     
 }
 #pragma mark - imagePickerController delegate

@@ -806,7 +806,7 @@
         kkchat.chatWithUser = self.hostInfo.userName;
 //        kkchat.nickName = [DataStoreManager queryRemarkNameForUser:self.userName];
 //        kkchat.chatUserImg = [DataStoreManager queryFirstHeadImageForUser:self.hostInfo.userName];
-        kkchat.nickName = self.nickName;
+        kkchat.nickName = m_titleLabel.text;
         kkchat.chatUserImg = [GameCommon getHeardImgId:self.hostInfo.headImgStr];
         [self.navigationController pushViewController:kkchat animated:YES];
     }
