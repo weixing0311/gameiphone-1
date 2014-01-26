@@ -184,18 +184,18 @@
 
 - (void)heardImgClick:(id)sender
 {
-    if ([KISDictionaryHaveKey(self.dataDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]]) {
-        MyProfileViewController * myP = [[MyProfileViewController alloc] init];
-        [self.navigationController pushViewController:myP animated:YES];
-    }
-    else
-    {
+//    if ([KISDictionaryHaveKey(self.dataDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]]) {
+//        MyProfileViewController * myP = [[MyProfileViewController alloc] init];
+//        [self.navigationController pushViewController:myP animated:YES];
+//    }
+//    else
+//    {
         PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
         detailV.userName = KISDictionaryHaveKey(self.dataDic, @"username");
         detailV.nickName = KISDictionaryHaveKey(self.dataDic, @"nickname");
         detailV.isChatPage = NO;
         [self.navigationController pushViewController:detailV animated:YES];
-    }
+//    }
 }
 
 #pragma mark button

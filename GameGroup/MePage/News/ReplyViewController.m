@@ -402,18 +402,18 @@
 -(void)CellHeardButtonClick:(int)rowIndex
 {
     NSDictionary* tempDict = [m_dataReply objectAtIndex:rowIndex];
-    if ([KISDictionaryHaveKey(tempDict, @"userid") isEqualToString:[DataStoreManager getMyUserID]]) {
-        MyProfileViewController * myP = [[MyProfileViewController alloc] init];
-        [self.navigationController pushViewController:myP animated:YES];
-    }
-    else
-    {
+//    if ([KISDictionaryHaveKey(tempDict, @"userid") isEqualToString:[DataStoreManager getMyUserID]]) {
+//        MyProfileViewController * myP = [[MyProfileViewController alloc] init];
+//        [self.navigationController pushViewController:myP animated:YES];
+//    }
+//    else
+//    {
         PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
         detailV.userName = KISDictionaryHaveKey(tempDict, @"username");
         detailV.nickName = KISDictionaryHaveKey(tempDict, @"nickname");
         detailV.isChatPage = NO;
         [self.navigationController pushViewController:detailV animated:YES];
-    }
+//    }
 }
 
 #pragma mark  scrollView  delegate

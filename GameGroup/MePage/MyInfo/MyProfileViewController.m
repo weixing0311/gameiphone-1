@@ -710,15 +710,18 @@
                 break;
             case 2:
                 editVC.editType = EDIT_TYPE_nickName;
+                editVC.placeHold = self.hostInfo.nickName;
                 break;
             case 3:
                 editVC.editType = EDIT_TYPE_birthday;
                 break;
             case 4:
                 editVC.editType = EDIT_TYPE_hobby;
+                editVC.placeHold = self.hostInfo.hobby;
                 break;
             case 5:
                 editVC.editType = EDIT_TYPE_signature;
+                editVC.placeHold = self.hostInfo.signature;
                 break;
             default:
                 break;
@@ -733,15 +736,18 @@
             break;
         case 1:
             editVC.editType = EDIT_TYPE_nickName;
+            editVC.placeHold = self.hostInfo.nickName;
             break;
         case 2:
             editVC.editType = EDIT_TYPE_birthday;
             break;
         case 3:
             editVC.editType = EDIT_TYPE_hobby;
+            editVC.placeHold = self.hostInfo.hobby;
             break;
         case 4:
             editVC.editType = EDIT_TYPE_signature;
+            editVC.placeHold = self.hostInfo.signature;
             break;
         default:
             break;

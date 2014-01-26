@@ -59,6 +59,7 @@
     m_contentTextView.delegate = self;
     m_contentTextView.layer.cornerRadius = 5;
     m_contentTextView.layer.masksToBounds = YES;
+    m_contentTextView.text = self.placeHold ? self.placeHold : @"";
     [self.view addSubview:m_contentTextView];
     [m_contentTextView becomeFirstResponder];
     

@@ -16,6 +16,7 @@ typedef enum
     VIEW_TYPE_AttentionPage,
     VIEW_TYPE_FansPage,
     VIEW_TYPE_STRANGER,//陌生人
+    VIEW_TYPE_Self,//自己
 }MyViewType;
 
 @interface PersonDetailViewController : BaseViewController<HGPhotoWallDelegate, UIAlertViewDelegate>

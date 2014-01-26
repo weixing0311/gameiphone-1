@@ -93,6 +93,7 @@
 
 +(void)addFriendToLocal:(NSString *)username;
 +(NSString *)queryNickNameForUser:(NSString *)userName;
++(NSString *)querySelfUserName;
 +(NSString *)queryFirstHeadImageForUser:(NSString *)userName;
 +(void)updateFriendInfo:(NSDictionary *)userInfoDict ForUser:(NSString *)username;
 +(NSString *)getOtherMessageTitleWithUUID:(NSString*)uuid type:(NSString*)type;//获取角色等 nickName

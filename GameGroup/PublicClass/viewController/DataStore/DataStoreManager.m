@@ -1042,14 +1042,14 @@
         if (dFriends) {
             return YES;
         }
-//        DSAttentions * dAttention = [DSAttentions MR_findFirstWithPredicate:predicate];
-//        if (dAttention) {
-//            return YES;
-//        }
-//        DSAttentions * dFans = [DSAttentions MR_findFirstWithPredicate:predicate];
-//        if (dFans) {
-//            return YES;
-//        }
+        DSAttentions * dAttention = [DSAttentions MR_findFirstWithPredicate:predicate];
+        if (dAttention) {
+            return YES;
+        }
+        DSFans * dFans = [DSFans MR_findFirstWithPredicate:predicate];
+        if (dFans) {
+            return YES;
+        }
         return NO;
     }
     else
@@ -1386,9 +1386,6 @@
 }
 +(NSString *)queryNickNameForUser:(NSString *)userName
 {
-    if ([userName isEqualToString:@"123456789"]) {
-        return @"圈子通知";
-    }
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
     DSFriends * dFriend = [DSFriends MR_findFirstWithPredicate:predicate];
     if (dFriend) {//不是好友 就去粉丝列表查
@@ -1468,6 +1465,16 @@
             return userName;
     }
     
+    return @"";
+}
+
++(NSString *)querySelfUserName
+{
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userId==[c]%@",[DataStoreManager getMyUserID]];
+    DSFriends * dFriend = [DSFriends MR_findFirstWithPredicate:predicate];
+    if (dFriend) {//自己
+        return  dFriend.userName;
+    }
     return @"";
 }
 
@@ -1900,14 +1907,13 @@
         NSDictionary *destDic = [dataDic objectForKey:@"destUser"];
         userid = [GameCommon getNewStringWithId:[destDic objectForKey:@"userid"]];
         username = [GameCommon getNewStringWithId:[destDic objectForKey:@"username"]];
-        img = [GameCommon getNewStringWithId:[destDic objectForKey:@"img"]];
+        heardImgId = [GameCommon getNewStringWithId:[destDic objectForKey:@"userimg"]];
         superStar = [GameCommon getNewStringWithId:[destDic objectForKey:@"superstar"]];
         nickName = [GameCommon getNewStringWithId:[destDic objectForKey:@"alias"]];
         if ([nickName isEqualToString:@""]) {
             nickName = [GameCommon getNewStringWithId:[destDic objectForKey:@"nickname"]];
         }
     }
-  
 
     if (newsId) {
         [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
@@ -1976,7 +1982,7 @@
         NSDictionary *destDic = [dataDic objectForKey:@"destUser"];
         userid = [GameCommon getNewStringWithId:[destDic objectForKey:@"userid"]];
         username = [GameCommon getNewStringWithId:[destDic objectForKey:@"username"]];
-        img = [GameCommon getNewStringWithId:[destDic objectForKey:@"img"]];
+        heardImgId = [GameCommon getNewStringWithId:[destDic objectForKey:@"userimg"]];
         superStar = [GameCommon getNewStringWithId:[destDic objectForKey:@"superstar"]];
         nickName = [GameCommon getNewStringWithId:[destDic objectForKey:@"alias"]];
         if ([nickName isEqualToString:@""]) {

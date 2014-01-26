@@ -150,6 +150,10 @@
             else
                 [DataStoreManager saveUserFansInfo:self.hostInfo.infoDic];
         }
+        else if([self.hostInfo.userId isEqualToString:[DataStoreManager getMyUserID]])
+        {
+            self.viewType = VIEW_TYPE_Self;
+        }
         else  {
             self.viewType = VIEW_TYPE_STRANGER;
         }
@@ -351,6 +355,9 @@
             break;
         case VIEW_TYPE_STRANGER:
             m_relationLabel.text = @"陌生人";
+            break;
+        case VIEW_TYPE_Self:
+            m_relationLabel.text = @"自己";
             break;
         default:
             break;

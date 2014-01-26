@@ -1099,9 +1099,14 @@
 }
 -(void)myBtnClicked
 {
-    MyProfileViewController * myP = [[MyProfileViewController alloc] init];
-//    myP.hostInfo = [[HostInfo alloc] initWithHostInfo:[DataStoreManager queryMyInfo]];
-    [self.navigationController pushViewController:myP animated:YES];
+//    MyProfileViewController * myP = [[MyProfileViewController alloc] init];
+////    myP.hostInfo = [[HostInfo alloc] initWithHostInfo:[DataStoreManager queryMyInfo]];
+//    [self.navigationController pushViewController:myP animated:YES];
+    PersonDetailViewController * detailV = [[PersonDetailViewController alloc] init];
+    detailV.userName = [DataStoreManager querySelfUserName];
+    detailV.nickName = [DataStoreManager queryRemarkNameForUser:[DataStoreManager querySelfUserName]];
+    detailV.isChatPage = YES;
+    [self.navigationController pushViewController:detailV animated:YES];
 }
 -(void)offsetButtonTouchBegin:(UIButton *)sender
 {

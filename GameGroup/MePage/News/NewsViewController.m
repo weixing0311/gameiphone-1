@@ -549,33 +549,33 @@
     NSDictionary* tempDict = [m_newsArray objectAtIndex:rowIndex];
     if ([KISDictionaryHaveKey(tempDict, @"destUser") isKindOfClass:[NSDictionary class]]) {//目标 别人评论了我
         NSDictionary* destDic = KISDictionaryHaveKey(tempDict, @"destUser");
-        if ([KISDictionaryHaveKey(destDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]]) {
-            MyProfileViewController * myP = [[MyProfileViewController alloc] init];
-            [self.navigationController pushViewController:myP animated:YES];
-        }
-        else
-        {
+//        if ([KISDictionaryHaveKey(destDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]]) {
+//            MyProfileViewController * myP = [[MyProfileViewController alloc] init];
+//            [self.navigationController pushViewController:myP animated:YES];
+//        }
+//        else
+//        {
             PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
             detailV.userName = KISDictionaryHaveKey(destDic, @"username");
             detailV.nickName = KISDictionaryHaveKey(destDic, @"nickname");
             detailV.isChatPage = NO;
             [self.navigationController pushViewController:detailV animated:YES];
-        }
+//        }
     }
     else
     {
-        if ([KISDictionaryHaveKey(tempDict, @"userid") isEqualToString:[DataStoreManager getMyUserID]]) {
-            MyProfileViewController * myP = [[MyProfileViewController alloc] init];
-            [self.navigationController pushViewController:myP animated:YES];
-        }
-        else
-        {
+//        if ([KISDictionaryHaveKey(tempDict, @"userid") isEqualToString:[DataStoreManager getMyUserID]]) {
+//            MyProfileViewController * myP = [[MyProfileViewController alloc] init];
+//            [self.navigationController pushViewController:myP animated:YES];
+//        }
+//        else
+//        {
             PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
             detailV.userName = KISDictionaryHaveKey(tempDict, @"username");
             detailV.nickName = KISDictionaryHaveKey(tempDict, @"nickname");
             detailV.isChatPage = NO;
             [self.navigationController pushViewController:detailV animated:YES];
-        }
+//        }
     }
 }
 
