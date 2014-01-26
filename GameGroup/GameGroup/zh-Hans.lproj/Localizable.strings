@@ -1,0 +1,52 @@
+/* 
+  Localizable.strings
+  PetGroup
+
+  Created by Tolecen on 13-8-20.
+  Copyright (c) 2013年 Tolecen. All rights reserved.
+*/
+//通用文字
+
+
+//通用图片
+
+
+//消息界面用于显示的文字
+"Message_message"="消息";
+"Message_receiving"="消息(收取中...)";
+"Message_connecting"="消息(连接中...)";
+
+//消息界面要显示的图片
+
+
+//动态界面显示的文字
+
+
+//动态界面显示的图片
+
+
+//附近的人显示的文字
+"NearBy_all"="附近的人(全部)";
+"NearBy_male"="附近的人(男)";
+"NearBy_female"="附近的人(女)";
+"NearBy_pet"="附近的人(宠物)";
+"NearBy_Free"="附近的人";
+
+//附近的人显示的图片
+
+
+//联系人显示的文字
+
+
+//联系人显示的图片
+
+
+//个人中心显示的文字
+
+
+//个人中心显示的图片
+
+
+
+
+
