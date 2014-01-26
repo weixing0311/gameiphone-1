@@ -752,42 +752,44 @@
     }
     else if(alertView.tag == 345)//取消关注
     {
-        //后台存储
-        NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
-        NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-        
-        [paramDict setObject:self.hostInfo.userId forKey:@"frienduserid"];
-        [paramDict setObject:@"1" forKey:@"type"];
-
-        [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-        [postDict setObject:paramDict forKey:@"params"];
-        [postDict setObject:@"110" forKey:@"method"];
-        [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-        
-        [hud show:YES];
-        
-        [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            [hud hide:YES];
+        if (buttonIndex != alertView.cancelButtonIndex) {
+            //后台存储
+            NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+            NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
             
-            [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];
+            [paramDict setObject:self.hostInfo.userId forKey:@"frienduserid"];
+            [paramDict setObject:@"1" forKey:@"type"];
 
-            ////////////////////////
-            [DataStoreManager deleteAttentionWithUserName:self.userName];
-//            [GameCommon shareGameCommon].attentionTableChanged = YES;
-            [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
-
-            [self.navigationController popViewControllerAnimated:YES];
+            [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+            [postDict setObject:paramDict forKey:@"params"];
+            [postDict setObject:@"110" forKey:@"method"];
+            [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
             
-        } failure:^(AFHTTPRequestOperation *operation, id error) {
-            if ([error isKindOfClass:[NSDictionary class]]) {
-                if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
-                {
-                    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                    [alert show];
+            [hud show:YES];
+            
+            [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                [hud hide:YES];
+                
+                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];
+
+                ////////////////////////
+                [DataStoreManager deleteAttentionWithUserName:self.userName];
+    //            [GameCommon shareGameCommon].attentionTableChanged = YES;
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
+
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            } failure:^(AFHTTPRequestOperation *operation, id error) {
+                if ([error isKindOfClass:[NSDictionary class]]) {
+                    if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+                    {
+                        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                        [alert show];
+                    }
                 }
-            }
-            [hud hide:YES];
-        }];
+                [hud hide:YES];
+            }];
+        }
     }
 }
 

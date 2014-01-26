@@ -74,7 +74,6 @@
 
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
             
-            NSDictionary* msgDic = [msgContent JSONValue];
             DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];//消息页展示的内容
             if (!thumbMsgs)
                 thumbMsgs = [DSThumbMsgs MR_createInContext:localContext];
@@ -341,7 +340,6 @@
 {
     NSString * msgContent = [message objectForKey:@"msg"];
     NSDate * sendTime = [NSDate dateWithTimeIntervalSince1970:[[message objectForKey:@"time"] doubleValue]];
-    NSString * msgType = KISDictionaryHaveKey(message, @"msgType");
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSPredicate * predicate;
 

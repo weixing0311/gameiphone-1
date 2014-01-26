@@ -32,8 +32,54 @@
         self.disLabel.font = [UIFont boldSystemFontOfSize:14.0];
         self.disLabel.numberOfLines = 0;
         [self addSubview:self.disLabel];
+        
+        self.disField = [[UITextField alloc] initWithFrame:CGRectMake(100, 10, 190, 20)];
+        self.disField.textAlignment = NSTextAlignmentLeft;
+        self.disField.backgroundColor = [UIColor clearColor];
+        self.disField.textColor = kColorWithRGB(51, 51, 51, 1.0);
+        self.disField.font = [UIFont boldSystemFontOfSize:14.0];
+        self.disField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [self addSubview:self.disField];
+        self.disField.hidden = YES;
+        
+        m_birthDayPick = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, 320, 200)];
+        [m_birthDayPick setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]];
+        m_birthDayPick.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 280, 320, 236);
+        m_birthDayPick.datePickerMode = UIDatePickerModeDate;
+        m_birthDayPick.date = [[NSDate alloc] initWithTimeIntervalSince1970:631123200];
+        m_birthDayPick.maximumDate = [NSDate date];
+        self.disField.inputView = m_birthDayPick;//点击弹出的是pickview
+
+        UIToolbar* toolbar_server = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+        toolbar_server.tintColor = [UIColor blackColor];
+        UIBarButtonItem*rb_server = [[UIBarButtonItem alloc]initWithTitle:@"生日选择" style:UIBarButtonItemStyleDone target:self action:@selector(selectBirthdayOK)];
+        UIBarButtonItem*cancel_server = [[UIBarButtonItem alloc]initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(selectBirthdayCancel)];
+        rb_server.tintColor = [UIColor blackColor];
+        toolbar_server.items = @[rb_server, cancel_server];
+        self.disField.inputAccessoryView = toolbar_server;//跟着pickview上移
     }
     return self;
+}
+
+- (void)selectBirthdayCancel
+{
+    [self.disField resignFirstResponder];
+}
+
+- (void)selectBirthdayOK
+{
+    if (self.cellDelegate && [self.cellDelegate respondsToSelector:@selector(birthDaySelected:)]) {
+        [self.disField resignFirstResponder];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]];//location设置为中国
+        [dateFormatter setDateFormat:@"yyyyMMdd"];
+        
+        NSString* newDate = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate: m_birthDayPick.date]];
+        self.disField.text = newDate;
+        
+        [self.cellDelegate birthDaySelected:newDate];
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

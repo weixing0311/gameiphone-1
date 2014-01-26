@@ -8,10 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TextLabelTableCell : UITableViewCell
+@protocol BirthDayDelegate <NSObject>
 
+- (void)birthDaySelected:(NSString*)birthday;
+
+@end
+
+@interface TextLabelTableCell : UITableViewCell
+{
+    UIDatePicker* m_birthDayPick;
+}
+@property (assign,nonatomic)id<BirthDayDelegate> cellDelegate;
 @property (strong,nonatomic)UIImageView* vAuthImg;
 @property (strong,nonatomic)UILabel*  nameLabel;
 @property (strong,nonatomic)UILabel*  disLabel;
+@property (strong,nonatomic)UITextField*  disField;
 
 @end

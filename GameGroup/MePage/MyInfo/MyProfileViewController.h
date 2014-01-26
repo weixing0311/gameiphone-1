@@ -10,6 +10,7 @@
 #import "HGPhotoWall.h"
 #import "HostInfo.h"
 #import "DSFriends.h"
+#import "TextLabelTableCell.h"
 
 typedef  enum
 {
@@ -17,7 +18,7 @@ typedef  enum
     ActionSheetTypeOperationPic
 }ActionSheetType;
 
-@interface MyProfileViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, HGPhotoWallDelegate, UIAlertViewDelegate>
+@interface MyProfileViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, HGPhotoWallDelegate, UIAlertViewDelegate, BirthDayDelegate>
 
 @property(nonatomic,strong)NSString*  nickName;
 @property(nonatomic,strong)NSString*  userName;

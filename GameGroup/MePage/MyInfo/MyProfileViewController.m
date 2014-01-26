@@ -8,7 +8,6 @@
 
 #import "MyProfileViewController.h"
 #import "PhotoViewController.h"
-#import "TextLabelTableCell.h"
 #import "EditMessageViewController.h"
 
 @interface MyProfileViewController ()
@@ -93,6 +92,7 @@
     UIView* footView = [[UIView alloc] initWithFrame:CGRectMake(0, -2, 320, 2)];
     footView.backgroundColor = [UIColor whiteColor];
     m_myTableView.tableFooterView = footView;
+    
     
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
@@ -575,6 +575,7 @@
         }
         if([[GameCommon getNewStringWithId:self.hostInfo.superstar] isEqualToString:@"1"])//有认证
         {
+            cell.disField.hidden = YES;
             if (indexPath.row == 0) {
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 cell.nameLabel.text = @"      认证";
@@ -600,7 +601,9 @@
                     case 3:
                     {
                         cell.nameLabel.text = @"生日";
-                        cell.disLabel.text = self.hostInfo.birthday;
+                        cell.disField.hidden = NO;
+                        cell.disField.text = self.hostInfo.birthday;
+                        cell.cellDelegate = self;
                     } break;
                     case 4:
                     {
@@ -640,7 +643,9 @@
                 case 2:
                 {
                     cell.nameLabel.text = @"生日";
-                    cell.disLabel.text = self.hostInfo.birthday;
+                    cell.disField.hidden = NO;
+                    cell.disField.text = self.hostInfo.birthday;
+                    cell.cellDelegate = self;
                 } break;
                 case 3:
                 {
@@ -649,7 +654,7 @@
                     cell.disLabel.frame = CGRectMake(100, 10, 190, textSize.height == 0 ? 20 : textSize.height + 5);
                     cell.disLabel.text = [self.hostInfo.hobby isEqualToString:@""] ? @"暂无" : self.hostInfo.hobby;
 
-                       } break;
+                } break;
                 case 4:
                 {
                     cell.nameLabel.text = @"个性签名";
@@ -713,7 +718,8 @@
                 editVC.placeHold = self.hostInfo.nickName;
                 break;
             case 3:
-                editVC.editType = EDIT_TYPE_birthday;
+//                editVC.editType = EDIT_TYPE_birthday;
+                return;
                 break;
             case 4:
                 editVC.editType = EDIT_TYPE_hobby;
@@ -739,7 +745,8 @@
             editVC.placeHold = self.hostInfo.nickName;
             break;
         case 2:
-            editVC.editType = EDIT_TYPE_birthday;
+//            editVC.editType = EDIT_TYPE_birthday;
+            return;
             break;
         case 3:
             editVC.editType = EDIT_TYPE_hobby;
@@ -753,6 +760,38 @@
             break;
     }
     [self.navigationController pushViewController:editVC animated:YES];
+}
+
+- (void)birthDaySelected:(NSString*)birthday
+{
+    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+    
+    [paramDict setObject:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil] forKey:@"username"];
+    [paramDict setObject:birthday forKey:@"birthdate"];
+    
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:paramDict forKey:@"params"];
+    [postDict setObject:@"104" forKey:@"method"];
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    
+    [hud show:YES];
+    
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [hud hide:YES];
+        NSLog(@"%@", responseObject);
+        
+        [DataStoreManager saveUserInfo:responseObject];
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+        [hud hide:YES];
+    }];
 }
 
 - (void)didReceiveMemoryWarning

@@ -184,7 +184,7 @@
 #pragma mark 返回
 - (void)backButtonClick:(id)sender
 {
-    if (KISEmptyOrEnter(m_contentTextView.text)) {
+    if (KISEmptyOrEnter(m_contentTextView.text) || [m_contentTextView.text isEqualToString:self.placeHold]) {
         [self.navigationController popViewControllerAnimated:YES];
         return;
     }

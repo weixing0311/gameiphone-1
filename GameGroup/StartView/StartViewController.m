@@ -132,9 +132,9 @@
 -(void)firtOpen
 {
     NSMutableDictionary * paramsDic = [NSMutableDictionary dictionary];
-    if ([SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]) {
-        [paramsDic setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-    }
+//    if ([SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]) {
+//        [paramsDic setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+//    }
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kOpenData]) {
         NSDictionary* tempDic = [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData];
         [paramsDic setObject:KISDictionaryHaveKey(tempDic, @"gamelist_millis") forKey:@"gamelist_millis"];
