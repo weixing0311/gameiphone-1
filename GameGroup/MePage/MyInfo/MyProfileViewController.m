@@ -624,6 +624,7 @@
                         break;
                 }
             }
+            [cell refreshCell];
             return cell;
         }
         if (indexPath.row == 0) {
@@ -666,6 +667,7 @@
                     break;
             }
         }
+        [cell refreshCell];
         return cell;
     }
     else if(indexPath.section == 2)

@@ -24,4 +24,6 @@
 @property (strong,nonatomic)UILabel*  disLabel;
 @property (strong,nonatomic)UITextField*  disField;
 
+- (void)refreshCell;
+
 @end

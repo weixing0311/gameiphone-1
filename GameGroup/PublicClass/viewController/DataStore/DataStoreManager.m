@@ -1912,6 +1912,7 @@
         heardImgId = [GameCommon getNewStringWithId:[destDic objectForKey:@"userimg"]];
         superStar = [GameCommon getNewStringWithId:[destDic objectForKey:@"superstar"]];
         nickName = [GameCommon getNewStringWithId:[destDic objectForKey:@"alias"]];
+
         if ([nickName isEqualToString:@""]) {
             nickName = [GameCommon getNewStringWithId:[destDic objectForKey:@"nickname"]];
         }
