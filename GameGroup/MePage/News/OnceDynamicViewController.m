@@ -587,7 +587,7 @@
             [m_shareView addSubview:contentLabel];
         }
         
-        sharePeopleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(15, 125, 250, 30) textColor:kColorWithRGB(51, 51, 51, 1.0) font:[UIFont systemFontOfSize:13.0] text:[NSString stringWithFormat:@"分享给：%@,", KISDictionaryHaveKey(self.shareUserDic, @"displayName")] textAlignment:NSTextAlignmentLeft];
+        sharePeopleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(15, 125, 250, 30) textColor:kColorWithRGB(51, 51, 51, 1.0) font:[UIFont systemFontOfSize:13.0] text:[NSString stringWithFormat:@"分享给：%@", KISDictionaryHaveKey(self.shareUserDic, @"displayName")] textAlignment:NSTextAlignmentLeft];
         [m_shareView addSubview:sharePeopleLabel];
         
         UIButton* cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(15, 155, 120, 35)];
@@ -611,7 +611,7 @@
         m_shareViewBg.hidden = NO;
         m_shareView.hidden = NO;
         
-        sharePeopleLabel.text = [NSString stringWithFormat:@"分享给：%@,", KISDictionaryHaveKey(self.shareUserDic, @"displayName")];
+        sharePeopleLabel.text = [NSString stringWithFormat:@"分享给：%@", KISDictionaryHaveKey(self.shareUserDic, @"displayName")];
     }
     
 }

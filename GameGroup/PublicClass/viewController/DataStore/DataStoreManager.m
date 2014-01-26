@@ -206,6 +206,20 @@
         }
     }];
 }
+
++(void)storeThumbMsgUser:(NSString*)username nickName:(NSString*)nickName
+{
+    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",username];
+        
+        DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+        if (thumbMsgs)
+        {
+            thumbMsgs.senderNickname = nickName;
+        }
+    }];
+}
+
 +(NSString *)queryMsgRemarkNameForUser:(NSString *)userName
 {
     if ([userName isEqualToString:@"1234"]) {
@@ -1483,57 +1497,47 @@
     }
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
     DSFriends * dFriend = [DSFriends MR_findFirstWithPredicate:predicate];
-    if (dFriend.headImgID) {
-        NSRange range=[dFriend.headImgID rangeOfString:@","];
-        if (range.location!=NSNotFound) {
-            NSArray *imageArray = [dFriend.headImgID componentsSeparatedByString:@","];
-
-//            NSArray *arr = [[imageArray objectAtIndex:0] componentsSeparatedByString:@"_"];
-//            if (arr.count>1) {
-//                return [arr objectAtIndex:0];
-//            }
-//            else
+    if (dFriend) {
+        if (dFriend.headImgID) {
+            NSRange range=[dFriend.headImgID rangeOfString:@","];
+            if (range.location!=NSNotFound) {
+                NSArray *imageArray = [dFriend.headImgID componentsSeparatedByString:@","];
                 return [imageArray objectAtIndex:0];
-        }
-        else
-        {
-//            NSArray *arr = [dFriend.headImgID componentsSeparatedByString:@"_"];
-//            if (arr.count>1) {
-//                return [arr objectAtIndex:0];
-//            }
-//            else
+            }
+            else
+            {
                 return dFriend.headImgID;
+            }
         }
     }
-//    else if([userName isEqualToString:@"15811212096"])//小伙伴
-//    {
-//        DSFans* fans = [DSFans MR_findFirstWithPredicate:predicate];
-//        if (fans && fans.headImgID) {
-//            NSRange range=[fans.headImgID rangeOfString:@","];
-//            if (range.location!=NSNotFound) {
-//                NSArray *imageArray = [fans.headImgID componentsSeparatedByString:@","];
-//
-//                return [imageArray objectAtIndex:0];
-//            }
-//            else
-//            {
-//                return fans.headImgID;
-//            }
-//        }
-//        DSAttentions *attention = [DSAttentions MR_findFirstWithPredicate:predicate];
-//        if (attention && attention.headImgID) {
-//            NSRange range=[attention.headImgID rangeOfString:@","];
-//            if (range.location!=NSNotFound) {
-//                NSArray *imageArray = [attention.headImgID componentsSeparatedByString:@","];
-//                
-//                return [imageArray objectAtIndex:0];
-//            }
-//            else
-//            {
-//                return attention.headImgID;
-//            }
-//        }
-//    }
+    DSAttentions * dAttintion = [DSAttentions MR_findFirstWithPredicate:predicate];
+    if (dAttintion) {
+        if (dAttintion.headImgID) {
+            NSRange range=[dAttintion.headImgID rangeOfString:@","];
+            if (range.location!=NSNotFound) {
+                NSArray *imageArray = [dAttintion.headImgID componentsSeparatedByString:@","];
+                return [imageArray objectAtIndex:0];
+            }
+            else
+            {
+                return dAttintion.headImgID;
+            }
+        }
+    }
+    DSFans * dFans = [DSFans MR_findFirstWithPredicate:predicate];
+    if (dFans) {
+        if (dFans.headImgID) {
+            NSRange range=[dFans.headImgID rangeOfString:@","];
+            if (range.location!=NSNotFound) {
+                NSArray *imageArray = [dFans.headImgID componentsSeparatedByString:@","];
+                return [imageArray objectAtIndex:0];
+            }
+            else
+            {
+                return dFans.headImgID;
+            }
+        }
+    }
     return @"no";
 }
 #pragma mark - 存储个人信息

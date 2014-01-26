@@ -37,6 +37,7 @@
 +(void)storeNewMsgs:(NSDictionary *)msg senderType:(NSString *)sendertype;
 +(void)storeMyMessage:(NSDictionary *)message;
 +(void)storeThumbMsgUser:(NSString*)username nickName:(NSString*)nickName andImg:(NSString*)img;
++(void)storeThumbMsgUser:(NSString*)username nickName:(NSString*)nickName;//修改别名
 +(NSString *)queryMsgRemarkNameForUser:(NSString *)userName;
 +(NSString *)queryMsgHeadImageForUser:(NSString *)userName;
 +(void)blankMsgUnreadCountForUser:(NSString *)username;

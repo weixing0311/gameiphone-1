@@ -42,13 +42,81 @@
         for (NSDictionary* tempDic in m_clazzArray) {
             [m_clazzNameArray addObject:KISDictionaryHaveKey(tempDic, @"name")];
         }
+        
+        [self setMainView];
+        
+        hud = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:hud];
+        hud.labelText = @"请求中...";
     }
+    else
+    {
+        hud = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:hud];
+        hud.labelText = @"请求中...";
+        
+        [self firtOpen];
+    }
+}
+
+#pragma mark 开机联网
+-(void)firtOpen
+{
+    [hud show:YES];
+    NSMutableDictionary * paramsDic = [NSMutableDictionary dictionary];
     
-    [self setMainView];
+    [paramsDic setObject:@"" forKey:@"gamelist_millis"];
+    [paramsDic setObject:@"" forKey:@"wow_realms_millis"];
+    [paramsDic setObject:@"" forKey:@"wow_characterclasses_millis"];
     
-    hud = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:hud];
-    hud.labelText = @"请求中...";
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:paramsDic forKey:@"params"];
+    [postDict setObject:@"142" forKey:@"method"];
+    
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [hud hide: YES];
+        if (![responseObject isKindOfClass:[NSDictionary class]]) {
+            return ;
+        }
+        NSMutableDictionary* openData = [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData] ? [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData] : [NSMutableDictionary dictionaryWithCapacity:1];
+        if ([KISDictionaryHaveKey(responseObject, @"gamelist_update") boolValue]) {
+            [openData setObject:KISDictionaryHaveKey(responseObject, @"gamelist") forKey:@"gamelist"];
+            [openData setObject:KISDictionaryHaveKey(responseObject, @"gamelist_millis") forKey:@"gamelist_millis"];
+        }
+        if ([KISDictionaryHaveKey(responseObject, @"wow_characterclasses_update") boolValue]) {
+            [openData setObject:KISDictionaryHaveKey(responseObject, @"wow_characterclasses") forKey:@"wow_characterclasses"];
+            [openData setObject:KISDictionaryHaveKey(responseObject, @"wow_characterclasses_millis") forKey:@"wow_characterclasses_millis"];
+        }
+        if ([KISDictionaryHaveKey(responseObject, @"wow_realms_update") boolValue]) {
+            [openData setObject:KISDictionaryHaveKey(responseObject, @"wow_realms") forKey:@"wow_realms"];
+            [openData setObject:KISDictionaryHaveKey(responseObject, @"wow_realms_millis") forKey:@"wow_realms_millis"];
+        }
+        [[NSUserDefaults standardUserDefaults] setObject:openData forKey:kOpenData];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        if ([KISDictionaryHaveKey(openData, @"wow_realms") isKindOfClass:[NSDictionary class]]) {//注册服务器数据
+            [[GameCommon shareGameCommon].wow_realms addEntriesFromDictionary:KISDictionaryHaveKey(openData, @"wow_realms")];
+        }
+        if ([KISDictionaryHaveKey(openData, @"wow_characterclasses") isKindOfClass:[NSArray class]]) {
+            [[GameCommon shareGameCommon].wow_clazzs addObjectsFromArray:KISDictionaryHaveKey(openData, @"wow_characterclasses")];
+        }
+        [m_clazzArray addObjectsFromArray:[GameCommon shareGameCommon].wow_clazzs];
+        for (NSDictionary* tempDic in m_clazzArray) {
+            [m_clazzNameArray addObject:KISDictionaryHaveKey(tempDic, @"name")];
+        }
+        [self setMainView];
+       
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        [hud hide: YES];
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+    }];
 }
 
 - (void)setMainView

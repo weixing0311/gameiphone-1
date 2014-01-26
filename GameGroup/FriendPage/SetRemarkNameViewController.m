@@ -118,6 +118,12 @@
         {
             [DataStoreManager saveAttentionRemarkName:m_remarkText.text userName:self.userName];
         }
+        if ([m_remarkText.text isEqualToString:@""]) {
+            [DataStoreManager storeThumbMsgUser:self.userName nickName:self.nickName];
+        }
+        else
+            [DataStoreManager storeThumbMsgUser:self.userName nickName:m_remarkText.text];
+
         [self.navigationController popViewControllerAnimated:YES];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {

@@ -60,9 +60,11 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMesgReceived:) name:kNewMessageReceived object:nil];
 
-//    self.nickName = [DataStoreManager queryRemarkNameForUser:self.chatWithUser];//刷新别名
-//    titleLabel.text=self.nickName;
-//    [self.tView reloadData];
+    if (![[DataStoreManager queryMsgRemarkNameForUser:self.chatWithUser] isEqualToString:@""]) {
+        self.nickName = [DataStoreManager queryMsgRemarkNameForUser:self.chatWithUser];//刷新别名
+        titleLabel.text=self.nickName;
+        [self.tView reloadData];
+    }
 }
 
 - (void)viewDidLoad
@@ -290,7 +292,7 @@
                 higF = contentSize.height;
             }
             NSNumber * width = [NSNumber numberWithFloat:MAX(titleSize.width, withF)];
-            NSNumber * height = [NSNumber numberWithFloat:(titleSize.height + higF)];
+            NSNumber * height = [NSNumber numberWithFloat:((titleSize.height > 0 ? (titleSize.height + 5) : titleSize.height) + higF)];
             
             NSArray * hh = [NSArray arrayWithObjects:width,height, nil];
             [heightArray addObject:hh];
@@ -950,7 +952,7 @@
             NSURL * imgUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
             cell.thumbImgV.hidden = NO;
             cell.thumbImgV.imageURL = imgUrl;
-            [cell.thumbImgV setFrame:CGRectMake(70, 35 + titleSize.height, 40, 40)];
+            [cell.thumbImgV setFrame:CGRectMake(70, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), 40, 40)];
             contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:YES];
         }
         else
@@ -969,7 +971,7 @@
         cell.headImgV.imageURL = theUrl;
         bgImage = [[UIImage imageNamed:@"bubble_03.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
         
-        [cell.bgImageView setFrame:CGRectMake(padding-10+45, padding*2-15, size.width+25, size.height + 20)];
+        [cell.bgImageView setFrame:CGRectMake(padding-10+45, padding*2-15, size.width+27, size.height + 20)];
         [cell.bgImageView setBackgroundImage:bgImage forState:UIControlStateNormal];
         [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchBegin:) forControlEvents:UIControlEventTouchDown];
         [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchEnd:) forControlEvents:UIControlEventTouchUpInside];
@@ -977,11 +979,11 @@
         
         [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height)];
         if (cell.thumbImgV.hidden) {
-            [cell.contentLabel setFrame:CGRectMake(padding + 50, 35 + titleSize.height, contentSize.width, contentSize.height)];
+            [cell.contentLabel setFrame:CGRectMake(padding + 50, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
         }
         else
         {
-            [cell.contentLabel setFrame:CGRectMake(padding + 50 + 45, 35 + titleSize.height, contentSize.width, contentSize.height)];
+            [cell.contentLabel setFrame:CGRectMake(padding + 50 + 45, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
         }
         
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
