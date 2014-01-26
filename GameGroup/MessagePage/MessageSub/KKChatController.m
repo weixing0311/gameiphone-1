@@ -278,23 +278,23 @@
             
             CGSize titleSize = [self getPayloadMsgTitleSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"title")]];
             CGSize contentSize = CGSizeZero;
-            float withF = 0;
+//            float withF = 0;
             float higF = 0;
             if (([GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"thumb")].length > 0) && ![KISDictionaryHaveKey(magDic, @"thumb") isEqualToString:@"null"]) {
                 contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"msg")] withThumb:YES];
-                withF = contentSize.width + 40;
+//                withF = contentSize.width + 40;
                 higF = MAX(contentSize.height, 40);
             }
             else
             {
                 contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"msg")] withThumb:NO];
-                withF = contentSize.width;
+//                withF = contentSize.width;
                 higF = contentSize.height;
             }
-            NSNumber * width = [NSNumber numberWithFloat:MAX(titleSize.width, withF)];
+//            NSNumber * width = [NSNumber numberWithFloat:MAX(titleSize.width, withF)];
             NSNumber * height = [NSNumber numberWithFloat:((titleSize.height > 0 ? (titleSize.height + 5) : titleSize.height) + higF)];
             
-            NSArray * hh = [NSArray arrayWithObjects:width,height, nil];
+            NSArray * hh = [NSArray arrayWithObjects:[NSNumber numberWithFloat:195],height, nil];
             [heightArray addObject:hh];
             
             [formattedEntries addObject:KISDictionaryHaveKey(plainEntry, @"payload")];
@@ -977,7 +977,9 @@
         [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchEnd:) forControlEvents:UIControlEventTouchUpInside];
         [cell.bgImageView setTag:(indexPath.row+1)];
         
-        [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height)];
+        [cell.arrowImage setFrame:CGRectMake(padding-10+45 + size.width+27 + 10, size.height/2+27, 8, 12)];
+        
+        [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
         if (cell.thumbImgV.hidden) {
             [cell.contentLabel setFrame:CGRectMake(padding + 50, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
         }

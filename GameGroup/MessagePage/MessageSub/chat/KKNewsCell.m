@@ -50,9 +50,13 @@
         self.contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 270, 200)];
         self.contentLabel.textAlignment = NSTextAlignmentLeft;
         self.contentLabel.numberOfLines = 0;
-        self.contentLabel.textColor = kColorWithRGB(102, 102, 102, 1.0);
+        self.contentLabel.textColor = [UIColor grayColor];
         self.contentLabel.font = [UIFont boldSystemFontOfSize:13.0];
         [self.contentView addSubview:self.contentLabel];
+        
+        self.arrowImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 8, 12)];
+        self.arrowImage.image = KUIImage(@"right_arrow");
+        [self.contentView addSubview:self.arrowImage];
     }
     return self;
 }
@@ -60,8 +64,6 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 @end
