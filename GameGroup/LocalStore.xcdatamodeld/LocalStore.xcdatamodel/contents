@@ -22,6 +22,7 @@
         <attribute name="msgContent" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="msgFilesID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="msgType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="payload" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="receiver" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sender" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="senderNickname" optional="YES" attributeType="String" syncable="YES"/>

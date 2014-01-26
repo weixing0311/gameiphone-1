@@ -272,13 +272,13 @@
         NSString *message = [plainEntry objectForKey:@"msg"];
         NSString *msgType = KISDictionaryHaveKey(plainEntry, @"msgType");
         if ([msgType isEqualToString:@"payloadchat"]) {
-            NSDictionary* magDic = [message JSONValue];
+            NSDictionary* magDic = [KISDictionaryHaveKey(plainEntry, @"payload") JSONValue];
             
             CGSize titleSize = [self getPayloadMsgTitleSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"title")]];
             CGSize contentSize = CGSizeZero;
             float withF = 0;
             float higF = 0;
-            if (([GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"thumb")].length > 0)) {
+            if (([GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"thumb")].length > 0) && ![KISDictionaryHaveKey(magDic, @"thumb") isEqualToString:@"null"]) {
                 contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"msg")] withThumb:YES];
                 withF = contentSize.width + 40;
                 higF = MAX(contentSize.height, 40);
@@ -295,7 +295,7 @@
             NSArray * hh = [NSArray arrayWithObjects:width,height, nil];
             [heightArray addObject:hh];
             
-            [formattedEntries addObject:message];
+            [formattedEntries addObject:KISDictionaryHaveKey(plainEntry, @"payload")];
         }
         else
         {
@@ -324,7 +324,7 @@
 
 - (CGSize)getPayloadMsgTitleSize:(NSString*)theTitle
 {
-     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:15.0] constrainedToSize:CGSizeMake(200, 50)] : CGSizeZero;
+     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(200, 50)] : CGSizeZero;
 }
 - (CGSize)getPayloadMsgContentSize:(NSString*)theContent withThumb:(BOOL)haveThumb
 {
@@ -945,7 +945,7 @@
         CGSize contentSize = CGSizeZero;
 
         cell.titleLabel.text = KISDictionaryHaveKey(msgDic, @"title");
-        if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")].length > 0) {
+        if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")].length > 0 && ![KISDictionaryHaveKey(msgDic, @"thumb") isEqualToString:@"null"]) {
             NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")];
             NSURL * imgUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
             cell.thumbImgV.hidden = NO;
@@ -975,7 +975,7 @@
         [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchEnd:) forControlEvents:UIControlEventTouchUpInside];
         [cell.bgImageView setTag:(indexPath.row+1)];
         
-        [cell.titleLabel setFrame:CGRectMake(padding + 50, 35, titleSize.width, titleSize.height)];
+        [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height)];
         if (cell.thumbImgV.hidden) {
             [cell.contentLabel setFrame:CGRectMake(padding + 50, 35 + titleSize.height, contentSize.width, contentSize.height)];
         }
@@ -1118,7 +1118,7 @@
         NSMutableDictionary *dict = [messages objectAtIndex:(tempBtn.tag-1)];
         NSString*msgType = KISDictionaryHaveKey(dict, @"msgType");
         if ([msgType isEqualToString:@"payloadchat"]) {
-            NSDictionary* msgDic = [KISDictionaryHaveKey(dict, @"msg") JSONValue];
+            NSDictionary* msgDic = [KISDictionaryHaveKey(dict, @"payload") JSONValue];
             OnceDynamicViewController* detailVC = [[OnceDynamicViewController alloc] init];
             detailVC.messageid = KISDictionaryHaveKey(msgDic, @"messageid");
             detailVC.delegate = nil;

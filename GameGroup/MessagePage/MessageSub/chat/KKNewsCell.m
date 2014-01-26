@@ -37,7 +37,7 @@
         self.titleLabel.textAlignment = NSTextAlignmentLeft;
         self.titleLabel.numberOfLines = 2;
         self.titleLabel.textColor = [UIColor blackColor];
-        self.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
+        self.titleLabel.font = [UIFont boldSystemFontOfSize:14.0];
         [self.contentView addSubview:self.titleLabel];
         
         self.thumbImgV = [[EGOImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];

@@ -2,8 +2,8 @@
 //  DSCommonMsgs.h
 //  GameGroup
 //
-//  Created by Shen Yanping on 13-12-12.
-//  Copyright (c) 2013年 Swallow. All rights reserved.
+//  Created by Shen Yanping on 14-1-26.
+//  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -19,5 +19,6 @@
 @property (nonatomic, retain) NSString * sender;
 @property (nonatomic, retain) NSString * senderNickname;
 @property (nonatomic, retain) NSDate * senTime;
+@property (nonatomic, retain) NSString * payload;
 
 @end

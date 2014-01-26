@@ -344,8 +344,8 @@
             if ([msgtype isEqualToString:@"normalchat"]||!msgtype) {//聊天的 或动态
                 NSString* payload = [GameCommon getHeardImgId:[[message elementForName:@"payload"] stringValue]];//是否含payload标签
                 if (payload.length > 0) {
-                    msg= [[message elementForName:@"payload"] stringValue];
-                    [dict setObject:msg forKey:@"msg"];
+                    NSString* payload = [[message elementForName:@"payload"] stringValue];
+                    [dict setObject:payload forKey:@"payload"];
 
                     [dict setObject:@"payloadchat" forKey:@"msgType"];
                 }

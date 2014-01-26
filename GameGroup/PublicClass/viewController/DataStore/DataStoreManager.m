@@ -44,6 +44,7 @@
             commonMsg.msgContent = msgContent?msgContent:@"";
             commonMsg.senTime = sendTime;
             commonMsg.msgType = msgType;
+            commonMsg.payload = KISDictionaryHaveKey(msg, @"payload");
 
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
             
@@ -69,7 +70,8 @@
             commonMsg.msgContent = msgContent?msgContent:@"";
             commonMsg.senTime = sendTime;
             commonMsg.msgType = msgType;
-            
+            commonMsg.payload = KISDictionaryHaveKey(msg, @"payload");
+
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
             
             NSDictionary* msgDic = [msgContent JSONValue];
@@ -78,7 +80,7 @@
                 thumbMsgs = [DSThumbMsgs MR_createInContext:localContext];
             thumbMsgs.sender = sender;
             thumbMsgs.senderNickname = senderNickname?senderNickname:@"";
-            thumbMsgs.msgContent = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"title")] isEqualToString:@""]?KISDictionaryHaveKey(msgDic, @"msg"):KISDictionaryHaveKey(msgDic, @"title");
+            thumbMsgs.msgContent = msgContent;
             thumbMsgs.sendTime = sendTime;
             thumbMsgs.senderType = sendertype;
             int unread = [thumbMsgs.unRead intValue];
@@ -170,6 +172,7 @@
         commonMsg.senTime = sendTime;
         commonMsg.receiver = receicer;
         commonMsg.msgType = msgType;
+        commonMsg.payload = KISDictionaryHaveKey(message, @"payload");
 
         NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",receicer];
         
@@ -313,6 +316,7 @@
         NSTimeInterval uu = [tt timeIntervalSince1970];
         [thumbMsgsDict setObject:[NSString stringWithFormat:@"%f",uu] forKey:@"time"];
         [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgType]?[[commonMsgsArray objectAtIndex:i] msgType] : @"" forKey:@"msgType"];
+        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] payload]?[[commonMsgsArray objectAtIndex:i] payload] : @"" forKey:@"payload"];
 
         [allMsgArray addObject:thumbMsgsDict];
         
@@ -351,14 +355,14 @@
             }
             else
             {
-                if ([msgType isEqualToString:@"payloadchat"]) {
-                    NSDictionary* dic = [msgContent JSONValue];
-                    thumbMsgs.msgContent = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"title")].length > 0 ? KISDictionaryHaveKey(dic, @"title") : KISDictionaryHaveKey(dic, @"msg");
-                }
-                else
-                {
+//                if ([msgType isEqualToString:@"payloadchat"]) {
+//                    NSDictionary* dic = [msgContent JSONValue];
+//                    thumbMsgs.msgContent = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"title")].length > 0 ? KISDictionaryHaveKey(dic, @"title") : KISDictionaryHaveKey(dic, @"msg");
+//                }
+//                else
+//                {
                     thumbMsgs.msgContent = msgContent;
-                }
+//                }
                 thumbMsgs.sendTime = sendTime;
             }
         }
