@@ -1712,8 +1712,7 @@
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSArray * dFriend = [DSFriends MR_findAllInContext:localContext];
         for (DSFriends* friend in dFriend) {
-            NSLog(@"%@", friend.userName);
-            if (![friend.userName isEqualToString:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]) {//本人不清
+            if (friend.userName && ![friend.userName isEqualToString:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]]) {//本人不清
                 [friend deleteInContext:localContext];
             }
         }

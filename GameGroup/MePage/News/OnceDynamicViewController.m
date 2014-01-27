@@ -636,13 +636,14 @@
 {
     if (alertView.tag == 23) {
         if (buttonIndex != alertView.cancelButtonIndex) {
+            
             hud.labelText = @"举报中...";
             [hud show:YES];
             NSString* str = [NSString stringWithFormat:@"本人举报动态messageid为%@的文章含不良内容，请尽快处理！", self.messageid];
-            NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:str ,@"msg",@"Platform=iphone", @"detail",nil];
+            NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:str ,@"msg",@"Platform=iphone", @"detail",self.messageid,@"id",@"dynamic",@"type",nil];
             NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
             [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-            [postDict setObject:@"139" forKey:@"method"];
+            [postDict setObject:@"155" forKey:@"method"];
             [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
             [postDict setObject:dic forKey:@"params"];
             

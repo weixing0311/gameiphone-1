@@ -223,6 +223,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
     [NetManager requestWithURLStrNoController:BaseClientUrl Parameters:postDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
         NSMutableDictionary * recDict = KISDictionaryHaveKey(responseObject, @"user");
         if ([KISDictionaryHaveKey(responseObject, @"title") isKindOfClass:[NSArray class]] && [KISDictionaryHaveKey(responseObject, @"title") count] != 0) {//头衔
             [recDict setObject:[KISDictionaryHaveKey(responseObject, @"title") objectAtIndex:0] forKey:@"title"];
@@ -239,6 +240,8 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             {
                 [[GameCommon shareGameCommon] fansCountChanged:YES];
                 [DataStoreManager saveUserFansInfo:recDict];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
             }
             
             NSDictionary * uDict = [NSDictionary dictionaryWithObjectsAndKeys:[recDict objectForKey:@"username"],@"fromUser",[recDict objectForKey:@"nickname"],@"fromNickname",msg,@"addtionMsg",[recDict objectForKey:@"img"],@"headID", nil];

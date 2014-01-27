@@ -491,9 +491,10 @@
     
     m_currentStartY += 45;
     
-    [self setOneLineWithY:m_currentStartY];
+//    [self setOneLineWithY:m_currentStartY];
 
-    UIButton* reportButton = [CommonControlOrView setButtonWithFrame:CGRectMake(0, m_currentStartY + 2, 320, 40) title:@"举报该用户" fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:kColorWithRGB(51, 51, 51, 1.0) bgImage:nil HighImage:nil selectImage:nil];
+    UIButton* reportButton = [CommonControlOrView setButtonWithFrame:CGRectMake(0, m_currentStartY, 320, 45) title:@"举报该用户" fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:kColorWithRGB(51, 51, 51, 1.0) bgImage:nil HighImage:nil selectImage:nil];
+    reportButton.backgroundColor = kColorWithRGB(225, 225, 225, 1.0);
     [reportButton addTarget:self action:@selector(reportButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [m_myScrollView addSubview:reportButton];
     
@@ -511,7 +512,7 @@
 #pragma mark -举报
 - (void)reportButtonClick:(id)sender
 {
-    UIAlertView* alter = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您确定举报该篇文章吗？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView* alter = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您确定举报该用户吗？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     alter.tag = 23;
     [alter show];
 }
@@ -811,10 +812,10 @@
         if (buttonIndex != alertView.cancelButtonIndex) {
             [hud show:YES];
             NSString* str = [NSString stringWithFormat:@"本人举报用户id为%@的用户信息含不良内容，请尽快处理！", self.hostInfo.userId];
-            NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:str ,@"msg",@"Platform=iphone", @"detail",nil];
+            NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:str ,@"msg",@"Platform=iphone", @"detail",self.hostInfo.userId,@"id",@"user",@"type",nil];
             NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
             [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-            [postDict setObject:@"139" forKey:@"method"];
+            [postDict setObject:@"155" forKey:@"method"];
             [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
             [postDict setObject:dic forKey:@"params"];
             
