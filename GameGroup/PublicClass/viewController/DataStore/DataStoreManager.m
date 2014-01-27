@@ -103,8 +103,9 @@
             thumbMsgs.sendTime = sendTime;
             thumbMsgs.senderType = sendertype;
             thumbMsgs.msgType = msgType;
-            int unread = [thumbMsgs.unRead intValue];
-            thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
+//            int unread = [thumbMsgs.unRead intValue];
+//            thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
+            thumbMsgs.unRead = @"1";
             thumbMsgs.messageuuid = @"";
         }];
     }

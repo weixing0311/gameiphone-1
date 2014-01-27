@@ -32,7 +32,7 @@
     #import "CellButtonClickDelegate.h"
 #endif
 
-#define appType @"91"//91、appStore
+#define appType @"appStore"//91、appStore
 
 //常量
 #define BaseClientUrl @"http://58.83.193.120/gamepro/request"//开机联网地址
@@ -41,10 +41,7 @@
 #define BaseImageUrl  @"http://58.83.193.120/gamepro/fileserver/get/"
 #define BaseDeleteImageUrl  @"http://58.83.193.120/gamepro/fileserver/delete/"
 
-//#define BaseUploadImageUrl  @"http://123.178.27.74/pet-file-server/put"//宠物
-//#define BaseImageUrl  @"http://123.178.27.74/pet-file-server/get/"//宠物
-
-#define NormalRequestTimeout  60.0f//联网最长时间
+#define NormalRequestTimeout  30.0f//联网最长时间
 
 #define LOCALTOKEN            @"lovePetLocalToken"
 #define LOCALACCOUNT          @"lovePetLocalAccountCreatedByChongWuQuan"
@@ -67,7 +64,6 @@
 #define OTHERMESSAGE  @"otherMessage"//头衔 角色 战斗力
 #define RECOMMENDFRIEND @"recommendfriend"
 
-//#define ExceptCommonMsgCount 1   //首页除了显示普通用户消息还要显示的其他消息栏，目前只有打招呼一个
 #define ZhaoHuLan  @"新朋友"
 
 #define PhoneNumKey @"phoneKey"//用于判断是否自动登陆

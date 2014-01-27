@@ -31,13 +31,13 @@
         refreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 20)];
         refreshLabel.backgroundColor = [UIColor clearColor];
         refreshLabel.font = [UIFont boldSystemFontOfSize:12.0];
-        refreshLabel.textColor = [UIColor blackColor];
+        refreshLabel.textColor = kColorWithRGB(151, 151, 151, 1.0);
         refreshLabel.textAlignment = NSTextAlignmentCenter;
         
         refreshDate = [[UILabel alloc] initWithFrame:CGRectMake(0, 25, 320, 20)];
         refreshDate.backgroundColor = [UIColor clearColor];
         refreshDate.font = [UIFont boldSystemFontOfSize:12.0];
-        refreshDate.textColor = [UIColor blackColor];
+        refreshDate.textColor = kColorWithRGB(151, 151, 151, 1.0);
         refreshDate.textAlignment = NSTextAlignmentCenter;
         
         refreshArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pullup_arrow.png"]];
