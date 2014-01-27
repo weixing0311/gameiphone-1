@@ -490,6 +490,14 @@
     [m_myScrollView addSubview:timeLabel];
     
     m_currentStartY += 45;
+    
+    [self setOneLineWithY:m_currentStartY];
+
+    UIButton* reportButton = [CommonControlOrView setButtonWithFrame:CGRectMake(0, m_currentStartY + 2, 320, 40) title:@"举报该用户" fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:kColorWithRGB(51, 51, 51, 1.0) bgImage:nil HighImage:nil selectImage:nil];
+    [reportButton addTarget:self action:@selector(reportButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [m_myScrollView addSubview:reportButton];
+    
+    m_currentStartY += 45;
 }
 
 - (void)setOneLineWithY:(float)frameY
@@ -498,6 +506,14 @@
     lineImg.image = KUIImage(@"line");
     lineImg.backgroundColor = [UIColor clearColor];
     [m_myScrollView addSubview:lineImg];
+}
+
+#pragma mark -举报
+- (void)reportButtonClick:(id)sender
+{
+    UIAlertView* alter = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您确定举报该篇文章吗？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alter.tag = 23;
+    [alter show];
 }
 
 #pragma mark -按钮布局
@@ -779,6 +795,32 @@
 
                 [self.navigationController popViewControllerAnimated:YES];
                 
+            } failure:^(AFHTTPRequestOperation *operation, id error) {
+                if ([error isKindOfClass:[NSDictionary class]]) {
+                    if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+                    {
+                        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                        [alert show];
+                    }
+                }
+                [hud hide:YES];
+            }];
+        }
+    }
+    else if (alertView.tag == 23) {
+        if (buttonIndex != alertView.cancelButtonIndex) {
+            [hud show:YES];
+            NSString* str = [NSString stringWithFormat:@"本人举报用户id为%@的用户信息含不良内容，请尽快处理！", self.hostInfo.userId];
+            NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:str ,@"msg",@"Platform=iphone", @"detail",nil];
+            NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+            [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+            [postDict setObject:@"139" forKey:@"method"];
+            [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+            [postDict setObject:dic forKey:@"params"];
+            
+            [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                [hud hide:YES];
+                [self showAlertViewWithTitle:@"提示" message:@"感谢您的举报，我们会尽快处理！" buttonTitle:@"确定"];
             } failure:^(AFHTTPRequestOperation *operation, id error) {
                 if ([error isKindOfClass:[NSDictionary class]]) {
                     if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])

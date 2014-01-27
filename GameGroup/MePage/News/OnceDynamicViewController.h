@@ -11,7 +11,7 @@
 #import "TableViewDatasourceDidChange.h"
 #import "selectContactPage.h"
 
-@interface OnceDynamicViewController : BaseViewController<HPGrowingTextViewDelegate, TableViewDatasourceDidChange, UIWebViewDelegate, UIGestureRecognizerDelegate, getContact, UIActionSheetDelegate>
+@interface OnceDynamicViewController : BaseViewController<HPGrowingTextViewDelegate, TableViewDatasourceDidChange, UIWebViewDelegate, UIGestureRecognizerDelegate, getContact, UIActionSheetDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong)NSString* messageid;
 @property (nonatomic, strong)NSString* urlLink;//如果不为空  内容用webView显示

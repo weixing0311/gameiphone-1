@@ -71,7 +71,7 @@
         case 0:
         {
             if (indexPath.row == 0) {
-                cell.leftImageView.image = KUIImage(@"me_set_delete");
+                cell.leftImageView.image = KUIImage(@"me_set_info");
                 cell.titleLable.text = @"关于小伙伴";
             }
             else

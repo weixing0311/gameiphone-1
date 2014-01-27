@@ -18,8 +18,9 @@
 {
     UIButton *m_shareButton;
     
-    UIView* inPutView;
-    UIButton* inputButton;
+//    UIView* inPutView;
+//    UIButton* inputButton;
+    UILabel* commentLabel;
     
     NSInteger  allPL;//总评论数
     
@@ -33,7 +34,7 @@
 }
 @property(nonatomic, strong)NSDictionary* dataDic;
 @property(nonatomic, strong)NSArray*      headImgArray;
-@property (strong,nonatomic) HPGrowingTextView *textView;
+//@property (strong,nonatomic) HPGrowingTextView *textView;
 @property (nonatomic, strong)NSDictionary* shareUserDic;
 @end
 
@@ -50,8 +51,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:Nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:Nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:Nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:Nil];
 
     [super viewWillDisappear:animated];
 }
@@ -60,9 +61,8 @@
 {
     [super viewWillAppear:animated];
     
-  
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewDidLoad
@@ -284,7 +284,7 @@
             loadStr = [loadStr stringByAppendingString:[self imageHtmlWithId:[self.headImgArray objectAtIndex:i]]];
         }
         
-        UIWebView* contentView = [[UIWebView alloc] initWithFrame:CGRectMake(0, startX + 60, kScreenWidth, kScreenHeigth - 50 - startX - 60-(KISHighVersion_7?0:20))];
+        UIWebView* contentView = [[UIWebView alloc] initWithFrame:CGRectMake(0, startX + 60, kScreenWidth, kScreenHeigth - 40 - startX - 60-(KISHighVersion_7?0:20))];
         contentView.scalesPageToFit = NO;
         contentView.dataDetectorTypes = UIDataDetectorTypePhoneNumber | UIDataDetectorTypeLink;
 //        contentView.dataDetectorTypes = UIDataDetectorTypeAll;
@@ -300,110 +300,61 @@
                 }
             }
         }
-//        contentView.scrollView.scrollEnabled = NO;
         [self.view addSubview:contentView];
-        
-        UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick:)];
-        tapGesture.delegate = self;
-        [contentView addGestureRecognizer:tapGesture];
-        
-        /*
-        CGSize titleSize = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.dataDic, @"title")] sizeWithFont:[UIFont boldSystemFontOfSize:15.0] constrainedToSize:CGSizeMake(310, INT_MAX)];
 
-        UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 310, titleSize.height)];
-        titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.numberOfLines = 0;
-        titleLabel.text = KISDictionaryHaveKey(self.dataDic, @"title");
-        titleLabel.textColor = [UIColor blackColor];
-        titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
-        [scroll addSubview:titleLabel];
-        
-        UILabel* timeLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(210, 10+titleSize.height, 100, 15) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:12.0] text:[NSString stringWithFormat:@"(%@ 发表)", [self getDataWithTime]] textAlignment:NSTextAlignmentRight];
-        [scroll addSubview:timeLabel];
-
-        CGSize contentSize = [KISDictionaryHaveKey(self.dataDic, @"msg") sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(310, INT_MAX)];
-        
-        UITextView* contentView = [[UITextView alloc] initWithFrame:CGRectMake(5, 30 + titleSize.height, 310, (contentSize.height + 25) < scroll.frame.size.height ? scroll.frame.size.height : (contentSize.height + 25))];
-        contentView.text = KISDictionaryHaveKey(self.dataDic, @"msg");
-        contentView.textColor = kColorWithRGB(102, 102, 102, 1.0);
-        contentView.font = [UIFont systemFontOfSize:15.0];
-        contentView.editable = NO;
-        contentView.scrollEnabled = NO;
-        contentView.backgroundColor = [UIColor clearColor];
-        contentView.showsVerticalScrollIndicator = NO;
-        [scroll addSubview:contentView];
-        
-        
-        for(int i = 0; i < [self.headImgArray count]; i++)
-        {
-            NSInteger line = i/3;
-            EGOImageButton* imageBtn = [[EGOImageButton alloc] initWithFrame:CGRectMake(10 + (290/3.0 + 5)*(i%3), 25 + contentSize.height +(290.0/3 + 5)*line, 290.0/3, 290.0/3)];
-            imageBtn.placeholderImage = KUIImage(@"placeholder");
-            imageBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseImageUrl,[self.headImgArray objectAtIndex:i]]];
-            imageBtn.tag = i;
-            [imageBtn addTarget:self action:@selector(imageClick:) forControlEvents:UIControlEventTouchUpInside];
-            [scroll addSubview:imageBtn];
-        }
-        
-        scroll.contentSize = CGSizeMake(kScreenWidth, titleSize.height + 25 + contentSize.height + ([self.headImgArray count]/3 + 1) * (290.0/3 + 5));*/
     }
     else
     {
-        UIWebView* mWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, startX + 60, kScreenWidth, kScreenHeigth - 50 - startX - 60-(KISHighVersion_7?0:20))];
+        UIWebView* mWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, startX + 60, kScreenWidth, kScreenHeigth - 40 - startX - 60-(KISHighVersion_7?0:20))];
 //        mWebView.scalesPageToFit = YES;
         mWebView.delegate = self;
         NSURL *requestUrl = [NSURL URLWithString:self.urlLink];
         NSURLRequest *request = [NSURLRequest requestWithURL:requestUrl];
         [mWebView loadRequest:request];
         
-        UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick:)];
-        tapGesture.delegate = self;
-        [mWebView addGestureRecognizer:tapGesture];
+//        UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick:)];
+//        tapGesture.delegate = self;
+//        [mWebView addGestureRecognizer:tapGesture];
         
         [self.view addSubview:mWebView];
     }
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-40, 320, 40)];
+    imageView.image = KUIImage(@"inputbg.png");
+    imageView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:imageView];
     
-    inPutView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-50, 320, 50)];
-    [self.view addSubview:inPutView];
+    UIButton* reportButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-40, 159, 40)];
+    [reportButton setImage:KUIImage(@"news_report") forState:UIControlStateNormal];
+    reportButton.imageEdgeInsets = UIEdgeInsetsMake(15.0/2, 34, 15.2/2, 100);
+    reportButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 34);
+    [reportButton setTitle:@"举报投诉" forState:UIControlStateNormal];
+    reportButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    [reportButton setTitleColor:kColorWithRGB(102, 102, 102, 1.0) forState:UIControlStateNormal];
+    [reportButton addTarget:self action:@selector(reportButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:reportButton];
+    
+    UILabel* line = [[UILabel alloc] initWithFrame:CGRectMake(160, self.view.frame.size.height-30, 1, 20)];
+    line.backgroundColor = kColorWithRGB(200, 200, 200, 1.0);
+    [self.view addSubview:line];
 
-    self.textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(10, 7, 240, 35)];
-    self.textView.isScrollable = NO;
-    self.textView.contentInset = UIEdgeInsetsMake(0, 5, 0, 5);
-	self.textView.minNumberOfLines = 1;
-	self.textView.maxNumberOfLines = 6;
-	self.textView.returnKeyType = UIReturnKeySend; //just as an example
-	self.textView.font = [UIFont systemFontOfSize:15.0f];
-	self.textView.delegate = self;
-    self.textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
-    self.textView.backgroundColor = [UIColor clearColor];
-    
-    UIImage *rawEntryBackground = [UIImage imageNamed:@"chat_input.png"];
-    UIImage *entryBackground = [rawEntryBackground stretchableImageWithLeftCapWidth:13 topCapHeight:22];
-    UIImageView *entryImageView = [[UIImageView alloc] initWithImage:entryBackground];
-    entryImageView.frame = CGRectMake(10, 7, 240, 35);
-    entryImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    
-    UIImage *rawBackground = [UIImage imageNamed:@"inputbg.png"];
-    UIImage *background = [rawBackground stretchableImageWithLeftCapWidth:13 topCapHeight:22];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:background];
-    imageView.frame = CGRectMake(0, 0, inPutView.frame.size.width, inPutView.frame.size.height);
-    imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    
-    self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    
-    // view hierachy
-    [inPutView addSubview:imageView];
-    [inPutView addSubview:entryImageView];
-    [inPutView addSubview:self.textView];
-    
-    inputButton = [[UIButton alloc] initWithFrame:CGRectMake(255, 8, 60, 35)];
-    [inputButton setBackgroundImage:KUIImage(@"blue_small_3_normal") forState:UIControlStateNormal];
-    [inputButton setBackgroundImage:KUIImage(@"blue_small_3_click") forState:UIControlStateHighlighted];
-    [inputButton setTitle:[NSString stringWithFormat:@"评论 %d", allPL] forState:UIControlStateNormal];
-    inputButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    [inputButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    UIButton* inputButton = [[UIButton alloc] initWithFrame:CGRectMake(161, self.view.frame.size.height-40, 159, 40)];
+    [inputButton setImage:KUIImage(@"news_comment") forState:UIControlStateNormal];
+    inputButton.imageEdgeInsets = UIEdgeInsetsMake(15.0/2, 34, 15.2/2, 100);
+//    inputButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 34);
+//    inputButton.titleLabel.textAlignment = NSTextAlignmentLeft;
+//    [inputButton setTitle:[NSString stringWithFormat:@"评论 %d", allPL] forState:UIControlStateNormal];
+//    inputButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+//    [inputButton setTitleColor:kColorWithRGB(102, 102, 102, 1.0) forState:UIControlStateNormal];
     [inputButton addTarget:self action:@selector(okButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [inPutView addSubview:inputButton];
+    [self.view addSubview:inputButton];
+    
+    commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(225, self.view.frame.size.height-40, 85, 40)];
+    commentLabel.textAlignment = NSTextAlignmentLeft;
+    commentLabel.textColor = kColorWithRGB(102, 102, 102, 1.0);
+    commentLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    commentLabel.text = [NSString stringWithFormat:@"评论 %d", allPL];
+    commentLabel.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:commentLabel];
 }
 
 -(void)getHead:(NSString *)headImgStr
@@ -429,18 +380,18 @@
 }
 
 #pragma mark 手势
-- (void)tapClick:(id)sender
-{
-    [self.textView resignFirstResponder];
-}
-
--(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    if ([touch.view isKindOfClass:[UIButton class]]) {
-        return NO;
-    }
-    return YES;
-}
+//- (void)tapClick:(id)sender
+//{
+//    [self.textView resignFirstResponder];
+//}
+//
+//-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+//{
+//    if ([touch.view isKindOfClass:[UIButton class]]) {
+//        return NO;
+//    }
+//    return YES;
+//}
 
 #pragma mark 详情
 - (NSString*)getDataWithTime
@@ -564,7 +515,7 @@
         [m_shareView addSubview:titleLabel];
         
         if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(self.dataDic, @"thumb")].length > 0 && ![[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.dataDic, @"thumb")] isEqualToString:@"null"]) {
-            EGOImageView* thumb = [[EGOImageView alloc] initWithFrame:CGRectMake(10, (titleSize.height > 0 ? titleSize.height : 10) + 10, 50, 50)];
+            EGOImageView* thumb = [[EGOImageView alloc] initWithFrame:CGRectMake(10, (titleSize.height > 0 ? titleSize.height : 10) + 15, 50, 50)];
             thumb.layer.cornerRadius = 5;
             thumb.layer.masksToBounds = YES;
             thumb.placeholderImage = KUIImage(@"have_picture");
@@ -673,83 +624,121 @@
     }];
 }
 
-#pragma mark 发表 或评论
+#pragma mark 举报 或评论
+- (void)reportButtonClick:(id)sender
+{
+    UIAlertView* alter = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您确定举报该篇文章吗？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alter.tag = 23;
+    [alter show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 23) {
+        if (buttonIndex != alertView.cancelButtonIndex) {
+            hud.labelText = @"举报中...";
+            [hud show:YES];
+            NSString* str = [NSString stringWithFormat:@"本人举报动态messageid为%@的文章含不良内容，请尽快处理！", self.messageid];
+            NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:str ,@"msg",@"Platform=iphone", @"detail",nil];
+            NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+            [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+            [postDict setObject:@"139" forKey:@"method"];
+            [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+            [postDict setObject:dic forKey:@"params"];
+            
+            [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                [hud hide:YES];
+                [self showAlertViewWithTitle:@"提示" message:@"感谢您的举报，我们会尽快处理！" buttonTitle:@"确定"];
+            } failure:^(AFHTTPRequestOperation *operation, id error) {
+                if ([error isKindOfClass:[NSDictionary class]]) {
+                    if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+                    {
+                        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                        [alert show];
+                    }
+                }
+                [hud hide:YES];
+            }];
+        }
+    }
+}
+
 - (void)okButtonClick:(id)sender
 {
-    if ([sender isKindOfClass:[UIButton class]]) {
-        UIButton* tempBtn = (UIButton*)sender;
-
-        if ([tempBtn.titleLabel.text isEqualToString:@"发表"]) {//发表
-            [self send];
-        }
-        else
-        {
+//    if ([sender isKindOfClass:[UIButton class]]) {
+//        UIButton* tempBtn = (UIButton*)sender;
+//
+//        if ([tempBtn.titleLabel.text isEqualToString:@"发表"]) {//发表
+//            [self send];
+//        }
+//        else
+//        {
             ReplyViewController * VC = [[ReplyViewController alloc] init];
             VC.messageid = self.messageid;
             VC.delegate = self;
             VC.isHaveArticle = NO;
             [self.navigationController pushViewController:VC animated:YES];
-        }
-    }
+//        }
+//    }
 }
 
 - (void)dynamicListJustReload//新评论
 {
     allPL ++;
-    [inputButton setTitle:[NSString stringWithFormat:@"评论 %d", allPL] forState:UIControlStateNormal];
-    
+//    [inputButton setTitle:[NSString stringWithFormat:@"评论 %d", allPL] forState:UIControlStateNormal];
+    commentLabel.text = [NSString stringWithFormat:@"评论 %d", allPL];
     [self.delegate dynamicListJustReload];
 }
 
-- (void)send
-{
-    if (KISEmptyOrEnter(self.textView.text)) {
-        [self showAlertViewWithTitle:@"提示" message:@"请输入评论内容" buttonTitle:@"确定"];
-        return;
-    }
-    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
-    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-    
-    [paramDict setObject:@"5" forKey:@"type"];
-    [paramDict setObject:self.textView.text forKey:@"msg"];
-    [paramDict setObject:self.messageid forKey:@"messageid"];
-    
-    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-    [postDict setObject:paramDict forKey:@"params"];
-    [postDict setObject:@"134" forKey:@"method"];
-    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-    
-    [hud show:YES];
-    
-    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [hud hide:YES];
-        [self.textView resignFirstResponder];
-        self.textView.text = @"";
-        
-        allPL ++;//评论数加1
-        [inputButton setTitle:[NSString stringWithFormat:@"评论 %d", allPL] forState:UIControlStateNormal];
-
-//        if ([responseObject isKindOfClass:[NSDictionary class]]) {
-//            [self addNewNewsToStore:responseObject];
-//            if (self.delegate&&[self.delegate respondsToSelector:@selector(dynamicListAddOneDynamic:)])
-//                [self.delegate dynamicListAddOneDynamic:responseObject];
+//- (void)send
+//{
+//    if (KISEmptyOrEnter(self.textView.text)) {
+//        [self showAlertViewWithTitle:@"提示" message:@"请输入评论内容" buttonTitle:@"确定"];
+//        return;
+//    }
+//    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+//    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+//    
+//    [paramDict setObject:@"5" forKey:@"type"];
+//    [paramDict setObject:self.textView.text forKey:@"msg"];
+//    [paramDict setObject:self.messageid forKey:@"messageid"];
+//    
+//    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+//    [postDict setObject:paramDict forKey:@"params"];
+//    [postDict setObject:@"134" forKey:@"method"];
+//    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+//    
+//    [hud show:YES];
+//    
+//    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        [hud hide:YES];
+//        [self.textView resignFirstResponder];
+//        self.textView.text = @"";
+//        
+//        allPL ++;//评论数加1
+//        [inputButton setTitle:[NSString stringWithFormat:@"评论 %d", allPL] forState:UIControlStateNormal];
+//
+////        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+////            [self addNewNewsToStore:responseObject];
+////            if (self.delegate&&[self.delegate respondsToSelector:@selector(dynamicListAddOneDynamic:)])
+////                [self.delegate dynamicListAddOneDynamic:responseObject];
+////        }
+//        ReplyViewController * VC = [[ReplyViewController alloc] init];
+//        VC.messageid = self.messageid;
+//        VC.isHaveArticle = NO;
+//        VC.delegate = self;
+//        [self.navigationController pushViewController:VC animated:YES];
+//    } failure:^(AFHTTPRequestOperation *operation, id error) {
+//        if ([error isKindOfClass:[NSDictionary class]]) {
+//            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+//            {
+//                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+//                [alert show];
+//            }
 //        }
-        ReplyViewController * VC = [[ReplyViewController alloc] init];
-        VC.messageid = self.messageid;
-        VC.isHaveArticle = NO;
-        VC.delegate = self;
-        [self.navigationController pushViewController:VC animated:YES];
-    } failure:^(AFHTTPRequestOperation *operation, id error) {
-        if ([error isKindOfClass:[NSDictionary class]]) {
-            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
-            {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                [alert show];
-            }
-        }
-        [hud hide:YES];
-    }];
-}
+//        [hud hide:YES];
+//    }];
+//}
 
 //- (void)addNewNewsToStore:(NSDictionary*)dic
 //{
@@ -763,86 +752,86 @@
 //    [DataStoreManager saveMyNewsWithData:dic];
 //}
 
-#pragma mark 输入
-#pragma mark HPExpandingTextView delegate
-//改变键盘高度
-- (void)growingTextView:(HPGrowingTextView *)growingTextView willChangeHeight:(float)height
-{
-    float diff = (growingTextView.frame.size.height - height);
-    
-	CGRect r = inPutView.frame;
-    r.size.height -= diff;
-    r.origin.y += diff;
-	inPutView.frame = r;
-}
-
--(BOOL)growingTextViewShouldReturn:(HPGrowingTextView *)growingTextView
-{
-    [self send];
-//    [self.textView resignFirstResponder];
-    return YES;
-}
-
-#pragma mark Responding to keyboard events
-- (void)keyboardWillShow:(NSNotification *)notification {
-    /*
-     Reduce the size of the text view so that it's not obscured by the keyboard.
-     Animate the resize so that it's in sync with the appearance of the keyboard.
-     */
-    
-    NSDictionary *userInfo = [notification userInfo];
-    
-    // Get the origin of the keyboard when it's displayed.
-    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-    
-    // Get the top of the keyboard as the y coordinate of its origin in self's view's coordinate system. The bottom of the text view's frame should align with the top of the keyboard's final position.
-    CGRect keyboardRect = [aValue CGRectValue];
-    
-    // Get the duration of the animation.
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-    // Animate the resize of the text view's frame in sync with the keyboard's appearance.
-    [self autoMovekeyBoard:keyboardRect.size.height];
-    
-    [inputButton setTitle:@"发表" forState:UIControlStateNormal];
-}
-
-
-- (void)keyboardWillHide:(NSNotification *)notification {
-    
-    NSDictionary* userInfo = [notification userInfo];
-    
-    /*
-     Restore the size of the text view (fill self's view).
-     Animate the resize so that it's in sync with the disappearance of the keyboard.
-     */
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-    [self autoMovekeyBoard:0];
-    
-    [inputButton setTitle:[NSString stringWithFormat:@"评论 %d", allPL] forState:UIControlStateNormal];
-}
-
--(void) autoMovekeyBoard: (float) h{
-    
-//    [UIView beginAnimations:nil context:nil];
-//    [UIView setAnimationDuration:0.2];
-	//inPutView.frame = CGRectMake(0.0f, (float)(self.view.frame.size.height-h-inPutView.frame.size.height), 320.0f, inPutView.frame.size.height);
-    
-    
-    CGRect containerFrame = inPutView.frame;
-    containerFrame.origin.y = self.view.bounds.size.height - (h + containerFrame.size.height);
-	// animations settings
-    
-	
-	// set views with new info
-	inPutView.frame = containerFrame;
-    
-}
+//#pragma mark 输入
+//#pragma mark HPExpandingTextView delegate
+////改变键盘高度
+//- (void)growingTextView:(HPGrowingTextView *)growingTextView willChangeHeight:(float)height
+//{
+//    float diff = (growingTextView.frame.size.height - height);
+//    
+//	CGRect r = inPutView.frame;
+//    r.size.height -= diff;
+//    r.origin.y += diff;
+//	inPutView.frame = r;
+//}
+//
+//-(BOOL)growingTextViewShouldReturn:(HPGrowingTextView *)growingTextView
+//{
+//    [self send];
+////    [self.textView resignFirstResponder];
+//    return YES;
+//}
+//
+//#pragma mark Responding to keyboard events
+//- (void)keyboardWillShow:(NSNotification *)notification {
+//    /*
+//     Reduce the size of the text view so that it's not obscured by the keyboard.
+//     Animate the resize so that it's in sync with the appearance of the keyboard.
+//     */
+//    
+//    NSDictionary *userInfo = [notification userInfo];
+//    
+//    // Get the origin of the keyboard when it's displayed.
+//    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+//    
+//    // Get the top of the keyboard as the y coordinate of its origin in self's view's coordinate system. The bottom of the text view's frame should align with the top of the keyboard's final position.
+//    CGRect keyboardRect = [aValue CGRectValue];
+//    
+//    // Get the duration of the animation.
+//    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+//    NSTimeInterval animationDuration;
+//    [animationDurationValue getValue:&animationDuration];
+//    
+//    // Animate the resize of the text view's frame in sync with the keyboard's appearance.
+//    [self autoMovekeyBoard:keyboardRect.size.height];
+//    
+//    [inputButton setTitle:@"发表" forState:UIControlStateNormal];
+//}
+//
+//
+//- (void)keyboardWillHide:(NSNotification *)notification {
+//    
+//    NSDictionary* userInfo = [notification userInfo];
+//    
+//    /*
+//     Restore the size of the text view (fill self's view).
+//     Animate the resize so that it's in sync with the disappearance of the keyboard.
+//     */
+//    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+//    NSTimeInterval animationDuration;
+//    [animationDurationValue getValue:&animationDuration];
+//    
+//    [self autoMovekeyBoard:0];
+//    
+//    [inputButton setTitle:[NSString stringWithFormat:@"评论 %d", allPL] forState:UIControlStateNormal];
+//}
+//
+//-(void) autoMovekeyBoard: (float) h{
+//    
+////    [UIView beginAnimations:nil context:nil];
+////    [UIView setAnimationDuration:0.2];
+//	//inPutView.frame = CGRectMake(0.0f, (float)(self.view.frame.size.height-h-inPutView.frame.size.height), 320.0f, inPutView.frame.size.height);
+//    
+//    
+//    CGRect containerFrame = inPutView.frame;
+//    containerFrame.origin.y = self.view.bounds.size.height - (h + containerFrame.size.height);
+//	// animations settings
+//    
+//	
+//	// set views with new info
+//	inPutView.frame = containerFrame;
+//    
+//}
 
 #pragma mark touch
 //-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
