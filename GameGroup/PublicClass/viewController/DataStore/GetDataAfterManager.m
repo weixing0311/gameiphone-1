@@ -76,14 +76,14 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     [self storeNewMessage:messageContent];
 
     if (![DataStoreManager ifHaveThisUser:sender]) {//是否为好友 不是就请求资料
-        [self requestPeopleInfoWithName:sender ForType:1 Msg:nil];
+        [self requestPeopleInfoWithName:sender ForType:1 Msg:nil userInfo:messageContent];
     }
     else
     {
         [DataStoreManager storeThumbMsgUser:sender nickName:[DataStoreManager queryRemarkNameForUser:sender] andImg:[DataStoreManager queryFirstHeadImageForUserId:sender]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNewMessageReceived object:nil userInfo:messageContent];
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNewMessageReceived object:nil userInfo:messageContent];
 }
 
 #pragma mark 收到验证好友请求
@@ -113,16 +113,16 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
         }
         else
         {
-            [self requestPeopleInfoWithName:fromUser ForType:0 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+            [self requestPeopleInfoWithName:fromUser ForType:0 Msg:KISDictionaryHaveKey(userInfo, @"msg") userInfo:userInfo];
         }
     }
     else if([shiptype isEqualToString:@"3"])//粉丝
     {
-        [self requestPeopleInfoWithName:fromUser ForType:0 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+        [self requestPeopleInfoWithName:fromUser ForType:0 Msg:KISDictionaryHaveKey(userInfo, @"msg") userInfo:userInfo];
     }
     else
     {
-        [self requestPeopleInfoWithName:fromUser ForType:0 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+        [self requestPeopleInfoWithName:fromUser ForType:0 Msg:KISDictionaryHaveKey(userInfo, @"msg") userInfo:userInfo];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:kFriendHelloReceived object:nil userInfo:userInfo];
 }
@@ -158,7 +158,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
         }
         else
         {
-            [self requestPeopleInfoWithName:fromUser ForType:2 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+            [self requestPeopleInfoWithName:fromUser ForType:2 Msg:KISDictionaryHaveKey(userInfo, @"msg") userInfo:userInfo];
         }
     }
     else if ([shiptype isEqualToString:@"unkown"])
@@ -177,12 +177,12 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
         }
         else
         {
-            [self requestPeopleInfoWithName:fromUser ForType:2 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+            [self requestPeopleInfoWithName:fromUser ForType:2 Msg:KISDictionaryHaveKey(userInfo, @"msg") userInfo:userInfo];
         }
     }
     else
     {
-        [self requestPeopleInfoWithName:fromUser ForType:2 Msg:KISDictionaryHaveKey(userInfo, @"msg")];
+        [self requestPeopleInfoWithName:fromUser ForType:2 Msg:KISDictionaryHaveKey(userInfo, @"msg") userInfo:userInfo];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:kDeleteAttention object:nil userInfo:userInfo];
 }
@@ -211,7 +211,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     [[NSNotificationCenter defaultCenter] postNotificationName:kRecommendFriendReceived object:nil userInfo:info];
 }
 
--(void)requestPeopleInfoWithName:(NSString *)userid ForType:(int)type Msg:(NSString *)msg
+-(void)requestPeopleInfoWithName:(NSString *)userid ForType:(int)type Msg:(NSString *)msg userInfo:(NSDictionary*)messageContent
 {
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
@@ -266,6 +266,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
                 nickName = KISDictionaryHaveKey(recDict, @"nickname");
             }
             [DataStoreManager storeThumbMsgUser:userid nickName:nickName andImg:[GameCommon getHeardImgId:[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"img")]]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewMessageReceived object:nil userInfo:messageContent];
         }
         else if (type == 2)//取消关注 删除
         {
