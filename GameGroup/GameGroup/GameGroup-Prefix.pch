@@ -88,6 +88,8 @@
 
 #define kOpenData @"openData"//开机请求的数据
 
+#define kLastVersion @"lastVersion"//上个版本的版本号 因1.0是用username登陆 后面版本是userid 必须清掉聊天消息和关注表
+
 //常用方法
 #define KUIImage(name) ([UIImage imageNamed:name])
 #define RootDocPath ([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0])

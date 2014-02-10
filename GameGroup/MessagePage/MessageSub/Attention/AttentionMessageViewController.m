@@ -133,7 +133,7 @@
     
     PersonDetailViewController* detailVC = [[PersonDetailViewController alloc] init];
     
-    detailVC.userName = KISDictionaryHaveKey(tempDict, @"userName");
+    detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
     detailVC.nickName = KISDictionaryHaveKey(tempDict, @"nickName");
     detailVC.isChatPage = NO;
     
@@ -155,7 +155,7 @@
         }
         else
         {
-            [DataStoreManager deleteReceivedHelloWithUserName:KISDictionaryHaveKey(tempDic, @"userName") withTime:KISDictionaryHaveKey(tempDic, @"receiveTime")];
+            [DataStoreManager deleteReceivedHelloWithUserId:KISDictionaryHaveKey(tempDic, @"userid") withTime:KISDictionaryHaveKey(tempDic, @"receiveTime")];
         }
         [m_tableData removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];

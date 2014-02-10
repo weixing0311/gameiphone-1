@@ -56,5 +56,5 @@
 - (void)fansCountChanged:(BOOL)addOne;
 
 + (void)loginOut;
-
++ (void)cleanLastData;
 @end

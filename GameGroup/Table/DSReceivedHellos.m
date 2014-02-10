@@ -2,8 +2,8 @@
 //  DSReceivedHellos.m
 //  GameGroup
 //
-//  Created by Shen Yanping on 13-12-12.
-//  Copyright (c) 2013年 Swallow. All rights reserved.
+//  Created by Shen Yanping on 14-2-10.
+//  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
 #import "DSReceivedHellos.h"
@@ -18,6 +18,6 @@
 @dynamic nickName;
 @dynamic receiveTime;
 @dynamic unreadCount;
-@dynamic userName;
+@dynamic userId;
 
 @end

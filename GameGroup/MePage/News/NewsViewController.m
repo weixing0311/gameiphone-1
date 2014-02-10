@@ -556,7 +556,7 @@
 //        else
 //        {
             PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
-            detailV.userName = KISDictionaryHaveKey(destDic, @"username");
+            detailV.userId = KISDictionaryHaveKey(destDic, @"userid");
             detailV.nickName = KISDictionaryHaveKey(destDic, @"nickname");
             detailV.isChatPage = NO;
             [self.navigationController pushViewController:detailV animated:YES];
@@ -571,7 +571,7 @@
 //        else
 //        {
             PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
-            detailV.userName = KISDictionaryHaveKey(tempDict, @"username");
+            detailV.userId = KISDictionaryHaveKey(tempDict, @"userid");
             detailV.nickName = KISDictionaryHaveKey(tempDict, @"nickname");
             detailV.isChatPage = NO;
             [self.navigationController pushViewController:detailV animated:YES];

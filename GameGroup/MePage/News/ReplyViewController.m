@@ -409,7 +409,7 @@
 //    else
 //    {
         PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
-        detailV.userName = KISDictionaryHaveKey(tempDict, @"username");
+        detailV.userId = KISDictionaryHaveKey(tempDict, @"userid");
         detailV.nickName = KISDictionaryHaveKey(tempDict, @"nickname");
         detailV.isChatPage = NO;
         [self.navigationController pushViewController:detailV animated:YES];

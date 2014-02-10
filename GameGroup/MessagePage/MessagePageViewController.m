@@ -96,7 +96,9 @@
     {
         [DataStoreManager setDefaultDataBase:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil] AndDefaultModel:@"LocalStore"];//根据用户名创建数据库
         NSLog(@"getMyUserID: %@", [DataStoreManager getMyUserID]);
-    
+        
+        [GameCommon cleanLastData];//因1.0是用username登陆xmpp 后面版本是userid 必须清掉聊天消息和关注表
+        
         [self.view bringSubviewToFront:hud];
         if ([[NSUserDefaults standardUserDefaults] objectForKey:isFirstOpen])
         {
@@ -786,19 +788,6 @@
     }];
 
 }
-
-//#pragma mark 收到聊天消息或其他消息
-//-(void)newMessageReceived:(NSDictionary *)messageContent
-//{
-//    NSRange range = [[messageContent objectForKey:@"sender"] rangeOfString:@"@"];
-//    NSString * sender = [[messageContent objectForKey:@"sender"] substringToIndex:range.location];
-//    if (![DataStoreManager ifHaveThisUser:sender]) {//是否为联系人 不是就请求资料
-//        [self requestPeopleInfoWithName:sender ForType:1 Msg:nil];
-//    }
-//    
-//    [self storeNewMessage:messageContent];
-//    [self displayMsgsForDefaultView];
-//}
 
 #pragma mark - 获得好友、关注、粉丝列表
 -(void)getFriendByHttp

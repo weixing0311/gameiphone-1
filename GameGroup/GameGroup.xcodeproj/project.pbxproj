@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6801B5C518A87A6C00629B55 /* DSReceivedHellos.m in Sources */ = {isa = PBXBuildFile; fileRef = 6801B5C418A87A6C00629B55 /* DSReceivedHellos.m */; };
 		681317A0188E437A001154AB /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 6813179F188E437A001154AB /* Reachability.m */; };
 		681317A4188E7492001154AB /* SetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 681317A3188E7492001154AB /* SetViewController.m */; };
 		681317A7188E74C9001154AB /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 681317A6188E74C9001154AB /* AboutViewController.m */; };
@@ -227,7 +228,6 @@
 		683FA17318599675007B7487 /* DSThumbSubscribedMsgs.m in Sources */ = {isa = PBXBuildFile; fileRef = 683FA17218599675007B7487 /* DSThumbSubscribedMsgs.m */; };
 		683FA17618599675007B7487 /* DSUnreadCount.m in Sources */ = {isa = PBXBuildFile; fileRef = 683FA17518599675007B7487 /* DSUnreadCount.m */; };
 		683FA18B18599676007B7487 /* DSNameIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 683FA18A18599676007B7487 /* DSNameIndex.m */; };
-		683FA19118599677007B7487 /* DSReceivedHellos.m in Sources */ = {isa = PBXBuildFile; fileRef = 683FA19018599677007B7487 /* DSReceivedHellos.m */; };
 		683FA19418599677007B7487 /* DSSubscribedMsgs.m in Sources */ = {isa = PBXBuildFile; fileRef = 683FA19318599677007B7487 /* DSSubscribedMsgs.m */; };
 		683FA19A18599677007B7487 /* DSThumbPublicMsgs.m in Sources */ = {isa = PBXBuildFile; fileRef = 683FA19918599677007B7487 /* DSThumbPublicMsgs.m */; };
 		683FA1A01859AE51007B7487 /* woman_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 683FA19F1859AE51007B7487 /* woman_bg.png */; };
@@ -674,6 +674,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6801B5C318A87A6C00629B55 /* DSReceivedHellos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSReceivedHellos.h; sourceTree = "<group>"; };
+		6801B5C418A87A6C00629B55 /* DSReceivedHellos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSReceivedHellos.m; sourceTree = "<group>"; };
 		6813179E188E437A001154AB /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		6813179F188E437A001154AB /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		681317A2188E7492001154AB /* SetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetViewController.h; sourceTree = "<group>"; };
@@ -1002,8 +1004,6 @@
 		683FA17518599675007B7487 /* DSUnreadCount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DSUnreadCount.m; path = ../DSUnreadCount.m; sourceTree = "<group>"; };
 		683FA18918599676007B7487 /* DSNameIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSNameIndex.h; path = ../DSNameIndex.h; sourceTree = "<group>"; };
 		683FA18A18599676007B7487 /* DSNameIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DSNameIndex.m; path = ../DSNameIndex.m; sourceTree = "<group>"; };
-		683FA18F18599676007B7487 /* DSReceivedHellos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSReceivedHellos.h; path = ../DSReceivedHellos.h; sourceTree = "<group>"; };
-		683FA19018599677007B7487 /* DSReceivedHellos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DSReceivedHellos.m; path = ../DSReceivedHellos.m; sourceTree = "<group>"; };
 		683FA19218599677007B7487 /* DSSubscribedMsgs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSSubscribedMsgs.h; path = ../DSSubscribedMsgs.h; sourceTree = "<group>"; };
 		683FA19318599677007B7487 /* DSSubscribedMsgs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DSSubscribedMsgs.m; path = ../DSSubscribedMsgs.m; sourceTree = "<group>"; };
 		683FA19818599677007B7487 /* DSThumbPublicMsgs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSThumbPublicMsgs.h; path = ../DSThumbPublicMsgs.h; sourceTree = "<group>"; };
@@ -2289,6 +2289,8 @@
 			isa = PBXGroup;
 			children = (
 				683FA16818599652007B7487 /* LocalStore.xcdatamodeld */,
+				6801B5C318A87A6C00629B55 /* DSReceivedHellos.h */,
+				6801B5C418A87A6C00629B55 /* DSReceivedHellos.m */,
 				687BC9E51894975800B1863F /* DSThumbMsgs.h */,
 				687BC9E61894975800B1863F /* DSThumbMsgs.m */,
 				687BC9E21894975800B1863F /* DSCommonMsgs.h */,
@@ -2315,8 +2317,6 @@
 				683FA19918599677007B7487 /* DSThumbPublicMsgs.m */,
 				683FA19218599677007B7487 /* DSSubscribedMsgs.h */,
 				683FA19318599677007B7487 /* DSSubscribedMsgs.m */,
-				683FA18F18599676007B7487 /* DSReceivedHellos.h */,
-				683FA19018599677007B7487 /* DSReceivedHellos.m */,
 				683FA18918599676007B7487 /* DSNameIndex.h */,
 				683FA18A18599676007B7487 /* DSNameIndex.m */,
 				683FA17418599675007B7487 /* DSUnreadCount.h */,
@@ -4309,7 +4309,6 @@
 				68CAA78D184DD104007138B1 /* XMPPRoomOccupantHybridMemoryStorageObject.m in Sources */,
 				6814419C185052220094C669 /* MessagePageViewController.m in Sources */,
 				68AB5F8B1856EAE800CE7824 /* ShowTextViewController.m in Sources */,
-				683FA19118599677007B7487 /* DSReceivedHellos.m in Sources */,
 				68CAA78E184DD104007138B1 /* XMPPRoomMemoryStorage.m in Sources */,
 				68CAA78F184DD104007138B1 /* XMPPRoomMessageMemoryStorageObject.m in Sources */,
 				68CAA790184DD104007138B1 /* XMPPRoomOccupantMemoryStorageObject.m in Sources */,
@@ -4417,6 +4416,7 @@
 				68CAA7BE184DD104007138B1 /* XMPPTime.m in Sources */,
 				6834179B1858150600934FEF /* HGPhotoWall.m in Sources */,
 				68CAA7BF184DD104007138B1 /* NSXMLElement+XEP_0203.m in Sources */,
+				6801B5C518A87A6C00629B55 /* DSReceivedHellos.m in Sources */,
 				6823A4C81891FD6300962961 /* KKNewsCell.m in Sources */,
 				683417C31858178500934FEF /* MyProfileViewController.m in Sources */,
 				6834178A1858041E00934FEF /* NetManager.m in Sources */,

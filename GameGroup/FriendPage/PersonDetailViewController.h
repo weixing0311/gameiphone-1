@@ -23,7 +23,7 @@ typedef enum
 
 @property(nonatomic, assign)MyViewType    viewType;
 @property(nonatomic, strong)HostInfo*     hostInfo;
-@property(nonatomic, strong)NSString*     userName;
+@property(nonatomic, strong)NSString*     userId;
 @property(nonatomic, strong)NSString*     nickName;
 @property(nonatomic, assign)BOOL          isChatPage;//从聊天页面进入 点发起聊天pop
 

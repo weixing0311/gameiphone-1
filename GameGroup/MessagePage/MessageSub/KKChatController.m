@@ -89,10 +89,10 @@
 //    {
 //        userDefaults = [NSMutableDictionary dictionary];
 //    }
-    self.ifFriend = YES;
-    if (![DataStoreManager ifHaveThisFriend:self.chatWithUser]) {
-        self.ifFriend = NO;
-    }
+//    self.ifFriend = YES;
+//    if (![DataStoreManager ifHaveThisFriend:self.chatWithUser]) {
+//        self.ifFriend = NO;
+//    }
     
     UIImageView * bgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
     bgV.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
@@ -664,7 +664,7 @@
 -(void)userInfoClick
 {
     PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
-    detailV.userName = self.chatWithUser;
+    detailV.userId = self.chatWithUser;
     detailV.nickName = self.nickName;
     detailV.isChatPage = YES;
     [self.navigationController pushViewController:detailV animated:YES];
@@ -673,11 +673,7 @@
 -(void)toContactProfile
 {
     PersonDetailViewController * detailV = [[PersonDetailViewController alloc] init];
-//    HostInfo * hostInfo = [[HostInfo alloc] initWithNewHostInfo:[NSDictionary dictionaryWithObjectsAndKeys:self.nickName?self.nickName:self.chatWithUser,@"nickname",self.chatWithUser,@"username", nil] PetsArray:nil];
-//    detailV.hostInfo = hostInfo;
-//    detailV.needRequest = YES;
-//    detailV.friendStatus = self.friendStatus;
-    detailV.userName = self.chatWithUser;
+    detailV.userId = self.chatWithUser;
     detailV.nickName = self.nickName;
     detailV.isChatPage = YES;
     [self.navigationController pushViewController:detailV animated:YES];
@@ -1107,8 +1103,8 @@
 ////    myP.hostInfo = [[HostInfo alloc] initWithHostInfo:[DataStoreManager queryMyInfo]];
 //    [self.navigationController pushViewController:myP animated:YES];
     PersonDetailViewController * detailV = [[PersonDetailViewController alloc] init];
-    detailV.userName = [DataStoreManager querySelfUserName];
-    detailV.nickName = [DataStoreManager queryRemarkNameForUser:[DataStoreManager querySelfUserName]];
+    detailV.userId = [DataStoreManager getMyUserID];
+    detailV.nickName = [DataStoreManager queryRemarkNameForUser:[DataStoreManager getMyUserID]];
     detailV.isChatPage = YES;
     [self.navigationController pushViewController:detailV animated:YES];
 }
@@ -1118,7 +1114,6 @@
     tempBtn = sender;
     NSLog(@"begin");
     [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(endIt:) userInfo:nil repeats:NO];
-    
 }
 -(void)offsetButtonTouchEnd:(UIButton *)sender
 {
@@ -1299,20 +1294,20 @@
 #pragma mark 转发
 -(void)sureToTransform:(NSDictionary *)userDict
 {
-    self.chatWithUser = [userDict objectForKey:@"username"];
-    self.nickName = [userDict objectForKey:@"displayName"];
-    self.chatUserImg = [userDict objectForKey:@"img"];
-    titleLabel.text=self.nickName;
-    
-    self.ifFriend = YES;
-    if (![DataStoreManager ifHaveThisFriend:self.chatWithUser]) {
-        self.ifFriend = NO;
-    }
-    messages = [DataStoreManager qureyAllCommonMessages:self.chatWithUser];
-    [self normalMsgToFinalMsg];
-    [DataStoreManager blankMsgUnreadCountForUser:self.chatWithUser];
-    [self sendMsg:tempStr];
-    [self.tView reloadData];
+//    self.chatWithUser = [userDict objectForKey:@"username"];
+//    self.nickName = [userDict objectForKey:@"displayName"];
+//    self.chatUserImg = [userDict objectForKey:@"img"];
+//    titleLabel.text=self.nickName;
+//    
+//    self.ifFriend = YES;
+//    if (![DataStoreManager ifHaveThisFriend:self.chatWithUser]) {
+//        self.ifFriend = NO;
+//    }
+//    messages = [DataStoreManager qureyAllCommonMessages:self.chatWithUser];
+//    [self normalMsgToFinalMsg];
+//    [DataStoreManager blankMsgUnreadCountForUser:self.chatWithUser];
+//    [self sendMsg:tempStr];
+//    [self.tView reloadData];
 }
 -(void)deleteMsg
 {
@@ -1430,10 +1425,11 @@
 
         //发送给谁
         [mes addAttributeWithName:@"to" stringValue:[self.chatWithUser stringByAppendingString:[[TempData sharedInstance] getDomain]]];
-        //   NSLog(@"chatWithUser:%@",chatWithUser);
+//        //由谁发送
+//        [mes addAttributeWithName:@"from" stringValue:[[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
         //由谁发送
-        [mes addAttributeWithName:@"from" stringValue:[[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
-        
+        [mes addAttributeWithName:@"from" stringValue:[[DataStoreManager getMyUserID] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
+
         [mes addAttributeWithName:@"msgtype" stringValue:@"normalchat"];
         [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
         [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];

@@ -2,8 +2,8 @@
 //  DSReceivedHellos.h
 //  GameGroup
 //
-//  Created by Shen Yanping on 13-12-12.
-//  Copyright (c) 2013年 Swallow. All rights reserved.
+//  Created by Shen Yanping on 14-2-10.
+//  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -19,6 +19,6 @@
 @property (nonatomic, retain) NSString * nickName;
 @property (nonatomic, retain) NSDate * receiveTime;
 @property (nonatomic, retain) NSString * unreadCount;
-@property (nonatomic, retain) NSString * userName;
+@property (nonatomic, retain) NSString * userId;
 
 @end

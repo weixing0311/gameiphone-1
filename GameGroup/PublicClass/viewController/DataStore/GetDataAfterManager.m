@@ -80,7 +80,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     }
     else
     {
-        [DataStoreManager storeThumbMsgUser:sender nickName:[DataStoreManager queryRemarkNameForUser:sender] andImg:[DataStoreManager queryFirstHeadImageForUser:sender]];
+        [DataStoreManager storeThumbMsgUser:sender nickName:[DataStoreManager queryRemarkNameForUser:sender] andImg:[DataStoreManager queryFirstHeadImageForUserId:sender]];
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNewMessageReceived object:nil userInfo:messageContent];
@@ -136,7 +136,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     NSString * shiptype = KISDictionaryHaveKey(userInfo, @"shiptype");
     NSString * msg = KISDictionaryHaveKey(userInfo, @"msg");
     
-    [DataStoreManager deleteThumbMsgWithSender:fromUser];
+//    [DataStoreManager deleteThumbMsgWithSender:fromUser];
     
     [self storeNewMessage:userInfo];
     NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithCapacity:1];
@@ -171,7 +171,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             [DataStoreManager addPersonToReceivedHellos:tempDic];
             
             [[GameCommon shareGameCommon] fansCountChanged:NO];
-            [DataStoreManager deleteFansWithUserName:fromUser];
+            [DataStoreManager deleteFansWithUserid:fromUser];
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
 //            [self displayMsgsForDefaultView];
         }
@@ -211,11 +211,11 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     [[NSNotificationCenter defaultCenter] postNotificationName:kRecommendFriendReceived object:nil userInfo:info];
 }
 
--(void)requestPeopleInfoWithName:(NSString *)userName ForType:(int)type Msg:(NSString *)msg
+-(void)requestPeopleInfoWithName:(NSString *)userid ForType:(int)type Msg:(NSString *)msg
 {
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-    [paramDict setObject:userName forKey:@"username"];
+    [paramDict setObject:userid forKey:@"userid"];
     
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
     [postDict setObject:paramDict forKey:@"params"];
@@ -228,6 +228,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
         if ([KISDictionaryHaveKey(responseObject, @"title") isKindOfClass:[NSArray class]] && [KISDictionaryHaveKey(responseObject, @"title") count] != 0) {//头衔
             [recDict setObject:[KISDictionaryHaveKey(responseObject, @"title") objectAtIndex:0] forKey:@"title"];
         }
+        NSString* userName = KISDictionaryHaveKey(recDict, @"username");
         if (type==0) {//打招呼的 存到粉丝列表里
             if ([DataStoreManager ifIsAttentionWithUserName:userName]) {
                 [DataStoreManager deleteAttentionWithUserName:userName];//从关注表删除
@@ -264,7 +265,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             if ([nickName isEqualToString:@""]) {
                 nickName = KISDictionaryHaveKey(recDict, @"nickname");
             }
-            [DataStoreManager storeThumbMsgUser:userName nickName:nickName andImg:[GameCommon getHeardImgId:[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"img")]]];
+            [DataStoreManager storeThumbMsgUser:userid nickName:nickName andImg:[GameCommon getHeardImgId:[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"img")]]];
         }
         else if (type == 2)//取消关注 删除
         {
@@ -278,7 +279,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             }
             if ([DataStoreManager ifIsFansWithUserName:userName]) {//从粉丝表移出
                 [[GameCommon shareGameCommon] fansCountChanged:NO];
-                [DataStoreManager deleteFansWithUserName:userName];
+                [DataStoreManager deleteFansWithUserid:userid];
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
             }
             NSDictionary * uDict = [NSDictionary dictionaryWithObjectsAndKeys:[recDict objectForKey:@"username"],@"fromUser",[recDict objectForKey:@"nickname"],@"fromNickname",msg,@"addtionMsg",[recDict objectForKey:@"img"],@"headID", nil];

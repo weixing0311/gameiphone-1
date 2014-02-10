@@ -527,13 +527,8 @@ static GameCommon *my_gameCommon = NULL;
 #pragma mark 注销
 + (void)loginOut
 {
-//    [GameCommon shareGameCommon].isFirst = YES;
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:isFirstOpen];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:FansCount];
-
-//    [GameCommon shareGameCommon].friendTableChanged = YES;
-//    [GameCommon shareGameCommon].attentionTableChanged = YES;
-//    [GameCommon shareGameCommon].fansTableChanged = YES;
     
     [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:haveMyNews];
     [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:haveFriendNews];
@@ -552,5 +547,20 @@ static GameCommon *my_gameCommon = NULL;
     [app.xmppHelper disconnect];
 }
 
+#pragma mark 是否由1.0版本升级
++ (void)cleanLastData
+{
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:kLastVersion] && [[[NSUserDefaults standardUserDefaults] objectForKey:kLastVersion] floatValue] > 1.0) {
+        NSLog(@"当前版本大于1.0");
+    }
+    else
+    {
+        [DataStoreManager deleteAllCommonMsg];
+        [DataStoreManager deleteAllHello];
+    }
+    NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+    [[NSUserDefaults standardUserDefaults] setValue:version forKey:kLastVersion];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 @end

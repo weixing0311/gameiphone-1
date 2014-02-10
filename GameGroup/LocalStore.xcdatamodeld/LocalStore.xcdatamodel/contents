@@ -136,7 +136,7 @@
         <attribute name="nickName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="receiveTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="unreadCount" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="DSRecommendList" representedClassName="DSRecommendList" syncable="YES">
         <attribute name="fromID" optional="YES" attributeType="String" syncable="YES"/>

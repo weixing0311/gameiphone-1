@@ -697,7 +697,7 @@
     }
     
     PersonDetailViewController* detailVC = [[PersonDetailViewController alloc] init];
-    detailVC.userName = KISDictionaryHaveKey(tempDic, @"username");
+    detailVC.userId = KISDictionaryHaveKey(tempDic, @"userid");
     detailVC.nickName = KISDictionaryHaveKey(tempDic, @"nickname");
     detailVC.isChatPage = NO;
     [self.navigationController pushViewController:detailVC animated:YES];

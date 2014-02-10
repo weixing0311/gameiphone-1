@@ -153,7 +153,7 @@
     NSDictionary* tempDict = [m_tableData objectAtIndex:myCell.myIndexPath.row];
 
     PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
-    detailV.userName = KISDictionaryHaveKey(tempDict, @"username");
+    detailV.userId = KISDictionaryHaveKey(tempDict, @"userid");
     detailV.nickName = KISDictionaryHaveKey(tempDict, @"nickname");
     detailV.isChatPage = NO;
     [self.navigationController pushViewController:detailV animated:YES];
@@ -217,7 +217,7 @@
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
                 
-                [DataStoreManager deleteFansWithUserName:KISDictionaryHaveKey(tempDic, @"username")];
+                [DataStoreManager deleteFansWithUserid:KISDictionaryHaveKey(tempDic, @"userid")];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
             }

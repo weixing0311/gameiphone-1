@@ -303,7 +303,7 @@
             return;
         }
         PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
-        VC.userName = KISDictionaryHaveKey(recDict, @"username");
+        VC.userId = KISDictionaryHaveKey(recDict, @"userid");
         VC.nickName = KISDictionaryHaveKey(recDict, @"nickname");
         HostInfo* hostInfo = [[HostInfo alloc] initWithHostInfo:responseObject];
         VC.hostInfo = hostInfo;

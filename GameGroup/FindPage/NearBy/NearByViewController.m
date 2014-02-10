@@ -298,7 +298,7 @@
     NSDictionary* recDict = [m_tabelData objectAtIndex:indexPath.row];
     
     PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
-    VC.userName = KISDictionaryHaveKey(recDict, @"username");
+    VC.userId = KISDictionaryHaveKey(recDict, @"userid");
     VC.nickName = KISDictionaryHaveKey(recDict, @"nickname");
     VC.isChatPage = NO;
     [self.navigationController pushViewController:VC animated:YES];

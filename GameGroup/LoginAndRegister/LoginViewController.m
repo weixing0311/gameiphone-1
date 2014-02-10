@@ -181,6 +181,8 @@
         
         [[TempData sharedInstance] SetServer:[[dic objectForKey:@"chatServer"] objectForKey:@"address"] TheDomain:[[dic objectForKey:@"chatServer"] objectForKey:@"name"]];//得到域名
         
+        [GameCommon cleanLastData];//因1.0是用username登陆xmpp 后面版本是userid 必须清掉聊天消息和关注表
+
         [self upLoadUserLocationWithLat:[[TempData sharedInstance] returnLat] Lon:[[TempData sharedInstance] returnLon]];
         [self loginSuccess];
 

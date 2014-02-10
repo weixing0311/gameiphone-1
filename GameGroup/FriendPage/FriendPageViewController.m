@@ -991,7 +991,7 @@
                 break;
         }
 //    }
-    detailVC.userName = KISDictionaryHaveKey(tempDict, @"username");
+    detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
     detailVC.nickName = KISDictionaryHaveKey(tempDict, @"displayName");
     detailVC.isChatPage = NO;
     [self.navigationController pushViewController:detailVC animated:YES];

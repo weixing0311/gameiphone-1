@@ -112,17 +112,17 @@
         [hud hide:YES];
         NSLog(@"%@", responseObject);
         if (self.isFriend) {
-            [DataStoreManager saveFriendRemarkName:m_remarkText.text userName:self.userName];
+            [DataStoreManager saveFriendRemarkName:m_remarkText.text userid:self.userId];
         }
         else
         {
-            [DataStoreManager saveAttentionRemarkName:m_remarkText.text userName:self.userName];
+            [DataStoreManager saveAttentionRemarkName:m_remarkText.text userid:self.userId];
         }
         if ([m_remarkText.text isEqualToString:@""]) {
-            [DataStoreManager storeThumbMsgUser:self.userName nickName:self.nickName];
+            [DataStoreManager storeThumbMsgUser:self.userId nickName:self.nickName];
         }
         else
-            [DataStoreManager storeThumbMsgUser:self.userName nickName:m_remarkText.text];
+            [DataStoreManager storeThumbMsgUser:self.userId nickName:m_remarkText.text];
 
         [self.navigationController popViewControllerAnimated:YES];
         

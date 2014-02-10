@@ -46,7 +46,7 @@
 {
     [super viewWillAppear:animated];
     
-    m_titleLabel.text = [DataStoreManager queryRemarkNameForUser:self.userName];//别名或昵称
+    m_titleLabel.text = [DataStoreManager queryRemarkNameForUser:self.userId];//别名或昵称
     if ([m_titleLabel.text isEqualToString:@""]) {//不是好友或关注
         m_titleLabel.text = self.nickName;
     }
@@ -98,7 +98,7 @@
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
-    [paramDict setObject:self.userName forKey:@"username"];
+    [paramDict setObject:self.userId forKey:@"userid"];
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
     [postDict setObject:paramDict forKey:@"params"];
     [postDict setObject:@"106" forKey:@"method"];
@@ -655,7 +655,7 @@
         
         [hud hide:YES];
         
-        [DataStoreManager deleteFansWithUserName:self.userName];
+        [DataStoreManager deleteFansWithUserid:self.userId];
 //        [GameCommon shareGameCommon].fansTableChanged = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
         
@@ -734,7 +734,7 @@
                 [hud hide:YES];
                 
 //                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];//删除聊天消息
-                [DataStoreManager deleteFriendWithUserName:self.userName];//从表删除
+                [DataStoreManager deleteFriendWithUserName:self.hostInfo.userName];//从表删除
 
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
 
@@ -790,7 +790,7 @@
 //                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];
 
                 ////////////////////////
-                [DataStoreManager deleteAttentionWithUserName:self.userName];
+                [DataStoreManager deleteAttentionWithUserName:self.hostInfo.userName];
 
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
 
@@ -846,7 +846,7 @@
     else//直接进入聊天页面
     {
         KKChatController * kkchat = [[KKChatController alloc] init];
-        kkchat.chatWithUser = self.hostInfo.userName;
+        kkchat.chatWithUser = self.hostInfo.userId;
 //        kkchat.nickName = [DataStoreManager queryRemarkNameForUser:self.userName];
 //        kkchat.chatUserImg = [DataStoreManager queryFirstHeadImageForUser:self.hostInfo.userName];
         kkchat.nickName = m_titleLabel.text;
