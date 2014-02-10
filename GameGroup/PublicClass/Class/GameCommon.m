@@ -105,7 +105,11 @@ static GameCommon *my_gameCommon = NULL;
     NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
     [commomDic setObject:version forKey:@"version"];
     
-    [commomDic setObject:@"1" forKey:@"channel"];
+    if ([appType isEqualToString:@"91"]) {
+        [commomDic setObject:@"2" forKey:@"channel"];
+    }
+    else
+        [commomDic setObject:@"1" forKey:@"channel"];
     [commomDic setObject:[self uuid] forKey:@"sn"];//流水号
     
     if ([[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]) {
