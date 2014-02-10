@@ -1,14 +1,7 @@
-//
-//  NSLog.h
-//  RuYiCai
-//
-//  Created by LiTengjie on 11-7-30.
-//  Copyright 2011 China. All rights reserved.
-//
 
 #import <Foundation/NSObjCRuntime.h>
 
-#define MYDEBUG 0
+#define MYDEBUG 1
 
 #if MYDEBUG
 #undef NSLog

@@ -733,9 +733,9 @@
             [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [hud hide:YES];
                 
-                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];//删除聊天消息
+//                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];//删除聊天消息
                 [DataStoreManager deleteFriendWithUserName:self.userName];//从表删除
-//                [GameCommon shareGameCommon].friendTableChanged = YES;
+
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
 
                 if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"3"])
@@ -787,11 +787,11 @@
             [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [hud hide:YES];
                 
-                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];
+//                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];
 
                 ////////////////////////
                 [DataStoreManager deleteAttentionWithUserName:self.userName];
-    //            [GameCommon shareGameCommon].attentionTableChanged = YES;
+
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
 
                 [self.navigationController popViewControllerAnimated:YES];
