@@ -259,10 +259,7 @@
         [self showAlertViewWithTitle:@"提示" message:@"请输入验证码！" buttonTitle:@"确定"];
         return;
     }
-    if ([m_verCodeTimer isValid]) {
-        [m_verCodeTimer invalidate];
-        m_verCodeTimer = nil;
-    }
+
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
     [params setObject:m_phoneNumText.text forKey:@"phoneNum"];
     [params setObject:m_verCodeText.text forKey:@"xcode"];
@@ -275,6 +272,12 @@
     hud.labelText = @"验证中...";
     [hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:body TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([m_verCodeTimer isValid]) {
+            [m_verCodeTimer invalidate];
+            m_verCodeTimer = nil;
+        }
+        
         m_verCodeView.hidden = YES;
         m_newPasswordView.hidden = NO;
     } failure:^(AFHTTPRequestOperation *operation, id error) {

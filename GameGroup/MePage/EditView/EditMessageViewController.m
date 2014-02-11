@@ -32,23 +32,23 @@
         case EDIT_TYPE_nickName:
         {
             [self setTopViewWithTitle:@"昵称" withBackButton:YES];
-            m_maxZiShu = 6;
+            m_maxZiShu = 6 - [[GameCommon shareGameCommon] unicodeLengthOfString:self.placeHold];
         } break;
         case EDIT_TYPE_birthday:
         {
             [self setTopViewWithTitle:@"生日" withBackButton:YES];
-            m_maxZiShu = 8;
+            m_maxZiShu = 8 - [[GameCommon shareGameCommon] unicodeLengthOfString:self.placeHold];
 
         } break;
         case EDIT_TYPE_signature:
         {
             [self setTopViewWithTitle:@"个性签名" withBackButton:YES];
-            m_maxZiShu = 20;
+            m_maxZiShu = 20 - [[GameCommon shareGameCommon] unicodeLengthOfString:self.placeHold];
         } break;
         case EDIT_TYPE_hobby:
         {
             [self setTopViewWithTitle:@"个人标签" withBackButton:YES];
-            m_maxZiShu = 5;
+            m_maxZiShu = 5 - [[GameCommon shareGameCommon] unicodeLengthOfString:self.placeHold];
         } break;
         default:
             break;

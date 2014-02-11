@@ -148,7 +148,27 @@
     
     [self getDataByNet];
 }
+- (void)backButtonClick:(id)sender
+{
+    if (!KISEmptyOrEnter(self.textView.text)) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您确定放弃已编写的评论内容吗？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+        alert.tag = 100;
+        [alert show];
+    }
+    else
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 100) {
+        if (alertView.cancelButtonIndex != buttonIndex) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+}
 - (void)getDataByNet
 {
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];

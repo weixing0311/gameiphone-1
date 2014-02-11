@@ -236,12 +236,12 @@
     }
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
     [params setObject:m_phoneNumText.text forKey:@"phoneNum"];
-    
+    [params setObject:@"register" forKey:@"type"];
+
     NSMutableDictionary* body = [[NSMutableDictionary alloc]init];
     [body addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
     [body setObject:params forKey:@"params"];
     [body setObject:@"112" forKey:@"method"];
-    [params setObject:@"register" forKey:@"type"];
 
     hud.labelText = @"获取中...";
     [hud show:YES];
@@ -346,7 +346,6 @@
         }
         [hud hide:YES];
     }];
-
 }
 
 - (void)startRefreshTime
