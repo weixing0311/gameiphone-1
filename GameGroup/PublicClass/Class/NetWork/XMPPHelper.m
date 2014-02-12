@@ -337,7 +337,7 @@
             [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
         }
         else
-            [dict setObject:msgTime  forKey:@"time"];
+            [dict setObject:msgTime?msgTime:@""  forKey:@"time"];
 
         NSLog(@"theDict%@",dict);
         if ([type isEqualToString:@"chat"]) {
