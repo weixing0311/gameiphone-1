@@ -2,7 +2,7 @@
 //  DSCommonMsgs.h
 //  GameGroup
 //
-//  Created by Shen Yanping on 14-1-26.
+//  Created by Shen Yanping on 14-2-13.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
@@ -15,10 +15,12 @@
 @property (nonatomic, retain) NSString * msgContent;
 @property (nonatomic, retain) NSString * msgFilesID;
 @property (nonatomic, retain) NSString * msgType;
+@property (nonatomic, retain) NSString * payload;
 @property (nonatomic, retain) NSString * receiver;
 @property (nonatomic, retain) NSString * sender;
 @property (nonatomic, retain) NSString * senderNickname;
 @property (nonatomic, retain) NSDate * senTime;
-@property (nonatomic, retain) NSString * payload;
+@property (nonatomic, retain) NSString * messageuuid;
+@property (nonatomic, retain) NSString * status;
 
 @end

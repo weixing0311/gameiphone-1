@@ -2,7 +2,7 @@
 //  DSThumbMsgs.m
 //  GameGroup
 //
-//  Created by Shen Yanping on 14-1-26.
+//  Created by Shen Yanping on 14-2-13.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
@@ -22,5 +22,6 @@
 @dynamic sendTime;
 @dynamic sendTimeStr;
 @dynamic unRead;
+@dynamic status;
 
 @end

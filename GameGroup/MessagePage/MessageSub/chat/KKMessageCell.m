@@ -51,7 +51,6 @@
         //  [bgImageView setAdjustsImageWhenHighlighted:NO];
         [self.contentView addSubview:bgImageView];
         
-        
         //聊天信息
         messageContentView = [[OHAttributedLabel alloc] initWithFrame:CGRectZero];
         messageContentView.backgroundColor = [UIColor clearColor];
@@ -75,12 +74,67 @@
         self.playAudioImageV.animationDuration=1.0;
         self.playAudioImageV.animationRepeatCount=0;
         [self.contentView addSubview:self.playAudioImageV];
+
+        self.activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        self.activityView.hidesWhenStopped = YES;
+        [self.contentView addSubview:self.activityView];
         
-        
+        self.failImage = [[UIImageView alloc]initWithFrame:CGRectZero];
+        self.failImage.image = KUIImage(@"fail_bg");
+        [self.contentView addSubview:self.failImage];
     }
     
     return self;
-    
+}
+
+- (void)refreshStatusPoint:(CGPoint)point status:(NSString*)status
+{
+    if ([status isEqualToString:@"0"]) {//失败
+        self.failImage.frame = CGRectMake(point.x-12, point.y-12, 24, 24);
+        self.failImage.hidden = NO;
+        
+        if ([self.cellTimer isValid]) {
+            [self.cellTimer invalidate];
+            self.cellTimer = nil;
+        }
+        [self.activityView stopAnimating];
+    }
+    else if([status isEqualToString:@"2"])//发送中
+    {
+        self.failImage.hidden = YES;
+
+        if (![self.cellTimer isValid]) {
+            self.cellTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(stopActivity) userInfo:nil repeats:YES];
+            [[NSRunLoop currentRunLoop] addTimer:self.cellTimer forMode:NSRunLoopCommonModes];
+            
+            self.activityView.center = point;
+            [self.activityView startAnimating];
+        }
+    }
+    else
+    {
+        self.failImage.hidden = YES;
+        if ([self.cellTimer isValid]) {
+            [self.cellTimer invalidate];
+            self.cellTimer = nil;
+        }
+        [self.activityView stopAnimating];
+    }
+}
+
+- (void)stopActivity
+{
+    if ([self.cellTimer isValid]) {
+        [self.cellTimer invalidate];
+        self.cellTimer = nil;
+    }
+    [self.activityView stopAnimating];
+
+//    if (self.kkDelegate && [self.kkDelegate respondsToSelector:@selector(stopActivityWithRow:)]) {
+//        [self.kkDelegate stopActivityWithRow:self.cellRow];
+//    }
+    NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:self.messageuuid,@"src_id",@"0", @"received",[NSString stringWithFormat:@"%d", self.cellRow],@"row",nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:dic];
 }
 
 -(BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo

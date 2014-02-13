@@ -45,7 +45,9 @@
             commonMsg.senTime = sendTime;
             commonMsg.msgType = msgType;
             commonMsg.payload = KISDictionaryHaveKey(msg, @"payload");
-
+            commonMsg.messageuuid = @"";
+            commonMsg.status = @"1";//已发送
+            
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
             
             DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];//消息页展示的内容
@@ -60,6 +62,7 @@
             thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
             thumbMsgs.msgType = msgType;
             thumbMsgs.messageuuid = @"";
+            thumbMsgs.status = @"1";//已发送
         }];
     }
     else if ([sendertype isEqualToString:PAYLOADMSG]) {//动态聊天消息
@@ -71,7 +74,9 @@
             commonMsg.senTime = sendTime;
             commonMsg.msgType = msgType;
             commonMsg.payload = KISDictionaryHaveKey(msg, @"payload");
-
+            commonMsg.messageuuid = @"";
+            commonMsg.status = @"1";//已发送
+            
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
             
             DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];//消息页展示的内容
@@ -86,6 +91,7 @@
             thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
             thumbMsgs.msgType = msgType;
             thumbMsgs.messageuuid = @"";
+            thumbMsgs.status = @"1";//已发送
         }];
     }
     else if([sendertype isEqualToString:SAYHELLOS])//关注 或取消关注
@@ -103,10 +109,9 @@
             thumbMsgs.sendTime = sendTime;
             thumbMsgs.senderType = sendertype;
             thumbMsgs.msgType = msgType;
-//            int unread = [thumbMsgs.unRead intValue];
-//            thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
             thumbMsgs.unRead = @"1";
             thumbMsgs.messageuuid = @"";
+            thumbMsgs.status = @"1";//已发送
         }];
     }
     else if([sendertype isEqualToString:OTHERMESSAGE])//头衔、角色、战斗力
@@ -129,6 +134,7 @@
             int unread = [thumbMsgs.unRead intValue];
             thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
             thumbMsgs.messageuuid = [[GameCommon shareGameCommon] uuid];
+            thumbMsgs.status = @"1";//已发送
         }];
     }
     else if([sendertype isEqualToString:RECOMMENDFRIEND])//推荐好友
@@ -146,10 +152,9 @@
             thumbMsgs.sendTime = sendTime;
             thumbMsgs.senderType = sendertype;
             thumbMsgs.msgType = msgType;
-//            int unread = [thumbMsgs.unRead intValue];
-//            thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
             thumbMsgs.unRead = @"1";
             thumbMsgs.messageuuid = [[GameCommon shareGameCommon] uuid];
+            thumbMsgs.status = @"1";//已发送
         }];
     }
 }
@@ -164,6 +169,8 @@
     NSString* msgType = KISDictionaryHaveKey(message, @"msgType");
     NSString* heardimg = KISDictionaryHaveKey(message, @"img");
 
+    NSString* messageuuid = KISDictionaryHaveKey(message, @"messageuuid");
+
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         DSCommonMsgs * commonMsg = [DSCommonMsgs MR_createInContext:localContext];
         commonMsg.sender = sender;
@@ -172,7 +179,9 @@
         commonMsg.senTime = sendTime;
         commonMsg.receiver = receicer;
         commonMsg.msgType = msgType;
-        commonMsg.payload = KISDictionaryHaveKey(message, @"payload");
+        commonMsg.payload = KISDictionaryHaveKey(message, @"payload");//动态 消息json
+        commonMsg.messageuuid = messageuuid;
+        commonMsg.status = @"2";//发送中
 
         NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",receicer];
         
@@ -185,12 +194,12 @@
         thumbMsgs.sendTime = sendTime;
         thumbMsgs.senderType = COMMONUSER;
         thumbMsgs.msgType = msgType;
-        
         thumbMsgs.senderimg = heardimg;
         
         int unread = [thumbMsgs.unRead intValue];
         thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
-        thumbMsgs.messageuuid = @"";
+        thumbMsgs.messageuuid = messageuuid;
+        thumbMsgs.status = @"2";//发送中
     }];
 }
 
@@ -331,6 +340,8 @@
         [thumbMsgsDict setObject:[NSString stringWithFormat:@"%f",uu] forKey:@"time"];
         [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgType]?[[commonMsgsArray objectAtIndex:i] msgType] : @"" forKey:@"msgType"];
         [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] payload]?[[commonMsgsArray objectAtIndex:i] payload] : @"" forKey:@"payload"];
+        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] messageuuid]?[[commonMsgsArray objectAtIndex:i] messageuuid] : @"" forKey:@"messageuuid"];
+        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] status]?[[commonMsgsArray objectAtIndex:i] status] : @"" forKey:@"status"];
 
         [allMsgArray addObject:thumbMsgsDict];
         
@@ -409,37 +420,30 @@
 
         [thumbMsgsDict setObject:[[thumbCommonMsgsArray objectAtIndex:i] messageuuid] forKey:@"messageuuid"];
         [thumbMsgsDict setObject:[[thumbCommonMsgsArray objectAtIndex:i] msgType] forKey:@"msgType"];
+        [thumbMsgsDict setObject:[[thumbCommonMsgsArray objectAtIndex:i] status]?[[thumbCommonMsgsArray objectAtIndex:i] status]:@"" forKey:@"status"];
 
         [allMsgArray addObject:thumbMsgsDict];
     }
     return allMsgArray;  
 }
 
-+(NSArray *)queryAllThumbPublicMsgs
++(void)refreshMessageStatusWithId:(NSString*)messageuuid status:(NSString*)status
 {
-    NSArray * thumbPublicMsgs = [DSThumbPublicMsgs MR_findAllSortedBy:@"sendTime" ascending:NO];
-    return thumbPublicMsgs;
-}
+    if (messageuuid && messageuuid.length > 0) {
+        [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+            NSPredicate * predicate = [NSPredicate predicateWithFormat:@"messageuuid==[c]%@", messageuuid];
+            DSCommonMsgs * commonMsgs = [DSCommonMsgs MR_findFirstWithPredicate:predicate];
+            if (commonMsgs) {
+                commonMsgs.status = status;
+            }
+            
+            DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+            if (thumbMsgs){
+                thumbMsgs.status = status;
+            }
+        }];
 
-+(NSDictionary *)queryLastPublicMsg
-{
-    NSArray * publicMsgs = [DSThumbPublicMsgs MR_findAllSortedBy:@"sendTime" ascending:YES];
-    NSMutableDictionary * lastMsgDict = [NSMutableDictionary dictionary];
-    [lastMsgDict setObject:@"公众账号" forKey:@"sender"];
-    if (publicMsgs.count>0) {
-        DSThumbPublicMsgs * lastRecHello = [publicMsgs lastObject];
-        NSDate * tt = [lastRecHello sendTime];
-        NSTimeInterval uu = [tt timeIntervalSince1970];
-        [lastMsgDict setObject:[NSString stringWithFormat:@"%f",uu] forKey:@"time"];
-        [lastMsgDict setObject:[NSString stringWithFormat:@"%@给您发了一条消息",[lastRecHello senderNickname]] forKey:@"msg"];
     }
-    else
-    {
-        NSTimeInterval uu = [[NSDate date] timeIntervalSince1970];
-        [lastMsgDict setObject:[NSString stringWithFormat:@"%f",uu] forKey:@"time"];
-        [lastMsgDict setObject:@"暂时还没有公众账号消息" forKey:@"msg"];
-    }
-    return lastMsgDict;
 }
 
 #pragma mark - 存储“好友”的关注人列表

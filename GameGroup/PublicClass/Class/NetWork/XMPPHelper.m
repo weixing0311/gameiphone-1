@@ -8,7 +8,6 @@
 
 #import "XMPPHelper.h"
 #import "XMPP.h"
-#import "BuddyListDelegate.h"
 #import "ChatDelegate.h"
 #import "AddReqDelegate.h"
 #import "CommentDelegate.h"
@@ -311,26 +310,23 @@
 /*<message xmlns="jabber:client" from="admin@gamepro.com" to="11111111111@gamepro.com" type="chat" msgtype="system" msgTime="1388032476641" fromNickname="&#x5C0F;&#x4F19;&#x4F34;" fromHeadImg="1"><body>通知：您失去了XX头衔</body></message>*/
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message{
     NSString *msgtype = [[message attributeForName:@"msgtype"] stringValue];
-     NSString *msg = @"";
-    if (![msgtype isEqualToString:@"zanDynamic"]) {
-         msg=[[message elementForName:@"body"] stringValue];
-        NSLog(@"body:type =====%@ ,%@",msg, msgtype);
-    }
+    NSString *msg = [[message elementForName:@"body"] stringValue];
+    NSLog(@"message =====%@",message);
     
     NSString *from = [[message attributeForName:@"from"] stringValue];
+    
+    NSRange range = [from rangeOfString:@"@"];
+    NSString * fromName = [from substringToIndex:(range.location == NSNotFound) ? 0 : range.location];
+    
     NSString *type = [[message attributeForName:@"type"] stringValue];
    
     NSString *msgTime = [[message attributeForName:@"msgTime"] stringValue];
-//    NSString *receiver = [[message attributeForName:@"to"] stringValue];
-//    NSString * fromNickName = [GameCommon getHeardImgId:[[message attributeForName:@"nickname"] stringValue]];//昵称
-//    NSString * fromimg = [GameCommon getHeardImgId:[[message attributeForName:@"img"] stringValue]];//头像
 
     if(msg!=nil){
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         [dict setObject:msg forKey:@"msg"];
         [dict setObject:from forKey:@"sender"];
        
-        //[dict setObject:fromNickName forKey:@"nickname"];
         //消息接收到的时间
         if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
             double newTime = [msgTime doubleValue]/1000;
@@ -424,6 +420,11 @@
                 }
                 [[GameCommon shareGameCommon] displayTabbarNotification];
             }
+        }
+        else if ([type isEqualToString:@"normal"] && [fromName isEqualToString:@"messageAck"])//消息发送状态告知
+        {
+            msg = [msg stringByReplacingOccurrencesOfString:@"'" withString:@"\""];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:[msg JSONValue]];
         }
     }
 }

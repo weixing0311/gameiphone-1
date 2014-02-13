@@ -37,10 +37,10 @@
 {
     [super viewDidLoad];
     
+    [self setTopViewWithTitle:@"" withBackButton:YES];
+    
     m_tabelData = [[NSMutableArray alloc] init];
     m_realmsArray = [[NSMutableArray alloc] init];
-    
-    [self setTopViewWithTitle:@"" withBackButton:YES];
     
     m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth - startX - (KISHighVersion_7?0:20))];
     m_myTableView.dataSource = self;
@@ -129,7 +129,6 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-        [hud hide:YES];
         if ([KISDictionaryHaveKey(responseObject, @"1") isKindOfClass:[NSArray class]])
         {
             NSMutableArray* selectArray = [[NSMutableArray alloc] init];

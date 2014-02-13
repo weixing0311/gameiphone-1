@@ -2,7 +2,7 @@
 //  DSCommonMsgs.m
 //  GameGroup
 //
-//  Created by Shen Yanping on 14-1-26.
+//  Created by Shen Yanping on 14-2-13.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
@@ -14,10 +14,12 @@
 @dynamic msgContent;
 @dynamic msgFilesID;
 @dynamic msgType;
+@dynamic payload;
 @dynamic receiver;
 @dynamic sender;
 @dynamic senderNickname;
 @dynamic senTime;
-@dynamic payload;
+@dynamic messageuuid;
+@dynamic status;
 
 @end

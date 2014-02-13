@@ -9,13 +9,9 @@
 #import <Foundation/Foundation.h>
 
 #import "DSThumbMsgs.h"
-#import "DSThumbPublicMsgs.h"
-
-#import "DSPublicMsgs.h"
 #import "DSCommonMsgs.h"
+
 #import "DSReceivedHellos.h"
-#import "DSThumbSubscribedMsgs.h"
-#import "DSSubscribedMsgs.h"
 #import "DSFriends.h"
 #import "DSUnreadCount.h"
 #import "DSNameIndex.h"
@@ -51,8 +47,7 @@
 +(void)deleteAllCommonMsg;
 +(void)refreshThumbMsgsAfterDeleteCommonMsg:(NSDictionary *)message ForUser:(NSString *)userid ifDel:(BOOL)del;
 +(NSArray *)qureyAllThumbMessages;
-+(NSDictionary *)queryLastPublicMsg;
-
++(void)refreshMessageStatusWithId:(NSString*)messageuuid status:(NSString*)status;
 
 +(NSArray *)queryAllReceivedHellos;
 +(NSDictionary *)qureyLastReceivedHello;
@@ -67,7 +62,7 @@
 +(void)deleteAttentionWithUserName:(NSString*)username;
 +(BOOL)ifIsAttentionWithUserName:(NSString*)userName;
 +(void)saveAttentionRemarkName:(NSString*)remarkName userid:(NSString*)userid;//存备注名
-+ (void)cleanAttentionList;//清空
++(void)cleanAttentionList;//清空
 
 //存储“好友”的粉丝列表
 +(void)saveUserFansInfo:(NSDictionary *)myInfo;

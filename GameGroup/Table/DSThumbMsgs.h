@@ -2,7 +2,7 @@
 //  DSThumbMsgs.h
 //  GameGroup
 //
-//  Created by Shen Yanping on 14-1-26.
+//  Created by Shen Yanping on 14-2-13.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
@@ -23,5 +23,6 @@
 @property (nonatomic, retain) NSDate * sendTime;
 @property (nonatomic, retain) NSString * sendTimeStr;
 @property (nonatomic, retain) NSString * unRead;
+@property (nonatomic, retain) NSString * status;
 
 @end

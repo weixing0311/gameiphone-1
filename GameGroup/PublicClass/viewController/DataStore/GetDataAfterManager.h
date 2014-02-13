@@ -16,6 +16,8 @@
 #define kOtherMessage    @"otherMessage"
 #define kRecommendFriendReceived @"recommendFriendReceived"
 
+#define kMessageAck @"messageAck"
+
 @interface GetDataAfterManager : NSObject
 
 @property(nonatomic,strong)AppDelegate* appDel;

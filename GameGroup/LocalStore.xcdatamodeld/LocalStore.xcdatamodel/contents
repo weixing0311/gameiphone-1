@@ -19,6 +19,7 @@
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="DSCommonMsgs" representedClassName="DSCommonMsgs" syncable="YES">
+        <attribute name="messageuuid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="msgContent" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="msgFilesID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="msgType" optional="YES" attributeType="String" syncable="YES"/>
@@ -27,6 +28,7 @@
         <attribute name="sender" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="senderNickname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="senTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="DSFans" representedClassName="DSFans" syncable="YES">
         <attribute name="achievement" optional="YES" attributeType="String" syncable="YES"/>
@@ -118,16 +120,6 @@
         <attribute name="myTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sendTime" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
-    <entity name="DSPublicMsgs" representedClassName="DSPublicMsgs" syncable="YES">
-        <attribute name="articlesID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="msgContent" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="msgFilesID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="msgType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="receiver" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sender" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="senderNickname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sendTime" optional="YES" attributeType="Date" syncable="YES"/>
-    </entity>
     <entity name="DSReceivedHellos" representedClassName="DSReceivedHellos" syncable="YES">
         <attribute name="acceptStatus" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="addtionMsg" optional="YES" attributeType="String" syncable="YES"/>
@@ -148,16 +140,6 @@
         <attribute name="userid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="DSSubscribedMsgs" representedClassName="DSSubscribedMsgs" syncable="YES">
-        <attribute name="articlesID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="msgContent" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="msgFilesID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="msgType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="receiver" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sender" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="senderNickname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sendTime" optional="YES" attributeType="Date" syncable="YES"/>
-    </entity>
     <entity name="DSThumbMsgs" representedClassName="DSThumbMsgs" syncable="YES">
         <attribute name="messageuuid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="msgContent" optional="YES" attributeType="String" syncable="YES"/>
@@ -169,24 +151,7 @@
         <attribute name="senderType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sendTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="sendTimeStr" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="unRead" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
-    <entity name="DSThumbPublicMsgs" representedClassName="DSThumbPublicMsgs" syncable="YES">
-        <attribute name="msgContent" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="msgType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="receiver" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sender" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="senderNickname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sendTime" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="unRead" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
-    <entity name="DSThumbSubscribedMsgs" representedClassName="DSThumbSubscribedMsgs" syncable="YES">
-        <attribute name="msgContent" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="msgType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="receiver" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sender" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="senderNickname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sendTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="unRead" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="DSUnreadCount" representedClassName="DSUnreadCount" syncable="YES">
@@ -205,13 +170,9 @@
         <element name="DSMyNewsList" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSNameIndex" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSOtherMsgs" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DSPublicMsgs" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSReceivedHellos" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSRecommendList" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DSSubscribedMsgs" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSThumbMsgs" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DSThumbPublicMsgs" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DSThumbSubscribedMsgs" positionX="0" positionY="0" width="0" height="0"/>
         <element name="DSUnreadCount" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

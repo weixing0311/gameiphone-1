@@ -19,6 +19,7 @@
 #import "selectContactPage.h"
 #import "OHASBasicHTMLParser.h"
 #import "EmojiView.h"
+#import "KKMessageCell.h"
 
 @class AppDelegate, XMPPHelper;
 
