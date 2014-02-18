@@ -424,7 +424,10 @@
         else if ([type isEqualToString:@"normal"] && [fromName isEqualToString:@"messageAck"])//消息发送状态告知
         {
             msg = [msg stringByReplacingOccurrencesOfString:@"'" withString:@"\""];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:[msg JSONValue]];
+            NSDictionary* msgData = [msg JSONValue];
+            NSString* src_id = KISDictionaryHaveKey(msgData, @"src_id");
+            [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(msgData, @"received") boolValue] ? @"1" : @"0"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:msgData];
         }
     }
 }

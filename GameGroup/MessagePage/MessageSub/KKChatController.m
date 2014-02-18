@@ -806,10 +806,10 @@
     NSDictionary* tempDic = notification.userInfo;
     
     NSString* rowIndex = KISDictionaryHaveKey(tempDic, @"row");
-    NSString* src_id = KISDictionaryHaveKey(tempDic, @"src_id");
-    NSString* received = KISDictionaryHaveKey(tempDic, @"received");//{'src_id':'','received':'true'}
+//    NSString* src_id = KISDictionaryHaveKey(tempDic, @"src_id");
+//    NSString* received = KISDictionaryHaveKey(tempDic, @"received");//{'src_id':'','received':'true'}
     if ([tempDic isKindOfClass:[NSDictionary class]]) {
-        [DataStoreManager refreshMessageStatusWithId:src_id status:[received boolValue] ? @"1" : @"0"];
+//        [DataStoreManager refreshMessageStatusWithId:src_id status:[received boolValue] ? @"1" : @"0"];
         if (rowIndex && rowIndex.length > 0) {//超时引起 5秒
             NSMutableDictionary *dict = [messages objectAtIndex:[rowIndex integerValue]];
             NSString* status = KISDictionaryHaveKey(dict, @"status");
