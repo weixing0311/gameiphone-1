@@ -80,6 +80,8 @@
     uDefault = [NSUserDefaults standardUserDefaults];
     currentID = [uDefault objectForKey:@"account"];
     
+    self.appDel = [[UIApplication sharedApplication] delegate];
+
     UIImageView * bgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
     bgV.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
     [self.view addSubview:bgV];
@@ -96,7 +98,8 @@
     
     messages = [[DataStoreManager qureyAllCommonMessages:self.chatWithUser] retain];
     [self normalMsgToFinalMsg];
-
+    [self sendReadedMesg];//发送已读消息
+    
     self.myHeadImg = [DataStoreManager queryFirstHeadImageForUser:[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]];
     
     self.tView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height-startX-55) style:UITableViewStylePlain];
@@ -219,7 +222,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
    // [self.messageTextField becomeFirstResponder];
-    self.appDel = [[UIApplication sharedApplication] delegate];
 //    self.appDel.xmppHelper.chatDelegate = self;
     
     btnLongTap = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(btnLongTapAction:)];
@@ -251,7 +253,26 @@
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
--(void)normalMsgToFinalMsg 
+- (void)sendReadedMesg//发送已读消息
+{
+    NSString* readMagIdString = @"";
+    for(NSDictionary* plainEntry in messages)
+    {
+        NSString *msgType = KISDictionaryHaveKey(plainEntry, @"msgType");
+        NSString *status = KISDictionaryHaveKey(plainEntry, @"status");
+        NSString *sender = KISDictionaryHaveKey(plainEntry, @"sender");
+        if ([msgType isEqualToString:@"normalchat"] && ![status isEqualToString:@"4"] && ![sender isEqualToString:@"you"]) {
+            if ([KISDictionaryHaveKey(plainEntry, @"messageuuid") length] > 0) {
+                readMagIdString = [readMagIdString stringByAppendingFormat:@"%@,", KISDictionaryHaveKey(plainEntry, @"messageuuid")];
+            }
+        }
+    }
+    if (readMagIdString.length > 0) {
+        [self comeBackDisplayed:self.chatWithUser msgId:readMagIdString];
+    }
+}
+
+-(void)normalMsgToFinalMsg
 {
     NSMutableArray* formattedEntries = [NSMutableArray arrayWithCapacity:messages.count];
     NSMutableArray* heightArray = [NSMutableArray array];
@@ -806,11 +827,13 @@
     NSDictionary* tempDic = notification.userInfo;
     
     NSString* rowIndex = KISDictionaryHaveKey(tempDic, @"row");
-//    NSString* src_id = KISDictionaryHaveKey(tempDic, @"src_id");
-//    NSString* received = KISDictionaryHaveKey(tempDic, @"received");//{'src_id':'','received':'true'}
+    NSString* src_id = KISDictionaryHaveKey(tempDic, @"src_id");
+    NSString* received = KISDictionaryHaveKey(tempDic, @"received");//{'src_id':'','received':'true'}
     if ([tempDic isKindOfClass:[NSDictionary class]]) {
 //        [DataStoreManager refreshMessageStatusWithId:src_id status:[received boolValue] ? @"1" : @"0"];
         if (rowIndex && rowIndex.length > 0) {//超时引起 5秒
+            [DataStoreManager refreshMessageStatusWithId:src_id status:[received boolValue] ? @"1" : @"0"];
+
             NSMutableDictionary *dict = [messages objectAtIndex:[rowIndex integerValue]];
             NSString* status = KISDictionaryHaveKey(dict, @"status");
             if ([status isEqualToString:@"2"] || [status isEqualToString:@"0"]) {//发送中 失败
@@ -1499,6 +1522,8 @@
     NSDictionary* tempDic = notification.userInfo;
     NSRange range = [KISDictionaryHaveKey(tempDic,  @"sender") rangeOfString:@"@"];
     NSString * sender = [KISDictionaryHaveKey(tempDic,  @"sender") substringToIndex:range.location];
+    NSString* msgType = KISDictionaryHaveKey(tempDic, @"msgType");
+   
     if ([sender isEqualToString:self.chatWithUser]) {
         [messages addObject:tempDic];
         
@@ -1507,7 +1532,39 @@
         if (messages.count>0) {
             [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
+        if ([msgType isEqualToString:@"normalchat"]) {
+            NSString* msgId = KISDictionaryHaveKey(tempDic, @"msgId");
+            [self comeBackDisplayed:sender msgId:msgId];//发送已读消息
+        }
     }
+}
+
+- (void)comeBackDisplayed:(NSString*)sender msgId:(NSString*)msgId//发送已读消息
+{
+    NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:msgId,@"src_id",@"true",@"received",@"Displayed",@"msgStatus", nil];
+    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+    [body setStringValue:[dic JSONRepresentation]];
+    
+    //生成XML消息文档
+    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+    //消息类型
+    [mes addAttributeWithName:@"type" stringValue:@"chat"];
+    
+    //发送给谁
+    [mes addAttributeWithName:@"to" stringValue:[sender stringByAppendingString:[[TempData sharedInstance] getDomain]]];
+    //由谁发送
+    [mes addAttributeWithName:@"from" stringValue:[[DataStoreManager getMyUserID] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
+    
+    //    [mes addAttributeWithName:@"msgtype" stringValue:@"normalchat"];
+    [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
+    [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];
+
+    //组合
+    [mes addChild:body];
+    if (![self.appDel.xmppHelper sendMessage:mes]) {
+        return;
+    }
+    [DataStoreManager refreshMessageStatusWithId:msgId status:@"4"];
 }
 
 -(void)makeMsgVStoreMsg:(NSDictionary *)messageContent

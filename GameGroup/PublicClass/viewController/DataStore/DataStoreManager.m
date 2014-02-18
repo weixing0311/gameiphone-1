@@ -26,6 +26,7 @@
     NSString * senderNickname = [msg objectForKey:@"nickname"];
     NSString * msgContent = KISDictionaryHaveKey(msg, @"msg");
     NSString * msgType = KISDictionaryHaveKey(msg, @"msgType");
+    NSString * msgId = KISDictionaryHaveKey(msg, @"msgId");
 
     NSDate * sendTime = [NSDate dateWithTimeIntervalSince1970:[[msg objectForKey:@"time"] doubleValue]];
     
@@ -45,7 +46,7 @@
             commonMsg.senTime = sendTime;
             commonMsg.msgType = msgType;
             commonMsg.payload = KISDictionaryHaveKey(msg, @"payload");
-            commonMsg.messageuuid = @"";
+            commonMsg.messageuuid = msgId;
             commonMsg.status = @"1";//已发送
             
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
@@ -61,7 +62,7 @@
             int unread = [thumbMsgs.unRead intValue];
             thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
             thumbMsgs.msgType = msgType;
-            thumbMsgs.messageuuid = @"";
+            thumbMsgs.messageuuid = msgId;
             thumbMsgs.status = @"1";//已发送
         }];
     }
@@ -430,7 +431,7 @@
 +(void)refreshMessageStatusWithId:(NSString*)messageuuid status:(NSString*)status
 {
     if (messageuuid && messageuuid.length > 0) {//0失败 1发送到服务器 2发送中 3已送达 4已读
-        [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+//        [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
             NSArray* idArray = [messageuuid componentsSeparatedByString:@","];
             for (int i = 0; i < [idArray count]; i++) {
                 NSString* oneId = [idArray objectAtIndex:i];
@@ -447,7 +448,7 @@
                     }
                 }
             }
-        }];
+//        }];
 
     }
 }

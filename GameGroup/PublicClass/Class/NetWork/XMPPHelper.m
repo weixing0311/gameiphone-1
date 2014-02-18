@@ -314,6 +314,7 @@
     NSLog(@"message =====%@",message);
     
     NSString *from = [[message attributeForName:@"from"] stringValue];
+    NSString *msgId = [[message attributeForName:@"id"] stringValue];
     
     NSRange range = [from rangeOfString:@"@"];
     NSString * fromName = [from substringToIndex:(range.location == NSNotFound) ? 0 : range.location];
@@ -337,7 +338,7 @@
 
         NSLog(@"theDict%@",dict);
         if ([type isEqualToString:@"chat"]) {
-            if ([msgtype isEqualToString:@"normalchat"]||!msgtype) {//聊天的 或动态
+            if ([msgtype isEqualToString:@"normalchat"]) {//聊天的 或动态聊天消息
                 NSString* payload = [GameCommon getHeardImgId:[[message elementForName:@"payload"] stringValue]];//是否含payload标签
                 if (payload.length > 0) {
                     NSString* payload = [[message elementForName:@"payload"] stringValue];
@@ -347,6 +348,8 @@
                 }
                 else
                     [dict setObject:@"normalchat" forKey:@"msgType"];
+                
+                [dict setObject:msgId?msgId:@"" forKey:@"msgId"];
 
                 [self.chatDelegate newMessageReceived:dict];
             }
@@ -420,12 +423,33 @@
                 }
                 [[GameCommon shareGameCommon] displayTabbarNotification];
             }
+            else
+            {
+                NSDictionary* bodyDic = [msg JSONValue];
+                if ([bodyDic isKindOfClass:[NSDictionary class]]) {
+                    NSString* src_id = KISDictionaryHaveKey(bodyDic, @"src_id");
+                    if (src_id.length <= 0) {
+                        return;
+                    }
+                    if ([KISDictionaryHaveKey(bodyDic, @"msgStatus") isEqualToString:@"Delivered"]) {//是否送达
+                        [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(bodyDic, @"received") boolValue] ? @"3" : @"0"];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:bodyDic];
+                    }
+                    else if ([KISDictionaryHaveKey(bodyDic, @"msgStatus") isEqualToString:@"Displayed"]) {//是否已读
+                        [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(bodyDic, @"received") boolValue] ? @"4" : @"0"];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:bodyDic];
+                    }
+                }
+            }
         }
-        else if ([type isEqualToString:@"normal"] && [fromName isEqualToString:@"messageAck"])//消息发送状态告知
+        else if ([type isEqualToString:@"normal"] && [fromName isEqualToString:@"messageAck"])//消息发送服务器状态告知
         {
             msg = [msg stringByReplacingOccurrencesOfString:@"'" withString:@"\""];
             NSDictionary* msgData = [msg JSONValue];
             NSString* src_id = KISDictionaryHaveKey(msgData, @"src_id");
+            if (src_id.length <= 0) {
+                return;
+            }
             [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(msgData, @"received") boolValue] ? @"1" : @"0"];
             [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:msgData];
         }

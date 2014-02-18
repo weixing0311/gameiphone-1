@@ -7,6 +7,7 @@
 //
 
 #import "GetDataAfterManager.h"
+#import "NSObject+SBJSON.h"
 
 @implementation GetDataAfterManager
 
@@ -67,12 +68,16 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     }
 }
 
-#pragma mark 收到聊天消息或其他消息
+#pragma mark 收到聊天消息
 -(void)newMessageReceived:(NSDictionary *)messageContent
 {
     NSRange range = [[messageContent objectForKey:@"sender"] rangeOfString:@"@"];
     NSString * sender = [[messageContent objectForKey:@"sender"] substringToIndex:range.location];
-    
+    NSString* msgType = KISDictionaryHaveKey(messageContent, @"msgType");
+    if ([msgType isEqualToString:@"normalchat"]) {
+        NSString* msgId = KISDictionaryHaveKey(messageContent, @"msgId");
+        [self comeBackDelivered:sender msgId:msgId];
+    }
     [self storeNewMessage:messageContent];
 
     if (![DataStoreManager ifHaveThisUser:sender]) {//是否为好友 不是就请求资料
@@ -83,7 +88,35 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
         [DataStoreManager storeThumbMsgUser:sender nickName:[DataStoreManager queryRemarkNameForUser:sender] andImg:[DataStoreManager queryFirstHeadImageForUserId:sender]];
         [[NSNotificationCenter defaultCenter] postNotificationName:kNewMessageReceived object:nil userInfo:messageContent];
     }
+}
+
+- (void)comeBackDelivered:(NSString*)sender msgId:(NSString*)msgId//发送送达消息
+{
+    NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:msgId,@"src_id",@"true",@"received",@"Delivered",@"msgStatus", nil];
+    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+    [body setStringValue:[dic JSONRepresentation]];
     
+    //生成XML消息文档
+    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+    //消息类型
+    [mes addAttributeWithName:@"type" stringValue:@"chat"];
+    
+    //发送给谁
+    [mes addAttributeWithName:@"to" stringValue:[sender stringByAppendingString:[[TempData sharedInstance] getDomain]]];
+    //由谁发送
+    [mes addAttributeWithName:@"from" stringValue:[[DataStoreManager getMyUserID] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
+    
+//    [mes addAttributeWithName:@"msgtype" stringValue:@"normalchat"];
+    [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
+    [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];
+//    NSString* uuid = [[GameCommon shareGameCommon] uuid];
+//    [mes addAttributeWithName:@"id" stringValue:uuid];
+//    NSLog(@"消息uuid ~!~~ %@", uuid);
+    //组合
+    [mes addChild:body];
+    if (![self.appDel.xmppHelper sendMessage:mes]) {
+        return;
+    }
 }
 
 #pragma mark 收到验证好友请求

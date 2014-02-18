@@ -75,6 +75,11 @@
         self.playAudioImageV.animationRepeatCount=0;
         [self.contentView addSubview:self.playAudioImageV];
 
+        self.statusLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        [self.statusLabel setTextColor:kColorWithRGB(151, 151, 151, 1.0)];
+        [self.statusLabel setFont:[UIFont boldSystemFontOfSize:12.0]];
+        [self.contentView addSubview:self.statusLabel];
+        
         self.activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         self.activityView.hidesWhenStopped = YES;
         [self.contentView addSubview:self.activityView];
@@ -111,8 +116,35 @@
             [self.activityView startAnimating];
         }
     }
+    else if ([status isEqualToString:@"3"])//送达
+    {
+        self.failImage.hidden = YES;
+        if ([self.cellTimer isValid]) {
+            [self.cellTimer invalidate];
+            self.cellTimer = nil;
+        }
+        [self.activityView stopAnimating];
+        
+        self.statusLabel.hidden = NO;
+        self.statusLabel.frame = CGRectMake(point.x-12, point.y-12, 24, 24);
+        self.statusLabel.text = @"送达";
+    }
+    else if ([status isEqualToString:@"4"])//已读
+    {
+        self.failImage.hidden = YES;
+        if ([self.cellTimer isValid]) {
+            [self.cellTimer invalidate];
+            self.cellTimer = nil;
+        }
+        [self.activityView stopAnimating];
+        
+        self.statusLabel.hidden = NO;
+        self.statusLabel.frame = CGRectMake(point.x-12, point.y-12, 24, 24);
+        self.statusLabel.text = @"已读";
+    }
     else
     {
+        self.statusLabel.hidden = YES;
         self.failImage.hidden = YES;
         if ([self.cellTimer isValid]) {
             [self.cellTimer invalidate];
