@@ -1456,7 +1456,7 @@
 }
 -(void)sendMsg:(NSString *)message
 {
-    if (message.length > 0) {
+    if (message.length > 0 &&![[message stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]==0) {
         //生成<body>文档
         NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
         [body setStringValue:message];
@@ -1513,6 +1513,12 @@
             [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
         self.textView.text = @"";
+    }
+    else{
+        //如果发送信息为空或者为空格的时候弹框提示
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"发送消息不能为空" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alertView show];
+        
     }
 }
 

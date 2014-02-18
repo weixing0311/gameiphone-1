@@ -126,9 +126,24 @@
     if (buttonIndex != alertView.cancelButtonIndex) {
         if (110 == alertView.tag) {
             [[EGOCache globalCache] clearCache];
-            NSFileManager *file_manager = [NSFileManager defaultManager];
-            NSString *path = [RootDocPath stringByAppendingPathComponent:@"tempImage"];
-            [file_manager removeItemAtPath:path error:nil];
+//            NSFileManager *file_manager = [NSFileManager defaultManager];
+//            NSString *path = [RootDocPath stringByAppendingPathComponent:@"tempImage"];
+//            [file_manager removeItemAtPath:path error:nil];
+            
+            NSString *cache = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+            NSFileManager *fm = [NSFileManager defaultManager];
+            NSDirectoryEnumerator *e = [fm enumeratorAtPath:cache];
+            NSString *fileName = nil;
+            
+            while (fileName = [e nextObject]) {
+                NSError *error = nil;
+                NSString *filePath = [cache stringByAppendingPathComponent:fileName];
+                BOOL flag =[fm removeItemAtPath:filePath error:&error];
+                NSLog(@"%d %@",flag,[error localizedDescription]);
+                
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"清理成功" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alertView show];
+            }
         }
         else if(111 == alertView.tag)
         {
