@@ -15,6 +15,7 @@
 @interface SetViewController ()
 {
     UITableView*  m_myTableView;
+    BOOL isOver;
 }
 @end
 
@@ -106,6 +107,7 @@
             else
             {
                 UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您确认要清除所有的缓存吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"清除", nil];
+                
                 alert.tag = 110;
                 [alert show];
             }
@@ -129,21 +131,29 @@
 //            NSFileManager *file_manager = [NSFileManager defaultManager];
 //            NSString *path = [RootDocPath stringByAppendingPathComponent:@"tempImage"];
 //            [file_manager removeItemAtPath:path error:nil];
-            
+            hud = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:hud];
+            hud.labelText = @"清理中...";
+            [hud showAnimated:YES whileExecutingBlock:^{
+                sleep(3);
+                hud.customView = [[UIImageView alloc]initWithImage:KUIImage(@"ok_click")];
+
+                hud.labelText = @"清理成功";
+                
+                sleep(1);
+            }];
+
             NSString *cache = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0];
             NSFileManager *fm = [NSFileManager defaultManager];
             NSDirectoryEnumerator *e = [fm enumeratorAtPath:cache];
             NSString *fileName = nil;
-            
-            while (fileName = [e nextObject]) {
-                NSError *error = nil;
-                NSString *filePath = [cache stringByAppendingPathComponent:fileName];
-                BOOL flag =[fm removeItemAtPath:filePath error:&error];
-                NSLog(@"%d %@",flag,[error localizedDescription]);
-                
-                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"清理成功" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                [alertView show];
-            }
+              while (fileName = [e nextObject]) {
+                  NSError *error = nil;
+                  NSString *filePath = [cache stringByAppendingPathComponent:fileName];
+                  BOOL flag =[fm removeItemAtPath:filePath error:&error];
+                  NSLog(@"%d %@",flag,[error localizedDescription]);
+                  
+              }
         }
         else if(111 == alertView.tag)
         {
@@ -153,6 +163,11 @@
     }
 }
 
+- (unsigned long long)fileSizeAtPath:(NSString*) filePath
+{
+    NSDictionary* attr = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil];
+    return [[attr objectForKey:NSFileSize] unsignedLongLongValue];
+}
 - (void)loginOutNet
 {
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];

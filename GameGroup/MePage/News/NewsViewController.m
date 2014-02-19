@@ -93,6 +93,13 @@
     else if(self.myViewType == FRIEND_NEWS_TYPE)
     {
         [self setTopViewWithTitle:@"好友动态" withBackButton:YES];
+        UIButton *addButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        addButton.frame=CGRectMake(270, startX - 44, 50, 44);
+        [addButton setBackgroundImage:KUIImage(@"add_news_normal") forState:UIControlStateNormal];
+        [addButton setBackgroundImage:KUIImage(@"add_news_click") forState:UIControlStateHighlighted];
+        [self.view addSubview:addButton];
+        [addButton addTarget:self action:@selector(addButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+
         
         [self getDataWithFriendStore];
     }

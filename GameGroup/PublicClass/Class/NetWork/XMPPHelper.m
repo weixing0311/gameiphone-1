@@ -540,6 +540,25 @@
     }
     NSLog(@"%@",sender);
 }
-
+- (void)xmppStream:(XMPPStream *)sender didReceiveError:(id)error
+{
+    NSLog(@"didReceiveError:%@",error);
+    DDXMLNode *errorNode = (DDXMLNode *)error;
+    //遍历错误节点
+    for(DDXMLNode *node in [errorNode children])
+    {
+        //若错误节点有【冲突】
+        if([[node name] isEqualToString:@"conflict"])
+        {
+            //停止轮训检查链接状态
+            //[_timer invalidate];
+            //弹出登陆冲突,点击OK后logout
+            NSString *message = [NSString stringWithFormat:@"在其他地方登陆"];
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            alert.tag = 9999;
+            [alert show];
+        }
+    }
+}
 
 @end
