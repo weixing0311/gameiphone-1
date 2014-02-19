@@ -101,21 +101,22 @@
 {
     [splashImageView removeFromSuperview];
 //    if ([self isHaveLogin]){
+    //消息页面
         MessagePageViewController* fist  = [[MessagePageViewController alloc] init];
         fist.hidesBottomBarWhenPushed = YES;
         UINavigationController* navigationController_First = [[UINavigationController alloc] initWithRootViewController:fist];
         navigationController_First.navigationBarHidden = YES;
-
+//好友页面
         FriendPageViewController* second = [[FriendPageViewController alloc] init];
         second.hidesBottomBarWhenPushed = YES;
         UINavigationController* navigationController_Second = [[UINavigationController alloc] initWithRootViewController:second];
         navigationController_Second.navigationBarHidden = YES;
-
+//发现页面
         FindPageViewController* third = [[FindPageViewController alloc] init];
         third.hidesBottomBarWhenPushed = YES;
         UINavigationController* navigationController_Third = [[UINavigationController alloc] initWithRootViewController:third];
         navigationController_Third.navigationBarHidden = YES;
-
+//我的页面
         MePageViewController* fourth = [[MePageViewController alloc] init];
         fourth.hidesBottomBarWhenPushed = YES;
         UINavigationController* navigationController_Fourth = [[UINavigationController alloc] initWithRootViewController:fourth];

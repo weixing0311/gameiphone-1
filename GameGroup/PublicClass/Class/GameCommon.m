@@ -170,6 +170,7 @@ static GameCommon *my_gameCommon = NULL;
     return [NSString stringWithFormat:@"%f",nowTime];
     
 }
+#pragma mark -周
 +(NSString *)getWeakDay:(NSDate *)datetime{
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSInteger unitFlags = NSWeekCalendarUnit|NSWeekdayCalendarUnit;
@@ -193,6 +194,7 @@ static GameCommon *my_gameCommon = NULL;
             return @"未知";break;
     }
 }
+#pragma mark -时间
 +(NSString *)CurrentTime:(NSString *)currentTime AndMessageTime:(NSString *)messageTime
 {
     NSString * finalTime;
