@@ -48,7 +48,7 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     switch (section) {
         case 0:
-            return 1;
+            return 2;
             break;
         case 1:
             return 2;
@@ -70,8 +70,15 @@
     switch (indexPath.section) {
         case 0:
         {
+             if (indexPath.row == 0) {
             cell.leftImageView.image = KUIImage(@"add_role");
             cell.titleLable.text = @"通过游戏角色添加";
+             }
+             else{
+            cell.leftImageView.image = KUIImage(@"add_role");
+            cell.titleLable.text = @"通过用户昵称查找";
+
+             }
         } break;
         case 1:
         {
@@ -100,7 +107,11 @@
     
     SearchPersonViewController* searchVC = [[SearchPersonViewController alloc] init];
     if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
         searchVC.viewType = SEARCH_TYPE_ROLE;
+        }else{
+        searchVC.viewType = SEARCH_TYPE_NICKNAME;
+        }
     }
     else
     {

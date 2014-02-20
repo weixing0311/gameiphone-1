@@ -15,7 +15,7 @@ typedef enum
     FINDPAS_TYPE_EMAIL,
 }FindPasType;
 
-@interface FindPasswordViewController : BaseViewController<UITextFieldDelegate>
+@interface FindPasswordViewController : BaseViewController<UITextFieldDelegate,UIAlertViewDelegate>
 
 @property(nonatomic, assign)FindPasType viewType;
 

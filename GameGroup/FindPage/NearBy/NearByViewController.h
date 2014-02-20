@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 #import "PullUpRefreshView.h"
 #import "SRRefreshView.h"
-
-@interface NearByViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, PullUpDelegate, SRRefreshDelegate>
-
+#import "NotConnectDelegate.h"
+@interface NearByViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, PullUpDelegate, SRRefreshDelegate,NotConnectDelegate>
+@property (strong,nonatomic) AppDelegate * appDel;
 @end

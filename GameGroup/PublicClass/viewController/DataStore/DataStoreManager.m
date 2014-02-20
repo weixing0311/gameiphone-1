@@ -2266,6 +2266,7 @@
         NSMutableDictionary * dict = [NSMutableDictionary dictionary];
         [dict setObject:[[rechellos objectAtIndex:i] userId] forKey:@"userid"];
         [dict setObject:[[rechellos objectAtIndex:i] nickName] forKey:@"nickName"];
+        NSLog(@"---------------%@",dict);
         //        NSRange range=[[[rechellos objectAtIndex:i] headImgID] rangeOfString:@","];
         //        if (range.location!=NSNotFound) {
         ////            NSArray *imageArray = [[[rechellos objectAtIndex:i] headImgID] componentsSeparatedByString:@","];

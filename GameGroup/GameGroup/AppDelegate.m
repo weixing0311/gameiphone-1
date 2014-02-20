@@ -46,17 +46,20 @@
     if (reach) {
         [GameCommon shareGameCommon].haveNet = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"1"];
+        NSLog(@"网络变化1111");
     }
     else{
         [self.xmppHelper disconnect];
         [GameCommon shareGameCommon].haveNet = NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"0"];
+        NSLog(@"网络变化000000");
     }
     reach.reachableBlock = ^(Reachability * reachability)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [GameCommon shareGameCommon].haveNet = YES;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"1"];
+            NSLog(@"网络变化3333");
         });
     };
     

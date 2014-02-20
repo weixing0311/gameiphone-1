@@ -115,8 +115,12 @@ alpha:alphaValue]
 
 //判断方法
 #define iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+//判断字典里面是否包含某个Key值
+//直接用objectForkey取值  如果没有这个key会崩溃  使用这个宏取值就安全点
 
 #define KISDictionaryHaveKey(dict,key) [[dict allKeys] containsObject:key] && ([dict objectForKey:key] != (NSString*)[NSNull null]) ? [dict objectForKey:key] : @""
+
+
 #define KISEmptyOrEnter(text) ([text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0)
 
 #define KISHighVersion_7 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)

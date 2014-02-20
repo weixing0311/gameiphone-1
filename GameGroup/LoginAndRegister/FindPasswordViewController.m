@@ -214,11 +214,60 @@
     [vercodeNextButton addTarget:self action:@selector(vercodeNextButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [m_verCodeView addSubview:vercodeNextButton];
 }
-
+#pragma mark -重新发送验证码
 - (void)refreshVCButtonClick:(id)sender
 {
+
     //以下应为获取成功后
-    [self startRefreshTime];
+   //[self startRefreshTime];
+    
+//    NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+//    [params setObject:m_phoneNumText.text forKey:@"phoneNum"];
+//    [params setObject:@"register" forKey:@"type"];
+//    
+//    NSMutableDictionary* body = [[NSMutableDictionary alloc]init];
+//    [body addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+//    [body setObject:params forKey:@"params"];
+//    [body setObject:@"112" forKey:@"method"];
+    
+    NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+    [params setObject:m_phoneNumText.text forKey:@"phoneNum"];
+    [params setObject:@"findpwd" forKey:@"type"];
+    
+    NSMutableDictionary* body = [[NSMutableDictionary alloc]init];
+    [body addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [body setObject:params forKey:@"params"];
+    [body setObject:@"112" forKey:@"method"];
+    
+    hud.labelText = @"获取中...";
+    [hud show:YES];
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:body TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        UILabel* topLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 300, 50)];
+        topLabel.numberOfLines = 2;
+        topLabel.font = [UIFont boldSystemFontOfSize:13.0];
+        topLabel.textColor = kColorWithRGB(128.0, 128, 128, 1.0);
+        topLabel.text = [NSString stringWithFormat:@"验证码已发送至手机号：%@，请注意查收！", m_phoneNumText.text];
+        [m_verCodeView addSubview:topLabel];
+        
+        m_phoneNumView.hidden = YES;
+        m_verCodeView.hidden = NO;
+        
+        [self startRefreshTime];
+        
+        [hud hide:YES];
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+        [hud hide:YES];
+    }];
+    
+
 }
 
 - (void)startRefreshTime
@@ -251,7 +300,7 @@
     else
         [m_refreshVCButton setTitle:[NSString stringWithFormat:@"%ds", m_leftTime] forState:UIControlStateSelected];
 }
-
+#pragma mark -获取验证码 下一步
 - (void)vercodeNextButtonClick:(id)sender
 {
     [m_verCodeText resignFirstResponder];
@@ -388,8 +437,12 @@
     [hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:body TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
-
-        [self.navigationController popViewControllerAnimated:YES];
+ 
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"修改成功" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        alertView.tag = 199992;
+        [alertView show];
+        
+       // [self.navigationController popViewControllerAnimated:YES];
 
     } failure:^(AFHTTPRequestOperation *operation,  id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
@@ -401,6 +454,13 @@
         }
         [hud hide:YES];
     }];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag ==199992) {
+         [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark 邮箱找回

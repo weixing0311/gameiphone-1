@@ -667,6 +667,7 @@
 		6F1DB45A185F24FF00E69C61 /* CommonControlOrView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1DB459185F24FF00E69C61 /* CommonControlOrView.m */; };
 		6F8AC42218745BE3002E983A /* have_picture.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F8AC42118745BE3002E983A /* have_picture.png */; };
 		6FDCED3A1878EFBA00F9FC18 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FDCED381878EFBA00F9FC18 /* libMobClickLibrary.a */; };
+		84076EDB18B5D67500019462 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84076EDA18B5D67500019462 /* SearchResultViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1657,6 +1658,8 @@
 		6F8AC42118745BE3002E983A /* have_picture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = have_picture.png; sourceTree = "<group>"; };
 		6FDCED381878EFBA00F9FC18 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		6FDCED391878EFBA00F9FC18 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
+		84076ED918B5D67500019462 /* SearchResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultViewController.h; sourceTree = "<group>"; };
+		84076EDA18B5D67500019462 /* SearchResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1750,6 +1753,8 @@
 				6850336D185EE1690034C8D6 /* SearchPersonViewController.m */,
 				68167420186163000073E389 /* SetRemarkNameViewController.h */,
 				68167421186163000073E389 /* SetRemarkNameViewController.m */,
+				84076ED918B5D67500019462 /* SearchResultViewController.h */,
+				84076EDA18B5D67500019462 /* SearchResultViewController.m */,
 			);
 			path = FriendPage;
 			sourceTree = "<group>";
@@ -4326,6 +4331,7 @@
 				68B265DC18755E58002AEA9F /* ReplyCell.m in Sources */,
 				681441891850463B0094C669 /* IntroduceViewController.m in Sources */,
 				68CAA79E184DD104007138B1 /* XMPPvCardTempLabel.m in Sources */,
+				84076EDB18B5D67500019462 /* SearchResultViewController.m in Sources */,
 				68CAA79F184DD104007138B1 /* XMPPvCardTempModule.m in Sources */,
 				68CAA7A0184DD104007138B1 /* XMPPvCardTempTel.m in Sources */,
 				683417441857FB2000934FEF /* MagicalRecord+iCloud.m in Sources */,

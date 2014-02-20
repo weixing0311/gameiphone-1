@@ -12,9 +12,10 @@
 
 typedef enum
 {
-    SEARCH_TYPE_ID = 0,
-    SEARCH_TYPE_PHONE,
-    SEARCH_TYPE_ROLE,
+    SEARCH_TYPE_ID = 0,//小伙伴ID
+    SEARCH_TYPE_PHONE,//手机号
+    SEARCH_TYPE_ROLE,//游戏角色
+    SEARCH_TYPE_NICKNAME,//小伙伴昵称
 }SearchViewType;
 
 @interface SearchPersonViewController : BaseViewController<UITextFieldDelegate, RealmSelectDelegate, SearchRoleDelegate>

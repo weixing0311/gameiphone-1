@@ -134,9 +134,10 @@
     PersonDetailViewController* detailVC = [[PersonDetailViewController alloc] init];
     
     detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
+    NSLog(@"detailVC.userId%@",detailVC.userId);
     detailVC.nickName = KISDictionaryHaveKey(tempDict, @"nickName");
     detailVC.isChatPage = NO;
-    
+    NSLog(@"最新关注获得数据%@",tempDict);
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 

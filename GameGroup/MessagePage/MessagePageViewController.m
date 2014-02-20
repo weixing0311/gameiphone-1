@@ -603,7 +603,7 @@
 
         return;
     }
-    if([[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"recommendfriend"])//好友推荐
+    if([[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"recommendfriend"])//好友推荐  推荐的朋友
     {
         [[Custom_tabbar showTabBar] hideTabBar:YES];
         

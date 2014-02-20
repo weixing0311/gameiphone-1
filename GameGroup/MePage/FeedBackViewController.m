@@ -55,16 +55,15 @@
         return;
     }
     [m_contentTextView resignFirstResponder];
-    
+
     [hud show:YES];
     
-    NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:m_contentTextView.text ,@"msg",@"Platform=iphone", @"detail",nil];
+    NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:m_contentTextView.text ,@"msg",@"Platform=iphone", @"detail",[[NSUserDefaults standardUserDefaults] objectForKey:PhoneNumKey],@"phoneNum",nil];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
     [postDict setObject:@"139" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     [postDict setObject:dic forKey:@"params"];
-    
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
         [self showMessageWindowWithContent:@"成功" imageType:0];

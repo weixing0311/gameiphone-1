@@ -1514,9 +1514,13 @@
         }
         self.textView.text = @"";
     }
+    else if (message.length==0)
+    {
+        return;
+    }
     else{
         //如果发送信息为空或者为空格的时候弹框提示
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"发送消息不能为空" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"不能发送空消息" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alertView show];
         
     }
