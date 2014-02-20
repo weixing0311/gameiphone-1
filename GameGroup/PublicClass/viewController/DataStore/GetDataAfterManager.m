@@ -131,7 +131,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     [self storeNewMessage:userInfo];
     NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithCapacity:1];
     
-    if ([shiptype isEqualToString:@"1"]) {
+    if ([shiptype isEqualToString:@"1"]) {//成为好友
         if ([DataStoreManager ifIsAttentionWithUserName:fromUser]) {
             [tempDic addEntriesFromDictionary:[DataStoreManager addPersonToReceivedHellosWithAttention:fromUser]];
             [tempDic setObject:fromUser forKey:@"fromUser"];
@@ -278,7 +278,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
             }
             
-            NSDictionary * uDict = [NSDictionary dictionaryWithObjectsAndKeys:[recDict objectForKey:@"username"],@"fromUser",[recDict objectForKey:@"nickname"],@"fromNickname",msg,@"addtionMsg",[recDict objectForKey:@"img"],@"headID", nil];
+            NSDictionary * uDict = [NSDictionary dictionaryWithObjectsAndKeys:[recDict objectForKey:@"id"],@"fromUser",[recDict objectForKey:@"nickname"],@"fromNickname",msg,@"addtionMsg",[recDict objectForKey:@"img"],@"headID", nil];
             [DataStoreManager addPersonToReceivedHellos:uDict];
         }
         else if (type==1){//聊天消息
