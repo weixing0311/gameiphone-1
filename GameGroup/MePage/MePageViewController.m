@@ -21,7 +21,7 @@
 #import "MyTitleObjViewController.h"
 #import "TitleObjDetailViewController.h"
 #import "NewsViewController.h"
-
+#import "CharacterDetailsViewController.h"//角色详情界面
 @interface MePageViewController ()
 {
     UITableView*  m_myTableView;
@@ -639,7 +639,7 @@
     {
         [[Custom_tabbar showTabBar] hideTabBar:YES];
         
-        CharacterEditViewController* VC = [[CharacterEditViewController alloc] init];
+        CharacterDetailsViewController* VC = [[CharacterDetailsViewController alloc] init];
         [self.navigationController pushViewController:VC animated:YES];
     }
     else if(indexPath.section == 3)//头衔

@@ -668,6 +668,25 @@
 		6F8AC42218745BE3002E983A /* have_picture.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F8AC42118745BE3002E983A /* have_picture.png */; };
 		6FDCED3A1878EFBA00F9FC18 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FDCED381878EFBA00F9FC18 /* libMobClickLibrary.a */; };
 		84076EDB18B5D67500019462 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84076EDA18B5D67500019462 /* SearchResultViewController.m */; };
+		84FB933718B70E62006A386B /* achievementCount.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932918B70E62006A386B /* achievementCount.png */; };
+		84FB933818B70E62006A386B /* die.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932A18B70E62006A386B /* die.png */; };
+		84FB933918B70E62006A386B /* killer.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932B18B70E62006A386B /* killer.png */; };
+		84FB933A18B70E62006A386B /* paiming_ico.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932C18B70E62006A386B /* paiming_ico.png */; };
+		84FB933B18B70E62006A386B /* PVE.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932D18B70E62006A386B /* PVE.png */; };
+		84FB933C18B70E62006A386B /* tab_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932E18B70E62006A386B /* tab_bg.png */; };
+		84FB933D18B70E62006A386B /* tab_click.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932F18B70E62006A386B /* tab_click.png */; };
+		84FB933E18B70E62006A386B /* tab_gray_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB933018B70E62006A386B /* tab_gray_line.png */; };
+		84FB933F18B70E62006A386B /* tab_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB933118B70E62006A386B /* tab_line.png */; };
+		84FB934018B70E62006A386B /* wowall.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 84FB933218B70E62006A386B /* wowall.jpg */; };
+		84FB934118B70E62006A386B /* wowfriend.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 84FB933318B70E62006A386B /* wowfriend.jpg */; };
+		84FB934218B70E62006A386B /* wowserverwow.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 84FB933418B70E62006A386B /* wowserverwow.jpg */; };
+		84FB934318B70E62006A386B /* zhang.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB933518B70E62006A386B /* zhang.png */; };
+		84FB934418B70E63006A386B /* 液晶数字字体.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84FB933618B70E62006A386B /* 液晶数字字体.ttf */; };
+		84FB934818B70F22006A386B /* CharacterDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FB934718B70F22006A386B /* CharacterDetailsViewController.m */; };
+		84FB934C18B70FF4006A386B /* Wgs.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB934918B70FF4006A386B /* Wgs.png */; };
+		84FB934D18B70FF4006A386B /* Wjjc.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB934A18B70FF4006A386B /* Wjjc.png */; };
+		84FB934E18B70FF4006A386B /* Wmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB934B18B70FF4006A386B /* Wmount.png */; };
+		84FB935218B71045006A386B /* CharacterDetailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FB935118B71045006A386B /* CharacterDetailsView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1660,6 +1679,27 @@
 		6FDCED391878EFBA00F9FC18 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		84076ED918B5D67500019462 /* SearchResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultViewController.h; sourceTree = "<group>"; };
 		84076EDA18B5D67500019462 /* SearchResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultViewController.m; sourceTree = "<group>"; };
+		84FB932918B70E62006A386B /* achievementCount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = achievementCount.png; sourceTree = "<group>"; };
+		84FB932A18B70E62006A386B /* die.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = die.png; sourceTree = "<group>"; };
+		84FB932B18B70E62006A386B /* killer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = killer.png; sourceTree = "<group>"; };
+		84FB932C18B70E62006A386B /* paiming_ico.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paiming_ico.png; sourceTree = "<group>"; };
+		84FB932D18B70E62006A386B /* PVE.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PVE.png; sourceTree = "<group>"; };
+		84FB932E18B70E62006A386B /* tab_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_bg.png; sourceTree = "<group>"; };
+		84FB932F18B70E62006A386B /* tab_click.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_click.png; sourceTree = "<group>"; };
+		84FB933018B70E62006A386B /* tab_gray_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_gray_line.png; sourceTree = "<group>"; };
+		84FB933118B70E62006A386B /* tab_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_line.png; sourceTree = "<group>"; };
+		84FB933218B70E62006A386B /* wowall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wowall.jpg; sourceTree = "<group>"; };
+		84FB933318B70E62006A386B /* wowfriend.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wowfriend.jpg; sourceTree = "<group>"; };
+		84FB933418B70E62006A386B /* wowserverwow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wowserverwow.jpg; sourceTree = "<group>"; };
+		84FB933518B70E62006A386B /* zhang.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zhang.png; sourceTree = "<group>"; };
+		84FB933618B70E62006A386B /* 液晶数字字体.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "液晶数字字体.ttf"; sourceTree = "<group>"; };
+		84FB934618B70F22006A386B /* CharacterDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterDetailsViewController.h; sourceTree = "<group>"; };
+		84FB934718B70F22006A386B /* CharacterDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CharacterDetailsViewController.m; sourceTree = "<group>"; };
+		84FB934918B70FF4006A386B /* Wgs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Wgs.png; sourceTree = "<group>"; };
+		84FB934A18B70FF4006A386B /* Wjjc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Wjjc.png; sourceTree = "<group>"; };
+		84FB934B18B70FF4006A386B /* Wmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Wmount.png; sourceTree = "<group>"; };
+		84FB935018B71045006A386B /* CharacterDetailsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterDetailsView.h; sourceTree = "<group>"; };
+		84FB935118B71045006A386B /* CharacterDetailsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CharacterDetailsView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1736,6 +1776,7 @@
 				68144192185051EC0094C669 /* FindPageViewController.m */,
 				6826AC55186D5E99005716FA /* CanRankTitleObjViewController.h */,
 				6826AC56186D5E99005716FA /* CanRankTitleObjViewController.m */,
+				84FB934F18B71004006A386B /* character details */,
 			);
 			path = FindPage;
 			sourceTree = "<group>";
@@ -2616,6 +2657,7 @@
 		68CAA617184DD0F8007138B1 /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				84FB932818B70E62006A386B /* Character details */,
 				682358DA1862DF4D00982D6C /* me */,
 				68503344185EA7430034C8D6 /* find */,
 				68EF5F04185C242B00AB3108 /* Emoji */,
@@ -3752,6 +3794,41 @@
 			path = UMeng;
 			sourceTree = "<group>";
 		};
+		84FB932818B70E62006A386B /* Character details */ = {
+			isa = PBXGroup;
+			children = (
+				84FB934918B70FF4006A386B /* Wgs.png */,
+				84FB934A18B70FF4006A386B /* Wjjc.png */,
+				84FB934B18B70FF4006A386B /* Wmount.png */,
+				84FB932918B70E62006A386B /* achievementCount.png */,
+				84FB932A18B70E62006A386B /* die.png */,
+				84FB932B18B70E62006A386B /* killer.png */,
+				84FB932C18B70E62006A386B /* paiming_ico.png */,
+				84FB932D18B70E62006A386B /* PVE.png */,
+				84FB932E18B70E62006A386B /* tab_bg.png */,
+				84FB932F18B70E62006A386B /* tab_click.png */,
+				84FB933018B70E62006A386B /* tab_gray_line.png */,
+				84FB933118B70E62006A386B /* tab_line.png */,
+				84FB933218B70E62006A386B /* wowall.jpg */,
+				84FB933318B70E62006A386B /* wowfriend.jpg */,
+				84FB933418B70E62006A386B /* wowserverwow.jpg */,
+				84FB933518B70E62006A386B /* zhang.png */,
+				84FB933618B70E62006A386B /* 液晶数字字体.ttf */,
+			);
+			path = "Character details";
+			sourceTree = "<group>";
+		};
+		84FB934F18B71004006A386B /* character details */ = {
+			isa = PBXGroup;
+			children = (
+				84FB934618B70F22006A386B /* CharacterDetailsViewController.h */,
+				84FB934718B70F22006A386B /* CharacterDetailsViewController.m */,
+				84FB935018B71045006A386B /* CharacterDetailsView.h */,
+				84FB935118B71045006A386B /* CharacterDetailsView.m */,
+			);
+			name = "character details";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3807,6 +3884,7 @@
 				68EF5FA6185C243200AB3108 /* biaoqing076.png in Resources */,
 				68EF5F93185C243200AB3108 /* biaoqing057.png in Resources */,
 				68397F9E186AA94F00C6A762 /* selectednormal-big.png in Resources */,
+				84FB934E18B70FF4006A386B /* Wmount.png in Resources */,
 				68CAA5FE184DD0ED007138B1 /* InfoPlist.strings in Resources */,
 				68420DA0188F957900260E20 /* show_nozan.png in Resources */,
 				68A3AA59186437CB0054D1EC /* chara_auth_click.png in Resources */,
@@ -3819,6 +3897,7 @@
 				684237F1187A8DDE00C18033 /* load_2.png in Resources */,
 				68EF5FA0185C243200AB3108 /* biaoqing070.png in Resources */,
 				68EF5F86185C243200AB3108 /* biaoqing044.png in Resources */,
+				84FB933B18B70E62006A386B /* PVE.png in Resources */,
 				688BFB9618517A2E00462BC8 /* table_bottom.png in Resources */,
 				68CAA606184DD0ED007138B1 /* Default.png in Resources */,
 				684237FB187ABE5C00C18033 /* zan_click.png in Resources */,
@@ -3873,6 +3952,7 @@
 				68397F9F186AA94F00C6A762 /* selectednormal-s.png in Resources */,
 				683E5720189631600028E475 /* news_report.png in Resources */,
 				68241C8B1872DB2100B6E53A /* recommend_star.png in Resources */,
+				84FB934318B70E62006A386B /* zhang.png in Resources */,
 				68241C7518725E4800B6E53A /* mess_guanzhu.png in Resources */,
 				68420DA9188FC33200260E20 /* add_news_normal.png in Resources */,
 				6818B6CC187D475900829A19 /* women_normal.png in Resources */,
@@ -3909,6 +3989,8 @@
 				68EF5FA3185C243200AB3108 /* biaoqing073.png in Resources */,
 				68EF5F85185C243200AB3108 /* biaoqing043.png in Resources */,
 				68EF5F88185C243200AB3108 /* biaoqing046.png in Resources */,
+				84FB933C18B70E62006A386B /* tab_bg.png in Resources */,
+				84FB933F18B70E62006A386B /* tab_line.png in Resources */,
 				68241C7618725E4800B6E53A /* mess_tuijian.png in Resources */,
 				682F9773185AB24E00068F56 /* wo_normal.png in Resources */,
 				68EF5F6C185C243200AB3108 /* biaoqing018.png in Resources */,
@@ -3920,6 +4002,7 @@
 				6835FFC71873AFB0004040BD /* edit_bg.png in Resources */,
 				6847F8E1187E8EC800472DEE /* protocol.txt in Resources */,
 				68CAA61B184DD0F8007138B1 /* leftside_shadow_bg@2x.png in Resources */,
+				84FB933E18B70E62006A386B /* tab_gray_line.png in Resources */,
 				68503348185EA74F0034C8D6 /* ranking_icon.png in Resources */,
 				6850333B185E98450034C8D6 /* inputbg.png in Resources */,
 				68EF600F185C2EC200AB3108 /* ReceiverVoiceNodePlaying002@2x.png in Resources */,
@@ -3944,6 +4027,7 @@
 				68CAA7D8184DD104007138B1 /* build-libidn.sh in Resources */,
 				683A913118559E8C008CBDE0 /* gray_button_normal.png in Resources */,
 				683E571F189631600028E475 /* news_comment.png in Resources */,
+				84FB934218B70E62006A386B /* wowserverwow.jpg in Resources */,
 				68EF5FAC185C243200AB3108 /* biaoqing082.png in Resources */,
 				682D7EE3187BBF3F002E38B0 /* v_auth.png in Resources */,
 				68EF5F9B185C243200AB3108 /* biaoqing065.png in Resources */,
@@ -3953,9 +4037,12 @@
 				682F9756185AB18F00068F56 /* login_button_click.png in Resources */,
 				68EF5FAA185C243200AB3108 /* biaoqing080.png in Resources */,
 				6818B6CB187D475900829A19 /* women_click.png in Resources */,
+				84FB934418B70E63006A386B /* 液晶数字字体.ttf in Resources */,
 				682CB2211869173900E15D37 /* select_top.png in Resources */,
 				68503342185E9AC40034C8D6 /* bubble_01@2x.png in Resources */,
+				84FB933A18B70E62006A386B /* paiming_ico.png in Resources */,
 				68EF6015185C2EE000AB3108 /* SenderVoiceNodePlaying002@2x.png in Resources */,
+				84FB933918B70E62006A386B /* killer.png in Resources */,
 				683FA1B01859AFA5007B7487 /* segment_bg.png in Resources */,
 				68EF5F8C185C243200AB3108 /* biaoqing050.png in Resources */,
 				688BFB9D185198B900462BC8 /* back_click.png in Resources */,
@@ -3981,6 +4068,7 @@
 				68503370185F06E30034C8D6 /* line.png in Resources */,
 				6847F8E8187EC62300472DEE /* icon.png in Resources */,
 				6826AC7A186D9387005716FA /* rarenum_small_5.png in Resources */,
+				84FB933818B70E62006A386B /* die.png in Resources */,
 				683FA1AD1859AF6D007B7487 /* menu_button_normal.png in Resources */,
 				682F975B185AB19300068F56 /* register_button_normal.png in Resources */,
 				68420D94188F773800260E20 /* back_2.png in Resources */,
@@ -3994,6 +4082,7 @@
 				68EF5F91185C243200AB3108 /* biaoqing055.png in Resources */,
 				68B265D0187535C4002AEA9F /* detail_top_bg.png in Resources */,
 				682D7ED8187B9B95002E38B0 /* clazz_9.png in Resources */,
+				84FB934D18B70FF4006A386B /* Wjjc.png in Resources */,
 				68241C7418725E4800B6E53A /* mess_gonggao.png in Resources */,
 				68EF5F74185C243200AB3108 /* biaoqing026.png in Resources */,
 				68EF5FAD185C243200AB3108 /* biaoqing083.png in Resources */,
@@ -4051,6 +4140,7 @@
 				68EF5F7F185C243200AB3108 /* biaoqing037.png in Resources */,
 				68EF5F6B185C243200AB3108 /* biaoqing017.png in Resources */,
 				68EF5FA7185C243200AB3108 /* biaoqing077.png in Resources */,
+				84FB933D18B70E62006A386B /* tab_click.png in Resources */,
 				682D7ED0187B9B95002E38B0 /* clazz_1.png in Resources */,
 				68EF5FAB185C243200AB3108 /* biaoqing081.png in Resources */,
 				68A13E32188507830003D132 /* red_auth.png in Resources */,
@@ -4060,6 +4150,7 @@
 				68EF6048185C2F2500AB3108 /* third_xiemessage_record_ani9.png in Resources */,
 				682D7EDA187B9B95002E38B0 /* clazz_11.png in Resources */,
 				68397FA5186ACE5F00C6A762 /* titleobj_gray.png in Resources */,
+				84FB934C18B70FF4006A386B /* Wgs.png in Resources */,
 				682EBB3A18604626005DD7E1 /* edit_normal.png in Resources */,
 				68EF6035185C2F2500AB3108 /* third_xiemessage_record_ani13.png in Resources */,
 				68EF5F67185C243200AB3108 /* biaoqing013.png in Resources */,
@@ -4069,6 +4160,7 @@
 				68EF5EE5185C11E200AB3108 /* moren_people.png in Resources */,
 				68503343185E9AC40034C8D6 /* bubble_02@2x.png in Resources */,
 				682358DD1862DF8100982D6C /* me_email.png in Resources */,
+				84FB934018B70E62006A386B /* wowall.jpg in Resources */,
 				6847F8E9187EC62300472DEE /* icon@2x.png in Resources */,
 				68EF5F7E185C243200AB3108 /* biaoqing036.png in Resources */,
 				68EF5F84185C243200AB3108 /* biaoqing042.png in Resources */,
@@ -4125,8 +4217,10 @@
 				684237F2187A8DDE00C18033 /* load_3.png in Resources */,
 				68EF603E185C2F2500AB3108 /* third_xiemessage_record_ani21.png in Resources */,
 				684237FC187ABE5C00C18033 /* zan_hig_2.png in Resources */,
+				84FB933718B70E62006A386B /* achievementCount.png in Resources */,
 				68EF5F63185C243200AB3108 /* biaoqing009.png in Resources */,
 				68EF6036185C2F2500AB3108 /* third_xiemessage_record_ani14.png in Resources */,
+				84FB934118B70E62006A386B /* wowfriend.jpg in Resources */,
 				68477D1C1883C53300C68FBA /* people_man.png in Resources */,
 				684237F0187A8DDE00C18033 /* load_1.png in Resources */,
 				68EF5F76185C243200AB3108 /* biaoqing028.png in Resources */,
@@ -4345,6 +4439,7 @@
 				68CAA7A3184DD104007138B1 /* XMPPIQ+XEP_0060.m in Sources */,
 				683417BB185815AE00934FEF /* EGOCache.m in Sources */,
 				68CAA7A4184DD104007138B1 /* XMPPPubSub.m in Sources */,
+				84FB935218B71045006A386B /* CharacterDetailsView.m in Sources */,
 				68CAA7A5184DD104007138B1 /* TURNSocket.m in Sources */,
 				68CAA7A6184DD104007138B1 /* XMPPIQ+XEP_0066.m in Sources */,
 				68CAA7A7184DD104007138B1 /* XMPPMessage+XEP_0066.m in Sources */,
@@ -4425,6 +4520,7 @@
 				68CAA7CA184DD104007138B1 /* XMPPSRVResolver.m in Sources */,
 				683417481857FB2000934FEF /* MagicalRecord.m in Sources */,
 				683417451857FB2000934FEF /* MagicalRecord+Options.m in Sources */,
+				84FB934818B70F22006A386B /* CharacterDetailsViewController.m in Sources */,
 				68EF5FD6185C26DC00AB3108 /* KKMessageCell.m in Sources */,
 				68CAA7CB184DD104007138B1 /* GCDAsyncSocket.m in Sources */,
 				68CAA7CC184DD104007138B1 /* DDAbstractDatabaseLogger.m in Sources */,

@@ -11,10 +11,10 @@
 #import "AppDelegate.h"
 #import "SetRemarkNameViewController.h"
 #import "KKChatController.h"
-#import "TitleObjDetailViewController.h"
-#import "NewsViewController.h"
+#import "TitleObjDetailViewController.h"//头衔界面
+#import "NewsViewController.h"//动态界面
 #import "AppDelegate.h"
-
+#import "CharacterDetailsViewController.h"
 @interface PersonDetailViewController ()
 {
     UILabel*        m_titleLabel;
@@ -435,12 +435,34 @@
             UIView* myCharacter = [CommonControlOrView setCharactersViewWithName:KISDictionaryHaveKey(characterDic, @"name") gameId:@"1" realm:[KISDictionaryHaveKey(characterDic, @"realm") stringByAppendingString:realm] pveScore:[NSString stringWithFormat:@"%@",KISDictionaryHaveKey(characterDic, @"pveScore")] img:KISDictionaryHaveKey(characterDic, @"clazz") auth:[GameCommon getNewStringWithId:KISDictionaryHaveKey(characterDic, @"auth")]];
             myCharacter.frame = CGRectMake(0, m_currentStartY, kScreenWidth, 60);
             [m_myScrollView addSubview:myCharacter];
+            
+            UIButton* titleSelect = [[UIButton alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 60)];
+            titleSelect.backgroundColor = [UIColor clearColor];
+            [titleSelect addTarget:self action:@selector(tapMyCharacter:) forControlEvents:UIControlEventTouchUpInside];
+            titleSelect.tag = i+1000;
+            [m_myScrollView addSubview:titleSelect];
+            
+            m_currentStartY += 40;
+
+            
+            
+//            [myCharacter setTag:i+1000];
+//            [myCharacter addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapMyCharacter:)]];
         }
         m_currentStartY += 60;
         [self setOneLineWithY:m_currentStartY];
     }
 }
 
+
+-(void)tapMyCharacter:(UIButton *)sender
+{
+    
+    NSLog(@"点击角色%d",sender.tag);
+    
+//    CharacterDetailsViewController *CVC = [[CharacterDetailsViewController alloc]init];
+//    [self.navigationController pushViewController:CVC animated:YES];
+}
 - (void)setAchievementView
 {
     if ([self.hostInfo.achievementArray isKindOfClass:[NSArray class]] && [self.hostInfo.achievementArray count] != 0) {
@@ -474,6 +496,9 @@
         }
     }
 }
+
+
+
 
 - (void)titleObjSelectClick:(UIButton*)selectBut
 {
@@ -969,22 +994,22 @@
 
 - (void)photoWallMovePhotoFromIndex:(NSInteger)index toIndex:(NSInteger)newIndex
 {
-    
+    NSLog(@"1");
 }
 
 - (void)photoWallAddAction
 {
-    
+    NSLog(@"2");
 }
 
 - (void)photoWallAddFinish
 {
-    
+    NSLog(@"3");
 }
 
 - (void)photoWallDeleteFinish
 {
-    
+    NSLog(@"4");
 }
 
 - (void)didReceiveMemoryWarning
