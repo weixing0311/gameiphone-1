@@ -179,11 +179,20 @@
                 [alert show];
             }
         }
+        else
+        {
+            UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请求数据失败，请检查网络！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            alert.tag = 56;
+            [alert show];
+        }
+        
         [refreshView stopLoading:NO];
         [_slimeView endRefresh];
 
         [hud hide:YES];
     }];
+    //////
+
 }
 
 #pragma mark 筛选

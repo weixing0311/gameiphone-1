@@ -49,7 +49,9 @@
     m_titleLabel.text = [DataStoreManager queryRemarkNameForUser:self.userId];//别名或昵称
     if ([m_titleLabel.text isEqualToString:@""]) {//不是好友或关注
         m_titleLabel.text = self.nickName;
+         NSLog(@"self.userid%@",self.nickName);
     }
+    NSLog(@"m_titlelabel%@",m_titleLabel.text);
 }
 
 - (void)viewDidLoad
@@ -230,15 +232,31 @@
         {//目标 别人评论了我
             NSDictionary* destDic = KISDictionaryHaveKey(self.hostInfo.state, @"destUser");
             imageId = [GameCommon getHeardImgId: KISDictionaryHaveKey(destDic, @"userimg")];
-            showTitle = [NSString stringWithFormat:@"%@%@",[[GameCommon getNewStringWithId:KISDictionaryHaveKey(destDic, @"alias")] isEqualToString:@""] ? KISDictionaryHaveKey(destDic, @"nickname") : KISDictionaryHaveKey(destDic, @"alias") , KISDictionaryHaveKey(self.hostInfo.state, @"showtitle")];
+            
+            showTitle = [NSString stringWithFormat:@"%@%@",[[GameCommon getNewStringWithId:KISDictionaryHaveKey(destDic, @"alias")] isEqualToString:@""] ? [DataStoreManager queryRemarkNameForUser:KISDictionaryHaveKey(destDic, @"nickname")] : KISDictionaryHaveKey(destDic, @"alias") , KISDictionaryHaveKey(self.hostInfo.state, @"showtitle")];
+
+            if (showTitle ==nil) {
+                showTitle = [NSString stringWithFormat:@"%@%@",[[GameCommon getNewStringWithId:KISDictionaryHaveKey(destDic, @"alias")] isEqualToString:@""] ? KISDictionaryHaveKey(destDic, @"nickname") : KISDictionaryHaveKey(destDic, @"alias") , KISDictionaryHaveKey(self.hostInfo.state, @"showtitle")];
+
+            }
         }
         else
         {
             if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.hostInfo.state, @"type")] isEqualToString:@"3"]) {
-                showTitle = [KISDictionaryHaveKey(self.hostInfo.state, @"nickname") stringByAppendingString:@"发表了该内容"];
+                showTitle =  [[DataStoreManager queryRemarkNameForUser:self.userId]stringByAppendingString:@"发表了该内容"];
+                NSLog(@"showtitle%@",showTitle);
+                if ([showTitle  isEqualToString:@""]) {
+                    showTitle = [KISDictionaryHaveKey(self.hostInfo.state, @"nickname") stringByAppendingString:@"发表了该内容"];
+                   
+                }
+                 NSLog(@"showTitle%@",showTitle);
             }
             else
+                showTitle = [[DataStoreManager queryRemarkNameForUser:KISDictionaryHaveKey(self.hostInfo.state, @"userid")]stringByAppendingString:KISDictionaryHaveKey(self.hostInfo.state, @"showtitle")];
+            if (showTitle ==nil) {
                 showTitle = [KISDictionaryHaveKey(self.hostInfo.state, @"nickname") stringByAppendingString:KISDictionaryHaveKey(self.hostInfo.state, @"showtitle")];
+
+            }
             imageId = [GameCommon getHeardImgId: KISDictionaryHaveKey(self.hostInfo.state, @"userimg")];
         }
       

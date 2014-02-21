@@ -466,6 +466,7 @@
                 shareType = 0;
                 selectContactPage *VC = [[selectContactPage alloc] init];
                 VC.contactDelegate = self;
+                VC.contentDic = self.dataDic;
                 [self.navigationController pushViewController:VC animated:YES];
             }  break;
             case 1:

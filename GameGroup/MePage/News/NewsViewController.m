@@ -355,7 +355,10 @@
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
         cell.headImageV.imageURL = theUrl;
         
-        NSString * nickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(destDic, @"alias")];
+        //[DataStoreManager queryRemarkNameForUser:self.userId]
+        NSString *nickName = [GameCommon getNewStringWithId:[DataStoreManager queryRemarkNameForUser:KISDictionaryHaveKey(destDic, @"userid")]];
+        
+//        NSString * nickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(destDic, @"alias")];
         if ([nickName isEqualToString:@""]) {
             nickName = KISDictionaryHaveKey(destDic, @"nickname");
         }
@@ -391,7 +394,9 @@
 //        else
             cell.headImageV.imageURL = theUrl;
         
-        NSString * nickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"alias")];
+//        NSString * nickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"alias")];
+        NSString *nickName = [GameCommon getNewStringWithId:[DataStoreManager queryRemarkNameForUser:KISDictionaryHaveKey(tempDic, @"userid")]];
+
         if ([nickName isEqualToString:@""]) {
             nickName = KISDictionaryHaveKey(tempDic, @"nickname");
         }

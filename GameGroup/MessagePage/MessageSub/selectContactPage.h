@@ -33,4 +33,5 @@
 @property (strong,nonatomic) AppDelegate * appDel;
 @property (strong,nonatomic)UITableView *contactsTable;
 @property (assign,nonatomic) id <getContact> contactDelegate;
+@property (strong,nonatomic)NSDictionary *contentDic;
 @end
