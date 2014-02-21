@@ -84,8 +84,8 @@
         self.activityView.hidesWhenStopped = YES;
         [self.contentView addSubview:self.activityView];
         
-        self.failImage = [[UIImageView alloc]initWithFrame:CGRectZero];
-        self.failImage.image = KUIImage(@"fail_bg");
+        self.failImage = [[UIButton alloc]initWithFrame:CGRectZero];
+        [self.failImage setBackgroundImage:KUIImage(@"fail_bg") forState:UIControlStateNormal];
         [self.contentView addSubview:self.failImage];
     }
     
@@ -97,7 +97,8 @@
     if ([status isEqualToString:@"0"]) {//失败
         self.failImage.frame = CGRectMake(point.x-12, point.y-12, 24, 24);
         self.failImage.hidden = NO;
-        
+        self.statusLabel.hidden = YES;
+
         if ([self.cellTimer isValid]) {
             [self.cellTimer invalidate];
             self.cellTimer = nil;
@@ -107,9 +108,10 @@
     else if([status isEqualToString:@"2"])//发送中
     {
         self.failImage.hidden = YES;
+        self.statusLabel.hidden = YES;
 
         if (![self.cellTimer isValid]) {
-            self.cellTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(stopActivity) userInfo:nil repeats:YES];
+            self.cellTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(stopActivity) userInfo:nil repeats:YES];
             [[NSRunLoop currentRunLoop] addTimer:self.cellTimer forMode:NSRunLoopCommonModes];
             
             self.activityView.center = point;

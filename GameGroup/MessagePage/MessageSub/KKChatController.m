@@ -1090,7 +1090,11 @@
             [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchBegin:) forControlEvents:UIControlEventTouchDown];
             [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchEnd:) forControlEvents:UIControlEventTouchUpInside];
             [cell.bgImageView setTag:(indexPath.row+1)];
-            
+
+            [cell.failImage addTarget:self action:@selector(offsetButtonTouchBegin:) forControlEvents:UIControlEventTouchDown];
+            [cell.failImage addTarget:self action:@selector(offsetButtonTouchEnd:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.failImage setTag:(indexPath.row+1)];
+
             [cell refreshStatusPoint:CGPointMake(320-size.width-padding-60 -15, (size.height+20)/2 + padding*2-15) status:status];
         }else {
             [cell.headImgV setFrame:CGRectMake(10, padding*2-15, 40, 40)];
@@ -1485,10 +1489,11 @@
         [mes addChild:body];
         
         //发送消息
-        if (![self.appDel.xmppHelper sendMessage:mes]) {
-            [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
-            return;
-        }
+        [self.appDel.xmppHelper sendMessage:mes];
+//        if (![self.appDel.xmppHelper sendMessage:mes]) {
+//            [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
+//            return;
+//        }
         
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
         [dictionary setObject:message forKey:@"msg"];

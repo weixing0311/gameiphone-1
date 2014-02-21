@@ -22,7 +22,7 @@
 
 @property(nonatomic, retain) NSTimer* cellTimer;//发送5秒
 @property(nonatomic, retain) UIActivityIndicatorView *activityView;
-@property(nonatomic, retain) UIImageView* failImage;
+@property(nonatomic, retain) UIButton* failImage;
 @property(nonatomic, retain) UILabel*  statusLabel;//已读 送达
 @property(nonatomic, assign) NSInteger cellRow;
 @property(nonatomic, retain) NSString* messageuuid;
