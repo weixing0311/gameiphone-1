@@ -128,7 +128,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(otherMessageReceived:) name:kOtherMessage object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recommendFriendReceived:) name:kOtherMessage object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActiveWithNet:) name:@"appBecomeActive" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActiveWithNet:) name:kReachabilityChangedNotification object:nil];
 
     [self setTopViewWithTitle:@"" withBackButton:NO];
     
@@ -190,8 +190,8 @@
 #pragma mark 进入程序网络变化
 - (void)appBecomeActiveWithNet:(NSNotification*)notification
 {
-    NSString* haveNet = notification.object;
-    if ([haveNet isEqualToString:@"1"] && [self isHaveLogin]) {//有网
+    Reachability* reach = notification.object;
+    if ([reach currentReachabilityStatus] != NotReachable  && [self isHaveLogin]) {//有网
         if (![self.appDel.xmppHelper ifXMPPConnected]&&![titleLabel.text isEqualToString:@"消息(连接中...)"]) {
             if ([[TempData sharedInstance] getServer] && [[TempData sharedInstance] getServer].length > 0) {
                 [self logInToChatServer];
@@ -202,7 +202,7 @@
             }
         }
     }
-    else if ([haveNet isEqualToString:@"0"])
+    else
     {
         titleLabel.text = @"消息(未连接)";
         [self.appDel.xmppHelper disconnect];

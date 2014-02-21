@@ -4629,7 +4629,7 @@
 		68CAA614184DD0ED007138B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: YaYun Cui (QG9C9G6T78)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Shanshan Wei (CWP7SHBTMF)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GameGroup/GameGroup-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4648,7 +4648,7 @@
 		68CAA615184DD0ED007138B1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: YaYun Cui (QG9C9G6T78)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Shanshan Wei (CWP7SHBTMF)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GameGroup/GameGroup-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;

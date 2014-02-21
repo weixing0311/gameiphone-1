@@ -14,8 +14,6 @@
 #import "DDTTYLogger.h"
 #import "GetDataAfterManager.h"
 
-#import "Reachability.h"
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -43,7 +41,7 @@
     
     //网络变化
     Reachability * reach = [Reachability reachabilityForInternetConnection];
-    if (reach) {
+   /* if (reach) {
         [GameCommon shareGameCommon].haveNet = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"1"];
         NSLog(@"网络变化1111");
@@ -71,7 +69,7 @@
             [GameCommon shareGameCommon].haveNet = NO;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"0"];
         });
-    };
+    };*/
     
     [reach startNotifier];
     
@@ -100,60 +98,7 @@
     //它是类里自带的方法,这个方法得说下，很多人都不知道有什么用，它一般在整个应用程序加载时执行，挂起进入后也会执行，所以很多时候都会使用到，将小红圈清空
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(reachabilityChanged:)
-//                                                 name: kReachabilityChangedNotification
-//                                               object: nil];
-//    Reachability* hostReach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
-//    [hostReach startNotifier];
-    
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:[NSString stringWithFormat:@"%d",[GameCommon testConnection]]];
-//    Reachability * reach = [Reachability reachabilityForInternetConnection];
-//    if (reach) {
-//        [GameCommon shareGameCommon].haveNet = YES;
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"1"];
-//    }
-//    else{
-//        [self.xmppHelper disconnect];
-//        [GameCommon shareGameCommon].haveNet = NO;
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"0"];
-//    }
-//    reach.reachableBlock = ^(Reachability * reachability)
-//    {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [GameCommon shareGameCommon].haveNet = YES;
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"1"];
-//        });
-//    };
-//    
-//    reach.unreachableBlock = ^(Reachability * reachability)
-//    {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//
-//            [self.xmppHelper disconnect];
-//            [GameCommon shareGameCommon].haveNet = NO;
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"0"];
-//        });
-//    };
-//
-//    [reach startNotifier];
 }
-
-//-(void)reachabilityChanged:(NSNotification*)note
-//{
-//    Reachability * reach = [note object];
-//    
-//    if([reach isReachable])
-//    {
-//        //  NSLog( @"Notification Says Reachable");
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:[NSString stringWithFormat:@"%d",[GameCommon testConnection]]];
-//    }
-//    else
-//    {
-//        //    NSLog( @"Notification Says Unreachable");
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:[NSString stringWithFormat:@"%d",[GameCommon testConnection]]];
-//    }
-//}
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
