@@ -53,6 +53,13 @@
         arrow.image = KUIImage(@"right_arrow");
         arrow.backgroundColor = [UIColor clearColor];
         [self addSubview:arrow];
+        
+        UIButton* cellSelect = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 220, 60)];
+        cellSelect.backgroundColor = [UIColor clearColor];
+        [cellSelect addTarget:self action:@selector(cellSelectClick:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:cellSelect];
+
+        
     }
     return self;
 }
@@ -64,6 +71,12 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
+}
+- (void)cellSelectClick:(id)sender
+{
+    if (self.myCellDelegate && [self.myCellDelegate respondsToSelector:@selector(showCellSelectClick1:)]) {
+        [self.myCellDelegate showCellSelectClick1:self];
+    }
 }
 
 @end

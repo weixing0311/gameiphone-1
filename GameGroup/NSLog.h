@@ -1,7 +1,7 @@
 
 #import <Foundation/NSObjCRuntime.h>
 
-#define MYDEBUG 1
+#define MYDEBUG 0
 
 #if MYDEBUG
 #undef NSLog

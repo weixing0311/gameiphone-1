@@ -31,7 +31,8 @@
  
  titlesObj =                     (//头衔
  {
- characterid = 1802;
+ characterid = 1802;   //游戏角色ID
+ 
  hasDate = 1387870544000;
  hide = 0;
  id = 379;
@@ -70,6 +71,27 @@
         
         self.state = KISDictionaryHaveKey(info, @"dynamicmsg");//动态
 
+//获取游戏角色列表
+        //NSDictionary *charaDic = KISDictionaryHaveKey(info, @"dynamicmsg");
+        if (![self.state isKindOfClass:[NSDictionary class]]) {
+            ;
+        }else{
+         NSDictionary *dic =KISDictionaryHaveKey(self.state, @"titleObj");
+        if ([dic isKindOfClass:[NSDictionary class]]) {
+           
+            
+            NSLog(@"charaDic%@",dic);
+            
+             self.gameid = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"gameid")];
+             self.characterid = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"characterid")];
+            
+            NSLog(@"各种ID%@--%@",self.gameid,self.characterid);
+
+        }else{
+            NSLog(@"字典为空");
+
+        }
+        }
         self.zanNum = [GameCommon getNewStringWithId:KISDictionaryHaveKey(info, @"zannum")];
         self.fanNum = [GameCommon getNewStringWithId:KISDictionaryHaveKey(info, @"fansnum")];
 
@@ -84,6 +106,7 @@
         self.updateTime = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfo, @"updateUserLocationDate")];
         self.distrance = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfo, @"distance")];
         
+        
         self.relation = [NSString stringWithFormat:@"%@",KISDictionaryHaveKey(info, @"shiptype")];// 1 好友，2 关注 3 粉丝 4 陌生人
         
         self.createTime = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfo, @"createTime")];
@@ -95,7 +118,6 @@
         self.clazzId = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfo, @"clazz")];
         
         self.userName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfo, @"username")];
-        
         self.userId = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfo, @"id")];
         self.nickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfo, @"nickname")];
         self.telNumber = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfo, @"phoneNumber")];
@@ -184,3 +206,4 @@
 }
 
 @end
+

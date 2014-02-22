@@ -98,7 +98,7 @@
     }
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
-        NSLog(@"%@", responseObject);
+        NSLog(@"responseObject%@", responseObject);
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             m_hostInfo = [[HostInfo alloc] initWithHostInfo:responseObject];
 
@@ -640,7 +640,18 @@
         [[Custom_tabbar showTabBar] hideTabBar:YES];
         
         CharacterDetailsViewController* VC = [[CharacterDetailsViewController alloc] init];
-        [self.navigationController pushViewController:VC animated:YES];
+        NSDictionary *dictim = KISDictionaryHaveKey(m_hostInfo.state, @"titleObj");
+        if ([dictim isKindOfClass:[NSDictionary class]]) {
+            NSLog(@"没有人");
+            VC.characterId = m_hostInfo.characterid;
+            VC.gameId = m_hostInfo.gameid;
+            VC.myViewType = CHARA_INFO_MYSELF;
+            [self.navigationController pushViewController:VC animated:YES];
+        }else{
+            [self showAlertViewWithTitle:@"提示" message:@"你没有绑定任何角色" buttonTitle:@"确定"];
+            ;
+        }
+        
     }
     else if(indexPath.section == 3)//头衔
     {

@@ -29,5 +29,5 @@
 @protocol MyTitleShowDelegate <NSObject>
 
 - (void)showButtonClick:(MyTitleObjHideCell*)myCell;
-
+- (void)showCellSelectClick1:(MyTitleObjHideCell*)myCell;
 @end

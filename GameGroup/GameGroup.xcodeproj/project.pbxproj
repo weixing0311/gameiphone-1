@@ -668,6 +668,8 @@
 		6F8AC42218745BE3002E983A /* have_picture.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F8AC42118745BE3002E983A /* have_picture.png */; };
 		6FDCED3A1878EFBA00F9FC18 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FDCED381878EFBA00F9FC18 /* libMobClickLibrary.a */; };
 		84076EDB18B5D67500019462 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84076EDA18B5D67500019462 /* SearchResultViewController.m */; };
+		847DD07918B88DDD00BB0215 /* CharaDaCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 847DD07818B88DDD00BB0215 /* CharaDaCell.m */; };
+		847DD08118B8979500BB0215 /* NewsViewInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 847DD08018B8979500BB0215 /* NewsViewInfo.m */; };
 		84FB933718B70E62006A386B /* achievementCount.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932918B70E62006A386B /* achievementCount.png */; };
 		84FB933818B70E62006A386B /* die.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932A18B70E62006A386B /* die.png */; };
 		84FB933918B70E62006A386B /* killer.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932B18B70E62006A386B /* killer.png */; };
@@ -687,6 +689,8 @@
 		84FB934D18B70FF4006A386B /* Wjjc.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB934A18B70FF4006A386B /* Wjjc.png */; };
 		84FB934E18B70FF4006A386B /* Wmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB934B18B70FF4006A386B /* Wmount.png */; };
 		84FB935218B71045006A386B /* CharacterDetailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FB935118B71045006A386B /* CharacterDetailsView.m */; };
+		84FB935518B73A49006A386B /* CharaInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FB935418B73A49006A386B /* CharaInfo.m */; };
+		84FB935718B77359006A386B /* ceshi.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 84FB935618B77359006A386B /* ceshi.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -702,7 +706,7 @@
 		68144177185043860094C669 /* StartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartViewController.m; sourceTree = "<group>"; };
 		681441871850463B0094C669 /* IntroduceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntroduceViewController.h; sourceTree = "<group>"; };
 		681441881850463B0094C669 /* IntroduceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntroduceViewController.m; sourceTree = "<group>"; };
-		68144191185051EC0094C669 /* FindPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindPageViewController.h; sourceTree = "<group>"; };
+		68144191185051EC0094C669 /* FindPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FindPageViewController.h; path = ../FindPage/FindPageViewController.h; sourceTree = "<group>"; };
 		68144192185051EC0094C669 /* FindPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindPageViewController.m; sourceTree = "<group>"; };
 		68144197185052150094C669 /* MePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MePageViewController.h; sourceTree = "<group>"; };
 		68144198185052150094C669 /* MePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MePageViewController.m; sourceTree = "<group>"; };
@@ -1679,6 +1683,10 @@
 		6FDCED391878EFBA00F9FC18 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		84076ED918B5D67500019462 /* SearchResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultViewController.h; sourceTree = "<group>"; };
 		84076EDA18B5D67500019462 /* SearchResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultViewController.m; sourceTree = "<group>"; };
+		847DD07718B88DDD00BB0215 /* CharaDaCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharaDaCell.h; sourceTree = "<group>"; };
+		847DD07818B88DDD00BB0215 /* CharaDaCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CharaDaCell.m; sourceTree = "<group>"; };
+		847DD07F18B8979500BB0215 /* NewsViewInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsViewInfo.h; sourceTree = "<group>"; };
+		847DD08018B8979500BB0215 /* NewsViewInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsViewInfo.m; sourceTree = "<group>"; };
 		84FB932918B70E62006A386B /* achievementCount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = achievementCount.png; sourceTree = "<group>"; };
 		84FB932A18B70E62006A386B /* die.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = die.png; sourceTree = "<group>"; };
 		84FB932B18B70E62006A386B /* killer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = killer.png; sourceTree = "<group>"; };
@@ -1700,6 +1708,9 @@
 		84FB934B18B70FF4006A386B /* Wmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Wmount.png; sourceTree = "<group>"; };
 		84FB935018B71045006A386B /* CharacterDetailsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterDetailsView.h; sourceTree = "<group>"; };
 		84FB935118B71045006A386B /* CharacterDetailsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CharacterDetailsView.m; sourceTree = "<group>"; };
+		84FB935318B73A49006A386B /* CharaInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharaInfo.h; sourceTree = "<group>"; };
+		84FB935418B73A49006A386B /* CharaInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CharaInfo.m; sourceTree = "<group>"; };
+		84FB935618B77359006A386B /* ceshi.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ceshi.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1772,7 +1783,6 @@
 				682E2DF21888F369004E8991 /* NormalTableCell.m */,
 				682CB225186917B900E15D37 /* samerealm */,
 				683417911858076800934FEF /* NearBy */,
-				68144191185051EC0094C669 /* FindPageViewController.h */,
 				68144192185051EC0094C669 /* FindPageViewController.m */,
 				6826AC55186D5E99005716FA /* CanRankTitleObjViewController.h */,
 				6826AC56186D5E99005716FA /* CanRankTitleObjViewController.m */,
@@ -1871,6 +1881,8 @@
 				68397FA9186ACEA200C6A762 /* MyTitleObjShowCell.m */,
 				68397FAB186AD60800C6A762 /* MyTitleObjHideCell.h */,
 				68397FAC186AD60800C6A762 /* MyTitleObjHideCell.m */,
+				847DD07718B88DDD00BB0215 /* CharaDaCell.h */,
+				847DD07818B88DDD00BB0215 /* CharaDaCell.m */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -1960,6 +1972,8 @@
 				68B265C818752D36002AEA9F /* Cell */,
 				6826AC59186D785F005716FA /* NewsViewController.h */,
 				6826AC5A186D785F005716FA /* NewsViewController.m */,
+				847DD07F18B8979500BB0215 /* NewsViewInfo.h */,
+				847DD08018B8979500BB0215 /* NewsViewInfo.m */,
 				6826AC5C186D7E9F005716FA /* NewsGetTitleCell.h */,
 				6826AC5D186D7E9F005716FA /* NewsGetTitleCell.m */,
 				68241C911872EBFF00B6E53A /* SendNewsViewController.h */,
@@ -2320,6 +2334,7 @@
 		683FA19E1859974D007B7487 /* Table */ = {
 			isa = PBXGroup;
 			children = (
+				68144191185051EC0094C669 /* FindPageViewController.h */,
 				683FA16818599652007B7487 /* LocalStore.xcdatamodeld */,
 				686CE87418AC70EF00BA2422 /* DSThumbMsgs.h */,
 				686CE87518AC70EF00BA2422 /* DSThumbMsgs.m */,
@@ -3797,6 +3812,7 @@
 		84FB932818B70E62006A386B /* Character details */ = {
 			isa = PBXGroup;
 			children = (
+				84FB935618B77359006A386B /* ceshi.jpg */,
 				84FB934918B70FF4006A386B /* Wgs.png */,
 				84FB934A18B70FF4006A386B /* Wjjc.png */,
 				84FB934B18B70FF4006A386B /* Wmount.png */,
@@ -3825,6 +3841,8 @@
 				84FB934718B70F22006A386B /* CharacterDetailsViewController.m */,
 				84FB935018B71045006A386B /* CharacterDetailsView.h */,
 				84FB935118B71045006A386B /* CharacterDetailsView.m */,
+				84FB935318B73A49006A386B /* CharaInfo.h */,
+				84FB935418B73A49006A386B /* CharaInfo.m */,
 			);
 			name = "character details";
 			sourceTree = "<group>";
@@ -3857,6 +3875,11 @@
 			attributes = {
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = Swallow;
+				TargetAttributes = {
+					68CAA5EF184DD0ED007138B1 = {
+						DevelopmentTeam = 8FP33456DN;
+					};
+				};
 			};
 			buildConfigurationList = 68CAA5EB184DD0ED007138B1 /* Build configuration list for PBXProject "GameGroup" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -4243,6 +4266,7 @@
 				682D7ED7187B9B95002E38B0 /* clazz_8.png in Resources */,
 				683A913E1855B992008CBDE0 /* sr_refresh@2x.png in Resources */,
 				6836FD35186C29B000AF7562 /* blue_small2_normal.png in Resources */,
+				84FB935718B77359006A386B /* ceshi.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4356,6 +4380,7 @@
 				68CAA786184DD104007138B1 /* XMPPRoom.xcdatamodeld in Sources */,
 				68144193185051EC0094C669 /* FindPageViewController.m in Sources */,
 				683416F21857F97800934FEF /* DataStoreManager.m in Sources */,
+				84FB935518B73A49006A386B /* CharaInfo.m in Sources */,
 				68CAA787184DD104007138B1 /* XMPPRoomCoreDataStorage.m in Sources */,
 				68CAA788184DD104007138B1 /* XMPPRoomMessageCoreDataStorageObject.m in Sources */,
 				682E2DF01888D9B6004E8991 /* OtherMsgsViewController.m in Sources */,
@@ -4468,6 +4493,7 @@
 				683417BE185815AE00934FEF /* EGOImageLoader.m in Sources */,
 				68CAA7B0184DD104007138B1 /* XMPPCapabilities.m in Sources */,
 				68CAA7B1184DD104007138B1 /* XMPPMessageArchiving.xcdatamodeld in Sources */,
+				847DD07918B88DDD00BB0215 /* CharaDaCell.m in Sources */,
 				68CAA7B2184DD104007138B1 /* XMPPMessageArchiving_Contact_CoreDataObject.m in Sources */,
 				68CAA7B3184DD104007138B1 /* XMPPMessageArchiving_Message_CoreDataObject.m in Sources */,
 				684FF99B1850631600A7FC42 /* GameCommon.m in Sources */,
@@ -4544,6 +4570,7 @@
 				686D2F2D184DE35200F6E1BB /* NSObject+SBJSON.m in Sources */,
 				68CAA7D4184DD104007138B1 /* NSString+DDXML.m in Sources */,
 				682CB228186917D000E15D37 /* SameRealmViewController.m in Sources */,
+				847DD08118B8979500BB0215 /* NewsViewInfo.m in Sources */,
 				68CAA7D5184DD104007138B1 /* DDXMLDocument.m in Sources */,
 				68EF5FFC185C283B00AB3108 /* OHASMarkupParserBase.m in Sources */,
 				68CAA7D6184DD104007138B1 /* DDXMLElement.m in Sources */,
@@ -4629,7 +4656,8 @@
 		68CAA614184DD0ED007138B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: YaYun Cui (QG9C9G6T78)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GameGroup/GameGroup-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4641,6 +4669,7 @@
 					"\"$(SRCROOT)/OpenSourceData/XMPP/Vendor/libidn\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -4648,7 +4677,8 @@
 		68CAA615184DD0ED007138B1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: YaYun Cui (QG9C9G6T78)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GameGroup/GameGroup-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4660,6 +4690,7 @@
 					"\"$(SRCROOT)/OpenSourceData/XMPP/Vendor/libidn\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

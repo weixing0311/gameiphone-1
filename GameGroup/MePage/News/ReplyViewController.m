@@ -417,6 +417,8 @@
 
     self.textView.text = [NSString stringWithFormat:@"回复 %@：", nickName];
     [self.textView becomeFirstResponder];
+    
+    
 }
 
 -(void)CellHeardButtonClick:(int)rowIndex

@@ -154,31 +154,34 @@
     [[GameCommon shareGameCommon] displayTabbarNotification];
     [self.navigationController popViewControllerAnimated:YES];
 }
-
+//网络获取自己发表参与的内容
 - (void)getDataWithMyStore
 {
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSArray * dMyNews = [DSMyNewsList MR_findAllInContext:localContext];
         for (DSMyNewsList* news in dMyNews) {
+            NSLog(@"dMyNews%@",dMyNews);
             NSDictionary* commentDic = [NSDictionary dictionaryWithObject:news.commentObj forKey:@"msg"];
             NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"userimg", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",commentDic, @"commentObj",news.urlLink, @"urlLink",news.img, @"thumb",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",news.showTitle, @"showtitle",news.superstar, @"superstar",nil];
             [m_newsArray addObject:tempDic];
         }
     }];
 }
-
+//获取好友的发表内容
 - (void)getDataWithFriendStore
 {
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSArray * dFriendsNews = [DSFriendsNewsList MR_findAllInContext:localContext];
         for (DSFriendsNewsList* news in dFriendsNews) {
+            
+            NSLog(@"dFriendNews%@",dFriendsNews);
             NSDictionary* commentDic = [NSDictionary dictionaryWithObject:news.commentObj forKey:@"msg"];
             NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithObjectsAndKeys:news.newsId, @"id", news.heardImgId, @"userimg", news.bigTitle, @"title", news.msg, @"msg", news.detailPageId, @"detailPageId", news.createDate, @"createDate", news.nickName, @"nickname",news.type, @"type",commentDic, @"commentObj",news.urlLink, @"urlLink",news.img, @"thumb",news.zannum, @"zannum",news.userid, @"userid",news.username, @"username",news.showTitle, @"showtitle",news.superstar, @"superstar",nil];
             [m_newsArray addObject:tempDic];
         }
     }];
 }
-
+//获取系统推送内容
 - (void)getNewsDataByNet
 {
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
@@ -209,7 +212,7 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
-
+        NSLog(@"responseObject1%@",responseObject);
         if (![responseObject isKindOfClass:[NSArray class]]) {
             [refreshView stopLoading:YES];
             [_slimeView endRefresh];

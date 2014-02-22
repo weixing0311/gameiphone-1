@@ -11,13 +11,13 @@
 
 @interface MyTitleObjViewController ()
 {
-    UITableView*  m_showTitleObjTable;
-    NSMutableArray* m_showDataArray;
-    UITableView*  m_hideTitleObjTable;
-    NSMutableArray* m_hideDataArray;
+    UITableView*  m_showTitleObjTable;//显示的头衔界面
+    NSMutableArray* m_showDataArray;//显示的头衔
+    UITableView*  m_hideTitleObjTable;//隐藏的头衔几面
+    NSMutableArray* m_hideDataArray;//隐藏的头衔
 
-    UIButton*     m_showButton;
-    UIButton*     m_hideButton;
+    UIButton*     m_showButton;//显示的头衔button
+    UIButton*     m_hideButton;//隐藏的头衔button
     
     BOOL          m_isHaveChange;
     
@@ -94,7 +94,7 @@
   
     [self getTitleObjByNet];
 }
-
+//显示隐藏头衔页面
 - (void)segmentChanged:(UIButton*)segButton
 {
     if (segButton.selected) {
@@ -116,7 +116,7 @@
         [m_hideTitleObjTable reloadData];
     }
 }
-
+//获取网络数据
 - (void)getTitleObjByNet
 {
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
@@ -349,6 +349,7 @@
 }
 
 #pragma mark - Table view delegate
+//推送到详细界面
 - (void)showCellSelectClick:(MyTitleObjShowCell*)myCell//编辑状态下的cell不可点击
 {
     TitleObjDetailViewController* detailVC = [[TitleObjDetailViewController alloc] init];
@@ -357,6 +358,15 @@
     detailVC.isFriendTitle = NO;
     [self.navigationController pushViewController:detailVC animated:YES];
 }
+- (void)showCellSelectClick1:(MyTitleObjHideCell*)myCell//编辑状态下的cell不可点击
+{
+    TitleObjDetailViewController* detailVC = [[TitleObjDetailViewController alloc] init];
+    detailVC.titleObjArray = m_hideDataArray;
+    detailVC.showIndex = myCell.myIndexPath.row;
+    detailVC.isFriendTitle = NO;
+    [self.navigationController pushViewController:detailVC animated:YES];
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

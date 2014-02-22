@@ -460,8 +460,14 @@
     
     NSLog(@"点击角色%d",sender.tag);
     
-//    CharacterDetailsViewController *CVC = [[CharacterDetailsViewController alloc]init];
-//    [self.navigationController pushViewController:CVC animated:YES];
+    CharacterDetailsViewController *CVC = [[CharacterDetailsViewController alloc]init];
+    NSDictionary *dic = KISDictionaryHaveKey(self.hostInfo.state, @"titleObj");
+    if ([dic isKindOfClass:[NSDictionary class]]) {
+        CVC.gameId =self.hostInfo.gameid;
+        CVC.characterId = self.hostInfo.characterid;
+        CVC.myViewType = CHARA_INFO_PERSON;
+        [self.navigationController pushViewController:CVC animated:YES];
+    }
 }
 - (void)setAchievementView
 {
