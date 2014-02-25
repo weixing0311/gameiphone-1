@@ -544,6 +544,10 @@
             NSString * nameKey;
             if (nickName.length>=1) {
                 nameKey = [[DataStoreManager convertChineseToPinYin:pinYin] stringByAppendingFormat:@"+%@",pinYin];
+                NSPredicate * predicateNameKey = [NSPredicate predicateWithFormat:@"nameKey==%@",nameKey];
+                DSAttentions * dAttention_nameKey = [DSAttentions MR_findFirstWithPredicate:predicateNameKey];
+                if (dAttention_nameKey)//如果昵称重复 在key后面添1
+                    nameKey = [nameKey stringByAppendingString:@"1"];
                 dFriend.nameKey = nameKey;
                 nameIndex = [[nameKey substringToIndex:1] uppercaseString];
                 dFriend.nameIndex = nameIndex;
@@ -1714,6 +1718,10 @@
             NSString * nameKey;
             if (nickName.length>=1) {
                 nameKey = [[DataStoreManager convertChineseToPinYin:pinYin] stringByAppendingFormat:@"+%@",pinYin];
+                NSPredicate * predicateNameKey = [NSPredicate predicateWithFormat:@"nameKey==%@",nameKey];
+                DSFriends * dFriend_nameKey = [DSAttentions MR_findFirstWithPredicate:predicateNameKey];
+                if (dFriend_nameKey)//如果昵称重复 在key后面添0
+                    nameKey = [nameKey stringByAppendingString:@"0"];
                 dFriend.nameKey = nameKey;
                 nameIndex = [[nameKey substringToIndex:1] uppercaseString];
                 dFriend.nameIndex = nameIndex;
