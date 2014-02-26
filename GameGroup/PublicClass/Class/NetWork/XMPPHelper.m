@@ -309,10 +309,13 @@
 #pragma mark 收到消息后调用
 /*<message xmlns="jabber:client" from="admin@gamepro.com" to="11111111111@gamepro.com" type="chat" msgtype="system" msgTime="1388032476641" fromNickname="&#x5C0F;&#x4F19;&#x4F34;" fromHeadImg="1"><body>通知：您失去了XX头衔</body></message>*/
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message{
-    NSString *msgtype = [[message attributeForName:@"msgtype"] stringValue];
     NSString *msg = [[message elementForName:@"body"] stringValue];
     NSLog(@"message =====%@",message);
-    
+
+    if(msg==nil){
+        return;
+    }
+    NSString *msgtype = [[message attributeForName:@"msgtype"] stringValue];
     NSString *from = [[message attributeForName:@"from"] stringValue];
     NSString *msgId = [[message attributeForName:@"id"] stringValue];
     
@@ -320,140 +323,134 @@
     NSString * fromName = [from substringToIndex:(range.location == NSNotFound) ? 0 : range.location];
     
     NSString *type = [[message attributeForName:@"type"] stringValue];
-   
+    
     NSString *msgTime = [[message attributeForName:@"msgTime"] stringValue];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:msg forKey:@"msg"];
+    [dict setObject:from forKey:@"sender"];
+    
+    //消息接收到的时间
 
-    if(msg!=nil){
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        [dict setObject:msg forKey:@"msg"];
-        [dict setObject:from forKey:@"sender"];
-       
-        //消息接收到的时间
-        if ([NSString stringWithFormat:@"%.f", [msgTime doubleValue]].length > 10) {
-            double newTime = [msgTime doubleValue]/1000;
-            [dict setObject:[NSString stringWithFormat:@"%.f", newTime]  forKey:@"time"];
+    [dict setObject:[NSString stringWithFormat:@"%.f", [msgTime doubleValue]/1000]  forKey:@"time"];
+    
+    NSLog(@"theDict%@",dict);
+    if ([type isEqualToString:@"chat"]) {
+        if ([msgtype isEqualToString:@"normalchat"]) {//聊天的 或动态聊天消息
+            NSString* payload = [GameCommon getHeardImgId:[[message elementForName:@"payload"] stringValue]];//是否含payload标签
+            if (payload.length > 0) {
+                NSString* payload = [[message elementForName:@"payload"] stringValue];
+                [dict setObject:payload forKey:@"payload"];
+                
+                [dict setObject:@"payloadchat" forKey:@"msgType"];
+            }
+            else
+                [dict setObject:@"normalchat" forKey:@"msgType"];
+            
+            [dict setObject:msgId?msgId:@"" forKey:@"msgId"];
+            
+            [self.chatDelegate newMessageReceived:dict];
         }
-        else
-            [dict setObject:msgTime?msgTime:@""  forKey:@"time"];
-
-        NSLog(@"theDict%@",dict);
-        if ([type isEqualToString:@"chat"]) {
-            if ([msgtype isEqualToString:@"normalchat"]) {//聊天的 或动态聊天消息
-                NSString* payload = [GameCommon getHeardImgId:[[message elementForName:@"payload"] stringValue]];//是否含payload标签
-                if (payload.length > 0) {
-                    NSString* payload = [[message elementForName:@"payload"] stringValue];
-                    [dict setObject:payload forKey:@"payload"];
-
-                    [dict setObject:@"payloadchat" forKey:@"msgType"];
-                }
-                else
-                    [dict setObject:@"normalchat" forKey:@"msgType"];
-                
-                [dict setObject:msgId?msgId:@"" forKey:@"msgId"];
-
-                [self.chatDelegate newMessageReceived:dict];
-            }
-            else if ([msgtype isEqualToString:@"sayHello"]){//打招呼的
-                [dict setObject:@"sayHello" forKey:@"msgType"];
-
-                NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
-                [dict setObject:shiptype  forKey:@"shiptype"];
-
-                [self.addReqDelegate newAddReq:dict];
-            }
-            else if([msgtype isEqualToString:@"deletePerson"])//取消关注
-            {
-                [dict setObject:@"deletePerson" forKey:@"msgType"];
-               
-                NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
-                [dict setObject:shiptype  forKey:@"shiptype"];
-                
-                [self.deletePersonDelegate deletePersonReceived:dict];
-            }
-            else if ([msgtype isEqualToString:@"character"] || [msgtype isEqualToString:@"pveScore"] || [msgtype isEqualToString:@"title"])
-            {
-                [dict setObject:msgtype forKey:@"msgType"];
-              
-                [dict setObject:[[message attributeForName:@"title"] stringValue] forKey:@"title"];
-                
-                [self.otherMsgReceiveDelegate otherMessageReceived:dict];
-            }
-            else if ([msgtype isEqualToString:@"recommendfriend"])//好友推荐
-            {
-                [dict setObject:msgtype forKey:@"msgType"];
-                
-                NSArray* arr = [msg JSONValue];
-                NSString* dis = @"";
-                if ([arr isKindOfClass:[NSArray class]]) {
-                    if ([arr count] != 0) {
-                        NSMutableDictionary* dic = [arr objectAtIndex:0];
-                        if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"type")] isEqualToString:@"1"]) {
-                           dis = [NSString stringWithFormat:@"获得通讯录好友%@", KISDictionaryHaveKey(dic, @"nickname")];
-                        }
-                        else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"type")] isEqualToString:@"2"]) {
-                            dis = [NSString stringWithFormat:@"获得明星好友%@", KISDictionaryHaveKey(dic, @"nickname")];
-                        }
-                        else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"type")] isEqualToString:@"3"]) {
-                            dis = [NSString stringWithFormat:@"获得公会好友%@", KISDictionaryHaveKey(dic, @"nickname")];
-                        }
+        else if ([msgtype isEqualToString:@"sayHello"]){//打招呼的
+            [dict setObject:@"sayHello" forKey:@"msgType"];
+            
+            NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
+            [dict setObject:shiptype  forKey:@"shiptype"];
+            
+            [self.addReqDelegate newAddReq:dict];
+        }
+        else if([msgtype isEqualToString:@"deletePerson"])//取消关注
+        {
+            [dict setObject:@"deletePerson" forKey:@"msgType"];
+            
+            NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
+            [dict setObject:shiptype  forKey:@"shiptype"];
+            
+            [self.deletePersonDelegate deletePersonReceived:dict];
+        }
+        else if ([msgtype isEqualToString:@"character"] || [msgtype isEqualToString:@"pveScore"] || [msgtype isEqualToString:@"title"])
+        {
+            [dict setObject:msgtype forKey:@"msgType"];
+            
+            [dict setObject:[[message attributeForName:@"title"] stringValue] forKey:@"title"];
+            
+            [self.otherMsgReceiveDelegate otherMessageReceived:dict];
+        }
+        else if ([msgtype isEqualToString:@"recommendfriend"])//好友推荐
+        {
+            [dict setObject:msgtype forKey:@"msgType"];
+            
+            NSArray* arr = [msg JSONValue];
+            NSString* dis = @"";
+            if ([arr isKindOfClass:[NSArray class]]) {
+                if ([arr count] != 0) {
+                    NSMutableDictionary* dic = [arr objectAtIndex:0];
+                    if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"type")] isEqualToString:@"1"]) {
+                        dis = [NSString stringWithFormat:@"获得通讯录好友%@", KISDictionaryHaveKey(dic, @"nickname")];
+                    }
+                    else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"type")] isEqualToString:@"2"]) {
+                        dis = [NSString stringWithFormat:@"获得明星好友%@", KISDictionaryHaveKey(dic, @"nickname")];
+                    }
+                    else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"type")] isEqualToString:@"3"]) {
+                        dis = [NSString stringWithFormat:@"获得公会好友%@", KISDictionaryHaveKey(dic, @"nickname")];
                     }
                 }
-                [dict setObject:dis forKey:@"disStr"];
-                [self.recommendReceiveDelegate recommendFriendReceived:dict];
             }
-            else if([msgtype isEqualToString:@"frienddynamicmsg"] || [msgtype isEqualToString:@"mydynamicmsg"])//动态
-            {
-                if ([msgtype isEqualToString:@"frienddynamicmsg"]) {
-                    if ([[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews]) {
-                        
-                        NSInteger unRead = [[[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews] integerValue] + 1;
-                        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d", unRead] forKey:haveFriendNews];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
-                    else
-                    {
-                        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveFriendNews];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
+            [dict setObject:dis forKey:@"disStr"];
+            [self.recommendReceiveDelegate recommendFriendReceived:dict];
+        }
+        else if([msgtype isEqualToString:@"frienddynamicmsg"] || [msgtype isEqualToString:@"mydynamicmsg"])//动态
+        {
+            if ([msgtype isEqualToString:@"frienddynamicmsg"]) {
+                if ([[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews]) {
+                    
+                    NSInteger unRead = [[[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews] integerValue] + 1;
+                    [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d", unRead] forKey:haveFriendNews];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
                 }
                 else
                 {
-                    [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveMyNews];
+                    [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveFriendNews];
                     [[NSUserDefaults standardUserDefaults] synchronize];
                 }
-                [[GameCommon shareGameCommon] displayTabbarNotification];
             }
             else
             {
-                NSDictionary* bodyDic = [msg JSONValue];
-                if ([bodyDic isKindOfClass:[NSDictionary class]]) {
-                    NSString* src_id = KISDictionaryHaveKey(bodyDic, @"src_id");
-                    if (src_id.length <= 0) {
-                        return;
-                    }
-                    if ([KISDictionaryHaveKey(bodyDic, @"msgStatus") isEqualToString:@"Delivered"]) {//是否送达
-                        [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(bodyDic, @"received") boolValue] ? @"3" : @"0"];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:bodyDic];
-                    }
-                    else if ([KISDictionaryHaveKey(bodyDic, @"msgStatus") isEqualToString:@"Displayed"]) {//是否已读
-                        [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(bodyDic, @"received") boolValue] ? @"4" : @"0"];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:bodyDic];
-                    }
+                [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveMyNews];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            [[GameCommon shareGameCommon] displayTabbarNotification];
+        }
+        else
+        {
+            NSDictionary* bodyDic = [msg JSONValue];
+            if ([bodyDic isKindOfClass:[NSDictionary class]]) {
+                NSString* src_id = KISDictionaryHaveKey(bodyDic, @"src_id");
+                if (src_id.length <= 0) {
+                    return;
+                }
+                if ([KISDictionaryHaveKey(bodyDic, @"msgStatus") isEqualToString:@"Delivered"]) {//是否送达
+                    [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(bodyDic, @"received") boolValue] ? @"3" : @"0"];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:bodyDic];
+                }
+                else if ([KISDictionaryHaveKey(bodyDic, @"msgStatus") isEqualToString:@"Displayed"]) {//是否已读
+                    [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(bodyDic, @"received") boolValue] ? @"4" : @"0"];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:bodyDic];
                 }
             }
         }
-        else if ([type isEqualToString:@"normal"] && [fromName isEqualToString:@"messageAck"])//消息发送服务器状态告知
-        {
-            msg = [msg stringByReplacingOccurrencesOfString:@"'" withString:@"\""];
-            NSDictionary* msgData = [msg JSONValue];
-            NSString* src_id = KISDictionaryHaveKey(msgData, @"src_id");
-            if (src_id.length <= 0) {
-                return;
-            }
-            [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(msgData, @"received") boolValue] ? @"1" : @"0"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:msgData];
-        }
     }
+    if ([type isEqualToString:@"normal"] && [fromName isEqualToString:@"messageAck"])//消息发送服务器状态告知
+    {
+        msg = [msg stringByReplacingOccurrencesOfString:@"'" withString:@"\""];
+        NSDictionary* msgData = [msg JSONValue];
+        NSString* src_id = KISDictionaryHaveKey(msgData, @"src_id");
+        if (src_id.length <= 0) {
+            return;
+        }
+        [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(msgData, @"received") boolValue] ? @"1" : @"0"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:msgData];
+    }
+    
 }
 
 //注册成功
