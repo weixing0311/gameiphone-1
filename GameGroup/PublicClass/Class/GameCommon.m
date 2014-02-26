@@ -216,6 +216,7 @@ static GameCommon *my_gameCommon = NULL;
     int currentDayBegin = theCurrentT-hours*3600-minutes*60;
     int yesterdayBegin = currentDayBegin-3600*24;
 //    int qiantianBegin = yesterdayBegin-3600*24;
+    int oneWeekBegin = yesterdayBegin - 6 * 24 *3600;
     //今天
     if ([currentStr isEqualToString:messageDateStr]) {
 //        if (msgHour>0&&msgHour<11) {
@@ -248,24 +249,14 @@ static GameCommon *my_gameCommon = NULL;
 //        }
         finalTime = @"昨天";
     }
-    //前天
-//    else if (theMessageT>=qiantianBegin&&theMessageT<yesterdayBegin)
-//    {
-//        NSDate * msgDate = [NSDate dateWithTimeIntervalSince1970:theMessageT];
-//        NSString * weekday = [GameCommon getWeakDay:msgDate];
-//        if (msgHour>0&&msgHour<11) {
-//            finalTime = [NSString stringWithFormat:@"%@早晨",weekday];
-//        }
-//        else if (msgHour>=11&&msgHour<13){
-//            finalTime = [NSString stringWithFormat:@"%@中午",weekday];
-//        }
-//        else if(msgHour>=13&&msgHour<18) {
-//            finalTime = [NSString stringWithFormat:@"%@下午",weekday];
-//        }
-//        else{
-//            finalTime = [NSString stringWithFormat:@"%@晚上",weekday];
-//        }
-//    }
+    //一周以内
+    else if (theMessageT-oneWeekBegin < 7 * 24 * 3600)
+    {
+        NSDate * msgDate = [NSDate dateWithTimeIntervalSince1970:theMessageT];
+        NSString * weekday = [GameCommon getWeakDay:msgDate];
+      
+        finalTime = [NSString stringWithFormat:@"%@",weekday];
+    }
 //    //今年
 //    else if([[messageDateStr substringToIndex:4] isEqualToString:[currentStr substringToIndex:4]]){
 //        finalTime = [NSString stringWithFormat:@"%@月%@日",[[messageDateStr substringFromIndex:5] substringToIndex:2],[messageDateStr substringFromIndex:8]];
