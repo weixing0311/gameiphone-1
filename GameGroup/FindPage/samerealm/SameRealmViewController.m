@@ -335,6 +335,10 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (m_tabelData.count ==0) {
+        NSLog(@"数组为空");
+        return 1;
+    }
     return [m_tabelData count];
 }
 
@@ -350,8 +354,24 @@
     if (cell == nil) {
         cell = [[PersonTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
+    if (m_tabelData.count==0) {
+        NSLog(@"数组为空");
+        cell.textLabel.text = @"暂无玩家信息";
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
+        cell.nameLabel.text =nil;
+        cell.gameImg_one.image = nil;
+        cell.headImageV.image = nil;
+        cell.ageLabel.text = nil;
+        cell.distLabel.text =nil;
+        cell.timeLabel.text =nil;
+        cell.ageLabel.backgroundColor = [UIColor clearColor];
+    }else{
+        cell.textLabel.text =nil;
+        
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     NSDictionary* tempDict = [m_tabelData objectAtIndex:indexPath.row];
+    
+    
     
     cell.nameLabel.text = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"alias")] isEqualToString:@""] ? [tempDict objectForKey:@"nickname"] : KISDictionaryHaveKey(tempDict, @"alias");
     cell.gameImg_one.image = KUIImage(@"wow");
@@ -387,12 +407,18 @@
     cell.timeLabel.text = [GameCommon getTimeAndDistWithTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"updateUserLocationDate")] Dis:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"distance")]];
     
     [cell refreshCell];
+    
+    }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     [m_myTableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (m_tabelData.count ==0) {
+        return;
+    }
     
     NSDictionary* recDict = [m_tabelData objectAtIndex:indexPath.row];
     

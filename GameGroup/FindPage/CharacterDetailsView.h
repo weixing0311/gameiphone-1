@@ -7,14 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EGOImageView.h"
+@protocol MyCharacterDelegate;
+@interface CharacterDetailsView : UIScrollView<UIScrollViewDelegate>
 
-@protocol changeMyPageDelegate;
 
-@interface CharacterDetailsView : UIScrollView
+@property(assign,nonatomic)id<MyCharacterDelegate> myCharaterDelegate;
 @property(nonatomic,strong)UIScrollView *  TopScrollView;
 @property(nonatomic,strong)UIImageView  *  topImageView;
 @property(nonatomic,strong)UIView       *  titleView;//头像后面的黑色背景
-@property(nonatomic,strong)UIImageView  *  headerImageView;//头像
+@property(nonatomic,strong)EGOImageView *  headerImageView;//头像
 @property(nonatomic,strong)UILabel      *  NickNameLabel;//名字LB
 @property(nonatomic,strong)UILabel      *  guildLabel;//公会label
 @property(nonatomic,strong)UIView       *  rightPView;//右上透明veiw；
@@ -29,12 +31,15 @@
 @property(nonatomic,strong)UIButton     *  realmBtn;
 @property(nonatomic,strong)UIImageView  *  underListImageView;//下划线img
 @property(nonatomic,strong)UIScrollView *  listScrollView;
-@property(nonatomic,assign)id<changeMyPageDelegate>myChangeDelegate;
-@end
 
-@protocol changeMyPageDelegate <NSObject>
--(void)changePageWithReaml:(CharacterDetailsView*)Creaml;
--(void)changePageWithFriend:(CharacterDetailsView*)Cfriend;
--(void)changePageWithCountry:(CharacterDetailsView*)Ccountry;
+-(void)comeFromMy;
+-(void)comeFromPerson;
 
 @end
+
+@protocol MyCharacterDelegate <NSObject>
+
+- (void)reLoadingList:(CharacterDetailsView *)characterdetailsView;
+@end
+
+

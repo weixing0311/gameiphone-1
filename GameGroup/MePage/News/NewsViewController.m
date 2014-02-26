@@ -351,6 +351,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     NSDictionary* tempDic = [m_newsArray objectAtIndex:indexPath.row];
+    
     if ([KISDictionaryHaveKey(tempDic, @"destUser") isKindOfClass:[NSDictionary class]]) {//目标 别人评论了我
         NSDictionary* destDic = KISDictionaryHaveKey(tempDic, @"destUser");
         NSString* imageName = [GameCommon getHeardImgId:KISDictionaryHaveKey(destDic, @"userimg")];

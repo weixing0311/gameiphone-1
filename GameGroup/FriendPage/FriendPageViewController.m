@@ -492,7 +492,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];//保存方式
         
         [m_sortTypeDic setObject:sort forKey:sorttype_2];
-
+        NSLog(@"m_sortTypeDic%@",m_sortTypeDic);
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             [self parseAttentionsList:KISDictionaryHaveKey(responseObject, @"2")];
         }
@@ -904,6 +904,7 @@
         {
             if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"]) {//按字母排
                 tempDict = [m_attentionDict objectForKey:[[[m_sectionArray_attention objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
+                NSLog(@"tempDict%@",tempDict);
             }
             else
                 tempDict = [m_otherSortAttentionArray objectAtIndex:indexPath.row];

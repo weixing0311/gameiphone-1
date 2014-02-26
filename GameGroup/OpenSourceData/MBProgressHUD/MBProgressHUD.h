@@ -214,6 +214,8 @@ typedef void (^MBProgressHUDCompletionBlock)();
  *
  * @see animationType
  */
+#pragma mark --自己写的
+
 - (void)hide:(BOOL)animated afterDelay:(NSTimeInterval)delay;
 
 /** 
@@ -447,5 +449,6 @@ typedef void (^MBProgressHUDCompletionBlock)();
  * Display mode - NO = round or YES = annular. Defaults to round.
  */
 @property (nonatomic, assign, getter = isAnnular) BOOL annular;
+
 
 @end

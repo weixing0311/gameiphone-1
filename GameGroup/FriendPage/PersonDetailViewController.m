@@ -110,7 +110,7 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
-        NSLog(@"%@", responseObject);
+        NSLog(@"responseObjectresponseObject%@", responseObject);
 
         self.hostInfo = [[HostInfo alloc] initWithHostInfo:responseObject];
         
@@ -461,13 +461,25 @@
     NSLog(@"点击角色%d",sender.tag);
     
     CharacterDetailsViewController *CVC = [[CharacterDetailsViewController alloc]init];
+    
+    NSArray* characterArray = KISDictionaryHaveKey(self.hostInfo.characters, @"1");//魔兽世界
+    
+    if ([characterArray isKindOfClass:[NSArray class]]){
+        NSDictionary *dic = [characterArray objectAtIndex:sender.tag-1000];
+        CVC.characterId = KISDictionaryHaveKey(dic, @"id");
+        CVC.gameId = @"1";
+        //告诉是他人看到推过来的
+    }else{
     NSDictionary *dic = KISDictionaryHaveKey(self.hostInfo.state, @"titleObj");
     if ([dic isKindOfClass:[NSDictionary class]]) {
         CVC.gameId =self.hostInfo.gameid;
         CVC.characterId = self.hostInfo.characterid;
-        CVC.myViewType = CHARA_INFO_PERSON;
-        [self.navigationController pushViewController:CVC animated:YES];
     }
+
+    }
+    CVC.myViewType = CHARA_INFO_PERSON;
+    [self.navigationController pushViewController:CVC animated:YES];
+
 }
 - (void)setAchievementView
 {
@@ -910,6 +922,7 @@
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
     [paramDict setObject:self.hostInfo.userId forKey:@"frienduserid"];
+    NSLog(@"self.hostInfo.userId%@",self.hostInfo.userId);
     [paramDict setObject:@"1" forKey:@"type"];
     
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
@@ -920,7 +933,7 @@
     [hud show:YES];
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+        NSLog(@"dicresponseObject%@",responseObject);
         [hud hide:YES];
         if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"2"])
         {
@@ -928,8 +941,8 @@
                 NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithCapacity:1];
                 [dic addEntriesFromDictionary:self.hostInfo.infoDic];
                 [dic setObject:[self.hostInfo.achievementArray objectAtIndex:0] forKey:@"title"];
-                
                 [DataStoreManager saveUserAttentionInfo:dic];
+                NSLog(@"dicdic%@",dic);
             }
             else
                 [DataStoreManager saveUserAttentionInfo:self.hostInfo.infoDic];
@@ -1022,5 +1035,54 @@
 {
     [super didReceiveMemoryWarning];
 }
-
+/*
+ {
+ entity =     {
+ characters =         {
+ };
+ dynamicmsg = " ";
+ fansnum = 0;
+ shiptype = unkown;
+ title =         (
+ );
+ user =         {
+ age = 27;
+ alias = " ";
+ appType = " ";
+ backgroundImg = " ";
+ birthdate = 19860821;
+ city = " ";
+ constellation = "\U72ee\U5b50\U5ea7";
+ createTime = " ";
+ deviceToken = " ";
+ distance = "13.83747860072203";
+ email = "306750047@qq.com";
+ fan = " ";
+ gender = 0;
+ hobby = " ";
+ id = 10110246;
+ ifFraudulent = " ";
+ img = " ";
+ latitude = "39.982617";
+ longitude = "116.304345";
+ modTime = " ";
+ nickname = "\U6d4b\U8bd5\U4e13\U7528\U6635\U79f0";
+ password = "lueSGJZetyySpUndWjMBEg==";
+ phoneNumber = " ";
+ rarenum = 0;
+ realname = " ";
+ remark = " ";
+ signature = " ";
+ superremark = " ";
+ superstar = 0;
+ title = " ";
+ updateUserLocationDate = 1393236457786;
+ username = 18000109998;
+ };
+ zannum = 0;
+ };
+ errorcode = 0;
+ sn = B7474460C0B845FA94A507E69E5BE2E0;
+ }
+ */
 @end

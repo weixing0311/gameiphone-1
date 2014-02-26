@@ -1221,10 +1221,10 @@
         [mes addChild:body];
         
         //发送消息
-        if (![self.appDel.xmppHelper sendMessage:mes]) {
-            [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
-            return;
-        }
+//        if (![self.appDel.xmppHelper sendMessage:mes]) {
+//            [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
+//            return;
+//        }
         [messages replaceObjectAtIndex:cellIndex withObject:dict];
         NSIndexPath* indexpath = [NSIndexPath indexPathForRow:cellIndex inSection:0];
         [self.tView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexpath] withRowAnimation:UITableViewRowAnimationNone];

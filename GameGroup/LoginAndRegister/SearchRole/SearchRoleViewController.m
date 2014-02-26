@@ -225,7 +225,15 @@
     m_clazzNamePick.delegate = self;
     m_clazzNamePick.showsSelectionIndicator = YES;
     m_clazzNameText.inputView = m_clazzNamePick;//点击弹出的是pickview
-
+    
+//    m_clazzNamePick = [[UIPickerView alloc]initWithFrame:CGRectMake(0, self.view.bounds.size.height-200, 320, 200)];
+//    m_clazzNamePick.dataSource = self;
+//    m_clazzNamePick.delegate = self;
+//    m_clazzNamePick.showsSelectionIndicator = YES;
+//    //m_clazzNameText.inputView = m_clazzNamePick;//点击弹出的是pickview
+//    [self.view.window addSubview:m_clazzNamePick];
+//    
+    
     UIToolbar* toolbar_server = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
     toolbar_server.tintColor = [UIColor blackColor];
     UIBarButtonItem*rb_server = [[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStyleDone target:self action:@selector(selectClazzNameOK)];
@@ -270,6 +278,7 @@
     }
     else
         m_clazzNameText.text = @"";
+    //m_clazzNamePick =nil;
 }
 
 - (void)okButtonClick:(id)sender
@@ -289,6 +298,14 @@
         [self showAlertViewWithTitle:@"提示" message:@"请选择职业" buttonTitle:@"确定"];
         return;
     }
+    
+//    if (m_clazzNamePick !=nil) {
+//        NSLog(@"123");
+//        m_clazzNamePick =nil;
+//        return;
+//    }
+    NSLog(@"picker%@",m_clazzNamePick);
+    
     NSString* clazzId = [[m_clazzArray objectAtIndex:[m_clazzNamePick selectedRowInComponent:0]] objectForKey:@"id"];
     
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
@@ -357,6 +374,7 @@
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     if (pickerView == m_clazzNamePick) {
+        m_clazzNameText.text = [m_clazzNameArray objectAtIndex:[m_clazzNamePick selectedRowInComponent:0]];
 
     }
 }

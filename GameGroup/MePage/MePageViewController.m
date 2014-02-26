@@ -8,20 +8,21 @@
 
 #import "MePageViewController.h"
 #import "MyProfileViewController.h"
+#import "MyTitleObjViewController.h"
+#import "TitleObjDetailViewController.h"
+#import "FeedBackViewController.h"
+#import "CharacterEditViewController.h"
+#import "CharacterDetailsViewController.h"//角色详情界面
+
 #import "HostInfo.h"
 //#import "ContactsCell.h"
 #import "PersonTableCell.h"
 #import "MyCharacterCell.h"
 #import "MyNormalTableCell.h"
 #import "SetViewController.h"
-#import "FeedBackViewController.h"
-#import "CharacterEditViewController.h"
 #import "TitleObjTableCell.h"
 #import "MyStateTableCell.h"
-#import "MyTitleObjViewController.h"
-#import "TitleObjDetailViewController.h"
 #import "NewsViewController.h"
-#import "CharacterDetailsViewController.h"//角色详情界面
 @interface MePageViewController ()
 {
     UITableView*  m_myTableView;
@@ -640,18 +641,22 @@
         [[Custom_tabbar showTabBar] hideTabBar:YES];
         
         CharacterDetailsViewController* VC = [[CharacterDetailsViewController alloc] init];
-        NSDictionary *dictim = KISDictionaryHaveKey(m_hostInfo.state, @"titleObj");
-        if ([dictim isKindOfClass:[NSDictionary class]]) {
-            NSLog(@"没有人");
-            VC.characterId = m_hostInfo.characterid;
-            VC.gameId = m_hostInfo.gameid;
-            VC.myViewType = CHARA_INFO_MYSELF;
-            [self.navigationController pushViewController:VC animated:YES];
-        }else{
-            [self showAlertViewWithTitle:@"提示" message:@"你没有绑定任何角色" buttonTitle:@"确定"];
-            ;
+        NSArray* characterArray = KISDictionaryHaveKey(m_hostInfo.characters, @"1");//魔兽世界
+        if (![characterArray isKindOfClass:[NSArray class]]){
+            CharacterEditViewController *characterVC = [[CharacterEditViewController alloc]init];
+            [self.navigationController pushViewController:characterVC animated:YES];
+            NSLog(@"添加角色");
         }
-        
+        else
+        {
+            NSDictionary *dic = [characterArray objectAtIndex:indexPath.row];
+            VC.characterId = KISDictionaryHaveKey(dic, @"id");
+            VC.gameId = @"1";
+            VC.myViewType = CHARA_INFO_MYSELF;
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"contentOfjuese" object:nil];
+            [self.navigationController pushViewController:VC animated:YES];
+            NSLog(@"角色详情");
+        }
     }
     else if(indexPath.section == 3)//头衔
     {

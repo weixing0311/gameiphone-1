@@ -24,7 +24,7 @@
     
     UILabel*        m_starSignLabel;//星座
     UILabel*        m_ageLabel;//年龄
-    
+    NSTimer *timer;
     BOOL            m_isSort;//图片顺序变化
 }
 @end
@@ -337,8 +337,14 @@
 //            NSDictionary* CompresID = responseObject;//"<local>0_me.jpg" = 8; 8为id
             [NetManager uploadImages:waitingUploadImgArray WithURLStr:BaseUploadImageUrl ImageName:waitingUploadStrArray TheController:self Progress:nil Success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
            
-                [hud hide:YES];
+              //  [hud hide:YES];
+                hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD_isok"]];
+                hud.labelText = @"保存成功";
+                hud.mode = MBProgressHUDModeCustomView;
+                [hud hide:YES afterDelay:4];
 
+
+                
                 NSMutableArray * a1 = [NSMutableArray arrayWithArray:self.headImgArray];//压缩图 头像
 //                NSMutableArray * a2 = [NSMutableArray arrayWithArray:self.headBigImgArray];//大图 点开时用
                 for (NSString*a in responseObject) {// "<local>0_me.jpg" = 22; "<local>1_me.jpg" = 21;
@@ -403,19 +409,25 @@
     [postDict setObject:@"104" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
+   // [hud showWhileExecuting:@selector(pop) onTarget:self withObject:nil animated:YES];
     [hud show:YES];
-    
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [hud hide:YES];
         NSLog(@"%@", responseObject);
         
-        [DataStoreManager saveUserInfo:responseObject];
+//            hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD_isok"]];
+//            hud.labelText = @"保存成功";
+//            hud.mode = MBProgressHUDModeCustomView;
+//            [hud hide:YES afterDelay:3];
+// [NSTimer scheduledTimerWithTimeInterval:3.f target:self selector:@selector(pop) userInfo:nil repeats:NO];        [DataStoreManager saveUserInfo:responseObject];
+        [self showMessageWindowWithContent:@"保存成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
+
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
+                
                 UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
@@ -423,7 +435,11 @@
         [hud hide:YES];
     }];
 }
+-(void)pop
+{
+    [self.navigationController popViewControllerAnimated:YES];
 
+}
 - (void)deleteImageIdByNet
 {
     [NetManager deleteImagesWithURLStr:BaseDeleteImageUrl ImageName:deleteImageIdArray TheController:self Progress:nil Success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
@@ -780,7 +796,12 @@
     [hud show:YES];
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [hud hide:YES];
+       // [hud hide:YES];
+        hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD_isok"]];
+        hud.labelText = @"保存成功";
+        hud.mode = MBProgressHUDModeCustomView;
+        [hud hide:YES afterDelay:4];
+
         NSLog(@"%@", responseObject);
         
         [DataStoreManager saveUserInfo:responseObject];

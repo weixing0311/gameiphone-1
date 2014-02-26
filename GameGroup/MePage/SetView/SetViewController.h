@@ -7,7 +7,8 @@
 //
 
 #import "BaseViewController.h"
-
+@class AppDelegate, XMPPHelper;
 @interface SetViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@property (strong,nonatomic) AppDelegate * appDel;
 
 @end

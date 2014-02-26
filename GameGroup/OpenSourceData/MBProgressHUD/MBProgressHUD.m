@@ -269,6 +269,9 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
+
+
+
 #pragma mark - Timer callbacks
 
 - (void)handleGraceTimer:(NSTimer *)theTimer {
