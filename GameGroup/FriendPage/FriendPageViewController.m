@@ -367,7 +367,9 @@
             if(![[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"])
                 rowNum = [m_otherSortAttentionArray count];
             else
+            {
                 rowNum = [m_attentionsArray count];
+            }
             titleLabel.text = [NSString stringWithFormat:@"关注(%d)", rowNum];
         } break;
         case kSegmentFans:
@@ -382,7 +384,6 @@
         default:
             break;
     }
-
 }
 
 #pragma mark -获得好友列表

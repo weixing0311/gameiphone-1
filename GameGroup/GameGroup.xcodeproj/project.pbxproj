@@ -4651,6 +4651,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "C58436B8-50A1-44EB-9889-AA91BDE26908";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -4676,6 +4677,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "C58436B8-50A1-44EB-9889-AA91BDE26908";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4684,8 +4686,12 @@
 		68CAA614184DD0ED007138B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+<<<<<<< HEAD
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+=======
+				CODE_SIGN_IDENTITY = "iPhone Developer: Shanshan Wei (CWP7SHBTMF)";
+>>>>>>> FETCH_HEAD
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GameGroup/GameGroup-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4705,8 +4711,12 @@
 		68CAA615184DD0ED007138B1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+<<<<<<< HEAD
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+=======
+				CODE_SIGN_IDENTITY = "iPhone Developer: Shanshan Wei (CWP7SHBTMF)";
+>>>>>>> FETCH_HEAD
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GameGroup/GameGroup-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;

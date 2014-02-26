@@ -249,20 +249,24 @@
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
     [paramDict setObject:@"5" forKey:@"type"];
-    [paramDict setObject:self.textView.text forKey:@"msg"];
+    if (!self.textView.placeholder) {
+        [paramDict setObject:self.textView.text forKey:@"msg"];
+    }else{
+        [paramDict setObject:[NSString stringWithFormat:@"%@%@",self.textView.placeholder,self.textView.text] forKey:@"msg"];
+    }
     [paramDict setObject:self.messageid forKey:@"messageid"];
     
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
     [postDict setObject:paramDict forKey:@"params"];
     [postDict setObject:@"134" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-    
+    self.textView.placeholder = @"";
     [hud show:YES];
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
 
-        self.textView.text = @"";
+        self.textView.text = nil;
         
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             if (self.delegate&&[self.delegate respondsToSelector:@selector(dynamicListJustReload)])
@@ -415,7 +419,7 @@
 //    NSString* nickName = [KISDictionaryHaveKey(tempDict, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(tempDict, @"nickname");
     NSString* nickName = KISDictionaryHaveKey(tempDict, @"nickname");
 
-    self.textView.text = [NSString stringWithFormat:@"回复 %@：", nickName];
+    self.textView.placeholder = [NSString stringWithFormat:@"回复 %@：", nickName];
     [self.textView becomeFirstResponder];
     
     

@@ -30,6 +30,9 @@
 
     #import "NSString+SBJSON.h"
     #import "CellButtonClickDelegate.h"
+
+    #import "Reachability.h"
+
 #endif
 
 #define appType @"91"//91、appStore
