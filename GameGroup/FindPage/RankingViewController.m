@@ -31,7 +31,11 @@
  *            职业id， 全服和全国用这个， 不传默认全职业
  * @return
  */
-
+/*
+ {{"ranktype":"1,2,3","gameid":"1","maxSize":"10","rankvaltype":"pveScore","pageIndex":"1","characterid":"156821","classid":"1"},"isCompression":"0"}
+ 
+ {{"ranktype":"1","gameid":"1","maxSize":"5","rankvaltype":"fengjian","pageIndex":"-1","characterid":"158169",},"isCompression":"0"}
+ */
 
 
 #import "RankingViewController.h"
@@ -57,7 +61,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    //[self getSortDataByNet];
+    [self getSortDataByNet];
 }
 - (void)viewDidLoad
 {
@@ -118,20 +122,17 @@
     
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-    
+    // [paramDict setObject:KISDictionaryHaveKey(self.sccDic, @"realm") forKey:@"realm"];
+
     [paramDict setObject:@"1" forKey:@"gameid"];
-    
-   // [paramDict setObject:KISDictionaryHaveKey(self.sccDic, @"realm") forKey:@"realm"];
     [paramDict setObject:self.custType forKey:@"classid"];
-    
     [paramDict setObject:self.characterid forKey:@"characterid"];
-    
-    
-//    [paramDict setObject:self.cRankvaltype forKey:@"ranktype"];
-    [paramDict setObject:@"1,2,3" forKey:@"ranktype"];
+    [paramDict setObject:self.cRankvaltype forKey:@"ranktype"];
+
+    //[paramDict setObject:@"1,2,3" forKey:@"ranktype"];
     
     [paramDict setObject:self.dRankvaltype forKey:@"rankvaltype"];
-    [paramDict setObject:@"0" forKey:@"pageIndex"];
+    [paramDict setObject:@"1" forKey:@"pageIndex"];
     [paramDict setObject:@"10" forKey:@"maxSize"];
     
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];

@@ -291,14 +291,14 @@
     achievementPoints
     */
     if (tableView ==m_contentTableView) {
-       ranking.custType = @"1" ;
+       ranking.cRankvaltype = @"1" ;
         
     }
     if (tableView ==m_countryTableView) {
-        ranking.custType = @"3" ;
+        ranking.cRankvaltype = @"3" ;
     }
     if (tableView ==m_reamlTableView) {
-        ranking.custType = @"realm" ;
+        ranking.cRankvaltype = @"realm" ;
     }
     
     switch (indexPath.row) {
