@@ -675,7 +675,6 @@
 		84DB92AE18BB6912006CB36A /* RankingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DB92AD18BB6912006CB36A /* RankingCell.m */; };
 		84DFB13B18BAF1F100BE6905 /* HUD_isok.png in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB13A18BAF1F100BE6905 /* HUD_isok.png */; };
 		84F2FC4118BF1D2200C2EF29 /* Dfont_kis.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84F2FC4018BF1D2200C2EF29 /* Dfont_kis.ttf */; };
-		84F2FC4518BF1F4700C2EF29 /* EncounterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F2FC4418BF1F4700C2EF29 /* EncounterViewController.m */; };
 		84F2FC4818BF218600C2EF29 /* EncounterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F2FC4718BF218600C2EF29 /* EncounterCell.m */; };
 		84F2FC4B18BF247D00C2EF29 /* EncoXHViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F2FC4A18BF247D00C2EF29 /* EncoXHViewController.m */; };
 		84F2FC5118BF26A900C2EF29 /* green.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F2FC4D18BF26A900C2EF29 /* green.png */; };
@@ -1719,8 +1718,6 @@
 		84DB92AD18BB6912006CB36A /* RankingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingCell.m; sourceTree = "<group>"; };
 		84DFB13A18BAF1F100BE6905 /* HUD_isok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HUD_isok.png; sourceTree = "<group>"; };
 		84F2FC4018BF1D2200C2EF29 /* Dfont_kis.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Dfont_kis.ttf; sourceTree = "<group>"; };
-		84F2FC4318BF1F4700C2EF29 /* EncounterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncounterViewController.h; sourceTree = "<group>"; };
-		84F2FC4418BF1F4700C2EF29 /* EncounterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncounterViewController.m; sourceTree = "<group>"; };
 		84F2FC4618BF218600C2EF29 /* EncounterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncounterCell.h; sourceTree = "<group>"; };
 		84F2FC4718BF218600C2EF29 /* EncounterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncounterCell.m; sourceTree = "<group>"; };
 		84F2FC4918BF247D00C2EF29 /* EncoXHViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoXHViewController.h; sourceTree = "<group>"; };
@@ -3887,8 +3884,6 @@
 		84F2FC4218BF1F1200C2EF29 /* xiehou */ = {
 			isa = PBXGroup;
 			children = (
-				84F2FC4318BF1F4700C2EF29 /* EncounterViewController.h */,
-				84F2FC4418BF1F4700C2EF29 /* EncounterViewController.m */,
 				84F2FC4918BF247D00C2EF29 /* EncoXHViewController.h */,
 				84F2FC4A18BF247D00C2EF29 /* EncoXHViewController.m */,
 			);
@@ -4587,7 +4582,6 @@
 				686D2F1A184DE33800F6E1BB /* AFNetworkActivityIndicatorManager.m in Sources */,
 				68CAA7A1184DD104007138B1 /* NSXMLElement+XEP_0059.m in Sources */,
 				6826AC52186D2703005716FA /* SearchRoleViewController.m in Sources */,
-				84F2FC4518BF1F4700C2EF29 /* EncounterViewController.m in Sources */,
 				6834179C1858150600934FEF /* HGPhoto.m in Sources */,
 				6826AC57186D5E99005716FA /* CanRankTitleObjViewController.m in Sources */,
 				6814419F185053310094C669 /* Custom_tabbar.m in Sources */,

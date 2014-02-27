@@ -11,7 +11,6 @@
 #import "CharacterDetailsView.h"
 #import "CharaDaCell.h"
 #import "RankingViewController.h"
-#import "TestListViewController.h"
 
 @interface CharacterDetailsViewController ()
 
@@ -281,9 +280,6 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
-//    TestListViewController *test = [[TestListViewController alloc]init];
-//    [self.navigationController pushViewController:test animated:YES];
     
     RankingViewController *ranking = [[RankingViewController alloc]init] ;
     ranking.characterid =m_charaInfo.characterid;
