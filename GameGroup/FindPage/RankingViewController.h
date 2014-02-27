@@ -7,10 +7,19 @@
 //
 
 #import "BaseViewController.h"
-
-@interface RankingViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
+#import "PullUpRefreshView.h"
+#import "SRRefreshView.h"
+#import "NotConnectDelegate.h"
+#import "PullDownRefreshView.h"
+#import "SendNewsViewController.h"
+@interface RankingViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, PullUpDelegate, SRRefreshDelegate,UIScrollViewDelegate,TableViewDatasourceDidChange>
 @property(nonatomic,copy)NSString *custType;//职业
 @property(nonatomic,copy)NSString *characterid;//角色
+@property(nonatomic,copy)NSString *characterName;//角色名称
 @property(nonatomic,copy)NSString *cRankvaltype;//排名方位  服务器 全国 好友
 @property(nonatomic,copy)NSString *dRankvaltype;//排名类型
+@property(nonatomic, assign)NSInteger showIndex;//展示第几个 从0开始
+@property(nonatomic,assign)NSString *server;//服务器
+@property(nonatomic,copy)NSString *COME_FROM;
+@property(nonatomic,copy)NSString *titleOfRanking;//表头
 @end

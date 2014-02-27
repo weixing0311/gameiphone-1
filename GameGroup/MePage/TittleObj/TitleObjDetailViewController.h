@@ -12,7 +12,18 @@
 #import "PullDownRefreshView.h"
 #import "TableViewDatasourceDidChange.h"
 
-@interface TitleObjDetailViewController : BaseViewController<UIGestureRecognizerDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, TitleSortCellDelegate, PullUpDelegate, PullDowmDelegate, UIActionSheetDelegate,TableViewDatasourceDidChange>
+@interface TitleObjDetailViewController : BaseViewController
+<
+UIGestureRecognizerDelegate,
+UIScrollViewDelegate,
+UITableViewDataSource,
+UITableViewDelegate,
+TitleSortCellDelegate,
+PullUpDelegate,
+PullDowmDelegate,
+UIActionSheetDelegate,
+TableViewDatasourceDidChange
+>
 
 @property(nonatomic, strong)NSArray*  titleObjArray;
 @property(nonatomic, assign)NSInteger showIndex;//展示第几个 从0开始

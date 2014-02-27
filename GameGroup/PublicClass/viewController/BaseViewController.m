@@ -42,6 +42,7 @@
 //    topImageView.image = KUIImage(@"top");
     topImageView.userInteractionEnabled = YES;
     topImageView.backgroundColor = kColorWithRGB(23, 161, 240, 1.0);
+    topImageView.image = KUIImage(@"nav_bg");
     [self.view addSubview:topImageView];
     
     UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTopViewClick:)];
@@ -57,9 +58,9 @@
     [self.view addSubview:titleLabel];
     
     if (hasBacButton) {
-        UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, KISHighVersion_7 ? 20 : 0, 50, 44)];
-        [backButton setBackgroundImage:KUIImage(@"back") forState:UIControlStateNormal];
-        [backButton setBackgroundImage:KUIImage(@"back_click") forState:UIControlStateHighlighted];
+        UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30)];
+        [backButton setBackgroundImage:KUIImage(@"btn_back") forState:UIControlStateNormal];
+        [backButton setBackgroundImage:KUIImage(@"btn_back_onclick") forState:UIControlStateHighlighted];
         backButton.backgroundColor = [UIColor clearColor];
         [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:backButton];
