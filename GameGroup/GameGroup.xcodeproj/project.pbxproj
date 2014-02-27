@@ -667,6 +667,7 @@
 		6F1DB45A185F24FF00E69C61 /* CommonControlOrView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1DB459185F24FF00E69C61 /* CommonControlOrView.m */; };
 		6F8AC42218745BE3002E983A /* have_picture.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F8AC42118745BE3002E983A /* have_picture.png */; };
 		6FDCED3A1878EFBA00F9FC18 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FDCED381878EFBA00F9FC18 /* libMobClickLibrary.a */; };
+		7215B2CB18BD8F7F0094D142 /* XMPPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7215B2CA18BD8F7F0094D142 /* XMPPManager.m */; };
 		84076EDB18B5D67500019462 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84076EDA18B5D67500019462 /* SearchResultViewController.m */; };
 		841D0D2D18BCB37B0044B3B2 /* 液晶数字字体.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 841D0D2C18BCB37B0044B3B2 /* 液晶数字字体.ttf */; };
 		847DD07918B88DDD00BB0215 /* CharaDaCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 847DD07818B88DDD00BB0215 /* CharaDaCell.m */; };
@@ -1685,6 +1686,8 @@
 		6F8AC42118745BE3002E983A /* have_picture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = have_picture.png; sourceTree = "<group>"; };
 		6FDCED381878EFBA00F9FC18 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		6FDCED391878EFBA00F9FC18 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
+		7215B2C918BD8F7F0094D142 /* XMPPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPManager.h; sourceTree = "<group>"; };
+		7215B2CA18BD8F7F0094D142 /* XMPPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPManager.m; sourceTree = "<group>"; };
 		84076ED918B5D67500019462 /* SearchResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultViewController.h; sourceTree = "<group>"; };
 		84076EDA18B5D67500019462 /* SearchResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultViewController.m; sourceTree = "<group>"; };
 		841D0D2C18BCB37B0044B3B2 /* 液晶数字字体.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "液晶数字字体.ttf"; sourceTree = "<group>"; };
@@ -2160,6 +2163,8 @@
 				6834178F1858055700934FEF /* XMPPHelper.m */,
 				683417881858041E00934FEF /* NetManager.h */,
 				683417891858041E00934FEF /* NetManager.m */,
+				7215B2C918BD8F7F0094D142 /* XMPPManager.h */,
+				7215B2CA18BD8F7F0094D142 /* XMPPManager.m */,
 			);
 			path = NetWork;
 			sourceTree = "<group>";
@@ -4551,6 +4556,7 @@
 				6834178A1858041E00934FEF /* NetManager.m in Sources */,
 				682C417E184F1B0E002D463E /* KGStatusBar.m in Sources */,
 				68241C891872D8D000B6E53A /* RecommendCell.m in Sources */,
+				7215B2CB18BD8F7F0094D142 /* XMPPManager.m in Sources */,
 				68CAA7C0184DD104007138B1 /* XEP_0223.m in Sources */,
 				68CAA7C1184DD104007138B1 /* XMPPAttentionModule.m in Sources */,
 				68A3AA62186447710054D1EC /* MyCharacterEditCell.m in Sources */,
@@ -4686,12 +4692,8 @@
 		68CAA614184DD0ED007138B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-<<<<<<< HEAD
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-=======
 				CODE_SIGN_IDENTITY = "iPhone Developer: Shanshan Wei (CWP7SHBTMF)";
->>>>>>> FETCH_HEAD
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GameGroup/GameGroup-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4711,12 +4713,8 @@
 		68CAA615184DD0ED007138B1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-<<<<<<< HEAD
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-=======
 				CODE_SIGN_IDENTITY = "iPhone Developer: Shanshan Wei (CWP7SHBTMF)";
->>>>>>> FETCH_HEAD
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GameGroup/GameGroup-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;

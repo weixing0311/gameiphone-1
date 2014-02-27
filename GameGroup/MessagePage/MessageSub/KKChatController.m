@@ -1490,10 +1490,6 @@
         
         //发送消息
         [self.appDel.xmppHelper sendMessage:mes];
-//        if (![self.appDel.xmppHelper sendMessage:mes]) {
-//            [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
-//            return;
-//        }
         
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
         [dictionary setObject:message forKey:@"msg"];

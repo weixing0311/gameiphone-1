@@ -13,6 +13,7 @@
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 #import "GetDataAfterManager.h"
+#import "XMPPManager.h"
 
 @implementation AppDelegate
 
@@ -26,7 +27,7 @@
     self.startViewController = [[StartViewController alloc] init];
     self.window.rootViewController = self.startViewController;
     
-//    [DDLog addLogger:[DDTTYLogger sharedInstance]];//打印xmpp输出
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];//打印xmpp输出
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.xmppHelper=[[XMPPHelper alloc] init];
@@ -41,35 +42,7 @@
     
     //网络变化
     Reachability * reach = [Reachability reachabilityForInternetConnection];
-   /* if (reach) {
-        [GameCommon shareGameCommon].haveNet = YES;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"1"];
-        NSLog(@"网络变化1111");
-    }
-    else{
-        [self.xmppHelper disconnect];
-        [GameCommon shareGameCommon].haveNet = NO;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"0"];
-        NSLog(@"网络变化000000");
-    }
-    reach.reachableBlock = ^(Reachability * reachability)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [GameCommon shareGameCommon].haveNet = YES;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"1"];
-            NSLog(@"网络变化3333");
-        });
-    };
-    
-    reach.unreachableBlock = ^(Reachability * reachability)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [self.xmppHelper disconnect];
-            [GameCommon shareGameCommon].haveNet = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"appBecomeActive" object:@"0"];
-        });
-    };*/
+  
     
     [reach startNotifier];
     

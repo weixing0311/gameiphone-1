@@ -170,7 +170,7 @@
 }
 - (void)loginOutNet
 {
-    XMPPHelper *xmppHelper = [[XMPPHelper alloc]init];
+//    XMPPHelper *xmppHelper = [[XMPPHelper alloc]init];
    
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     

@@ -20,7 +20,7 @@
 @class XMPPPresence;
 @class XMPPRoster;
 @class XMPPReconnect;
-
+@class XMPPAutoPing;
 @interface XMPPHelper : NSObject
 
 typedef void (^CallBackBlock) (void);
@@ -33,6 +33,7 @@ typedef enum {
 }xmppType;
 
 @property (nonatomic,strong) XMPPStream *xmppStream;
+@property (nonatomic,strong) XMPPAutoPing * xmppAutoPing;
 @property (nonatomic,strong) XMPPvCardCoreDataStorage *xmppvCardStorage;
 @property (nonatomic,strong) XMPPvCardTempModule *xmppvCardTempModule;
 @property (nonatomic,strong) XMPPvCardAvatarModule *xmppvCardAvatarModule;

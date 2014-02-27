@@ -45,50 +45,15 @@
     
     [self firtOpen];
     
-//    NSString * openImgStr = [[NSUserDefaults standardUserDefaults] objectForKey:@"OpenImg"];
-//    NSString *path1 = [RootDocPath stringByAppendingPathComponent:@"OpenImages"];
-//    NSFileManager *fm1 = [NSFileManager defaultManager];
-//    if([fm1 fileExistsAtPath:path1] == NO)
-//    {
-//        [fm1 createDirectoryAtPath:path1 withIntermediateDirectories:YES attributes:nil error:nil];
-//    }
-//    NSString  *openImgPath = [NSString stringWithFormat:@"%@/openImage.jpg",path1];
-//    
-//    if (openImgStr) {
-//        
-//        NSData * nsData= [NSData dataWithContentsOfFile:openImgPath];
-//        UIImage * openPic= [UIImage imageWithData:nsData];
-//        if (openPic) {
-//            splashImageView=[[UIImageView alloc]initWithImage:openPic];
-//            splashImageView.frame=CGRectMake(0, 0, 320, 568);
-//        }
-//        else
-//        {
-//            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"OpenImg"];
-//            if (iPhone5) {
-//                splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start_2.png"]];
-//                splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
-//            }
-//            else
-//            {
-//                splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start.png"]];
-//                splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
-//            }
-//        }
-//        
-//    }
-//    else
-//    {
-        if (iPhone5) {
-            splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start_2.png"]];
-            splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
-        }
-        else
-        {
-            splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start.png"]];
-            splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
-        }
-//    }
+    if (iPhone5) {
+        splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start_2.png"]];
+        splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
+    }
+    else
+    {
+        splashImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"start.png"]];
+        splashImageView.frame=CGRectMake(0, 0, 320, self.view.frame.size.height);
+    }
     [self.view addSubview:splashImageView];
     [self performSelector:@selector(showLoading:) withObject:nil afterDelay:kStartViewShowTime];
     
@@ -133,9 +98,6 @@
 -(void)firtOpen
 {
     NSMutableDictionary * paramsDic = [NSMutableDictionary dictionary];
-//    if ([SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]) {
-//        [paramsDic setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-//    }
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kOpenData]) {
         NSDictionary* tempDic = [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData];
         [paramsDic setObject:KISDictionaryHaveKey(tempDic, @"gamelist_millis") forKey:@"gamelist_millis"];
@@ -176,15 +138,6 @@
     {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"IOSURL"];
     }
-//        appStoreURL = [[dict objectForKey:@"version"] objectForKey:@"iosurl"];
-//        [[NSUserDefaults standardUserDefaults] setObject:appStoreURL forKey:@"IOSURL"];
-//        [[NSUserDefaults standardUserDefaults] synchronize];
-//        NSString * receivedImgStr = [dict objectForKey:@"firstImage"];
-//        NSString * openImgStr = [[NSUserDefaults standardUserDefaults] objectForKey:@"OpenImg"];
-//        if (!openImgStr||![receivedImgStr isEqualToString:openImgStr]) {
-//            [self downloadImageWithID:receivedImgStr Type:@"open" PicName:nil];
-//        }
-        
         NSMutableDictionary* openData = [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData] ? [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData] : [NSMutableDictionary dictionaryWithCapacity:1];
         if ([KISDictionaryHaveKey(dict, @"gamelist_update") boolValue]) {
             [openData setObject:KISDictionaryHaveKey(dict, @"gamelist") forKey:@"gamelist"];

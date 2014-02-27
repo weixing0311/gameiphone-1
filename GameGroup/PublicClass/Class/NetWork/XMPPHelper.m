@@ -15,7 +15,7 @@
 #import "DeletePersonDelegate.h"
 #import "OtherMessageReceive.h"
 #import "RecommendFriendDelegate.h"
-
+#import "XMPPAutoPing.h"
 #import "XMPPRoster.h"
 #import "XMPPRosterMemoryStorage.h"
 #import "XMPPvCardTemp.h"
@@ -25,7 +25,7 @@
 #import "XMPPJID.h"
 #import "TempData.h"
 #import "XMPPReconnect.h"
-
+#import "JSON.h"
 @implementation XMPPHelper
 //@synthesize xmppStream,xmppvCardStorage,xmppvCardTempModule,xmppvCardAvatarModule,xmppvCardTemp,account,password,buddyListDelegate,chatDelegate,xmpprosterDelegate,processFriendDelegate,xmpptype,success,fail,regsuccess,regfail,xmppRosterscallback,myVcardTemp,xmppRosterMemoryStorage,xmppRoster;
 
@@ -41,6 +41,9 @@
 //    self.xmppReconnect = [[XMPPReconnect alloc] initWithDispatchQueue:dispatch_get_main_queue()];
 //    [self.xmppReconnect addDelegate:self delegateQueue:dispatch_get_main_queue()];
 //    [self.xmppReconnect activate:self.xmppStream];
+//    self.xmppAutoPing = [[XMPPAutoPing alloc] initWithDispatchQueue:dispatch_get_main_queue()];
+//    self.xmppAutoPing.pingInterval = 10;
+//    [_xmppAutoPing activate:self.xmppStream];
 }
 - (void)goOnline {
 	XMPPPresence *presence = [XMPPPresence presence];
@@ -307,6 +310,20 @@
 }
 // 3.关于通信的
 #pragma mark 收到消息后调用
+- (void)responseWithID:(NSString*)msgID from:(NSString*)from to:(NSString*)to
+{
+    //响应消息服务器
+    NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:msgID,@"src_id",@"true",@"received",@"Delivered",@"msgStatus", nil];
+    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+    [body setStringValue:[dic JSONRepresentation]];
+    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+    [mes addAttributeWithName:@"id" stringValue:msgID];
+    [mes addAttributeWithName:@"type" stringValue:@"normal"];
+    [mes addAttributeWithName:@"to" stringValue:to];
+    [mes addAttributeWithName:@"from" stringValue:from];
+    [mes addAttributeWithName:@"msgtype" stringValue:@"msgStatus"];
+    [self.xmppStream sendElement:mes];
+}
 /*<message xmlns="jabber:client" from="admin@gamepro.com" to="11111111111@gamepro.com" type="chat" msgtype="system" msgTime="1388032476641" fromNickname="&#x5C0F;&#x4F19;&#x4F34;" fromHeadImg="1"><body>通知：您失去了XX头衔</body></message>*/
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message{
     NSString *msg = [[message elementForName:@"body"] stringValue];
@@ -318,7 +335,7 @@
     NSString *msgtype = [[message attributeForName:@"msgtype"] stringValue];
     NSString *from = [[message attributeForName:@"from"] stringValue];
     NSString *msgId = [[message attributeForName:@"id"] stringValue];
-    
+    NSString *to = [[message attributeForName:@"to"] stringValue];
     NSRange range = [from rangeOfString:@"@"];
     NSString * fromName = [from substringToIndex:(range.location == NSNotFound) ? 0 : range.location];
     
@@ -336,6 +353,7 @@
     NSLog(@"theDict%@",dict);
     if ([type isEqualToString:@"chat"]) {
         if ([msgtype isEqualToString:@"normalchat"]) {//聊天的 或动态聊天消息
+            [self responseWithID:msgId from:to to:from];
             NSString* payload = [GameCommon getHeardImgId:[[message elementForName:@"payload"] stringValue]];//是否含payload标签
             if (payload.length > 0) {
                 NSString* payload = [[message elementForName:@"payload"] stringValue];
