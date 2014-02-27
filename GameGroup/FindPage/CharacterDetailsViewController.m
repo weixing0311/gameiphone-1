@@ -52,44 +52,8 @@
 {
     [super viewDidLoad];
 
-   NSArray *familyNames = [UIFont familyNames];
-    for( NSString *familyName in familyNames ){ printf( "Family: %s \n", [familyName UTF8String] );
-        NSArray *fontNames = [UIFont fontNamesForFamilyName:familyName];
-        for( NSString *fontName in fontNames )
-        { printf( "\tFont: %s \n", [fontName UTF8String] );
-        }
-    }
-
     
-    
-    UIImageView* topImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, KISHighVersion_7 ? 64 : 44)];
-    topImageView.image = KUIImage(@"nav_bg");
-    topImageView.userInteractionEnabled = YES;
-    topImageView.backgroundColor = kColorWithRGB(23, 161, 240, 1.0);
-    [self.view addSubview:topImageView];
-    
-    UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTopViewClick:)];
-    tapGesture.delegate = self;
-    [topImageView addGestureRecognizer:tapGesture];
-    
-    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, KISHighVersion_7 ? 20 : 0, 220, 44)];
-    titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.text = @"角色详情";
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.font = [UIFont boldSystemFontOfSize:20];
-    [self.view addSubview:titleLabel];
-    
-    UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30)];
-    [backButton setBackgroundImage:KUIImage(@"btn_back") forState:UIControlStateNormal];
-    [backButton setBackgroundImage:KUIImage(@"btn_back_onclick") forState:UIControlStateHighlighted];
-    backButton.backgroundColor = [UIColor clearColor];
-    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];
-    
-    
-    
-   // [self setTopViewWithTitle:@"角色详情" withBackButton:YES];
+    [self setTopViewWithTitle:@"角色详情" withBackButton:YES];
     
     self.view.backgroundColor = [UIColor whiteColor];
 	// Do any additional setup after loading the view.
@@ -114,7 +78,7 @@
     titleImageArray =[NSMutableArray array];
     [titleImageArray addObject:KUIImage(@"PVE.png")];
     [titleImageArray addObject:KUIImage(@"killer.png")];
-    [titleImageArray addObject:KUIImage(@"itemserver.png")];
+    [titleImageArray addObject:KUIImage(@"Wgs")];
     [titleImageArray addObject:KUIImage(@"achievementCount.png")];
     [titleImageArray addObject:KUIImage(@"Wjjc.png")];
 //PVE战斗力  荣誉击杀数  装备等级 成就点数  PVP竞技场）

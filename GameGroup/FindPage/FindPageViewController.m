@@ -12,7 +12,7 @@
 #import "SameRealmViewController.h"
 #import "CanRankTitleObjViewController.h"
 #import "NewsViewController.h"
-
+#import "EncoXHViewController.h"
 @interface FindPageViewController ()
 {
     UITableView*  m_myTableView;
@@ -68,7 +68,7 @@
             return 2;
             break;
         default:
-            return 1;
+            return 2;
             break;
     }
 }
@@ -193,6 +193,9 @@
             } else if (indexPath.row == 1)
                 {
             [[Custom_tabbar showTabBar] hideTabBar:YES];
+                    EncoXHViewController *enco = [[EncoXHViewController alloc]init];
+                    [self.navigationController pushViewController:enco animated:YES];
+                    
                 }
         }   break;
         default:

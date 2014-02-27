@@ -60,19 +60,9 @@
 
         
         UIButton *button = [[UIButton alloc]init];
-        
-        UIImage *image1 = KUIImage(@"btn_green2");
-        UIEdgeInsets insets1 = UIEdgeInsetsMake(20, 20, 20, 20);
-        image1 = [image1 resizableImageWithCapInsets:insets1 resizingMode:UIImageResizingModeStretch];
-        
-        UIImage *image2 = KUIImage(@"btn_green2_onclick");
-        UIEdgeInsets insets2 = UIEdgeInsetsMake(20, 20, 20, 20);
-        image2 = [image2 resizableImageWithCapInsets:insets2 resizingMode:UIImageResizingModeStretch];
-
-        
-        button.frame = CGRectMake(10, 530, 300, 44);
-        [button setBackgroundImage:image1 forState:UIControlStateNormal];
-        [button setBackgroundImage:image2 forState:UIControlStateHighlighted];
+        button.frame = CGRectMake(10, 545, 300, 44);
+        [button setBackgroundImage:KUIImage(@"btn_updata_normol") forState:UIControlStateNormal];
+        [button setBackgroundImage:KUIImage(@"btn_updata_click") forState:UIControlStateHighlighted];
         [button setTitle:@"上次更新时间:3个月前" forState:UIControlStateNormal];
         [button setTitleColor:UIColorFromRGBA(0xffffff, 1) forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont boldSystemFontOfSize:14];

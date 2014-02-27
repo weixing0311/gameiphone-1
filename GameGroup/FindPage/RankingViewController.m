@@ -85,13 +85,18 @@
     [super viewDidLoad];
 //    [self setTopViewWithTitle:@"排行榜" withBackButton:YES];
     
+    [self setTopViewWithTitle:[NSString stringWithFormat:@"%@排行",self.titleOfRanking] withBackButton:YES];
     
+    UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
+    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateNormal];
+    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateHighlighted];
+    shareButton.backgroundColor = [UIColor clearColor];
+    [shareButton addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:shareButton];
+
     
     m_PageCount = 0;
     
-    
-    //创建navigationBar
-    [self buildTopView];
     
     //创建头button
     [self buildTopBtnView];
@@ -133,42 +138,6 @@
 }
 
 
-#pragma mark --创建NavigationBar
--(void)buildTopView
-{
-    UIImageView* topImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, KISHighVersion_7 ? 64 : 44)];
-    topImageView.image = KUIImage(@"nav_bg");
-    topImageView.userInteractionEnabled = YES;
-    topImageView.backgroundColor = kColorWithRGB(23, 161, 240, 1.0);
-    [self.view addSubview:topImageView];
-    
-    UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTopViewClick:)];
-    tapGesture.delegate = self;
-    [topImageView addGestureRecognizer:tapGesture];
-    
-    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, KISHighVersion_7 ? 20 : 0, 220, 44)];
-    titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.text = [NSString stringWithFormat:@"%@排行",self.titleOfRanking];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.font = [UIFont boldSystemFontOfSize:20];
-    [self.view addSubview:titleLabel];
-    
-    UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30)];
-    [backButton setBackgroundImage:KUIImage(@"btn_back") forState:UIControlStateNormal];
-    [backButton setBackgroundImage:KUIImage(@"btn_back_onclick") forState:UIControlStateHighlighted];
-    backButton.backgroundColor = [UIColor clearColor];
-    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];
-
-    UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
-    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateNormal];
-    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateHighlighted];
-    shareButton.backgroundColor = [UIColor clearColor];
-    [shareButton addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:shareButton];
-    
-}
 
 
 #pragma mark -- tableview delegate datasourse
@@ -312,71 +281,6 @@
 
 }
 
-/*
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
-    view.backgroundColor =[UIColor whiteColor];
-    m_friendBtn  = [UIButton buttonWithType:UIButtonTypeCustom];
-    m_countryBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    m_serverBtn  = [UIButton  buttonWithType:UIButtonTypeCustom];
-    
-    m_friendBtn.frame = CGRectMake(0,0,106,44);
-    m_countryBtn.frame = CGRectMake(106,0,106,44);
-    m_serverBtn.frame = CGRectMake(212,0,107,44);
-    
-    [m_friendBtn setTitle:@"好友" forState:UIControlStateNormal];
-    [m_countryBtn setTitle:@"全国" forState:UIControlStateNormal];
-    NSString *str = self.server;
-    if (str==Nil) {
-        str =@"服务器";
-    }
-    [m_serverBtn setTitle:str forState:UIControlStateNormal];
-    
-    m_friendBtn.backgroundColor = [UIColor clearColor];
-    m_countryBtn.backgroundColor = [UIColor clearColor];
-    m_serverBtn.backgroundColor = [UIColor clearColor];
-    
-    [m_friendBtn setTitleColor:UIColorFromRGBA(0xff9600, 1) forState:UIControlStateNormal];
-    [m_friendBtn setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
-    
-    [m_countryBtn setTitleColor:UIColorFromRGBA(0xff9600, 1) forState:UIControlStateNormal];
-    [m_countryBtn setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
-    
-    [m_serverBtn setTitleColor:UIColorFromRGBA(0xff9600, 1) forState:UIControlStateNormal];
-    [m_serverBtn setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
-    
-    [m_friendBtn addTarget:self action:@selector(loadingFriendInfo:) forControlEvents:UIControlEventTouchUpInside];
-    [m_countryBtn addTarget:self action:@selector(loadingCountryInfo:) forControlEvents:UIControlEventTouchUpInside];
-    [m_serverBtn addTarget:self action:@selector(loadingServerInfo:) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:m_friendBtn];
-    [view addSubview:m_countryBtn];
-    [view addSubview:m_serverBtn];
-    
-    m_underListImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 41,106,4)];
-    m_underListImageView.image =KUIImage(@"tab_line");
-    [view addSubview:m_underListImageView];
-
-    
-    return view;
-    
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 44;
-}
-*/
-//- (void)tableSortClick:(id)sender
-//{
-//    //请求第一页
-//    isGetForData = NO;
-//    m_lastPageIndex = 0;
-//    [m_cArray removeAllObjects];
-//    [m_tableView reloadData];
-//    
-//    [self getSortDataByNet];
-//}
 
 
 - (void)didReceiveMemoryWarning
@@ -461,6 +365,7 @@
     m_PageCount = 0;
      [m_cArray removeAllObjects];
     [self getSortDataByNet];
+    
     m_friendBtn.selected = YES;
     m_countryBtn.selected = NO;
     m_serverBtn.selected = NO;
@@ -540,6 +445,7 @@
     if ([self.cRankvaltype isEqualToString:@"2"]) {
         [paramDict setObject:self.custType forKey:@"classid"];
         }
+    
     [paramDict setObject:self.server forKey:@"realm"];
     [paramDict setObject:@"1" forKey:@"gameid"];
     [paramDict setObject:self.characterid forKey:@"characterid"];
@@ -566,8 +472,6 @@
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
         if ([responseObject isKindOfClass:[NSArray class]]) {
-            
-
             
             if (m_PageCount == 0) {
                 [m_cArray removeAllObjects];
@@ -627,7 +531,6 @@
 {
     if(scrollView == m_tableView)
     {
-        NSLog(@"什么时候走3");
         [refreshView viewWillBeginDragging:scrollView];
     }
 }
@@ -636,7 +539,6 @@
 {
     if(scrollView == m_tableView)
     {
-        NSLog(@"什么时候走1");
         [refreshView didEndDragging:scrollView];
         [_slimeView scrollViewDidEndDraging];
         
@@ -646,17 +548,14 @@
 - (void)PullUpStartRefresh
 {
     NSLog(@"start");
-  //  m_PageCount =0;
-        [self getSortDataByNet];
+    [self getSortDataByNet];
 }
 
 #pragma mark - slimeRefresh delegate
 //刷新
 - (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
 {
-    NSLog(@"什么时候走2");
     m_PageCount = 0;
-    
     [self getSortDataByNet];
 }
 
@@ -666,6 +565,4 @@
         
     }];
 }
-
-
 @end

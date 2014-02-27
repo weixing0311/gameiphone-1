@@ -654,6 +654,7 @@
             VC.gameId = @"1";
             VC.myViewType = CHARA_INFO_MYSELF;
             [[NSNotificationCenter defaultCenter]postNotificationName:@"contentOfjuese" object:nil];
+            
             [self.navigationController pushViewController:VC animated:YES];
             NSLog(@"角色详情");
         }
