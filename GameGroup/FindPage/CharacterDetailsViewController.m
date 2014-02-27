@@ -11,6 +11,8 @@
 #import "CharacterDetailsView.h"
 #import "CharaDaCell.h"
 #import "RankingViewController.h"
+#import "TestListViewController.h"
+
 @interface CharacterDetailsViewController ()
 
 @end
@@ -50,20 +52,44 @@
 {
     [super viewDidLoad];
 
-    //添加新字体
-    NSArray *familyNames = [UIFont familyNames];
-    for( NSString *familyName in familyNames ){
-        printf( "Family: %s \n", [familyName UTF8String] );
+   NSArray *familyNames = [UIFont familyNames];
+    for( NSString *familyName in familyNames ){ printf( "Family: %s \n", [familyName UTF8String] );
         NSArray *fontNames = [UIFont fontNamesForFamilyName:familyName];
-        for( NSString *fontName in fontNames ){
-            printf( "\tFont: %s \n", [fontName UTF8String] );
+        for( NSString *fontName in fontNames )
+        { printf( "\tFont: %s \n", [fontName UTF8String] );
         }
     }
+
+    
+    
+    UIImageView* topImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, KISHighVersion_7 ? 64 : 44)];
+    topImageView.image = KUIImage(@"nav_bg");
+    topImageView.userInteractionEnabled = YES;
+    topImageView.backgroundColor = kColorWithRGB(23, 161, 240, 1.0);
+    [self.view addSubview:topImageView];
+    
+    UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTopViewClick:)];
+    tapGesture.delegate = self;
+    [topImageView addGestureRecognizer:tapGesture];
+    
+    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, KISHighVersion_7 ? 20 : 0, 220, 44)];
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.text = @"角色详情";
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    [self.view addSubview:titleLabel];
+    
+    UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30)];
+    [backButton setBackgroundImage:KUIImage(@"btn_back") forState:UIControlStateNormal];
+    [backButton setBackgroundImage:KUIImage(@"btn_back_onclick") forState:UIControlStateHighlighted];
+    backButton.backgroundColor = [UIColor clearColor];
+    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:backButton];
     
     
     
-    
-    [self setTopViewWithTitle:@"角色详情" withBackButton:YES];
+   // [self setTopViewWithTitle:@"角色详情" withBackButton:YES];
     
     self.view.backgroundColor = [UIColor whiteColor];
 	// Do any additional setup after loading the view.
@@ -87,11 +113,11 @@
     
     titleImageArray =[NSMutableArray array];
     [titleImageArray addObject:KUIImage(@"PVE.png")];
-    [titleImageArray addObject:KUIImage(@"achievementCount.png")];
     [titleImageArray addObject:KUIImage(@"killer.png")];
-    [titleImageArray addObject:KUIImage(@"Wmount.png")];
+    [titleImageArray addObject:KUIImage(@"itemserver.png")];
+    [titleImageArray addObject:KUIImage(@"achievementCount.png")];
     [titleImageArray addObject:KUIImage(@"Wjjc.png")];
-//PVE战斗力  荣誉击杀数  装备等级 成就点数  PVP竞技场
+//PVE战斗力  荣誉击杀数  装备等级 成就点数  PVP竞技场）
     titleArray = [NSMutableArray arrayWithObjects:@"PVE战斗力",@"荣誉击杀",@"装备等级",@"成就点数",@"PVP竞技场", nil];
 
 }
@@ -105,22 +131,22 @@
         m_contentTableView.dataSource = self;
         m_contentTableView.delegate = self;
         m_contentTableView.bounces = NO;
-        m_contentTableView.rowHeight = 60;
+        m_contentTableView.rowHeight = 55;
 
         
-        m_countryTableView = [[UITableView alloc] initWithFrame:CGRectMake(320, 0, 320, 300) style:UITableViewStylePlain];
+        m_countryTableView = [[UITableView alloc] initWithFrame:CGRectMake(640, 0, 320, 300) style:UITableViewStylePlain];
         [m_charaDetailsView.listScrollView addSubview:m_countryTableView];
         m_countryTableView.dataSource = self;
         m_countryTableView.delegate = self;
         m_countryTableView.bounces = NO;
-        m_countryTableView.rowHeight = 60;
+        m_countryTableView.rowHeight = 55;
         
-        m_reamlTableView = [[UITableView alloc] initWithFrame:CGRectMake(640, 0, 320, 300) style:UITableViewStylePlain];
+        m_reamlTableView = [[UITableView alloc] initWithFrame:CGRectMake(320, 0, 320, 300) style:UITableViewStylePlain];
         [m_charaDetailsView.listScrollView addSubview:m_reamlTableView];
         m_reamlTableView.dataSource = self;
         m_reamlTableView.delegate = self;
         m_reamlTableView.bounces = NO;
-        m_reamlTableView.rowHeight = 60;
+        m_reamlTableView.rowHeight = 55;
 
 
     }else if(self.myViewType ==CHARA_INFO_PERSON){
@@ -157,7 +183,7 @@
 {
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
-    hud.labelText = @"请求中...";
+    hud.labelText = @"正拼命从英雄榜获取中...";
 
     
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
@@ -181,13 +207,26 @@
             if ([m_charaInfo.guild isEqualToString:@""]) {
                 m_charaDetailsView.guildLabel.text =@"<无工会>";
             }
-             m_charaDetailsView.realmView.text = [NSString stringWithFormat:@"%@ %@ %@", m_charaInfo.realm,m_charaInfo.sidename,m_charaInfo.professionalName];
+            //计算view的franme
+            NSString *str =[NSString stringWithFormat:@"%@ %@",m_charaInfo.realm,m_charaInfo.sidename];
+            m_charaDetailsView.rightPView.frame = CGRectMake(295-str.length*11, 5, str.length*11+20,20 );
+            m_charaDetailsView.realmView.frame = CGRectMake(18, 0, str.length*11, 20);
+            
+            
+             m_charaDetailsView.realmView.text = [NSString stringWithFormat:@"%@ %@", m_charaInfo.realm,m_charaInfo.sidename];
            // m_charaDetailsView.realmView.text = m_charaInfo.realm;
-            m_charaDetailsView.levelLabel.text =[NSString stringWithFormat:@"%@级", m_charaInfo.level];
+            m_charaDetailsView.levelLabel.text =[NSString stringWithFormat:@"Lv.%@ %@", m_charaInfo.level,m_charaInfo.professionalName];
             m_charaDetailsView.itemlevelView.text = [NSString stringWithFormat:@"%@/%@",m_charaInfo.itemlevel,m_charaInfo.itemlevelequipped] ;//
             m_charaDetailsView.clazzImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%@",m_charaInfo.professionalId]];
             m_charaDetailsView.headerImageView.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
             m_charaDetailsView.headerImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",m_charaInfo.thumbnail]];
+            
+            if ([m_charaInfo.auth isEqualToString:@"1"]) {
+                m_charaDetailsView.certificationImage.image = KUIImage(@"6");
+            }else
+            {
+                 m_charaDetailsView.certificationImage.image = KUIImage(@"5");
+            }
             //获取表格信息
             
             
@@ -278,9 +317,16 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
+//    TestListViewController *test = [[TestListViewController alloc]init];
+//    [self.navigationController pushViewController:test animated:YES];
+    
     RankingViewController *ranking = [[RankingViewController alloc]init] ;
     ranking.characterid =m_charaInfo.characterid;
     ranking.custType = m_charaInfo.professionalId;
+    ranking.server = m_charaInfo.realm;
+    ranking.characterName =m_charaInfo.roleNickName;
+    ranking. titleOfRanking = [titleArray objectAtIndex:indexPath.row];
     NSArray *array = [m_charaInfo.friendOfRanking allKeys];
     NSLog(@"array%@",array);
     /*
@@ -298,7 +344,7 @@
         ranking.cRankvaltype = @"3" ;
     }
     if (tableView ==m_reamlTableView) {
-        ranking.cRankvaltype = @"realm" ;
+        ranking.cRankvaltype = @"2" ;
     }
     
     switch (indexPath.row) {
@@ -321,6 +367,8 @@
         default:
             break;
     }
+    
+    ranking.COME_FROM =[NSString stringWithFormat:@"%u",self.myViewType];
     [self.navigationController pushViewController:ranking animated:YES];
     
 }

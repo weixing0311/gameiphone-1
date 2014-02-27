@@ -31,15 +31,16 @@
  *            职业id， 全服和全国用这个， 不传默认全职业
  * @return
  */
-/*
- {{"ranktype":"1,2,3","gameid":"1","maxSize":"10","rankvaltype":"pveScore","pageIndex":"1","characterid":"156821","classid":"1"},"isCompression":"0"}
- 
- {{"ranktype":"1","gameid":"1","maxSize":"5","rankvaltype":"fengjian","pageIndex":"-1","characterid":"158169",},"isCompression":"0"}
- */
 
 
 #import "RankingViewController.h"
 #import "RankingCell.h"
+#import "PersonDetailViewController.h"
+#import "SendNewsViewController.h"
+#define kSegmentFriend (0)
+#define kSegmentRealm (1)
+#define kSegmentCountry (2)
+
 @interface RankingViewController ()
 
 @end
@@ -48,6 +49,22 @@
 {
     NSMutableArray *m_cArray;
     UITableView *m_tableView;
+    UIButton       * m_serverBtn;
+    UIButton       * m_countryBtn;
+    UIButton       * m_friendBtn;
+    
+    
+    
+    PullUpRefreshView      *refreshView;
+    SRRefreshView   *_slimeView;
+
+    UIImageView *m_underListImageView;
+    
+    float btnWidth;//判断button的位置
+    float btnOfX;
+     UIView*         bgView;
+    
+    NSInteger     m_PageCount;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -66,20 +83,104 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTopViewWithTitle:@"排行榜" withBackButton:YES];
-
-    m_tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height - ( 50 + startX)) style:UITableViewStylePlain];
+//    [self setTopViewWithTitle:@"排行榜" withBackButton:YES];
+    
+    
+    
+    m_PageCount = 0;
+    
+    
+    //创建navigationBar
+    [self buildTopView];
+    
+    //创建头button
+    [self buildTopBtnView];
+    
+    
+    
+    m_tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, startX+44, 320, self.view.frame.size.height -startX-44) style:UITableViewStylePlain];
     m_tableView.rowHeight = 70;
     m_tableView.delegate = self;
     m_tableView.dataSource = self;
+    m_tableView.showsVerticalScrollIndicator = NO;
+    m_tableView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:m_tableView];
-	// Do any additional setup after loading the view.
+    
+
+    hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    hud.labelText = @"查询中...";
+
+    _slimeView = [[SRRefreshView alloc] init];
+    _slimeView.delegate = self;
+    _slimeView.upInset = 0;
+    _slimeView.slimeMissWhenGoingBack = NO;
+    _slimeView.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
+    _slimeView.slime.skinColor = [UIColor whiteColor];
+    _slimeView.slime.lineWith = 1;
+    _slimeView.slime.shadowBlur = 4;
+    _slimeView.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
+    [m_tableView addSubview:_slimeView];
+    
+    refreshView = [[PullUpRefreshView alloc] initWithFrame:CGRectMake(0, kScreenHeigth - startX-(KISHighVersion_7?0:20), 320, REFRESH_HEADER_HEIGHT)];//上拉加载
+    [m_tableView addSubview:refreshView];
+    refreshView.pullUpDelegate = self;
+    refreshView.myScrollView = m_tableView;
+    [refreshView stopLoading:NO];
+    
+
+    
+}
+
+
+#pragma mark --创建NavigationBar
+-(void)buildTopView
+{
+    UIImageView* topImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, KISHighVersion_7 ? 64 : 44)];
+    topImageView.image = KUIImage(@"nav_bg");
+    topImageView.userInteractionEnabled = YES;
+    topImageView.backgroundColor = kColorWithRGB(23, 161, 240, 1.0);
+    [self.view addSubview:topImageView];
+    
+    UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTopViewClick:)];
+    tapGesture.delegate = self;
+    [topImageView addGestureRecognizer:tapGesture];
+    
+    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, KISHighVersion_7 ? 20 : 0, 220, 44)];
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.text = [NSString stringWithFormat:@"%@排行",self.titleOfRanking];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    [self.view addSubview:titleLabel];
+    
+    UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30)];
+    [backButton setBackgroundImage:KUIImage(@"btn_back") forState:UIControlStateNormal];
+    [backButton setBackgroundImage:KUIImage(@"btn_back_onclick") forState:UIControlStateHighlighted];
+    backButton.backgroundColor = [UIColor clearColor];
+    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:backButton];
+
+    UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
+    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateNormal];
+    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateHighlighted];
+    shareButton.backgroundColor = [UIColor clearColor];
+    [shareButton addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:shareButton];
+    
+}
+
+
+#pragma mark -- tableview delegate datasourse
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return m_cArray.count;
-    return 10;
+    return m_cArray.count;
+    //return 10;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -89,13 +190,193 @@
     if (cell == nil) {
         cell = [[RankingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    cell.titleImageView.image = KUIImage(@"ceshi.jpg");
-    cell.NumLabel.text = [NSString stringWithFormat:@"%d",indexPath.row];
-    cell.titleLabel.text = @"下一站灬停留";
-    cell.serverLabel.text = @"冰霜之刃 - 猎人";
-    cell.CountOfLabel.text = @"11500";
+    
+    NSDictionary *dic = [m_cArray objectAtIndex:indexPath.row];
+    NSInteger i = [KISDictionaryHaveKey(dic, @"rank")integerValue];
+    if (i <=3) {
+        cell.NumLabel.backgroundColor =UIColorFromRGBA(0xff9600, 1);
+    }else if(i>3&&i<=10) {
+        cell.NumLabel.backgroundColor =UIColorFromRGBA(0x8a5d96, 1);
+    }
+    else{
+        cell.NumLabel.backgroundColor =UIColorFromRGBA(0x828be5, 1);
+    }
+    
+    if ([KISDictionaryHaveKey(dic, @"charactername") isEqualToString:self.characterName]&&[KISDictionaryHaveKey(dic, @"realm") isEqualToString:self.server]) {
+        cell.backgroundColor = UIColorFromRGBA(0xd0ebe9, 1);
+    }else {
+        cell.backgroundColor =[UIColor whiteColor];
+    }
+    
+    
+    //cell.titleImageView.image = KUIImage(@"ceshi.jpg");
+    cell.titleImageView.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
+    cell.titleImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(dic, @"img")]];
+
+    cell.NumLabel.text = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"rank")];
+    cell.titleLabel.text = KISDictionaryHaveKey(dic, @"nickname");
+    cell.serverLabel.text = [NSString stringWithFormat:@"%@-%@",KISDictionaryHaveKey(dic, @"charactername"),KISDictionaryHaveKey(dic, @"characterclass")];
+    cell.CountOfLabel.text =[NSString stringWithFormat:@"%@",KISDictionaryHaveKey(dic, @"value")];
     return cell;
 }
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    PersonDetailViewController *detailVC = [[PersonDetailViewController alloc]init];
+    NSDictionary *dic = [m_cArray objectAtIndex:indexPath.row];
+    
+    detailVC.userId = KISDictionaryHaveKey(dic, @"userid");
+    detailVC.nickName = KISDictionaryHaveKey(dic, @"displayName");
+    detailVC.isChatPage = NO;
+    [self.navigationController pushViewController:detailVC animated:YES];
+
+}
+
+
+#pragma mark ---创建顶部分类button
+-(void)buildTopBtnView
+{
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, startX, 320, 44)];
+    view.backgroundColor =[UIColor whiteColor];
+    [self.view addSubview:view];
+    m_friendBtn  = [UIButton buttonWithType:UIButtonTypeCustom];
+    m_countryBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    m_serverBtn  = [UIButton  buttonWithType:UIButtonTypeCustom];
+    
+    [m_friendBtn setBackgroundImage:KUIImage(@"tab_bg") forState:UIControlStateNormal];
+    [m_countryBtn setBackgroundImage:KUIImage(@"tab_bg") forState:UIControlStateNormal];
+    [m_serverBtn setBackgroundImage:KUIImage(@"tab_bg") forState:UIControlStateNormal];
+    
+
+    
+    if ([self.COME_FROM isEqualToString:@"0"]) {
+        btnWidth = 160;
+        btnOfX = 0;
+        m_friendBtn.hidden =YES;
+    }
+    if([self.COME_FROM isEqualToString:@"1"]){
+        btnWidth = 106;
+        btnOfX =106;
+    }
+    m_friendBtn.frame = CGRectMake(btnOfX-btnWidth,0,btnWidth,44);
+    m_countryBtn.frame = CGRectMake(btnOfX+btnWidth,0,btnWidth,44);
+    m_serverBtn.frame = CGRectMake(btnOfX,0,btnWidth,44);
+
+    m_underListImageView = [[UIImageView alloc]init];
+    m_underListImageView.image =KUIImage(@"tab_line");
+
+    if ([self.cRankvaltype isEqualToString:@"1"]) {
+        m_friendBtn.selected = YES;
+        m_underListImageView.frame =CGRectMake(btnOfX-btnWidth, 41,btnWidth,4);
+    }
+    if ([self.cRankvaltype isEqualToString:@"2"]) {
+        m_serverBtn.selected = YES;
+        m_underListImageView.frame =CGRectMake(btnOfX+btnWidth, 41,btnWidth,4);;
+    }
+    if ([self.cRankvaltype isEqualToString:@"3"]) {
+        m_countryBtn.selected = YES;
+        m_underListImageView.frame =CGRectMake(btnOfX, 41,btnWidth,4);
+    }
+
+    
+    
+    [m_friendBtn setTitle:@"好友" forState:UIControlStateNormal];
+    [m_countryBtn setTitle:@"全国" forState:UIControlStateNormal];
+    NSString *str = self.server;
+    if (str==Nil) {
+        str =@"服务器";
+    }
+    [m_serverBtn setTitle:str forState:UIControlStateNormal];
+    
+//    m_friendBtn.backgroundColor = [UIColor clearColor];
+//    m_countryBtn.backgroundColor = [UIColor clearColor];
+//    m_serverBtn.backgroundColor = [UIColor clearColor];
+    
+    [m_friendBtn setTitleColor:UIColorFromRGBA(0xff9600, 1) forState:UIControlStateSelected];
+    [m_friendBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
+    [m_countryBtn setTitleColor:UIColorFromRGBA(0xff9600, 1) forState:UIControlStateSelected];
+    [m_countryBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
+    [m_serverBtn setTitleColor:UIColorFromRGBA(0xff9600, 1) forState:UIControlStateSelected];
+    [m_serverBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
+    [m_friendBtn addTarget:self action:@selector(loadingFriendInfo:) forControlEvents:UIControlEventTouchUpInside];
+    [m_countryBtn addTarget:self action:@selector(loadingCountryInfo:) forControlEvents:UIControlEventTouchUpInside];
+    [m_serverBtn addTarget:self action:@selector(loadingServerInfo:) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:m_friendBtn];
+    [view addSubview:m_countryBtn];
+    [view addSubview:m_serverBtn];
+    [view addSubview:m_underListImageView];
+
+
+}
+
+/*
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+    view.backgroundColor =[UIColor whiteColor];
+    m_friendBtn  = [UIButton buttonWithType:UIButtonTypeCustom];
+    m_countryBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    m_serverBtn  = [UIButton  buttonWithType:UIButtonTypeCustom];
+    
+    m_friendBtn.frame = CGRectMake(0,0,106,44);
+    m_countryBtn.frame = CGRectMake(106,0,106,44);
+    m_serverBtn.frame = CGRectMake(212,0,107,44);
+    
+    [m_friendBtn setTitle:@"好友" forState:UIControlStateNormal];
+    [m_countryBtn setTitle:@"全国" forState:UIControlStateNormal];
+    NSString *str = self.server;
+    if (str==Nil) {
+        str =@"服务器";
+    }
+    [m_serverBtn setTitle:str forState:UIControlStateNormal];
+    
+    m_friendBtn.backgroundColor = [UIColor clearColor];
+    m_countryBtn.backgroundColor = [UIColor clearColor];
+    m_serverBtn.backgroundColor = [UIColor clearColor];
+    
+    [m_friendBtn setTitleColor:UIColorFromRGBA(0xff9600, 1) forState:UIControlStateNormal];
+    [m_friendBtn setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
+    
+    [m_countryBtn setTitleColor:UIColorFromRGBA(0xff9600, 1) forState:UIControlStateNormal];
+    [m_countryBtn setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
+    
+    [m_serverBtn setTitleColor:UIColorFromRGBA(0xff9600, 1) forState:UIControlStateNormal];
+    [m_serverBtn setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
+    
+    [m_friendBtn addTarget:self action:@selector(loadingFriendInfo:) forControlEvents:UIControlEventTouchUpInside];
+    [m_countryBtn addTarget:self action:@selector(loadingCountryInfo:) forControlEvents:UIControlEventTouchUpInside];
+    [m_serverBtn addTarget:self action:@selector(loadingServerInfo:) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:m_friendBtn];
+    [view addSubview:m_countryBtn];
+    [view addSubview:m_serverBtn];
+    
+    m_underListImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 41,106,4)];
+    m_underListImageView.image =KUIImage(@"tab_line");
+    [view addSubview:m_underListImageView];
+
+    
+    return view;
+    
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 44;
+}
+*/
+//- (void)tableSortClick:(id)sender
+//{
+//    //请求第一页
+//    isGetForData = NO;
+//    m_lastPageIndex = 0;
+//    [m_cArray removeAllObjects];
+//    [m_tableView reloadData];
+//    
+//    [self getSortDataByNet];
+//}
 
 
 - (void)didReceiveMemoryWarning
@@ -105,34 +386,172 @@
 }
 
 
+#pragma mark ---分享button方法
+-(void)shareBtnClick:(UIButton *)sender
+{
+    if (bgView != nil) {
+        [bgView removeFromSuperview];
+    }
+    bgView = [[UIView alloc] init];
+    bgView.frame = CGRectMake(328, 0, kScreenHeigth-320, kScreenWidth);
+    bgView.backgroundColor = [UIColor blackColor];
+    bgView.alpha = 0.4;
+    [self.view addSubview:bgView];
+    
+    UIActionSheet* actionSheet = [[UIActionSheet alloc]
+                                  initWithTitle:@"分享到"
+                                  delegate:self
+                                  cancelButtonTitle:@"取消"
+                                  destructiveButtonTitle:Nil
+                                  otherButtonTitles:@"我的动态", nil];
+    actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    
+    [actionSheet showInView:self.view];
+
+}
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+        [self performSelector:@selector(pushSendNews) withObject:nil afterDelay:1.0];
+    }
+    if (bgView != nil) {
+        [bgView removeFromSuperview];
+    }
+}
+
+- (void)pushSendNews
+{
+    //http://www.dapps.net/dev/iphone/iphone-ipad-screenshots-tips.html
+    //    CGImageRef UIGetScreenImage();
+    //    CGImageRef img = UIGetScreenImage();
+    //    UIImage* scImage=[UIImage imageWithCGImage:img];
+    UIGraphicsBeginImageContext(CGSizeMake(kScreenWidth, kScreenHeigth));
+    //    if(upScroll.center.y < 0)
+    //    {
+    //        [downScroll.layer renderInContext:UIGraphicsGetCurrentContext()];
+    //    }
+    //    else
+    //    {
+    //        CGContextRef cm = UIGraphicsGetCurrentContext();
+    //        CGContextTranslateCTM(cm, 200, 0.0);
+    //        [upScroll.layer renderInContext:cm];
+    //    }
+    [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    
+    SendNewsViewController* VC = [[SendNewsViewController alloc] init];
+    VC.titleImage = viewImage;
+    VC.delegate = self;
+    VC.defaultContent = [NSString stringWithFormat:@"分享%@的%@排名",self.characterName,self.titleOfRanking];
+    [self.navigationController pushViewController:VC animated:NO];
+}
+
+
+#pragma mark --顶部分类button方法
+-(void)loadingFriendInfo:(UIButton *)sender
+{
+    NSLog(@"%@",sender.titleLabel.text);
+    if ([self.cRankvaltype isEqualToString:@"1"]) {
+        return;
+    }
+    self.cRankvaltype =@"1";
+    m_PageCount = 0;
+     [m_cArray removeAllObjects];
+    [self getSortDataByNet];
+    m_friendBtn.selected = YES;
+    m_countryBtn.selected = NO;
+    m_serverBtn.selected = NO;
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.4];
+    
+    m_underListImageView.frame = CGRectMake(m_friendBtn.frame.origin.x, 41, m_friendBtn.frame.size.width, 4);
+    [UIView commitAnimations];
+
+    
+
+}
+-(void)loadingCountryInfo:(UIButton *)sender
+{
+    NSLog(@"%@",sender.titleLabel.text);
+    if ([self.cRankvaltype isEqualToString:@"3"]) {
+        return;
+    }
+   
+    self.cRankvaltype =@"3";
+     m_PageCount = 0;
+    [m_cArray removeAllObjects];
+   [self getSortDataByNet];
+    
+    //[self slimeRefreshStartRefresh:(SRRefreshView *)refreshView];
+    
+    
+    m_friendBtn.selected = NO;
+    m_countryBtn.selected = YES;
+    m_serverBtn.selected = NO;
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.4];
+    
+    m_underListImageView.frame = CGRectMake(m_countryBtn.frame.origin.x, 41, m_countryBtn.frame.size.width, 4);
+    [UIView commitAnimations];
+
+
+}
+-(void)loadingServerInfo:(UIButton *)sender
+{
+    NSLog(@"%@",sender.titleLabel.text);
+    if ([self.cRankvaltype isEqualToString:@"2"]) {
+        return;
+    }
+    m_PageCount = 0;
+    self.cRankvaltype =@"2";
+    [m_cArray removeAllObjects];
+
+  [self getSortDataByNet];
+    m_friendBtn.selected = NO;
+    m_countryBtn.selected = NO;
+    m_serverBtn.selected = YES;
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.4];
+    
+    m_underListImageView.frame = CGRectMake(m_serverBtn.frame.origin.x, 41, m_serverBtn.frame.size.width, 4);
+    [UIView commitAnimations];
+
+
+}
+
+#pragma mark --网络请求
 - (void)getSortDataByNet
 {
-    
-    
-    
-//     gameid 游戏id
-//     ranktype 排行类型，三个值：1，2，3， 1是好友， 2是全服， 3是全国， 大头衔也就是基本头衔有这个字段值是多个这间用逗号分隔的
-//     characterid 角色id
-//     rankvaltype 排行值类型， 战斗力还是坐骑等， 值对应大头衔里相应字段的值
-//     pageIndex 起始页， 如果传 -1 我就认为是取角色id附近的排名， 会返回这个角色的排行， 如果这个角色的排名就是前几名会返回rank排名为1的，这时pageIndex其实就相当于为0第一页时的返回数据， 所以前端要判断取角色排名的时侯是否返回了rank = 1， 如果有下一页应该是传pageIndex = 1 而不是 pageIndex = 0
-//     maxSize  记录数
-//     realm  服务器， 全服排行用这个
-//     classid  职业id， 全服和全国用这个， 不传默认全职业
-    
-    
+    hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    //hud.labelText = @"请求中...";
+
+    [hud show:YES];
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-    // [paramDict setObject:KISDictionaryHaveKey(self.sccDic, @"realm") forKey:@"realm"];
-
+    
+    
+    if ([self.cRankvaltype isEqualToString:@"2"]) {
+        [paramDict setObject:self.custType forKey:@"classid"];
+        }
+    [paramDict setObject:self.server forKey:@"realm"];
     [paramDict setObject:@"1" forKey:@"gameid"];
-    [paramDict setObject:self.custType forKey:@"classid"];
     [paramDict setObject:self.characterid forKey:@"characterid"];
     [paramDict setObject:self.cRankvaltype forKey:@"ranktype"];
-
-    //[paramDict setObject:@"1,2,3" forKey:@"ranktype"];
     
     [paramDict setObject:self.dRankvaltype forKey:@"rankvaltype"];
-    [paramDict setObject:@"1" forKey:@"pageIndex"];
+    
+    [paramDict setObject:[NSString stringWithFormat:@"%d",m_PageCount] forKey:@"pageIndex"];
+  //  [paramDict setObject:@"5" forKey:@"maxSize"];
+
+    
+  //  [paramDict setObject:@"-1" forKey:@"pageIndex"];
     [paramDict setObject:@"10" forKey:@"maxSize"];
     
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
@@ -140,71 +559,113 @@
     [postDict setObject:@"130" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
-    [hud show:YES];
+   // [hud show:YES];
 
+    
+    
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
-        NSLog(@"RankingresponseObject%@",responseObject);
         if ([responseObject isKindOfClass:[NSArray class]]) {
-            m_cArray = responseObject;
+            
+
+            
+            if (m_PageCount == 0) {
+                [m_cArray removeAllObjects];
+                
+                [m_cArray addObjectsFromArray:responseObject];
+                
+                NSLog(@"切换或者刷新==0");
+            }
+            else
+            {
+                [m_cArray addObjectsFromArray:responseObject];
+                
+                NSLog(@"要加载更多");
+            }
+            
             [m_tableView reloadData];
+            
+            [refreshView stopLoading:NO];
+            //        }
+            m_PageCount ++;
+            NSLog(@"m_PageCount ++%d",m_PageCount);
+            [refreshView setRefreshViewFrame];
+            [_slimeView endRefresh];
+        }else
+        {
+            [refreshView stopLoading:YES];
+            [_slimeView endRefresh];
         }
-        
-        
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
                 UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
+                [refreshView stopLoading:YES];
+                [_slimeView endRefresh];
             }
         }
         
-        [hud hide:YES];
+     //   [hud hide:YES];
+    }];
+}
+#pragma mark  scrollView  delegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (m_tableView.contentSize.height < m_tableView.frame.size.height) {
+        refreshView.viewMaxY = 0;
+    }
+    else
+        refreshView.viewMaxY = m_tableView.contentSize.height - m_tableView.frame.size.height;
+    [refreshView viewdidScroll:scrollView];
+    [_slimeView scrollViewDidScroll];
+}
+
+#pragma mark pull up refresh
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if(scrollView == m_tableView)
+    {
+        NSLog(@"什么时候走3");
+        [refreshView viewWillBeginDragging:scrollView];
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if(scrollView == m_tableView)
+    {
+        NSLog(@"什么时候走1");
+        [refreshView didEndDragging:scrollView];
+        [_slimeView scrollViewDidEndDraging];
+        
+    }
+}
+//上拉加载
+- (void)PullUpStartRefresh
+{
+    NSLog(@"start");
+  //  m_PageCount =0;
+        [self getSortDataByNet];
+}
+
+#pragma mark - slimeRefresh delegate
+//刷新
+- (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
+{
+    NSLog(@"什么时候走2");
+    m_PageCount = 0;
+    
+    [self getSortDataByNet];
+}
+
+-(void)endRefresh
+{
+    [_slimeView endRefreshFinish:^{
+        
     }];
 }
 
+
 @end
-
-
-
-/*
- 
- itleDic{
- characterid = 158171;
- charactername = "\U6de1\U6de1\U5730\U4f24";
- clazz = 5;
- gameid = 1;
- hasDate = 1392699274000;
- hide = 1;
- id = 160817;
- realm = "\U51b0\U971c\U4e4b\U5203";
- sortnum = 6;
- titleObj =     {
- createDate = 1389340897000;
- evolution = 0;
- gameid = 1;
- icon = " ";
- id = 111;
- img = 501;
- rank = 1;
- ranktype = "1,2,3";
- rankvaltype = itemlevel;
- rarememo = "1.53%";
- rarenum = 6;
- remark = "\U867d\U7136\U6c38\U6052\U5c9b\U5904\U5904\U5145\U6ee1\U5371\U9669\Uff0c\U4f46\U4e5f\U6709\U5f88\U591a\U4e0d\U9519\U7684\U673a\U9047\Uff0c\U5bcc\U8d35\U9669\U4e2d\U6c42\U554a\Uff01";
- remarkDetail = "\U83b7\U53d6\U6761\U4ef6\Uff1a
- \n\U83b7\U53d6\U88c5\U5907\U5230\U8fbe496\U7ea7\U522b
- \n
- \n\U4e0b\U4e00\U5934\U8854\Uff1a
- \n\U88c5\U5907\U7b49\U7ea7\U5230\U8fbe561";
- simpletitle = "\U7d2b\U88c5\U5f00\U59cb!";
- sortnum = 1;
- title = "\U7d2b\U88c5\U5f00\U59cb!";
- titlekey = "wow_itemlevel_496";
- titletype = "\U88c5\U5907\U7b49\U7ea7";
- };
- titleid = 111;
- userid = 10110253;
- userimg = " ";
- } */

@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "EGOImageView.h"
 @interface RankingCell : UITableViewCell
-@property(nonatomic,strong)UIImageView *titleImageView;
+@property(nonatomic,strong)EGOImageView *titleImageView;
 @property(nonatomic,strong)UILabel *CountOfLabel;
 @property(nonatomic,strong)UILabel *titleLabel;
 @property(nonatomic,strong)UILabel *serverLabel;

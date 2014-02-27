@@ -80,7 +80,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 5;
+    return 6;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -127,18 +127,22 @@
         } break;
         case 2:
         {
-//            if (0 == indexPath.row) {
-//                cell.textLabel.text = @"我的可进化头衔";
-//            }
-//            else
-//            {
+            if (0 == indexPath.row) {
+                cell.leftImageView.image = KUIImage(@"ranking_icon");
+                cell.titleLable.text = @"我的可排名头衔";
+                
+                cell.notiBgV.hidden = YES;
+            }
+            else
+            {
             cell.leftImageView.image = KUIImage(@"ranking_icon");
-            cell.titleLable.text = @"我的可排名头衔";
+            cell.titleLable.text = @"邂逅";
             
             cell.notiBgV.hidden = YES;
 
-//            }
+            }
         } break;
+
         default:
             break;
     }
@@ -181,10 +185,15 @@
         } break;
         case 2:
         {
+            if (indexPath.row == 0) {
             [[Custom_tabbar showTabBar] hideTabBar:YES];
 
             CanRankTitleObjViewController* titleVC = [[CanRankTitleObjViewController alloc] init];
             [self.navigationController pushViewController:titleVC animated:YES];
+            } else if (indexPath.row == 1)
+                {
+            [[Custom_tabbar showTabBar] hideTabBar:YES];
+                }
         }   break;
         default:
             break;

@@ -13,12 +13,10 @@
 
 #import "BaseViewController.h"
 
-@class AppDelegate, XMPPHelper;
 @protocol getContact <NSObject>
 -(void)getContact:(NSDictionary *)userDict;
 @end
 
 @interface SearchResultViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, PullUpDelegate, SRRefreshDelegate,NotConnectDelegate>
-@property (strong,nonatomic) AppDelegate * appDel;
 @property (strong,nonatomic) id responseObject;
 @end

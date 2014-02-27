@@ -31,7 +31,7 @@
 @property(nonatomic,strong)UIButton     *  realmBtn;
 @property(nonatomic,strong)UIImageView  *  underListImageView;//下划线img
 @property(nonatomic,strong)UIScrollView *  listScrollView;
-
+@property(nonatomic,strong)UIImageView  *  certificationImage;//认证button
 -(void)comeFromMy;
 -(void)comeFromPerson;
 

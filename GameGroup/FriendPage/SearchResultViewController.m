@@ -109,6 +109,8 @@
 
 - (void)getNearByDataByNet
 {
+    
+    //6222 0110 2463 0240
         if ((m_currentPage ==0 && ![_responseObject isKindOfClass:[NSDictionary class]]) || (m_currentPage != 0 && ![_responseObject isKindOfClass:[NSArray class]])) {
             [refreshView stopLoading:YES];
             [_slimeView endRefresh];
