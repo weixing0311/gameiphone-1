@@ -13,7 +13,6 @@
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 #import "GetDataAfterManager.h"
-#import "XMPPManager.h"
 
 @implementation AppDelegate
 
