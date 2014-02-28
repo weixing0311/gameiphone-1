@@ -795,7 +795,7 @@
                 [hud hide:YES];
                 
 //                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];//删除聊天消息
-                [DataStoreManager deleteFriendWithUserName:self.hostInfo.userName];//从表删除
+                [DataStoreManager deleteFriendWithUserId:self.hostInfo.userId];//从表删除
 
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
 
