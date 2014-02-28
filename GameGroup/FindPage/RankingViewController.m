@@ -219,11 +219,13 @@
 
     
     if ([self.COME_FROM isEqualToString:@"0"]) {
+        NSLog(@"看别人的");
         btnWidth = 160;
         btnOfX = 0;
         m_friendBtn.hidden =YES;
     }
     if([self.COME_FROM isEqualToString:@"1"]){
+        NSLog(@"看自己的");
         btnWidth = 106;
         btnOfX =106;
     }
@@ -566,3 +568,10 @@
     }];
 }
 @end
+/*
+ "ranktype":"3","realm":"卡拉赞","gameid":"1","maxSize":"10","pageIndex":"0","rankvaltype":"pveScore","characterid":"155846"},"isCompression":"0"}
+ 
+ 
+ "ranktype":"1","realm":"卡拉赞","gameid":"1","maxSize":"10","pageIndex":"0","rankvaltype":"pveScore","characterid":"155846"},"isCompression":"0"}
+ 
+ */

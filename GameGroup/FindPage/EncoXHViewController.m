@@ -30,26 +30,27 @@
 #import "HostInfo.h"
 #import "EnteroCell.h"
 #import "EGOImageView.h"
+#import "UIView+i7Rotate360.h"
 @interface EncoXHViewController ()
 
 @end
 
 @implementation EncoXHViewController
 {
-    UIButton *sayHelloBtn;
-    UIButton *inABtn;
-    EGOImageView *headImageView;
-    UIImageView *clazzImageView;
-    UILabel *NickNameLabel;
-    UILabel *customLabel;
-    UITextView *promptLabel;
-    NSDictionary *getDic;
-    
-    NSMutableArray *m_characterArray;
-    HostInfo     *m_hostInfo;
-    UITableView *m_tableView;
+    UIButton *sayHelloBtn;//打招呼
+    UIButton *inABtn;//换一个
+    EGOImageView *headImageView;//头像
+    UIImageView *clazzImageView;//职业图标
+    UILabel *NickNameLabel;//昵称
+    UILabel *customLabel;//年龄+性别+星座
+    UITextView *promptLabel;//提示语
+    NSDictionary *getDic;//获取邂逅字典
+    UILabel *clazzLabel;//职业名称
+    NSMutableArray *m_characterArray;//获取职业列表
+    HostInfo     *m_hostInfo;//信息
+    UITableView *m_tableView;//职业列表
 
-    
+    UIImageView *backgroundImageView;//背景图片
     
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -74,7 +75,7 @@
     m_characterArray = [[NSMutableArray alloc]init];
     [self setTopViewWithTitle:@"邂逅" withBackButton:YES];
     
-    UIImageView *backgroundImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height -startX)];
+    backgroundImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height -startX)];
     
     backgroundImageView.image =KUIImage(@"meet_bg_img.jpg");
     backgroundImageView.userInteractionEnabled = YES;
@@ -84,8 +85,6 @@
     [self buildTableView];
     
 }
-
-
 -(void)buildTableView
 {
     m_tableView = [[UITableView alloc]initWithFrame:CGRectMake(45, 100+startX, 230, 230) style:UITableViewStylePlain];
@@ -101,72 +100,79 @@
     m_tableView.showsVerticalScrollIndicator = NO;
     m_tableView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:m_tableView];
-
 }
-
-
 #pragma mark ---创建邂逅界面
 -(void)bulidEncounterView
 {
-    clazzImageView = [[UIImageView alloc]initWithFrame:CGRectMake(266,startX+ 6, 40, 40)];
-    
+    clazzImageView = [[UIImageView alloc]initWithFrame:CGRectMake(266,6, 40, 40)];
     clazzImageView.image = KUIImage(@"ceshi.jpg");
     clazzImageView.layer.masksToBounds = YES;
     clazzImageView.layer.cornerRadius = 20;
     clazzImageView.layer.borderWidth = 2.0;
     clazzImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
-    [self.view addSubview:clazzImageView];
+    [backgroundImageView addSubview:clazzImageView];
     
+    clazzLabel = [[UILabel alloc]initWithFrame:CGRectMake(260, 48, 50, 20)];
+    clazzLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.6];
+    clazzLabel.layer.masksToBounds = YES;
+    clazzLabel.layer.cornerRadius = 5;
+    clazzLabel.layer.borderWidth = 2.0;
+   // clazzLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
+    clazzLabel.font = [UIFont systemFontOfSize:12];
+    clazzLabel.textColor = [UIColor whiteColor];
+    [backgroundImageView addSubview:clazzLabel];
     
     headImageView = [[EGOImageView alloc]init];
     
-    headImageView.image = KUIImage(@"ceshi.jpg");
     headImageView.layer.masksToBounds = YES;
     headImageView.layer.cornerRadius = 80;
     headImageView.layer.borderWidth = 2.0;
     headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
-    [self.view addSubview:headImageView];
+    headImageView.placeholderImage = KUIImage(@"moren_people.png");
+    headImageView.frame = CGRectMake(80, 76-40, 160, 160);
+    [backgroundImageView addSubview:headImageView];
     
     
-    NickNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, startX+251, 320, 20)];
+    NickNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0,251-40, 320, 20)];
     NickNameLabel.backgroundColor = [UIColor clearColor];
     NickNameLabel.font = [UIFont systemFontOfSize:18];
     NickNameLabel.textAlignment = NSTextAlignmentCenter;
     NickNameLabel.textColor = [UIColor whiteColor];
-    [self.view addSubview:NickNameLabel];
+    [backgroundImageView addSubview:NickNameLabel];
     
-    customLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, startX+276, 320, 15)];
+    customLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 276-40, 320, 15)];
     customLabel.backgroundColor = [UIColor clearColor];
     customLabel.font = [UIFont systemFontOfSize:18];
     customLabel.textAlignment = NSTextAlignmentCenter;
     customLabel.textColor = [UIColor whiteColor];
-    [self.view addSubview:customLabel];
+    [backgroundImageView addSubview:customLabel];
     
     
-    promptLabel = [[UITextView alloc]initWithFrame:CGRectMake(0, startX+318, 320, 30)];
+    promptLabel = [[UITextView alloc]initWithFrame:CGRectMake(0,318-40, 320, 30)];
     promptLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];
     promptLabel.textColor = UIColorFromRGBA(0xc3c3c3, 1);
     promptLabel.textAlignment =NSTextAlignmentCenter;
     promptLabel.userInteractionEnabled = NO;
     promptLabel.font = [UIFont boldSystemFontOfSize:12];
-    [self.view addSubview:promptLabel];
+    [backgroundImageView addSubview:promptLabel];
     
     
     inABtn =[UIButton buttonWithType:UIButtonTypeCustom];
-    inABtn.frame = CGRectMake(20, kScreenHeigth-80, 120, 44);
+    inABtn.frame = CGRectMake(20, backgroundImageView.bounds.size.height-130, 120, 44);
     [inABtn setBackgroundImage:KUIImage(@"white_onclick") forState:UIControlStateNormal];
     [inABtn setBackgroundImage:KUIImage(@"white") forState:UIControlStateHighlighted];
     [inABtn addTarget:self action:@selector(changeOtherOne) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:inABtn];
+    [backgroundImageView addSubview:inABtn];
     
     
     sayHelloBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-    sayHelloBtn.frame = CGRectMake(180, kScreenHeigth-80, 120, 44);
+    sayHelloBtn.frame = CGRectMake(180, backgroundImageView.bounds.size.height-130, 120, 44);
     [sayHelloBtn setBackgroundImage:KUIImage(@"green_onclick") forState:UIControlStateNormal];
     [sayHelloBtn setBackgroundImage:KUIImage(@"green_onclick") forState:UIControlStateHighlighted];
     [sayHelloBtn addTarget:self action:@selector(sayHiToYou:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:sayHelloBtn];
+    [backgroundImageView addSubview:sayHelloBtn];
 
+    
 }
 -(void)changeOtherOne
 {
@@ -174,7 +180,7 @@
     customLabel.text = nil;
     promptLabel.text =nil;
     
-    headImageView.frame = CGRectMake(0, 400, 0, 0);
+   // headImageView.frame = CGRectMake(0, 400, 0, 0);
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
     
     [paramDict setObject:@"1" forKey:@"gameid"];
@@ -193,10 +199,6 @@
 
     [self getSayHelloForNetWithDictionary:paramDict method:@"158" prompt:@"打招呼ING" type:2];
 }
-
-
-
-
 #pragma mark ---网络请求
 - (void)getSayHelloForNetWithDictionary:(NSDictionary *)dic method:(NSString *)method prompt:(NSString *)prompt type:(NSInteger)COME_TYPE
 {
@@ -223,22 +225,40 @@
             //男♀♂
             NSString *str = nil;
             if ([KISDictionaryHaveKey(getDic, @"gender")isEqualToString:@"1"]) {
-                str= @"♂";
+                str= @"♀";
             }else{
-                str = @"♀";
+                str = @"♂";
             }
             NickNameLabel.text = KISDictionaryHaveKey(getDic, @"nickname");
             customLabel.text = [NSString stringWithFormat:@"%@ %@|%@",str,KISDictionaryHaveKey(getDic, @"age"),KISDictionaryHaveKey(getDic, @"constellation")];
             
             promptLabel.text =KISDictionaryHaveKey(getDic, @"prompt");
             NSInteger i;
-            i= promptLabel.text.length/23;
-            headImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(getDic, @"img")]];
+            
+            if ([KISDictionaryHaveKey(getDic, @"img")isKindOfClass:[NSArray class]]) {
+                headImageView.imageURL =[NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",[KISDictionaryHaveKey(getDic, @"img") objectAtIndex:0]]];
 
-            headImageView.frame = CGRectMake(80, startX+ 76, 160, 160);
-            promptLabel.frame = CGRectMake(0, startX+318, 320, 30+15*i);
-            inABtn.frame =CGRectMake(20, startX+363+15*i, 120, 44);
-            sayHelloBtn.frame =CGRectMake(180, startX+363+15*i, 120, 44);
+            }else{
+
+            headImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(getDic, @"img")]];
+            }
+            UIImage *image = headImageView.image;
+            [headImageView rotate360WithDuration:2.0 repeatCount:1 timingMode:i7Rotate360TimingModeLinear];
+            headImageView.animationDuration = 2.0;
+            headImageView.animationImages =
+            [NSArray arrayWithObjects:
+             headImageView.placeholderImage,
+             headImageView.placeholderImage,
+             headImageView.placeholderImage,
+             headImageView.placeholderImage,
+             headImageView.placeholderImage,
+             image, nil];
+            headImageView.animationRepeatCount = 1;
+            [headImageView startAnimating];
+
+            NSLog(@"%@",headImageView.image);
+            i= promptLabel.text.length/23;
+            promptLabel.frame = CGRectMake(0, 318-40, 320, 30+15*i);
             
         }
         if (COME_TYPE ==2) {
@@ -314,13 +334,21 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self bulidEncounterView];
+     tableView.hidden = YES;
     NSDictionary* tempDic = [m_characterArray objectAtIndex:indexPath.row];
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
     self.characterId =KISDictionaryHaveKey(tempDic, @"id");
     [paramDict setObject:@"1" forKey:@"gameid"];
+    int imageId = [KISDictionaryHaveKey(tempDic, @"clazz") intValue];
+    
+    clazzImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%d", imageId]];
+    clazzLabel.text =KISDictionaryHaveKey(tempDic, @"name");
+    
+    
     [paramDict setObject:KISDictionaryHaveKey(tempDic, @"id") forKey:@"characterid"];
-    tableView.hidden = YES;
-    [self bulidEncounterView];
+   
+    
     [self getSayHelloForNetWithDictionary:paramDict method:@"149" prompt:@"邂逅中..." type:1];
 
 }
