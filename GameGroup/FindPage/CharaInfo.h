@@ -128,6 +128,7 @@
 
 
 - (id)initWithCharaInfo:(NSDictionary*)info;
+- (id)initWithReLoadingInfo:(NSDictionary *)info;
 @end
 
 

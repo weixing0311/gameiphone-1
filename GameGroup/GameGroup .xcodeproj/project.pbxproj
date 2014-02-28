@@ -667,7 +667,6 @@
 		6F1DB45A185F24FF00E69C61 /* CommonControlOrView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1DB459185F24FF00E69C61 /* CommonControlOrView.m */; };
 		6F8AC42218745BE3002E983A /* have_picture.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F8AC42118745BE3002E983A /* have_picture.png */; };
 		6FDCED3A1878EFBA00F9FC18 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FDCED381878EFBA00F9FC18 /* libMobClickLibrary.a */; };
-		7215B2CB18BD8F7F0094D142 /* XMPPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7215B2CA18BD8F7F0094D142 /* XMPPManager.m */; };
 		84076EDB18B5D67500019462 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84076EDA18B5D67500019462 /* SearchResultViewController.m */; };
 		847DD07918B88DDD00BB0215 /* CharaDaCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 847DD07818B88DDD00BB0215 /* CharaDaCell.m */; };
 		847DD08118B8979500BB0215 /* NewsViewInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 847DD08018B8979500BB0215 /* NewsViewInfo.m */; };
@@ -4656,7 +4655,6 @@
 				682C417E184F1B0E002D463E /* KGStatusBar.m in Sources */,
 				84F2FC6D18BF539200C2EF29 /* EnteroCell.m in Sources */,
 				68241C891872D8D000B6E53A /* RecommendCell.m in Sources */,
-				7215B2CB18BD8F7F0094D142 /* XMPPManager.m in Sources */,
 				68CAA7C0184DD104007138B1 /* XEP_0223.m in Sources */,
 				68CAA7C1184DD104007138B1 /* XMPPAttentionModule.m in Sources */,
 				68A3AA62186447710054D1EC /* MyCharacterEditCell.m in Sources */,

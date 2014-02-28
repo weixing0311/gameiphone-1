@@ -25,9 +25,11 @@
     CharacterDetailsView * m_charaDetailsView;
     NSMutableArray       * titleImageArray;
     NSArray              * titleArray;
-    
+    MBProgressHUD       *  hud1;
     NSInteger              m_pageNum;
     float startX;
+    
+    BOOL            isInTheQueue;//获取刷新数据队列中
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -51,6 +53,7 @@
 {
     [super viewDidLoad];
     
+    isInTheQueue =NO;
     
     UIImageView* topImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, KISHighVersion_7 ? 64 : 44)];
     topImageView.image = KUIImage(@"nav_bg");
@@ -110,6 +113,12 @@
     //PVE战斗力  荣誉击杀数  装备等级 成就点数  PVP竞技场）
     titleArray = [NSMutableArray arrayWithObjects:@"PVE战斗力",@"荣誉击杀",@"装备等级",@"成就点数",@"PVP竞技场", nil];
     
+    hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+
+    hud1 =[[MBProgressHUD alloc]initWithView:m_charaDetailsView.listScrollView];
+    isInTheQueue =YES;
+
 }
 
 -(void)buildScrollView
@@ -171,8 +180,6 @@
 //获取网络数据
 - (void)getUserInfoByNet
 {
-    hud = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:hud];
     hud.labelText = @"正拼命从英雄榜获取中...";
     
     
@@ -242,6 +249,105 @@
     }];
     
 }
+
+
+//队列
+-(void)getUserLineInfoByNet
+{
+//    hud = [[MBProgressHUD alloc] initWithView:self.view];
+//    [self.view addSubview:hud];
+//    hud.labelText = @"正拼命从英雄榜获取中...";
+//    
+    
+    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+    
+    [paramDict setObject:self.gameId forKey:@"gameid"];
+    [paramDict setObject:self.characterId forKey:@"characterid"];
+    
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:paramDict forKey:@"params"];
+    [postDict setObject:@"159" forKey:@"method"];
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    
+    [hud show:YES];
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"res%@",responseObject);
+        if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"ok"]) {
+            [self reLoadingUserInfoFromNet];
+        }
+        if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"busy"]) {
+            KISDictionaryHaveKey(responseObject, @"time") ;
+            hud1.labelText = [NSString stringWithFormat:@"进入更新队列，目前队列位置：%d，预计更新时间：%@",
+                              [KISDictionaryHaveKey(responseObject, @"index") intValue],[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"time") ]]];
+            [hud1 show:YES];
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        [hud hide:YES];
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+    }];
+
+}
+//刷新数据
+-(void)reLoadingUserInfoFromNet
+{
+//    hud = [[MBProgressHUD alloc] initWithView:self.view];
+//    [self.view addSubview:hud];
+    hud.labelText = @"正拼命从英雄榜获取中...";
+    
+    
+    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+    
+    [paramDict setObject:self.gameId forKey:@"gameid"];
+    [paramDict setObject:self.characterId forKey:@"characterid"];
+    
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:paramDict forKey:@"params"];
+    [postDict setObject:@"160" forKey:@"method"];
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    
+    [hud show:YES];
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+            m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
+            
+            [hud hide:YES];
+            
+            [m_contentTableView reloadData];
+            [m_countryTableView reloadData];
+            [m_reamlTableView reloadData];
+            
+            NSString *changeBtnTitle =[NSString stringWithFormat:@"上次更新时间：%@",[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"rankingtime")]]];
+            
+            [[NSUserDefaults standardUserDefaults]setObject:KISDictionaryHaveKey(responseObject, @"rankingtime") forKey:@"WX_reloadBtnTitle_wx"];
+            
+            [m_charaDetailsView.reloadingBtn setTitle:changeBtnTitle forState:UIControlStateNormal];
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        [hud hide:YES];
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+    }];
+
+}
+
+
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView ==m_contentTableView) {
@@ -382,8 +488,14 @@
 }
 - (void)reLoadingList:(CharacterDetailsView *)characterdetailsView
 {
-    [self getUserInfoByNet];
-    NSLog(@"刷新数据");
+    if (isInTheQueue ==NO) {
+        [self getUserLineInfoByNet];
+        NSLog(@"刷新数据");
+    }
+    else{
+        [hud1 hide:YES];
+        isInTheQueue =NO;
+    }
 }
 
 @end

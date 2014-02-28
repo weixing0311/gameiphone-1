@@ -92,8 +92,7 @@
 }
 -(void)buildTableView
 {
-    tf = [[UITextField alloc]initWithFrame:CGRectMake(0, startX+40, 200, 30)];
-    tf.center  = CGPointMake(160, startX+50);
+    tf = [[UITextField alloc]init];
     tf.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.4];
     tf.borderStyle = UITextBorderStyleRoundedRect;
     tf.text = @"请选择一个角色";
@@ -145,8 +144,6 @@
     
     headImageView.layer.masksToBounds = YES;
     headImageView.layer.cornerRadius = 80;
-   // headImageView.layer.borderWidth = 2.0;
-  //  headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
     headImageView.placeholderImage = KUIImage(@"moren_people.png");
     headImageView.frame = CGRectMake(80, 76-40, 160, 160);
     [backgroundImageView addSubview:headImageView];
@@ -177,8 +174,8 @@
     
     
     promptLabel = [[UITextView alloc]initWithFrame:CGRectMake(0,318-40, 320, 30)];
-    promptLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];
     promptLabel.textColor = UIColorFromRGBA(0xc3c3c3, 1);
+    promptLabel.backgroundColor =[UIColor clearColor];
     promptLabel.textAlignment =NSTextAlignmentCenter;
     promptLabel.userInteractionEnabled = NO;
     promptLabel.font = [UIFont boldSystemFontOfSize:12];
@@ -187,8 +184,8 @@
     
     inABtn =[UIButton buttonWithType:UIButtonTypeCustom];
     inABtn.frame = CGRectMake(20, kScreenHeigth-70, 120, 44);
-    [inABtn setBackgroundImage:KUIImage(@"white_onclick") forState:UIControlStateNormal];
-    [inABtn setBackgroundImage:KUIImage(@"white") forState:UIControlStateHighlighted];
+    [inABtn setBackgroundImage:KUIImage(@"white") forState:UIControlStateNormal];
+    [inABtn setBackgroundImage:KUIImage(@"white_onclick") forState:UIControlStateHighlighted];
     [inABtn addTarget:self action:@selector(changeOtherOne) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:inABtn];
     
@@ -207,14 +204,23 @@
 - (void)changeOtherOne
 {
     inABtn.selected = YES;
-    inABtn.userInteractionEnabled = NO;
-    [self headPhotoAnimation];
-    m_leftTime = 3;
-    if ([m_verCodeTimer isValid]) {
-        [m_verCodeTimer invalidate];
-        m_verCodeTimer = nil;
-    }
-    m_verCodeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(refrenshVerCodeTime) userInfo:nil repeats:YES];
+    inABtn.enabled = NO;
+    
+    NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
+
+    [paramDict setObject:@"1" forKey:@"gameid"];
+    [paramDict setObject:self.characterId forKey:@"characterid"];
+    
+    [self getSayHelloForNetWithDictionary:paramDict method:@"149" prompt:@"邂逅中..." type:1];
+
+    
+//    [self headPhotoAnimation];
+//    m_leftTime = 3;
+//    if ([m_verCodeTimer isValid]) {
+//        [m_verCodeTimer invalidate];
+//        m_verCodeTimer = nil;
+//    }
+//    m_verCodeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(refrenshVerCodeTime) userInfo:nil repeats:YES];
     
 }
 
@@ -255,6 +261,7 @@
 }
 -(void)sayHiToYou:(UIButton *)sender
 {
+    sayHelloBtn.enabled = NO;
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
     [paramDict setObject:@"1" forKey:@"gameid"];
     [paramDict setObject:self.characterId forKey:@"characterid"];
@@ -281,6 +288,9 @@
         
         
         if (COME_TYPE ==1) {
+            inABtn.enabled = YES;
+            sayHelloBtn.enabled = YES;
+            
             [hud hide:YES];
             getDic = nil;
             getDic = [NSDictionary dictionaryWithDictionary:responseObject];
@@ -296,7 +306,8 @@
 
             }
             
-            
+            promptLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];
+
             NickNameLabel.text = KISDictionaryHaveKey(getDic, @"nickname");
             customLabel.text = [NSString stringWithFormat:@" %@ |%@",KISDictionaryHaveKey(getDic, @"age"),KISDictionaryHaveKey(getDic, @"constellation")];
             
@@ -319,8 +330,13 @@
             headImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(getDic, @"img")]];
                 NSLog(@"imageUrl111-->%@",headImageView.imageURL);
             }
+            
+            
+            headImageView.layer.borderWidth = 2.0;
+            headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
+
             UIImage *image = headImageView.image;
-            [headImageView rotate360WithDuration:1.0 repeatCount:2 timingMode:i7Rotate360TimingModeLinear];
+            [headImageView rotate360WithDuration:1.0 repeatCount:1 timingMode:i7Rotate360TimingModeLinear];
             headImageView.animationDuration = 2.0;
             headImageView.animationImages =
             [NSArray arrayWithObjects:
@@ -338,9 +354,11 @@
             
         }
         if (COME_TYPE ==2) {
+            
+            
             NSLog(@"打招呼成功");
             [hud hide:YES];
-            [self showMessageWindowWithContent:@"打招呼成功" imageType:0];
+           // [self showMessageWindowWithContent:@"打招呼成功" imageType:0];
             
             [self changeOtherOne];
             
@@ -352,16 +370,25 @@
                 [m_characterArray addObjectsFromArray:KISDictionaryHaveKey(responseObject, @"1")];
                 NSLog(@"m_characterArray%@",m_characterArray);
                 [m_tableView reloadData];
+                tf.frame =CGRectMake(0, startX+40, 200, 30);
+                tf.center  = CGPointMake(160, startX+50);
 
         }
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
+        inABtn.enabled = YES;
+        sayHelloBtn.enabled = YES;
+
+        
         if ([error isKindOfClass:[NSDictionary class]]) {
+            
+
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
                 UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
+                
                  [hud hide:YES];
             }
         }

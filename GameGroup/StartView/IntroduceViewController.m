@@ -64,6 +64,8 @@
     diffH = [GameCommon diffHeight:self];
 
     m_myScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, kScreenHeigth - ((diffH == 0) ? 20 : 0))];
+
+    
     NSLog(@"%@", NSStringFromCGRect(m_myScrollView.frame));
     m_myScrollView.backgroundColor = [UIColor clearColor];
     for (int i = 0; i < 5; i++) {
@@ -86,6 +88,9 @@
     m_myScrollView.pagingEnabled = YES;
     m_myScrollView.scrollEnabled = YES;
     m_myScrollView.contentSize = CGSizeMake(320 * 5, kScreenHeigth - ((diffH == 0) ? 20 : 0));
+
+    
+    
     m_myScrollView.showsHorizontalScrollIndicator = NO;
     m_myScrollView.showsVerticalScrollIndicator = NO;
     m_myScrollView.delegate = self;

@@ -378,8 +378,10 @@
         else if ([msgtype isEqualToString:@"character"] || [msgtype isEqualToString:@"pveScore"] || [msgtype isEqualToString:@"title"])
         {
             [dict setObject:msgtype forKey:@"msgType"];
+            NSString *title = [[message attributeForName:@"title"] stringValue]?
+            [[message attributeForName:@"title"] stringValue]:@" ";
             
-            [dict setObject:[[message attributeForName:@"title"] stringValue] forKey:@"title"];
+            [dict setObject:title forKey:@"title"];
             
             [self.otherMsgReceiveDelegate otherMessageReceived:dict];
         }

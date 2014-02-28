@@ -59,15 +59,23 @@
         [self addSubview:self.listScrollView];
 
         
-        UIButton *button = [[UIButton alloc]init];
-        button.frame = CGRectMake(10, 545, 300, 44);
-        [button setBackgroundImage:KUIImage(@"btn_updata_normol") forState:UIControlStateNormal];
-        [button setBackgroundImage:KUIImage(@"btn_updata_click") forState:UIControlStateHighlighted];
-        [button setTitle:@"上次更新时间:3个月前" forState:UIControlStateNormal];
-        [button setTitleColor:UIColorFromRGBA(0xffffff, 1) forState:UIControlStateNormal];
-        button.titleLabel.font = [UIFont boldSystemFontOfSize:14];
-        [button addTarget:self action:@selector(reLoadingCont:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:button];
+        self.reloadingBtn = [[UIButton alloc]init];
+        self.reloadingBtn.frame = CGRectMake(10, 545, 300, 44);
+        [self.reloadingBtn setBackgroundImage:KUIImage(@"btn_updata_normol") forState:UIControlStateNormal];
+        [self.reloadingBtn setBackgroundImage:KUIImage(@"btn_updata_click") forState:UIControlStateHighlighted];
+        
+        NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"WX_reloadBtnTitle_wx"];
+        if (str ==nil) {
+            [self.reloadingBtn setTitle:@"刷新排行榜数据" forState:UIControlStateNormal];
+        }
+        else{
+            [self.reloadingBtn setTitle:[NSString stringWithFormat:@"上次更新时间：%@",[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:str]]]forState:UIControlStateNormal];
+        }
+        
+        [self.reloadingBtn setTitleColor:UIColorFromRGBA(0xffffff, 1) forState:UIControlStateNormal];
+        self.reloadingBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+        [self.reloadingBtn addTarget:self action:@selector(reLoadingCont:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.reloadingBtn];
     }
     return self;
 }
