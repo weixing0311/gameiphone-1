@@ -18,6 +18,11 @@
     [MagicalRecord setDefaultModelNamed:[NSString stringWithFormat:@"%@.momd",modelName]];
     [MagicalRecord setupCoreDataStackWithStoreNamed:[NSString stringWithFormat:@"%@.sqlite",dataBaseName]];
 }
++ (BOOL)savedMsgWithID:(NSString*)msgId//消息是否已存
+{
+    NSArray * array = [DSCommonMsgs MR_findAll];
+    return NO;
+}
 #pragma mark - 存储消息相关
 +(void)storeNewMsgs:(NSDictionary *)msg senderType:(NSString *)sendertype
 {
