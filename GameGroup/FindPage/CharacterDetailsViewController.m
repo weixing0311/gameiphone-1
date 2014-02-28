@@ -25,9 +25,9 @@
     CharacterDetailsView * m_charaDetailsView;
     NSMutableArray       * titleImageArray;
     NSArray              * titleArray;
-
+    
     NSInteger              m_pageNum;
-     float startX;
+    float startX;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,8 +35,8 @@
     if (self) {
         // Custom initialization
         
-
-
+        
+        
     }
     return self;
 }
@@ -50,13 +50,40 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     
-    [self setTopViewWithTitle:@"角色详情" withBackButton:YES];
+    
+    UIImageView* topImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, KISHighVersion_7 ? 64 : 44)];
+    topImageView.image = KUIImage(@"nav_bg");
+    topImageView.userInteractionEnabled = YES;
+    topImageView.backgroundColor = kColorWithRGB(23, 161, 240, 1.0);
+    [self.view addSubview:topImageView];
+    
+    UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTopViewClick:)];
+    tapGesture.delegate = self;
+    [topImageView addGestureRecognizer:tapGesture];
+    
+    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, KISHighVersion_7 ? 20 : 0, 220, 44)];
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.text = @"角色详情";
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    [self.view addSubview:titleLabel];
+    
+    UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30)];
+    [backButton setBackgroundImage:KUIImage(@"btn_back") forState:UIControlStateNormal];
+    [backButton setBackgroundImage:KUIImage(@"btn_back_onclick") forState:UIControlStateHighlighted];
+    backButton.backgroundColor = [UIColor clearColor];
+    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:backButton];
+    
+    
+    
+    // [self setTopViewWithTitle:@"角色详情" withBackButton:YES];
     
     self.view.backgroundColor = [UIColor whiteColor];
 	// Do any additional setup after loading the view.
- 
+    
     startX = KISHighVersion_7 ? 64 : 44;
     
     m_charaDetailsView =[[CharacterDetailsView alloc]initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height - startX)];
@@ -70,19 +97,19 @@
     }
     
     [self.view addSubview:m_charaDetailsView];
-
+    
     [self buildScrollView];//创建下面的表格
-
+    
     
     titleImageArray =[NSMutableArray array];
     [titleImageArray addObject:KUIImage(@"PVE.png")];
     [titleImageArray addObject:KUIImage(@"killer.png")];
-    [titleImageArray addObject:KUIImage(@"Wgs")];
+    [titleImageArray addObject:KUIImage(@"itemserver.png")];
     [titleImageArray addObject:KUIImage(@"achievementCount.png")];
     [titleImageArray addObject:KUIImage(@"Wjjc.png")];
-//PVE战斗力  荣誉击杀数  装备等级 成就点数  PVP竞技场）
+    //PVE战斗力  荣誉击杀数  装备等级 成就点数  PVP竞技场）
     titleArray = [NSMutableArray arrayWithObjects:@"PVE战斗力",@"荣誉击杀",@"装备等级",@"成就点数",@"PVP竞技场", nil];
-
+    
 }
 
 -(void)buildScrollView
@@ -95,7 +122,7 @@
         m_contentTableView.delegate = self;
         m_contentTableView.bounces = NO;
         m_contentTableView.rowHeight = 55;
-
+        
         
         m_countryTableView = [[UITableView alloc] initWithFrame:CGRectMake(640, 0, 320, 300) style:UITableViewStylePlain];
         [m_charaDetailsView.listScrollView addSubview:m_countryTableView];
@@ -110,8 +137,8 @@
         m_reamlTableView.delegate = self;
         m_reamlTableView.bounces = NO;
         m_reamlTableView.rowHeight = 55;
-
-
+        
+        
     }else if(self.myViewType ==CHARA_INFO_PERSON){
         
         m_contentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 300) style:UITableViewStylePlain];
@@ -129,7 +156,7 @@
         m_countryTableView.delegate = self;
         m_countryTableView.bounces = NO;
         m_countryTableView.rowHeight = 60;
-
+        
         
         m_reamlTableView = [[UITableView alloc] initWithFrame:CGRectMake(320, 0, 320, 300) style:UITableViewStylePlain];
         [m_charaDetailsView.listScrollView addSubview:m_reamlTableView];
@@ -137,7 +164,7 @@
         m_reamlTableView.delegate = self;
         m_reamlTableView.bounces = NO;
         m_reamlTableView.rowHeight = 60;
-
+        
     }
 }
 
@@ -147,7 +174,7 @@
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
     hud.labelText = @"正拼命从英雄榜获取中...";
-
+    
     
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
@@ -176,8 +203,8 @@
             m_charaDetailsView.realmView.frame = CGRectMake(18, 0, str.length*11, 20);
             
             
-             m_charaDetailsView.realmView.text = [NSString stringWithFormat:@"%@ %@", m_charaInfo.realm,m_charaInfo.sidename];
-           // m_charaDetailsView.realmView.text = m_charaInfo.realm;
+            m_charaDetailsView.realmView.text = [NSString stringWithFormat:@"%@ %@", m_charaInfo.realm,m_charaInfo.sidename];
+            // m_charaDetailsView.realmView.text = m_charaInfo.realm;
             m_charaDetailsView.levelLabel.text =[NSString stringWithFormat:@"Lv.%@ %@", m_charaInfo.level,m_charaInfo.professionalName];
             m_charaDetailsView.itemlevelView.text = [NSString stringWithFormat:@"%@/%@",m_charaInfo.itemlevel,m_charaInfo.itemlevelequipped] ;//
             m_charaDetailsView.clazzImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%@",m_charaInfo.professionalId]];
@@ -188,7 +215,7 @@
                 m_charaDetailsView.certificationImage.image = KUIImage(@"6");
             }else
             {
-                 m_charaDetailsView.certificationImage.image = KUIImage(@"5");
+                m_charaDetailsView.certificationImage.image = KUIImage(@"5");
             }
             //获取表格信息
             
@@ -198,7 +225,7 @@
             [m_countryTableView reloadData];
             [m_reamlTableView reloadData];
             
-
+            
             
             [hud hide:YES];
         }
@@ -225,7 +252,7 @@
     }else{
         return m_charaInfo.thirdCompArray.count;
     }
-   // return 5;
+    // return 5;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -238,18 +265,18 @@
     cell.titleImgView.image = [titleImageArray objectAtIndex:indexPath.row];
     cell.titleLabel.text = [titleArray objectAtIndex:indexPath.row];
     cell.topImgView.image = KUIImage(@"paiming_ico");
-
+    
     
     if (tableView ==m_contentTableView) {
         cell.CountLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.firstValueArray objectAtIndex:indexPath.row]];
         cell.rankingLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.firstRankArray objectAtIndex:indexPath.row]];
-            NSString *str =[m_charaInfo.firstCompArray objectAtIndex:indexPath.row];
+        NSString *str =[m_charaInfo.firstCompArray objectAtIndex:indexPath.row];
         if (str==0) {
             cell.upDowmImgView.image = KUIImage(@"die");
         }else {
             cell.upDowmImgView.image = KUIImage(@"zhang");
-       }
-//        
+        }
+        //
     }
     if (tableView ==m_countryTableView){
         cell.CountLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.secondValueArray objectAtIndex:indexPath.row]];
@@ -260,7 +287,7 @@
         }else {
             cell.upDowmImgView.image = KUIImage(@"zhang");
         }
-
+        
     }
     if (tableView ==m_reamlTableView) {
         cell.CountLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.thirdValueArray objectAtIndex:indexPath.row]];
@@ -272,7 +299,7 @@
         }else {
             cell.upDowmImgView.image = KUIImage(@"zhang");
         }
-
+        
     }
     
     return cell;
@@ -280,6 +307,9 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    //    TestListViewController *test = [[TestListViewController alloc]init];
+    //    [self.navigationController pushViewController:test animated:YES];
     
     RankingViewController *ranking = [[RankingViewController alloc]init] ;
     ranking.characterid =m_charaInfo.characterid;
@@ -290,14 +320,14 @@
     NSArray *array = [m_charaInfo.friendOfRanking allKeys];
     NSLog(@"array%@",array);
     /*
-    pvpScore,
-    pveScore,
-    itemlevel,
-    totalHonorableKills,
-    achievementPoints
-    */
+     pvpScore,
+     pveScore,
+     itemlevel,
+     totalHonorableKills,
+     achievementPoints
+     */
     if (tableView ==m_contentTableView) {
-       ranking.cRankvaltype = @"1" ;
+        ranking.cRankvaltype = @"1" ;
         
     }
     if (tableView ==m_countryTableView) {
@@ -309,7 +339,7 @@
     
     switch (indexPath.row) {
         case 0:
-          ranking.dRankvaltype = @"pveScore";
+            ranking.dRankvaltype = @"pveScore";
             break;
         case 1:
             ranking.dRankvaltype = @"totalHonorableKills";
@@ -323,12 +353,13 @@
         case 4:
             ranking.dRankvaltype = @"pvpScore";
             break;
-    
+            
         default:
             break;
     }
     
     ranking.COME_FROM =[NSString stringWithFormat:@"%u",self.myViewType];
+    NSLog(@"COME_FROM%@",ranking.COME_FROM);
     [self.navigationController pushViewController:ranking animated:YES];
     
 }
@@ -337,7 +368,7 @@
 {
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.4];
-
+    
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -346,7 +377,7 @@
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"contentOfjuese" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"typePerson" object:nil];
-
+    
     
 }
 - (void)reLoadingList:(CharacterDetailsView *)characterdetailsView

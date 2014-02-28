@@ -48,7 +48,7 @@
         [self addSubview:self.serverLabel];
         
         self.CountOfLabel =[[UILabel alloc]initWithFrame:CGRectMake(250, 0, 100, 60)];
-        self.CountOfLabel.font = [UIFont boldSystemFontOfSize:18];
+        self.CountOfLabel.font = [UIFont boldSystemFontOfSize:19];
         self.CountOfLabel.backgroundColor =[UIColor clearColor];
         self.CountOfLabel.textColor =UIColorFromRGBA(0x636363, 1);
         self.CountOfLabel.font = [UIFont fontWithName:@"DigifaceWide" size:14];

@@ -694,6 +694,7 @@
 		84F2FC6A18BF4D4B00C2EF29 /* btn_updata_normol.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F2FC6818BF4D4B00C2EF29 /* btn_updata_normol.png */; };
 		84F2FC6D18BF539200C2EF29 /* EnteroCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F2FC6C18BF539200C2EF29 /* EnteroCell.m */; };
 		84F2FC6F18BF585700C2EF29 /* xh_jt.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F2FC6E18BF585700C2EF29 /* xh_jt.png */; };
+		84F2FC7518BF6D8D00C2EF29 /* UIView+i7Rotate360.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F2FC7418BF6D8D00C2EF29 /* UIView+i7Rotate360.m */; };
 		84FB933718B70E62006A386B /* achievementCount.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932918B70E62006A386B /* achievementCount.png */; };
 		84FB933818B70E62006A386B /* die.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932A18B70E62006A386B /* die.png */; };
 		84FB933918B70E62006A386B /* killer.png in Resources */ = {isa = PBXBuildFile; fileRef = 84FB932B18B70E62006A386B /* killer.png */; };
@@ -1740,6 +1741,8 @@
 		84F2FC6B18BF539200C2EF29 /* EnteroCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnteroCell.h; sourceTree = "<group>"; };
 		84F2FC6C18BF539200C2EF29 /* EnteroCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnteroCell.m; sourceTree = "<group>"; };
 		84F2FC6E18BF585700C2EF29 /* xh_jt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xh_jt.png; sourceTree = "<group>"; };
+		84F2FC7318BF6D8D00C2EF29 /* UIView+i7Rotate360.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+i7Rotate360.h"; sourceTree = "<group>"; };
+		84F2FC7418BF6D8D00C2EF29 /* UIView+i7Rotate360.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+i7Rotate360.m"; sourceTree = "<group>"; };
 		84FB932918B70E62006A386B /* achievementCount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = achievementCount.png; sourceTree = "<group>"; };
 		84FB932A18B70E62006A386B /* die.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = die.png; sourceTree = "<group>"; };
 		84FB932B18B70E62006A386B /* killer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = killer.png; sourceTree = "<group>"; };
@@ -2397,6 +2400,8 @@
 		683FA19E1859974D007B7487 /* Table */ = {
 			isa = PBXGroup;
 			children = (
+				84F2FC7318BF6D8D00C2EF29 /* UIView+i7Rotate360.h */,
+				84F2FC7418BF6D8D00C2EF29 /* UIView+i7Rotate360.m */,
 				683FA16818599652007B7487 /* LocalStore.xcdatamodeld */,
 				686CE87418AC70EF00BA2422 /* DSThumbMsgs.h */,
 				686CE87518AC70EF00BA2422 /* DSThumbMsgs.m */,
@@ -4567,6 +4572,7 @@
 				68CAA79A184DD104007138B1 /* XMPPvCardTempAdr.m in Sources */,
 				68EF5FFB185C283B00AB3108 /* OHASBasicMarkupParser.m in Sources */,
 				683A91401855B992008CBDE0 /* SRSlimeView.m in Sources */,
+				84F2FC7518BF6D8D00C2EF29 /* UIView+i7Rotate360.m in Sources */,
 				68CAA79B184DD104007138B1 /* XMPPvCardTempAdrTypes.m in Sources */,
 				683417C91858388600934FEF /* HostInfo.m in Sources */,
 				68CAA79C184DD104007138B1 /* XMPPvCardTempBase.m in Sources */,
