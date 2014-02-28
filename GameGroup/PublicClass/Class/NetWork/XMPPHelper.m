@@ -310,20 +310,6 @@
 }
 // 3.关于通信的
 #pragma mark 收到消息后调用
-- (void)responseWithID:(NSString*)msgID from:(NSString*)from to:(NSString*)to
-{
-    //响应消息服务器
-    NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:msgID,@"src_id",@"true",@"received",@"Delivered",@"msgStatus", nil];
-    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
-    [body setStringValue:[dic JSONRepresentation]];
-    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
-    [mes addAttributeWithName:@"id" stringValue:msgID];
-    [mes addAttributeWithName:@"type" stringValue:@"normal"];
-    [mes addAttributeWithName:@"to" stringValue:to];
-    [mes addAttributeWithName:@"from" stringValue:from];
-    [mes addAttributeWithName:@"msgtype" stringValue:@"msgStatus"];
-    [self.xmppStream sendElement:mes];
-}
 /*<message xmlns="jabber:client" from="admin@gamepro.com" to="11111111111@gamepro.com" type="chat" msgtype="system" msgTime="1388032476641" fromNickname="&#x5C0F;&#x4F19;&#x4F34;" fromHeadImg="1"><body>通知：您失去了XX头衔</body></message>*/
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message{
     NSString *msg = [[message elementForName:@"body"] stringValue];
@@ -335,7 +321,6 @@
     NSString *msgtype = [[message attributeForName:@"msgtype"] stringValue];
     NSString *from = [[message attributeForName:@"from"] stringValue];
     NSString *msgId = [[message attributeForName:@"id"] stringValue];
-    NSString *to = [[message attributeForName:@"to"] stringValue];
     NSRange range = [from rangeOfString:@"@"];
     NSString * fromName = [from substringToIndex:(range.location == NSNotFound) ? 0 : range.location];
     
@@ -353,7 +338,6 @@
     NSLog(@"theDict%@",dict);
     if ([type isEqualToString:@"chat"]) {
         if ([msgtype isEqualToString:@"normalchat"]) {//聊天的 或动态聊天消息
-            [self responseWithID:msgId from:to to:from];
             NSString* payload = [GameCommon getHeardImgId:[[message elementForName:@"payload"] stringValue]];//是否含payload标签
             if (payload.length > 0) {
                 NSString* payload = [[message elementForName:@"payload"] stringValue];
@@ -438,22 +422,22 @@
             }
             [[GameCommon shareGameCommon] displayTabbarNotification];
         }
-        else
-        {
-            NSDictionary* bodyDic = [msg JSONValue];
-            if ([bodyDic isKindOfClass:[NSDictionary class]]) {
-                NSString* src_id = KISDictionaryHaveKey(bodyDic, @"src_id");
-                if (src_id.length <= 0) {
-                    return;
-                }
-                if ([KISDictionaryHaveKey(bodyDic, @"msgStatus") isEqualToString:@"Delivered"]) {//是否送达
-                    [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(bodyDic, @"received") boolValue] ? @"3" : @"0"];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:bodyDic];
-                }
-                else if ([KISDictionaryHaveKey(bodyDic, @"msgStatus") isEqualToString:@"Displayed"]) {//是否已读
-                    [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(bodyDic, @"received") boolValue] ? @"4" : @"0"];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:bodyDic];
-                }
+        
+    }
+    if ([type isEqualToString:@"normal"]&& [msgtype isEqualToString:@"msgStatus"]) {
+        NSDictionary* bodyDic = [msg JSONValue];
+        if ([bodyDic isKindOfClass:[NSDictionary class]]) {
+            NSString* src_id = KISDictionaryHaveKey(bodyDic, @"src_id");
+            if (src_id.length <= 0) {
+                return;
+            }
+            if ([KISDictionaryHaveKey(bodyDic, @"msgStatus") isEqualToString:@"Delivered"]) {//是否送达
+                [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(bodyDic, @"received") boolValue] ? @"3" : @"0"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:bodyDic];
+            }
+            else if ([KISDictionaryHaveKey(bodyDic, @"msgStatus") isEqualToString:@"Displayed"]) {//是否已读
+                [DataStoreManager refreshMessageStatusWithId:src_id status:[KISDictionaryHaveKey(bodyDic, @"received") boolValue] ? @"4" : @"0"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:bodyDic];
             }
         }
     }

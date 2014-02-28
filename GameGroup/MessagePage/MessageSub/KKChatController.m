@@ -1221,10 +1221,10 @@
         [mes addChild:body];
         
         //发送消息
-//        if (![self.appDel.xmppHelper sendMessage:mes]) {
-//            [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
-//            return;
-//        }
+        if (![self.appDel.xmppHelper sendMessage:mes]) {
+            [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
+            return;
+        }
         [messages replaceObjectAtIndex:cellIndex withObject:dict];
         NSIndexPath* indexpath = [NSIndexPath indexPathForRow:cellIndex inSection:0];
         [self.tView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexpath] withRowAnimation:UITableViewRowAnimationNone];
@@ -1558,8 +1558,10 @@
     
     //生成XML消息文档
     NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+    [mes addAttributeWithName:@"id" stringValue:msgId];
+    [mes addAttributeWithName:@"msgtype" stringValue:@"msgStatus"];
     //消息类型
-    [mes addAttributeWithName:@"type" stringValue:@"chat"];
+    [mes addAttributeWithName:@"type" stringValue:@"normal"];
     
     //发送给谁
     [mes addAttributeWithName:@"to" stringValue:[sender stringByAppendingString:[[TempData sharedInstance] getDomain]]];
@@ -1567,7 +1569,6 @@
     [mes addAttributeWithName:@"from" stringValue:[[DataStoreManager getMyUserID] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
     
     //    [mes addAttributeWithName:@"msgtype" stringValue:@"normalchat"];
-    [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
     [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];
 
     //组合

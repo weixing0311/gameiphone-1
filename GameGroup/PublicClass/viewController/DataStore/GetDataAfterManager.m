@@ -98,8 +98,10 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     
     //生成XML消息文档
     NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+    [mes addAttributeWithName:@"id" stringValue:msgId];
+    [mes addAttributeWithName:@"msgtype" stringValue:@"msgStatus"];
     //消息类型
-    [mes addAttributeWithName:@"type" stringValue:@"chat"];
+    [mes addAttributeWithName:@"type" stringValue:@"normal"];
     
     //发送给谁
     [mes addAttributeWithName:@"to" stringValue:[sender stringByAppendingString:[[TempData sharedInstance] getDomain]]];
@@ -107,7 +109,6 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     [mes addAttributeWithName:@"from" stringValue:[[DataStoreManager getMyUserID] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
     
 //    [mes addAttributeWithName:@"msgtype" stringValue:@"normalchat"];
-    [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
     [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];
 //    NSString* uuid = [[GameCommon shareGameCommon] uuid];
 //    [mes addAttributeWithName:@"id" stringValue:uuid];
