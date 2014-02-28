@@ -170,7 +170,6 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     NSString * shiptype = KISDictionaryHaveKey(userInfo, @"shiptype");
     NSString * msg = KISDictionaryHaveKey(userInfo, @"msg");
     
-//    [DataStoreManager deleteThumbMsgWithSender:fromUser];
     
     [self storeNewMessage:userInfo];
     NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithCapacity:1];

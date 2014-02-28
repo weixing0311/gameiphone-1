@@ -354,10 +354,8 @@
         }
         else if ([msgtype isEqualToString:@"sayHello"]){//打招呼的
             [dict setObject:@"sayHello" forKey:@"msgType"];
-            
             NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
             [dict setObject:shiptype  forKey:@"shiptype"];
-            
             [self.addReqDelegate newAddReq:dict];
         }
         else if([msgtype isEqualToString:@"deletePerson"])//取消关注

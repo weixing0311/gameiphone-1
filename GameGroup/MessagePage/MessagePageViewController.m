@@ -57,32 +57,10 @@
     [super viewWillAppear:animated];
     
     [[Custom_tabbar showTabBar] hideTabBar:NO];
-//    if (![self.appDel.xmppHelper ifXMPPConnected]) {
-//        titleLabel.text = @"消息(未连接)";
-//    }
-//    self.appDel.xmppHelper.buddyListDelegate = self;
-//    self.appDel.xmppHelper.chatDelegate = self;
-//    self.appDel.xmppHelper.processFriendDelegate = self;
-//    self.appDel.xmppHelper.addReqDelegate = self;
-//    self.appDel.xmppHelper.commentDelegate = self;
-//    self.appDel.xmppHelper.deletePersonDelegate = self;
-//    self.appDel.xmppHelper.otherMsgReceiveDelegate = self;
-//    self.appDel.xmppHelper.recommendReceiveDelegate = self;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-//    if ([[TempData sharedInstance] needChat]) {
-//        [[Custom_tabbar showTabBar] hideTabBar:YES];
-//        NSDictionary * theDict = (NSDictionary *)[DataStoreManager queryOneFriendInfoWithUserName:[[TempData sharedInstance] getNeedChatUser]];
-//        KKChatController * kkchat = [[KKChatController alloc] init];
-//        kkchat.chatWithUser = [theDict objectForKey:@"username"];
-//        kkchat.nickName = [[theDict objectForKey:@"nickname"] length]>1?[theDict objectForKey:@"nickname"]:[theDict objectForKey:@"username"];
-//        kkchat.chatUserImg = [DataStoreManager queryFirstHeadImageForUser:[theDict objectForKey:@"username"]];
-//        [self.navigationController pushViewController:kkchat animated:YES];
-//        kkchat.msgDelegate = self;
-//        [[TempData sharedInstance] setNeedChatNO];
-//    }
 
     if (![self isHaveLogin]) {
         [[Custom_tabbar showTabBar] hideTabBar:YES];
@@ -132,14 +110,6 @@
 
     [self setTopViewWithTitle:@"" withBackButton:NO];
     
-//    UIButton* cleanBtn = [[UIButton alloc] initWithFrame:CGRectMake(320-55, startX-44, 50, 44)];
-//    [cleanBtn setTitle:@"清空" forState:UIControlStateNormal];
-//    [cleanBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    [cleanBtn setBackgroundColor:[UIColor clearColor]];
-//    cleanBtn.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
-//    [cleanBtn addTarget:self action:@selector(cleanBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:cleanBtn];
-    
     allMsgArray = [NSMutableArray array];
     allMsgUnreadArray = [NSMutableArray array];
     newReceivedMsgArray = [NSMutableArray array];
@@ -152,20 +122,6 @@
     [self.view addSubview:m_messageTable];
     m_messageTable.dataSource = self;
     m_messageTable.delegate = self;
-//    m_messageTable.contentOffset = CGPointMake(0, 44);
-    
-//    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-//    searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
-//    searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-//    searchBar.placeholder = @"搜索消息";
-//    m_messageTable.tableHeaderView = searchBar;
-//    [m_messageTable addSubview:searchBar];
-//    searchBar.delegate = self;
-//    
-//    searchDisplay = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
-//    searchDisplay.delegate = self;
-//    searchDisplay.searchResultsDataSource = self;
-//    searchDisplay.searchResultsDelegate = self;
     
     titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, startX - 44, 320, 44)];
     titleLabel.backgroundColor=[UIColor clearColor];
