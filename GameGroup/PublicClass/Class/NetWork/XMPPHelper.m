@@ -354,9 +354,13 @@
         }
         else if ([msgtype isEqualToString:@"sayHello"]){//打招呼的
             [dict setObject:@"sayHello" forKey:@"msgType"];
-            NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
-            [dict setObject:shiptype  forKey:@"shiptype"];
-            [self.addReqDelegate newAddReq:dict];
+            
+            NSString * shiptype = [GameCommon getNewStringWithId:[[message elementForName:@"payload"] stringValue]];
+            if (shiptype.length > 0) {
+                [dict setObject:KISDictionaryHaveKey([shiptype JSONValue], @"shiptype") forKey:@"shiptype"];
+            }
+            else
+                [dict setObject:@""  forKey:@"shiptype"];
         }
         else if([msgtype isEqualToString:@"deletePerson"])//取消关注
         {
