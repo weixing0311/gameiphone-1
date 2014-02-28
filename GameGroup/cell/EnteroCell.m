@@ -35,7 +35,7 @@
         [self addSubview:self.serverLabel];
 
         
-        self.jtImageView = [[UIImageView alloc]initWithFrame:CGRectMake(204, 23, 18, 18)];
+        self.jtImageView = [[UIImageView alloc]initWithFrame:CGRectMake(204, 23, 18, 25)];
         self.jtImageView.image = KUIImage(@"xh_jt");
         [self addSubview:self.jtImageView];
     }
