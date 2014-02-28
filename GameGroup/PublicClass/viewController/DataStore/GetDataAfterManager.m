@@ -73,11 +73,8 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
 {
     NSRange range = [[messageContent objectForKey:@"sender"] rangeOfString:@"@"];
     NSString * sender = [[messageContent objectForKey:@"sender"] substringToIndex:range.location];
-    NSString* msgType = KISDictionaryHaveKey(messageContent, @"msgType");
-    if ([msgType isEqualToString:@"normalchat"]) {
-        NSString* msgId = KISDictionaryHaveKey(messageContent, @"msgId");
-        [self comeBackDelivered:sender msgId:msgId];
-    }
+    NSString* msgId = KISDictionaryHaveKey(messageContent, @"msgId");
+    [self comeBackDelivered:sender msgId:msgId];
     [self storeNewMessage:messageContent];
 
     if (![DataStoreManager ifHaveThisUser:sender]) {//是否为好友 不是就请求资料

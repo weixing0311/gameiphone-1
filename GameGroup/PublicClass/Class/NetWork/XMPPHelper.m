@@ -447,7 +447,7 @@
             }
         }
     }
-    if ([type isEqualToString:@"normal"] && [fromName isEqualToString:@"messageAck"])//消息发送服务器状态告知
+    if ([type isEqualToString:@"normal"] && [fromName isEqualToString:@"messageack"])//消息发送服务器状态告知
     {
         msg = [msg stringByReplacingOccurrencesOfString:@"'" withString:@"\""];
         NSDictionary* msgData = [msg JSONValue];
