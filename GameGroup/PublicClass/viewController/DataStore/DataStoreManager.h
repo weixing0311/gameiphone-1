@@ -53,7 +53,7 @@
 +(NSDictionary *)qureyLastReceivedHello;
 
 //存储“好友”的关注人列表
-+(void)saveUserAttentionWithFriendList:(NSString*)userName;//从好友表到关注表
++(void)saveUserAttentionWithFriendList:(NSString*)userid;//从好友表到关注表
 +(void)saveUserAttentionInfo:(NSDictionary *)myInfo;
 +(NSMutableArray *)queryAttentionSections;
 +(NSMutableArray*)queryAllAttentionWithOtherSortType:(NSString*)sorttype ascend:(BOOL)ascend;
@@ -82,7 +82,7 @@
 +(NSMutableArray *)querySections;
 +(NSMutableArray*)queryAllFriendsWithOtherSortType:(NSString*)sorttype ascend:(BOOL)ascend;
 +(NSMutableDictionary *)queryAllFriends;
-+(void)deleteFriendWithUserName:(NSString*)username;
++(void)deleteFriendWithUserId:(NSString*)userid;
 +(void)saveFriendRemarkName:(NSString*)remarkName userid:(NSString*)userid;//存备注名
 + (void)cleanFriendList;//清空
 +(NSString*)getMyNameIndex;

@@ -175,7 +175,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     [self storeNewMessage:userInfo];
     NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithCapacity:1];
     if ([shiptype isEqualToString:@"2"]) {//移到关注表
-        if ([DataStoreManager ifHaveThisFriend:fromUser])
+        if ([DataStoreManager ifHaveThisUser:fromUser])
         {
             [tempDic addEntriesFromDictionary:[DataStoreManager addPersonToReceivedHellosWithFriend:fromUser]];
             [tempDic setObject:fromUser forKey:@"fromUser"];
@@ -185,10 +185,8 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             [DataStoreManager saveUserAttentionWithFriendList:fromUser];
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
 
-            [DataStoreManager deleteFriendWithUserName:fromUser];
+            [DataStoreManager deleteFriendWithUserId:fromUser];
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
-
-//            [self displayMsgsForDefaultView];
         }
         else
         {
@@ -305,7 +303,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
         else if (type == 2)//取消关注 删除
         {
             if ([DataStoreManager ifHaveThisFriend:userName]) {//移到关注表
-                [DataStoreManager deleteFriendWithUserName:userName];
+                [DataStoreManager deleteFriendWithUserId:userid];
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
 
                 [DataStoreManager saveUserAttentionInfo:recDict];
@@ -317,7 +315,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
                 [DataStoreManager deleteFansWithUserid:userid];
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
             }
-            NSDictionary * uDict = [NSDictionary dictionaryWithObjectsAndKeys:[recDict objectForKey:@"username"],@"fromUser",[recDict objectForKey:@"nickname"],@"fromNickname",msg,@"addtionMsg",[recDict objectForKey:@"img"],@"headID", nil];
+            NSDictionary * uDict = [NSDictionary dictionaryWithObjectsAndKeys:[recDict objectForKey:@"id"],@"fromUser",[recDict objectForKey:@"nickname"],@"fromNickname",msg,@"addtionMsg",[recDict objectForKey:@"img"],@"headID", nil];
             [DataStoreManager addPersonToReceivedHellos:uDict];
             
             //            [self displayMsgsForDefaultView];
