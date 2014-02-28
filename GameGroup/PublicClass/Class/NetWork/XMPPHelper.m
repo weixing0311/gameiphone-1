@@ -338,9 +338,8 @@
     NSLog(@"theDict%@",dict);
     if ([type isEqualToString:@"chat"]) {
         if ([msgtype isEqualToString:@"normalchat"]) {//聊天的 或动态聊天消息
-            NSString* payload = [GameCommon getHeardImgId:[[message elementForName:@"payload"] stringValue]];//是否含payload标签
+            NSString* payload = [GameCommon getNewStringWithId:[[message elementForName:@"payload"] stringValue]];//是否含payload标签
             if (payload.length > 0) {
-                NSString* payload = [[message elementForName:@"payload"] stringValue];
                 [dict setObject:payload forKey:@"payload"];
                 
                 [dict setObject:@"payloadchat" forKey:@"msgType"];
@@ -355,17 +354,24 @@
         else if ([msgtype isEqualToString:@"sayHello"]){//打招呼的
             [dict setObject:@"sayHello" forKey:@"msgType"];
             
-            NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
-            [dict setObject:shiptype  forKey:@"shiptype"];
-            
-            [self.addReqDelegate newAddReq:dict];
+            NSString * shiptype = [GameCommon getNewStringWithId:[[message elementForName:@"payload"] stringValue]];
+            if (shiptype.length > 0) {
+                [dict setObject:KISDictionaryHaveKey([shiptype JSONValue], @"shiptype") forKey:@"shiptype"];
+            }
+            else
+                [dict setObject:@""  forKey:@"shiptype"];
         }
         else if([msgtype isEqualToString:@"deletePerson"])//取消关注
         {
             [dict setObject:@"deletePerson" forKey:@"msgType"];
             
-            NSString * shiptype = [GameCommon getNewStringWithId:[[message attributeForName:@"shiptype"] stringValue]];
-            [dict setObject:shiptype  forKey:@"shiptype"];
+            NSString * shiptype = [GameCommon getNewStringWithId:[[message elementForName:@"payload"] stringValue]];
+            if (shiptype.length > 0) {
+                [dict setObject:KISDictionaryHaveKey([shiptype JSONValue], @"shiptype") forKey:@"shiptype"];
+            }
+            else
+                [dict setObject:@""  forKey:@"shiptype"];
+
             
             [self.deletePersonDelegate deletePersonReceived:dict];
         }

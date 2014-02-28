@@ -454,9 +454,9 @@
 }
 
 #pragma mark - 存储“好友”的关注人列表
-+(void)saveUserAttentionWithFriendList:(NSString*)userName
++(void)saveUserAttentionWithFriendList:(NSString*)userid
 {
-    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userId==[c]%@",userid];
     DSFriends * dFriend = [DSFriends MR_findFirstWithPredicate:predicate];
     if (!dFriend) {
         return;
@@ -1314,10 +1314,10 @@
     return theDict;
 }
 
-+(void)deleteFriendWithUserName:(NSString*)username;
++(void)deleteFriendWithUserId:(NSString*)userid
 {
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
-        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",username];
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userId==[c]%@",userid];
         DSFriends * dsfriend = [DSFriends MR_findFirstWithPredicate:predicate];
         if (dsfriend) {
             [dsfriend MR_deleteInContext:localContext];
