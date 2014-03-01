@@ -90,12 +90,12 @@
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView* footView = [[UIView alloc] init];
-   // footView.backgroundColor = [UIColor clearColor];
+    footView.backgroundColor = [UIColor whiteColor];
     
     if (KISHighVersion_7) {
         UIImageView* lineImg = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, kScreenWidth - 10, 2)];
         lineImg.image = KUIImage(@"line");
-        lineImg.backgroundColor = [UIColor clearColor];
+       // lineImg.backgroundColor = [UIColor clearColor];
         [footView addSubview:lineImg];
     }
 

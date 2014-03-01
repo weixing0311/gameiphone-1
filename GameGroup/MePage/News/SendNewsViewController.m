@@ -13,6 +13,8 @@
 {
     UIButton* PhotoB;
     UIImageView* deleteIV;
+    NSInteger  m_maxZiShu;//发表字符数量
+    UILabel *m_ziNumLabel;//提示文字
 }
 @property (nonatomic,strong)UITextView* dynamicTV;
 @property (nonatomic,strong)UILabel* placeholderL;
@@ -38,7 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    m_maxZiShu = 225;
     [self setTopViewWithTitle:@"发表动态" withBackButton:YES];
 
     UIButton *addButton=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -56,11 +58,11 @@
     UIImage* bgImage = [[UIImage imageNamed:@"edit_bg"]
                         stretchableImageWithLeftCapWidth:0 topCapHeight:10];
     
-    UIImageView* editIV = [[UIImageView alloc]initWithFrame:CGRectMake(13.75, 11.75+startX, 292.5, 128)];
+    UIImageView* editIV = [[UIImageView alloc]initWithFrame:CGRectMake(13.75, 21.75+startX, 292.5, 128)];
     editIV.image = bgImage;
     [self.view addSubview:editIV];
     
-    self.dynamicTV = [[UITextView alloc]initWithFrame:CGRectMake(13.75, 11.75+startX, 292.5, 128)];
+    self.dynamicTV = [[UITextView alloc]initWithFrame:CGRectMake(13.75, 21.75+startX, 292.5, 128)];
     _dynamicTV.backgroundColor = [UIColor clearColor];
     _dynamicTV.font = [UIFont systemFontOfSize:13];
     _dynamicTV.delegate = self;
@@ -89,7 +91,9 @@
     [imageB setBackgroundImage:[UIImage imageNamed:@"picBtn"] forState:UIControlStateNormal];
     [tool addSubview:imageB];
     
-    self.placeholderL = [[UILabel alloc]initWithFrame:CGRectMake(23, 18.75+startX, 200, 20)];
+    self.placeholderL = [[UILabel alloc]initWithFrame:CGRectMake(23, 28.75+startX, 200, 20)];
+    
+    
     _placeholderL.backgroundColor = [UIColor clearColor];
     _placeholderL.textColor = [UIColor grayColor];
     if (self.defaultContent && ![self.defaultContent isEqualToString:@""]) {//不是分享头衔
@@ -124,11 +128,21 @@
 
     }
     
+    m_ziNumLabel = [[UILabel alloc]initWithFrame:CGRectMake(23, startX, 200, 20)];
+    m_ziNumLabel.backgroundColor = [UIColor clearColor];
+    m_ziNumLabel.font= [UIFont systemFontOfSize:12];
+    m_ziNumLabel.textAlignment = NSTextAlignmentRight;
+    [self.view addSubview:m_ziNumLabel];
+    
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
     hud.delegate = self;
     hud.labelText = @"正在为您发布...";
+    
 }
+
+
+
 
 - (void)backButtonClick:(id)sender
 {
@@ -139,6 +153,10 @@
     }
     else
         [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)textViewDidChange:(UITextView *)textView
+{
+    [self refreshZiLabelText];
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -160,6 +178,14 @@
         [alert show];
         return;
     }
+    
+    if (_dynamicTV.text.length>225) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您发布的字数已超出限制" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alert.tag = 67;
+        [alert show];
+        return;
+    }
+
     [hud show:YES];
     [self.dynamicTV resignFirstResponder];
     if (self.pictureArray.count>0) {
@@ -410,6 +436,21 @@
     return YES;
 }
 
+- (void)refreshZiLabelText
+{
+    NSInteger ziNum = m_maxZiShu - [[GameCommon shareGameCommon] unicodeLengthOfString:_dynamicTV.text];
+    
+    if(ziNum >= 0)
+    {
+        m_ziNumLabel.text = [NSString stringWithFormat:@"还可以输入%d字", ziNum];
+        m_ziNumLabel.textColor = [UIColor grayColor];
+    }
+    else
+    {
+        m_ziNumLabel.text = [NSString stringWithFormat:@"已超过%d字", [[GameCommon shareGameCommon] unicodeLengthOfString:_dynamicTV.text] - m_maxZiShu];
+        m_ziNumLabel.textColor = [UIColor redColor];
+    }
+}
 #pragma mark - touch
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {

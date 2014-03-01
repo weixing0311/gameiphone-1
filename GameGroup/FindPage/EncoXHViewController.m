@@ -56,7 +56,7 @@
     
     NSInteger m_leftTime;
     NSTimer *m_verCodeTimer;
-
+    BOOL     isWXCeiling;//打招呼达到上限
     
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -288,8 +288,11 @@
         
         
         if (COME_TYPE ==1) {
+            isWXCeiling =YES;
             inABtn.enabled = YES;
             sayHelloBtn.enabled = YES;
+            
+            
             
             [hud hide:YES];
             getDic = nil;
@@ -355,12 +358,17 @@
         }
         if (COME_TYPE ==2) {
             
+            if (isWXCeiling ==YES) {
+                NSLog(@"打招呼成功");
+                [hud hide:YES];
+                [self showMessageWindowWithContent:@"打招呼成功" imageType:0];
+                [self changeOtherOne];
+
+            }else{
+                [self showMessageWindowWithContent:@"打招呼失败,邂逅数量已达上限" imageType:0];
+                sayHelloBtn.enabled = YES;
+            }
             
-            NSLog(@"打招呼成功");
-            [hud hide:YES];
-           // [self showMessageWindowWithContent:@"打招呼成功" imageType:0];
-            
-            [self changeOtherOne];
             
         }
         if (COME_TYPE ==3) {
@@ -388,7 +396,9 @@
             {
                 UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
-                
+                if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100041"]) {
+                    isWXCeiling =NO;
+                }
                  [hud hide:YES];
             }
         }

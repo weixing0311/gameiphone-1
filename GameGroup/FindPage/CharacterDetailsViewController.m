@@ -91,7 +91,7 @@
     
     m_charaDetailsView =[[CharacterDetailsView alloc]initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height - startX)];
     m_charaDetailsView.contentSize = CGSizeMake(320, 610);
-    m_charaDetailsView.bounces = NO;
+    //m_charaDetailsView.bounces = NO;
     m_charaDetailsView.myCharaterDelegate = self;
     if (self.myViewType ==CHARA_INFO_MYSELF) {
         [m_charaDetailsView comeFromMy];
@@ -277,6 +277,7 @@
             [self reLoadingUserInfoFromNet];
         }
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"busy"]) {
+            m_charaDetailsView.reloadingBtn.enabled =YES;
             KISDictionaryHaveKey(responseObject, @"time") ;
             hud1.labelText = [NSString stringWithFormat:@"进入更新队列，目前队列位置：%d，预计更新时间：%@",
                               [KISDictionaryHaveKey(responseObject, @"index") intValue],[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"time") ]]];
@@ -316,7 +317,7 @@
     
     [hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+        m_charaDetailsView.reloadingBtn.enabled =YES;
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
             
@@ -340,6 +341,7 @@
             {
                 UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
+                
             }
         }
     }];
@@ -358,7 +360,6 @@
     }else{
         return m_charaInfo.thirdCompArray.count;
     }
-    // return 5;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -488,6 +489,7 @@
 }
 - (void)reLoadingList:(CharacterDetailsView *)characterdetailsView
 {
+    m_charaDetailsView.reloadingBtn.enabled =NO;
     if (isInTheQueue ==NO) {
         [self getUserLineInfoByNet];
         NSLog(@"刷新数据");
