@@ -23,11 +23,14 @@
         NSLog(@"titleDic%@",self.titleDic);
         self.auth = [GameCommon getNewStringWithId:KISDictionaryHaveKey(info, @"auth")];//是否认证
         
-        self.professionalId = [GameCommon getNewStringWithId:KISDictionaryHaveKey(self.classObj, @"id")];
+        if ([self.classObj isKindOfClass:[NSDictionary class]]) {
+            self.professionalId = [GameCommon getNewStringWithId:KISDictionaryHaveKey(self.classObj, @"id")];
+            self.professionalName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(self.classObj, @"name")];
+
+        }
         
         self.characterid = [GameCommon getNewStringWithId:KISDictionaryHaveKey(info, @"id")];
         
-        self.professionalName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(self.classObj, @"name")];
         
         self.powerType = [GameCommon getNewStringWithId:KISDictionaryHaveKey(self.classObj, @"powerType")];
         self.roleNickName = [GameCommon getNewStringWithId:KISDictionaryHaveKey(info, @"name")];
@@ -98,6 +101,37 @@
         
         
 }
+    return self;
+}
+
+- (id)initWithReLoadingInfo:(NSDictionary *)info
+{
+    /*好友 全国 服务器  */
+    self.friendOfRanking = KISDictionaryHaveKey(info, @"1");
+    self.nationaOfRanking = KISDictionaryHaveKey(info, @"3");
+    self.serverOfRanking = KISDictionaryHaveKey(info, @"2");
+    
+    /*成就 好友  PVE 荣誉击杀  装备等级 成就点数 PVE */
+    self.achievementDic1 = KISDictionaryHaveKey(self.friendOfRanking, @"achievementPoints");
+    self.itemlevelDic1 = KISDictionaryHaveKey(self.friendOfRanking, @"itemlevel");
+    self.pveScoreDic1 = KISDictionaryHaveKey(self.friendOfRanking, @"pveScore");
+    self.pvpscoreDic1 = KISDictionaryHaveKey(self.friendOfRanking, @"pvpScore");
+    self.KillsDic1 = KISDictionaryHaveKey(self.friendOfRanking, @"totalHonorableKills");
+    
+    /*成就 全国  PVE 荣誉击杀  装备等级 成就点数 PVE */
+    self.achievementDic2 = KISDictionaryHaveKey(self.nationaOfRanking, @"achievementPoints");
+    self.itemlevelDic2 = KISDictionaryHaveKey(self.nationaOfRanking, @"itemlevel");
+    self.pveScoreDic2 = KISDictionaryHaveKey(self.nationaOfRanking, @"pveScore");
+    self.pvpscoreDic2 = KISDictionaryHaveKey(self.nationaOfRanking, @"pvpScore");
+    self.KillsDic2 = KISDictionaryHaveKey(self.nationaOfRanking, @"totalHonorableKills");
+    /*成就 服务器  PVE 荣誉击杀  装备等级 成就点数 PVE */
+    self.achievementDic3 = KISDictionaryHaveKey(self.serverOfRanking, @"achievementPoints");
+    self.itemlevelDic3 = KISDictionaryHaveKey(self.serverOfRanking, @"itemlevel");
+    self.pveScoreDic3 = KISDictionaryHaveKey(self.serverOfRanking, @"pveScore");
+    self.pvpscoreDic3 = KISDictionaryHaveKey(self.serverOfRanking, @"pvpScore");
+    self.KillsDic3 = KISDictionaryHaveKey(self.serverOfRanking, @"totalHonorableKills");
+    
+    [self getListContentForUrl];
     return self;
 }
 

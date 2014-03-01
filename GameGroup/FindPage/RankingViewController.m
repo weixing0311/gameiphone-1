@@ -95,9 +95,12 @@
     [self.view addSubview:shareButton];
 
     
-    m_PageCount = 0;
     
-    
+    if ([self.cRankvaltype isEqualToString:@"1"]) {
+        m_PageCount =-1;
+    }else{
+     m_PageCount = 0;
+    }
     //创建头button
     [self buildTopBtnView];
     
@@ -161,6 +164,7 @@
     }
     
     NSDictionary *dic = [m_cArray objectAtIndex:indexPath.row];
+    NSLog(@"dicdic%@",dic);
     NSInteger i = [KISDictionaryHaveKey(dic, @"rank")integerValue];
     if (i <=3) {
         cell.NumLabel.backgroundColor =UIColorFromRGBA(0xff9600, 1);
@@ -364,7 +368,7 @@
         return;
     }
     self.cRankvaltype =@"1";
-    m_PageCount = 0;
+    m_PageCount = -1;
      [m_cArray removeAllObjects];
     [self getSortDataByNet];
     

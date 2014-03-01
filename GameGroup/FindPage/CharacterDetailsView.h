@@ -32,6 +32,7 @@
 @property(nonatomic,strong)UIImageView  *  underListImageView;//下划线img
 @property(nonatomic,strong)UIScrollView *  listScrollView;
 @property(nonatomic,strong)UIImageView  *  certificationImage;//认证button
+@property(nonatomic,strong)UIButton     *   reloadingBtn;//刷新button
 -(void)comeFromMy;
 -(void)comeFromPerson;
 
