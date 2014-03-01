@@ -51,11 +51,10 @@
     }
     else
     {
+        [self firtOpen];
         hud = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:hud];
         hud.labelText = @"请求中...";
-        
-        [self firtOpen];
     }
 }
 

@@ -82,8 +82,9 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     NSRange range = [[messageContent objectForKey:@"sender"] rangeOfString:@"@"];
     NSString * sender = [[messageContent objectForKey:@"sender"] substringToIndex:range.location];
     NSString* msgId = KISDictionaryHaveKey(messageContent, @"msgId");
-    [self comeBackDelivered:sender msgId:msgId];
     [self storeNewMessage:messageContent];
+    [self comeBackDelivered:sender msgId:msgId];
+    
 
     if (![DataStoreManager ifHaveThisUser:sender]) {//是否为好友 不是就请求资料
         [self requestPeopleInfoWithName:sender ForType:1 Msg:nil userInfo:messageContent];
@@ -175,7 +176,6 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     NSString * shiptype = KISDictionaryHaveKey(userInfo, @"shiptype");
     NSString * msg = KISDictionaryHaveKey(userInfo, @"msg");
     
-    
     [self storeNewMessage:userInfo];
     NSMutableDictionary* tempDic = [NSMutableDictionary dictionaryWithCapacity:1];
     if ([shiptype isEqualToString:@"2"]) {//移到关注表
@@ -185,10 +185,8 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             [tempDic setObject:fromUser forKey:@"fromUser"];
             [tempDic setObject:msg forKey:@"addtionMsg"];
             [DataStoreManager addPersonToReceivedHellos:tempDic];
-            
             [DataStoreManager saveUserAttentionWithFriendList:fromUser];
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
-
             [DataStoreManager deleteFriendWithUserId:fromUser];
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
         }
@@ -243,7 +241,6 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     for (NSDictionary* tempDic in recommendArr) {
         [DataStoreManager saveRecommendWithData:tempDic];
     }
-//    [self displayMsgsForDefaultView];
     [[NSNotificationCenter defaultCenter] postNotificationName:kRecommendFriendReceived object:nil userInfo:info];
 }
 

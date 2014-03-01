@@ -476,51 +476,25 @@
     double theCurrentT = [curStr doubleValue];
     double theMessageT = [mesStr doubleValue];
     
+    NSLog(@"%f--%f",theCurrentT,theMessageT);
+    NSLog(@"++%f",theCurrentT-theMessageT);
+    if (((int)(theCurrentT-theMessageT))<60) {
+        return @"1分钟以前";
+    }
+    if (((int)(theCurrentT-theMessageT))<60*59) {
+        return [NSString stringWithFormat:@"%.f分钟以前",((theCurrentT-theMessageT)/60+1)];
+    }
+    if (((int)(theCurrentT-theMessageT))<60*60*24) {
+        return [NSString stringWithFormat:@"%.f小时以前",((theCurrentT-theMessageT)/3600)==0?1:((theCurrentT-theMessageT)/3600)];
+    }
+    if (((int)(theCurrentT-theMessageT))<60*60*48) {
+        return @"昨天";
+    }
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     //设定时间格式,这里可以设置成自己需要的格式
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString *messageDateStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:theMessageT]];
-    NSString *currentStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:theCurrentT]];
-    NSDateFormatter *dateFormatter2 = [[NSDateFormatter alloc] init];
-    [dateFormatter2 setDateFormat:@"HH:mm"];
-    NSString * msgT = [dateFormatter2 stringFromDate:[NSDate dateWithTimeIntervalSince1970:theMessageT]];
-    NSString * nowT = [dateFormatter2 stringFromDate:[NSDate dateWithTimeIntervalSince1970:theCurrentT]];
-    int msgHour = [[msgT substringToIndex:2] intValue];
-    int msgmin = [[msgT substringFromIndex:3] intValue];
-//    int msgDay = [[messageDateStr substringFromIndex:8] intValue];
-
-    int hours = [[nowT substringToIndex:2] intValue];
-    int minutes = [[nowT substringFromIndex:3] intValue];
-//    int day = [[currentStr substringFromIndex:8] intValue];
-    
-    double currentDayBegin = theCurrentT-hours*3600-minutes*60;
-    double yesterdayBegin = currentDayBegin-3600*24;
-    
-    //今天
-    if ([currentStr isEqualToString:messageDateStr] && msgHour == hours) {
-        if (minutes-msgmin<=0) {
-            finalTime = @"1分钟前";
-        }
-        else{
-            finalTime = [NSString stringWithFormat:@"%d分钟前",(minutes-msgmin)];
-        }
-    }
-    else if ([currentStr isEqualToString:messageDateStr]) {
-        finalTime = [NSString stringWithFormat:@"%d小时前",(hours-msgHour)];
-    }
-    //昨天
-    else if(theMessageT>=yesterdayBegin&&theMessageT<currentDayBegin){
-        finalTime = @"昨天";
-    }
-    else
-    {
-        if ((theCurrentT-theMessageT)/86400 <= 0) {
-            finalTime = @"1天前";
-        }
-        else
-            finalTime = [NSString stringWithFormat:@"%.f天前",(theCurrentT-theMessageT)/86400];
-    }
-    return finalTime;
+    return [messageDateStr substringFromIndex:5];
 }
 
 - (NSString*)getZanLabelWithNum:(NSString*)zannum
@@ -533,17 +507,6 @@
     }
     return [NSString stringWithFormat:@"%.f", newZan];
 }
-
-//- (NSString*)getHeadImgWithRow:(NSInteger)row
-//{
-//    NSArray* arr = [[[m_newsArray objectAtIndex:row] objectForKey:@"userimg"] componentsSeparatedByString:@","];
-//    if ([arr isKindOfClass:[NSArray class]]) {
-//        if ([arr count] != 0) {
-//            return [arr objectAtIndex:0];
-//        }
-//    }
-//    return @"";
-//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
