@@ -25,7 +25,7 @@
         return YES;
     }
     return NO;
-} 
+}
 #pragma mark - 存储消息相关
 +(void)storeNewMsgs:(NSDictionary *)msg senderType:(NSString *)sendertype
 {

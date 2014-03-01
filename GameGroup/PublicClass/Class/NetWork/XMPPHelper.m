@@ -326,7 +326,7 @@
     
     NSString *type = [[message attributeForName:@"type"] stringValue];
     
-    NSString *msgTime = [[message attributeForName:@"msgTime"] stringValue];
+    NSString *msgTime = [[message attributeForName:@"msgTime"] stringValue]?[[message attributeForName:@"msgTime"] stringValue]:@"0";
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:msg forKey:@"msg"];
     [dict setObject:from forKey:@"sender"];
