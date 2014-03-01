@@ -22,6 +22,11 @@
         self.NumLabel.layer.masksToBounds = YES;
         self.NumLabel.layer.cornerRadius = 6.0;
         self.NumLabel.layer.borderWidth = 0.1;
+        
+        int i = [self.NumLabel.text intValue];
+        if (i>99) {
+            self.NumLabel.font = [UIFont systemFontOfSize:15];
+        }
         self.NumLabel.font = [UIFont boldSystemFontOfSize:18];
         self.NumLabel.layer.borderColor = [[UIColor blackColor] CGColor];
 

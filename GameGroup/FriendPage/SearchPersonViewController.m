@@ -17,6 +17,7 @@
     UITextField*  m_gameNameText;
 //    UIPickerView* m_serverNamePick;
     UITextField*  m_roleNameText;
+    NSInteger    m_pageNum;
 //    NSMutableArray* m_realmsArray;//服务器名
 }
 @end
@@ -38,6 +39,8 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
+    
+    m_pageNum = 0;
     
     if(self.viewType == SEARCH_TYPE_ROLE)
     {
@@ -281,37 +284,37 @@
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
     if (self.viewType ==SEARCH_TYPE_NICKNAME) {
-        [paramDict setObject:searchContent.text forKey:@"nickname"];
-        [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon]getNetCommomDic]];
-        [postDict setObject:paramDict forKey:@"params"];
-        [postDict setObject:@"150" forKey:@"method"];
-        [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-
-        [hud show:YES];
-        
-        [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            [hud hide:YES];
+//        [paramDict setObject:searchContent.text forKey:@"nickname"];
+//        [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon]getNetCommomDic]];
+//        [postDict setObject:paramDict forKey:@"params"];
+//        [postDict setObject:@"150" forKey:@"method"];
+//        [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+//
+//        [hud show:YES];
+//        
+//        [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//            [hud hide:YES];
             SearchResultViewController *SV = [[SearchResultViewController alloc]init];
-            NSLog(@"看看出什么 nsl %@",responseObject);
-            SV.responseObject = responseObject;
+            SV.nickNameList =searchContent.text;
+           // SV.responseObject = responseObject;
             [self.navigationController pushViewController:SV animated:YES];
             
             
-        } failure:^(AFHTTPRequestOperation *operation, id error) {
-            if ([error isKindOfClass:[NSDictionary class]]) {
-                NSString* warn = [error objectForKey:kFailMessageKey];
-                if ([[error objectForKey:kFailErrorCodeKey] isEqualToString:@"200002"]) {//用户不存在， 角色存在
-                    warn = @"该角色目前尚未在小伙伴注册，快去邀请他吧，这样你们就可以聊天了!";
-                }
-                if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
-                {
-                    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", warn] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                    [alert show];
-                }
-            }
-            [hud hide:YES];
-        }];
-        NSLog(@"11231");
+//        } failure:^(AFHTTPRequestOperation *operation, id error) {
+//            if ([error isKindOfClass:[NSDictionary class]]) {
+//                NSString* warn = [error objectForKey:kFailMessageKey];
+//                if ([[error objectForKey:kFailErrorCodeKey] isEqualToString:@"200002"]) {//用户不存在， 角色存在
+//                    warn = @"该角色目前尚未在小伙伴注册，快去邀请他吧，这样你们就可以聊天了!";
+//                }
+//                if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+//                {
+//                    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", warn] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+//                    [alert show];
+//                }
+//            }
+//            [hud hide:YES];
+//        }];
+//        NSLog(@"11231");
     }else{
         NSLog(@"22231");
     if (self.viewType == SEARCH_TYPE_ID) {
@@ -319,6 +322,12 @@
     }
     else if(self.viewType == SEARCH_TYPE_PHONE)
     {
+        if (searchContent.text.length<11) {
+            [self showAlertViewWithTitle:@"提示" message:@"请输入正确的手机号码" buttonTitle:@"确定"];
+            return;
+        }
+        
+        
         [paramDict setObject:searchContent.text forKey:@"username"];
     }
     else
@@ -412,53 +421,6 @@
 }
 
 #pragma mark 选择器
-//- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-//{
-//    return 2;
-//}
-//- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-//{
-//    if (component == 0) {
-//        return ([[[GameCommon shareGameCommon].wow_realms allKeys] count]);
-//    }
-//    else if(component == 1)
-//    {
-//        return [m_realmsArray count];
-//    }
-//    return 0;
-//}
-//
-//- (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger) row forComponent:(NSInteger) component
-//{
-//    if (component == 0) {
-//        return ([[[GameCommon shareGameCommon].wow_realms allKeys] objectAtIndex:row]);
-//    }
-//    else if(component == 1)
-//    {
-//        return [m_realmsArray objectAtIndex:row];
-//    }
-//
-//    return @"";
-//    
-//}
-//- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-//{
-//    if (pickerView == m_serverNamePick) {
-//        if (component == 0) {
-//            NSString* key = [[[GameCommon shareGameCommon].wow_realms allKeys] objectAtIndex:row];
-//            m_realmsArray = [[GameCommon shareGameCommon].wow_realms objectForKey:key];
-//            [m_serverNamePick reloadComponent:1];
-//        }
-//    }
-//}
-//
-//- (void)selectServerNameOK
-//{
-//    [searchContent resignFirstResponder];
-//    NSString* fenQu = [[[GameCommon shareGameCommon].wow_realms allKeys] objectAtIndex:[m_serverNamePick selectedRowInComponent:0]];
-//    NSString* fuName = [[[GameCommon shareGameCommon].wow_realms objectForKey:fenQu] objectAtIndex:[m_serverNamePick selectedRowInComponent:1]];
-//    searchContent.text = [NSString stringWithFormat:@"%@ %@", fenQu, fuName];
-//}
 
 #pragma mark textField
 -(BOOL)textFieldShouldReturn:(UITextField *)textField

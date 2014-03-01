@@ -28,7 +28,8 @@
     MBProgressHUD       *  hud1;
     NSInteger              m_pageNum;
     float startX;
-    
+    NSString           *m_serverStr;//储存服务器名称
+    NSString           *m_characterId;
     BOOL            isInTheQueue;//获取刷新数据队列中
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -117,7 +118,6 @@
     [self.view addSubview:hud];
 
     hud1 =[[MBProgressHUD alloc]initWithView:m_charaDetailsView.listScrollView];
-    isInTheQueue =YES;
 
 }
 
@@ -208,8 +208,8 @@
             NSString *str =[NSString stringWithFormat:@"%@ %@",m_charaInfo.realm,m_charaInfo.sidename];
             m_charaDetailsView.rightPView.frame = CGRectMake(295-str.length*11, 5, str.length*11+20,20 );
             m_charaDetailsView.realmView.frame = CGRectMake(18, 0, str.length*11, 20);
-            
-            
+            m_serverStr = m_charaInfo.realm;
+            m_characterId = m_charaInfo.characterid;
             m_charaDetailsView.realmView.text = [NSString stringWithFormat:@"%@ %@", m_charaInfo.realm,m_charaInfo.sidename];
             // m_charaDetailsView.realmView.text = m_charaInfo.realm;
             m_charaDetailsView.levelLabel.text =[NSString stringWithFormat:@"Lv.%@ %@", m_charaInfo.level,m_charaInfo.professionalName];
@@ -419,9 +419,10 @@
     //    [self.navigationController pushViewController:test animated:YES];
     
     RankingViewController *ranking = [[RankingViewController alloc]init] ;
-    ranking.characterid =m_charaInfo.characterid;
+    ranking.characterid =m_characterId;
     ranking.custType = m_charaInfo.professionalId;
-    ranking.server = m_charaInfo.realm;
+    ranking.server = m_serverStr;
+    
     ranking.characterName =m_charaInfo.roleNickName;
     ranking. titleOfRanking = [titleArray objectAtIndex:indexPath.row];
     NSArray *array = [m_charaInfo.friendOfRanking allKeys];

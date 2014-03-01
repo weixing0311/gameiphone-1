@@ -17,6 +17,7 @@
 -(void)getContact:(NSDictionary *)userDict;
 @end
 
-@interface SearchResultViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, PullUpDelegate, SRRefreshDelegate>
+@interface SearchResultViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, PullUpDelegate, SRRefreshDelegate,UIScrollViewDelegate>
 @property (strong,nonatomic) id responseObject;
+@property(nonatomic,copy)NSString *nickNameList;
 @end

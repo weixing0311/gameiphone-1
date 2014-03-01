@@ -23,7 +23,20 @@
 
 @class AppDelegate, XMPPHelper;
 
-@interface KKChatController : BaseViewController<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,StoreMsgDelegate,getContact,UIAlertViewDelegate,UIActionSheetDelegate,UIScrollViewDelegate,AVAudioRecorderDelegate,AVAudioSessionDelegate,AVAudioPlayerDelegate,HPGrowingTextViewDelegate,EmojiViewDelegate>
+@interface KKChatController : BaseViewController
+<UITableViewDelegate,
+UITableViewDataSource,
+UITextFieldDelegate,
+StoreMsgDelegate,
+getContact,
+UIAlertViewDelegate,
+UIActionSheetDelegate,
+UIScrollViewDelegate,
+AVAudioRecorderDelegate,
+AVAudioSessionDelegate,
+AVAudioPlayerDelegate,
+HPGrowingTextViewDelegate,
+EmojiViewDelegate>
 {
     UILabel    *titleLabel;
     NSString * userName;

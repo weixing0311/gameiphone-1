@@ -1453,6 +1453,12 @@
 
 - (void)sendButton:(id)sender {
     
+    
+    if (self.textView.text.length>255) {
+        [self showAlertViewWithTitle:nil message:@"发送字数太多，请分条发送" buttonTitle:@"确定"];
+        return;
+    }
+
     //本地输入框中的信息
     NSString *message = self.textView.text;
     [self sendMsg:message];
