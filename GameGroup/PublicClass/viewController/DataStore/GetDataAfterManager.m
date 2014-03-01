@@ -48,11 +48,19 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     type = type?type:@"notype";
     if([type isEqualToString:@"normalchat"])
     {
+        if ([DataStoreManager savedMsgWithID:KISDictionaryHaveKey(messageContent, @"msgId")]) {
+            NSLog(@"消息已存在");
+            return;
+        }
         AudioServicesPlayAlertSound(1007);
         [DataStoreManager storeNewMsgs:messageContent senderType:COMMONUSER];//普通聊天消息
     }
     else if([type isEqualToString:@"payloadchat"])
     {
+        if ([DataStoreManager savedMsgWithID:KISDictionaryHaveKey(messageContent, @"msgId")]) {
+            NSLog(@"消息已存在");
+            return;
+        }
         AudioServicesPlayAlertSound(1007);
         [DataStoreManager storeNewMsgs:messageContent senderType:PAYLOADMSG];//动态消息
     }

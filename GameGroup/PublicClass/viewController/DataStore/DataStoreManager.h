@@ -29,7 +29,7 @@
 #import "DSOtherMsgs.h"
 
 @interface DataStoreManager : NSObject
-+ (BOOL)savedMsgWithID:(NSString*)msgId//消息是否已存
++ (BOOL)savedMsgWithID:(NSString*)msgId;//消息是否已存
 +(void)setDefaultDataBase:(NSString *)dataBaseName AndDefaultModel:(NSString *)modelName;
 +(void)storeNewMsgs:(NSDictionary *)msg senderType:(NSString *)sendertype;
 +(void)storeMyMessage:(NSDictionary *)message;

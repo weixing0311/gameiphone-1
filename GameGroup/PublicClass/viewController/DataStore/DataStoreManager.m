@@ -20,9 +20,12 @@
 }
 + (BOOL)savedMsgWithID:(NSString*)msgId//消息是否已存
 {
-    NSArray * array = [DSCommonMsgs MR_findAll];
+    NSArray * array = [DSCommonMsgs MR_findByAttribute:@"messageuuid" withValue:msgId];
+    if (array.count > 0) {
+        return YES;
+    }
     return NO;
-}
+} 
 #pragma mark - 存储消息相关
 +(void)storeNewMsgs:(NSDictionary *)msg senderType:(NSString *)sendertype
 {
