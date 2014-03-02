@@ -97,7 +97,7 @@
 
     
     UIButton *menuButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    menuButton.frame=CGRectMake(270, startX - 44, 50, 44);
+    menuButton.frame=CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30);
     [menuButton setBackgroundImage:KUIImage(@"menu_button_normal") forState:UIControlStateNormal];
     [menuButton setBackgroundImage:KUIImage(@"menu_button_click") forState:UIControlStateHighlighted];
     [self.view addSubview:menuButton];

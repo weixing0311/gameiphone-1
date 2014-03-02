@@ -26,7 +26,7 @@
 {
     [super viewDidLoad];
     
-    [self setTopViewWithTitle:@"头衔动态" withBackButton:YES];
+    [self setTopViewWithTitle:@"角色动态" withBackButton:YES];
     
     m_tableData = (NSMutableArray*)[DataStoreManager queryAllOtherMsg];
     
@@ -86,6 +86,7 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     NSDictionary * dict = [[[m_tableData objectAtIndex:indexPath.row] objectForKey:@"msgContent"] JSONValue];
+    NSLog(@"dicttt%@",dict);
 
     if([[[m_tableData objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"character"])//角色
     {
@@ -191,7 +192,9 @@
     }
 }
 
-
+/*
+  message =====<message xmlns="jabber:client" from="sys00000004@gamepro.com" to="10110253@gamepro.com" id="0268a59002bf443aa985647ff641949e" type="chat" msgtype="title" msgTime="1393726203264"><body>{"rarenum":4,"msg":"卡拉赞-竹子控 失去头衔雷霆之怒，逐风者的祝福之剑","gameid":1}</body><payload>{"title": "\u5931\u53bb\u5934\u8854\u96f7\u9706\u4e4b\u6012\uff0c\u9010\u98ce\u8005\u7684\u795d\u798f\u4e4b\u5251"}</payload></message>
+ */
 
 - (void)didReceiveMemoryWarning
 {

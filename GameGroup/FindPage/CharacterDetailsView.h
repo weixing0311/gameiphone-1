@@ -33,6 +33,7 @@
 @property(nonatomic,strong)UIScrollView *  listScrollView;
 @property(nonatomic,strong)UIImageView  *  certificationImage;//认证button
 @property(nonatomic,strong)UIButton     *   reloadingBtn;//刷新button
+@property(nonatomic,assign)BOOL  isComeTo;
 -(void)comeFromMy;
 -(void)comeFromPerson;
 

@@ -382,6 +382,9 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
         NSArray* characterArray = KISDictionaryHaveKey(m_hostInfo.characters, @"1");//魔兽世界
+        [[NSUserDefaults standardUserDefaults]setObject:characterArray forKey:@"CharacterArrayOfAllForYou"];
+        
+        
         if (![characterArray isKindOfClass:[NSArray class]]) {
             
 //            cell.heardImg.image = [UIImage imageNamed:@"clazz_0.png"];

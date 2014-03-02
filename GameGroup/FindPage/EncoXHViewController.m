@@ -70,15 +70,25 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSMutableDictionary *paramDict = [[NSMutableDictionary alloc]init];
-    [paramDict setObject:[DataStoreManager getMyUserID] forKey:@"userid"];
-    [self getSayHelloForNetWithDictionary:paramDict method:@"125" prompt:@"获取中..." type:3];
+    m_characterArray = [[NSMutableArray alloc]init];
+    
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"CharacterArrayOfAllForYou"]==NULL) {
+        NSLog(@"空走不走");
+        NSMutableDictionary *paramDict = [[NSMutableDictionary alloc]init];
+        [paramDict setObject:[DataStoreManager getMyUserID] forKey:@"userid"];
+        [self getSayHelloForNetWithDictionary:paramDict method:@"125" prompt:@"获取中..." type:3];
+
+    }else{
+    m_characterArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"CharacterArrayOfAllForYou"];
+    }
+
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
      getDic = [[NSDictionary alloc]init];
-    m_characterArray = [[NSMutableArray alloc]init];
+    
+    
     [self setTopViewWithTitle:@"邂逅" withBackButton:YES];
     
     backgroundImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height -startX)];
@@ -87,6 +97,7 @@
     backgroundImageView.userInteractionEnabled = YES;
     [self.view addSubview:backgroundImageView];
     hud = [[MBProgressHUD alloc]initWithView:self.view];
+    [self.view addSubview:hud];
     [self buildTableView];
     
 }
@@ -131,7 +142,7 @@
     
     
     
-    clazzLabel = [[UILabel alloc]initWithFrame:CGRectMake(260-clazzLabel.text.length, 53, 50+clazzLabel.text.length *12, 20)];
+    clazzLabel = [[UILabel alloc]initWithFrame:CGRectMake(260-clazzLabel.text.length/2, 53, 50+clazzLabel.text.length *12, 20)];
     clazzLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.6];
     clazzLabel.layer.masksToBounds = YES;
     clazzLabel.layer.cornerRadius = 5;
@@ -153,23 +164,25 @@
     
     NickNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0,251-40, 320, 20)];
     NickNameLabel.backgroundColor = [UIColor clearColor];
-    NickNameLabel.font = [UIFont systemFontOfSize:18];
+    NickNameLabel.font = [UIFont boldSystemFontOfSize:17];
     NickNameLabel.textAlignment = NSTextAlignmentCenter;
     NickNameLabel.textColor = [UIColor whiteColor];
     [backgroundImageView addSubview:NickNameLabel];
     
-    customLabel = [[UILabel alloc]initWithFrame:CGRectMake(120, 276-40, 120, 15)];
+    customLabel = [[UILabel alloc]initWithFrame:CGRectMake(125, 276-40, 120, 15)];
     customLabel.backgroundColor = [UIColor clearColor];
-    customLabel.font = [UIFont systemFontOfSize:18];
+    customLabel.font = [UIFont boldSystemFontOfSize:13];
   //  customLabel.textAlignment = NSTextAlignmentCenter;
     customLabel.textColor = [UIColor whiteColor];
     [backgroundImageView addSubview:customLabel];
     
-    sexLabel = [[UILabel alloc]initWithFrame:CGRectMake(customLabel.frame.origin.x-10, 276-40, 10, 15)];
-    [sexLabel setFont:[UIFont boldSystemFontOfSize:10.0]];
-    sexLabel.layer.cornerRadius = 3;
-    sexLabel.layer.masksToBounds = YES;
-    sexLabel.textAlignment = NSTextAlignmentLeft;
+    sexLabel = [[UILabel alloc]initWithFrame:CGRectMake(customLabel.frame.origin.x-40, 276-40, 40, 15)];
+    //[sexLabel setFont:[UIFont boldSystemFontOfSize:15]];
+    sexLabel.font = [UIFont fontWithName:@"menlo" size:20];
+    sexLabel.backgroundColor =[UIColor clearColor];
+//    sexLabel.layer.cornerRadius = 3;
+//    sexLabel.layer.masksToBounds = YES;
+    sexLabel.textAlignment = NSTextAlignmentRight;
     [backgroundImageView addSubview:sexLabel];
     
     
@@ -205,7 +218,7 @@
 {
     inABtn.selected = YES;
     inABtn.enabled = NO;
-    
+    sayHelloBtn.enabled = NO;
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
 
     [paramDict setObject:@"1" forKey:@"gameid"];
@@ -302,10 +315,10 @@
             //男♀♂
             if ([KISDictionaryHaveKey(getDic, @"gender")isEqualToString:@"1"]) {
                 sexLabel.text = @"♀";
-                sexLabel.backgroundColor = kColorWithRGB(238, 100, 196, 1.0);
+                sexLabel.textColor = kColorWithRGB(238, 100, 196, 1.0);
             }else{
                 sexLabel.text = @"♂";
-                sexLabel.backgroundColor = kColorWithRGB(33, 193, 250, 1.0);
+                sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
 
             }
             
@@ -378,6 +391,8 @@
                 [m_characterArray addObjectsFromArray:KISDictionaryHaveKey(responseObject, @"1")];
                 NSLog(@"m_characterArray%@",m_characterArray);
                 [m_tableView reloadData];
+                [[NSUserDefaults standardUserDefaults]setObject:m_characterArray forKey:@"CharacterArrayOfAllForYou"];
+
                 tf.frame =CGRectMake(0, startX+40, 200, 30);
                 tf.center  = CGPointMake(160, startX+50);
 
@@ -436,13 +451,6 @@
     cell.serverLabel.text = [KISDictionaryHaveKey(tempDic, @"realm") stringByAppendingString:realm];
     cell.titleLabel.text = KISDictionaryHaveKey(tempDic, @"name");
     
-//
-//    cell.editBtn.hidden = YES;
-//    //        cell.authBtn.hidden = NO;
-//    
-//    cell.myIndexPath = indexPath;
-//    cell.gameImg.image = KUIImage(@"wow");
-//    cell.nameLabel.text = KISDictionaryHaveKey(tempDic, @"name");
     
     return cell;
 }
@@ -471,7 +479,9 @@
     
     clazzImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%d", imageId]];
     clazzLabel.text =KISDictionaryHaveKey(tempDic, @"name");
-    clazzLabel.frame = CGRectMake(260-clazzLabel.text.length*4, 53, 10+clazzLabel.text.length *12, 20);
+    clazzLabel.frame = CGRectMake(260-clazzLabel.text.length*3, 53, 10+clazzLabel.text.length *12, 20);
+    
+    clazzLabel.center = CGPointMake(280, 63);
    // clazzLabel.center = CGPointMake(286, 63);
     [paramDict setObject:KISDictionaryHaveKey(tempDic, @"id") forKey:@"characterid"];
    

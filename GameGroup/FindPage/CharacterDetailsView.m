@@ -12,6 +12,7 @@
 {
     NSInteger m_pageNum;
     NSInteger m_typeNum;
+    
 }
 - (id)initWithFrame:(CGRect)frame
 {
@@ -100,7 +101,7 @@
     self.realmView.backgroundColor =[UIColor clearColor];
     self.realmView.textColor = UIColorFromRGBA(0xe3e3e3, 1);
  //   self.realmView.text = @"石爪峰 部落";
-    self.realmView.font = [UIFont boldSystemFontOfSize:11];
+    self.realmView.font = [UIFont boldSystemFontOfSize:12];
     [self.rightPView addSubview:self.realmView];
 }
 
@@ -158,7 +159,7 @@
   //  self.itemlevelView.text = @"576/576";
     self.backgroundColor = [UIColor clearColor];
     self.itemlevelView.textColor = UIColorFromRGBA(0xe3e3e3, 1);
-    self.itemlevelView.font = [UIFont boldSystemFontOfSize:15];
+    self.itemlevelView.font = [UIFont boldSystemFontOfSize:16];
     [self.titleView addSubview:self.itemlevelView];
 
     
@@ -284,7 +285,7 @@
     [ self.realmBtn setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
     [ self.realmBtn setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
     [self addSubview: self.realmBtn];
-
+    self.countryBtn.selected = YES;
    // self.myFriendBtn.frame = CGRectMake(106, 200, 0,44);
     //全国
     [self.countryBtn addTarget:self action:@selector(TypeTwoOfCountry:) forControlEvents:UIControlEventTouchUpInside];
@@ -365,7 +366,6 @@
         return;
     }
         m_pageNum = (NSInteger)self.listScrollView.contentOffset.x/self.listScrollView.bounds.size.width;
-    //self.TopScrollView.contentOffset =self.listScrollView.contentOffset;
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.4];
     NSLog(@"m_pageNum%d",m_pageNum);
@@ -376,7 +376,9 @@
 
     [UIView commitAnimations];
 
-
+    if (_isComeTo ==YES) {
+        
+   
         if (m_pageNum ==0) {
             self.myFriendBtn.selected = NO;
             self.countryBtn.selected = YES;
@@ -392,6 +394,19 @@
             self.countryBtn.selected = YES;
             self.realmBtn.selected = NO;
     }
+         }
+    else{
+        if (m_pageNum ==0) {
+        self.countryBtn.selected = YES;
+        self.realmBtn.selected = NO;
+    }
+        if (m_pageNum ==1) {
+            self.countryBtn.selected = NO;
+            self.realmBtn.selected = YES;
+        }
+
+        
+    }
     }
 
 #pragma MARK --
@@ -400,14 +415,16 @@
 
     self.countryBtn.selected = NO;
     self.realmBtn.selected = YES;
+    
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.4];
-    m_pageNum =0;
+    m_pageNum =1;
+    
     self.TopScrollView.contentOffset = CGPointMake(m_pageNum*self.TopScrollView.bounds.size.width, 0);
     
     self.listScrollView.contentOffset = CGPointMake(m_pageNum*self.listScrollView.bounds.size.width, 0);
     
-    self.underListImageView.frame = CGRectMake(0, 234, 160, 4);
+    self.underListImageView.frame = CGRectMake(160, 234, 160, 4);
     [UIView commitAnimations];
     
 
@@ -419,12 +436,12 @@
     self.realmBtn.selected = NO;
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.4];
-    m_pageNum =1;
+    m_pageNum =0;
     self.TopScrollView.contentOffset = CGPointMake(m_pageNum*self.TopScrollView.bounds.size.width, 0);
     
     self.listScrollView.contentOffset = CGPointMake(m_pageNum*self.listScrollView.bounds.size.width, 0);
     
-    self.underListImageView.frame = CGRectMake(160, 234, 160, 4);
+    self.underListImageView.frame = CGRectMake(0, 234, 160, 4);
     [UIView commitAnimations];
     
 

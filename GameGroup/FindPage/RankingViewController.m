@@ -64,7 +64,7 @@
     float btnOfX;
      UIView*         bgView;
     
-    NSInteger     m_PageCount;
+    
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -96,11 +96,6 @@
 
     
     
-    if ([self.cRankvaltype isEqualToString:@"1"]) {
-        m_PageCount =-1;
-    }else{
-     m_PageCount = 0;
-    }
     //创建头button
     [self buildTopBtnView];
     
@@ -368,7 +363,7 @@
         return;
     }
     self.cRankvaltype =@"1";
-    m_PageCount = -1;
+    self.pageCount = -1;
      [m_cArray removeAllObjects];
     [self getSortDataByNet];
     
@@ -393,7 +388,7 @@
     }
    
     self.cRankvaltype =@"3";
-     m_PageCount = 0;
+     self.pageCount = 0;
     [m_cArray removeAllObjects];
    [self getSortDataByNet];
     
@@ -418,7 +413,7 @@
     if ([self.cRankvaltype isEqualToString:@"2"]) {
         return;
     }
-    m_PageCount = 0;
+    self.pageCount = 0;
     self.cRankvaltype =@"2";
     [m_cArray removeAllObjects];
 
@@ -459,7 +454,7 @@
     
     [paramDict setObject:self.dRankvaltype forKey:@"rankvaltype"];
     
-    [paramDict setObject:[NSString stringWithFormat:@"%d",m_PageCount] forKey:@"pageIndex"];
+    [paramDict setObject:[NSString stringWithFormat:@"%d",self.pageCount] forKey:@"pageIndex"];
   //  [paramDict setObject:@"5" forKey:@"maxSize"];
 
     
@@ -479,7 +474,7 @@
         [hud hide:YES];
         if ([responseObject isKindOfClass:[NSArray class]]) {
             
-            if (m_PageCount == 0) {
+            if (self.pageCount == 0) {
                 [m_cArray removeAllObjects];
                 
                 [m_cArray addObjectsFromArray:responseObject];
@@ -497,8 +492,8 @@
             
             [refreshView stopLoading:NO];
             //        }
-            m_PageCount ++;
-            NSLog(@"m_PageCount ++%d",m_PageCount);
+            self.pageCount ++;
+            NSLog(@"m_PageCount ++%d",self.pageCount);
             [refreshView setRefreshViewFrame];
             [_slimeView endRefresh];
         }else
@@ -561,7 +556,7 @@
 //刷新
 - (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
 {
-    m_PageCount = 0;
+    self.pageCount = 0;
     [self getSortDataByNet];
 }
 

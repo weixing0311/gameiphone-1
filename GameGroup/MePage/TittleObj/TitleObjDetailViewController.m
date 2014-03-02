@@ -95,8 +95,6 @@
 
     self.view.transform = CGAffineTransformIdentity;
     self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-//    self.view.bounds = CGRectMake(0.0, 0.0, kScreenWidth, kScreenHeigth);
-//    self.view.frame = CGRectMake(0.0, 0.0, kScreenHeigth, kScreenWidth);
     NSLog(@"haizai %@=%@=%f,%f",NSStringFromCGRect(self.view.frame),
           NSStringFromCGRect(self.view.bounds),kScreenWidth,kScreenHeigth);
     
@@ -127,8 +125,8 @@
     
     [self setTopView];
     [self setUpView];
-    [self setDownView];
-    [self setTableTopView];
+   // [self setDownView];
+    //[self setTableTopView];
     
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
@@ -326,10 +324,6 @@
     pageControl.currentPage = self.showIndex;
     [upScroll addSubview:pageControl];
     
-    sortButton = [CommonControlOrView setButtonWithFrame:CGRectMake(0, 0, 65, 65) title:@"" fontSize:nil textColor:nil bgImage:KUIImage(@"sort_button_normal") HighImage:KUIImage(@"sort_button_click") selectImage:nil];
-    sortButton.center = CGPointMake(upScroll.contentOffset.x + kScreenHeigth - 65/2, kScreenWidth - 40);
-    [sortButton addTarget:self action:@selector(sortButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [upScroll addSubview:sortButton];
     
     NSDictionary* tempDic = KISDictionaryHaveKey([self.titleObjArray objectAtIndex:self.showIndex], @"titleObj");
     sortButton.hidden = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"rank")] isEqualToString:@"1"] ? NO : YES;
@@ -339,6 +333,8 @@
     }
 }
 
+# pragma mark --注销原因 ---不要头衔排名了
+/*
 - (void)setDownView
 {
     float buttonWidth = (kScreenHeigth - 30)/3;
@@ -525,7 +521,7 @@
     m_lastPageIndex = -1;
     [self getSortDataByNet];
 }
-
+*/
 #pragma mark 手势
 //- (void)tapClick:(id)sender
 //{
@@ -561,8 +557,10 @@
 {
     isShowSend = YES;
 }
-
+/*
 #pragma mark 请求
+
+
 - (void)getSortDataByNet
 {
     NSDictionary* bigTitleDic = [self.titleObjArray objectAtIndex:self.showIndex];
@@ -669,6 +667,7 @@
 }
 
 #pragma mark 按钮
+
 - (void)sortButtonClick:(id)sender
 {
     [UIView animateWithDuration:0.5 animations:^{
@@ -869,5 +868,5 @@
 {
     return YES;
 }
-
+*/
 @end

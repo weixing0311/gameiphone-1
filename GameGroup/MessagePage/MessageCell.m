@@ -42,7 +42,7 @@
         [self.nameLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:15]];
         [self.contentView addSubview:self.nameLabel];
         
-        self.contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 28, 235, 40)];
+        self.contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 28, 230, 40)];
         self.contentLabel.backgroundColor = [UIColor clearColor];
         [self.contentLabel setTextAlignment:NSTextAlignmentLeft];
         [self.contentLabel setFont:[UIFont systemFontOfSize:14]];

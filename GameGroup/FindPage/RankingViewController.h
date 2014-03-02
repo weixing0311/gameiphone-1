@@ -22,4 +22,5 @@
 @property(nonatomic,assign)NSString *server;//服务器
 @property(nonatomic,copy)NSString *COME_FROM;
 @property(nonatomic,copy)NSString *titleOfRanking;//表头
+@property(nonatomic,assign)NSInteger     pageCount;
 @end

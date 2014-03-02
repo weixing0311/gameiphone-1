@@ -30,6 +30,7 @@
     float startX;
     NSString           *m_serverStr;//储存服务器名称
     NSString           *m_characterId;
+    NSString           *m_zhiyeId;
     BOOL            isInTheQueue;//获取刷新数据队列中
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -117,14 +118,15 @@
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
 
-    hud1 =[[MBProgressHUD alloc]initWithView:m_charaDetailsView.listScrollView];
-
+    hud1 =[[MBProgressHUD alloc]initWithView:self.view];
+    [self.view addSubview:hud1];
 }
 
 -(void)buildScrollView
 {
     
     if (self.myViewType ==CHARA_INFO_MYSELF) {
+        m_charaDetailsView.isComeTo = YES;
         m_contentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 300) style:UITableViewStylePlain];
         [m_charaDetailsView.listScrollView addSubview:m_contentTableView];
         m_contentTableView.dataSource = self;
@@ -149,7 +151,7 @@
         
         
     }else if(self.myViewType ==CHARA_INFO_PERSON){
-        
+        m_charaDetailsView.isComeTo = NO;
         m_contentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 300) style:UITableViewStylePlain];
         [m_charaDetailsView.listScrollView addSubview:m_contentTableView];
         m_contentTableView.dataSource = self;
@@ -159,7 +161,7 @@
         m_contentTableView.hidden =YES;
         
         
-        m_countryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 300) style:UITableViewStylePlain];
+        m_countryTableView = [[UITableView alloc] initWithFrame:CGRectMake(320, 0, 320, 300) style:UITableViewStylePlain];
         [m_charaDetailsView.listScrollView addSubview:m_countryTableView];
         m_countryTableView.dataSource = self;
         m_countryTableView.delegate = self;
@@ -167,7 +169,7 @@
         m_countryTableView.rowHeight = 60;
         
         
-        m_reamlTableView = [[UITableView alloc] initWithFrame:CGRectMake(320, 0, 320, 300) style:UITableViewStylePlain];
+        m_reamlTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 300) style:UITableViewStylePlain];
         [m_charaDetailsView.listScrollView addSubview:m_reamlTableView];
         m_reamlTableView.dataSource = self;
         m_reamlTableView.delegate = self;
@@ -210,9 +212,21 @@
             m_charaDetailsView.realmView.frame = CGRectMake(18, 0, str.length*11, 20);
             m_serverStr = m_charaInfo.realm;
             m_characterId = m_charaInfo.characterid;
+            m_zhiyeId = m_charaInfo.professionalId;
+            
             m_charaDetailsView.realmView.text = [NSString stringWithFormat:@"%@ %@", m_charaInfo.realm,m_charaInfo.sidename];
+            
             // m_charaDetailsView.realmView.text = m_charaInfo.realm;
             m_charaDetailsView.levelLabel.text =[NSString stringWithFormat:@"Lv.%@ %@", m_charaInfo.level,m_charaInfo.professionalName];
+            
+            m_charaDetailsView.levelLabel.frame =
+            CGRectMake(323-m_charaDetailsView.levelLabel.text.length*9,
+                       8,
+                       m_charaDetailsView.levelLabel.text.length*9,
+                       25);
+            NSLog(@"长度%u",m_charaDetailsView.levelLabel.text.length*12);
+          //  m_charaDetailsView.levelLabel.center = CGPointMake(294, 8);
+            
             m_charaDetailsView.itemlevelView.text = [NSString stringWithFormat:@"%@/%@",m_charaInfo.itemlevel,m_charaInfo.itemlevelequipped] ;//
             m_charaDetailsView.clazzImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%@",m_charaInfo.professionalId]];
             m_charaDetailsView.headerImageView.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
@@ -270,10 +284,13 @@
     [postDict setObject:@"159" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
-    [hud show:YES];
+    //[hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        m_charaDetailsView.reloadingBtn.enabled =YES;
         NSLog(@"res%@",responseObject);
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"ok"]) {
+            
             [self reLoadingUserInfoFromNet];
         }
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"busy"]) {
@@ -281,10 +298,14 @@
             KISDictionaryHaveKey(responseObject, @"time") ;
             hud1.labelText = [NSString stringWithFormat:@"进入更新队列，目前队列位置：%d，预计更新时间：%@",
                               [KISDictionaryHaveKey(responseObject, @"index") intValue],[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"time") ]]];
-            [hud1 show:YES];
+            [hud1 showAnimated:YES whileExecutingBlock:^{
+                sleep(3);
+            }];
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
+        m_charaDetailsView.reloadingBtn.enabled =YES;
+
         [hud hide:YES];
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
@@ -303,7 +324,7 @@
 //    [self.view addSubview:hud];
     hud.labelText = @"正拼命从英雄榜获取中...";
     
-    
+    m_charaDetailsView.reloadingBtn.enabled =NO;
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
@@ -335,6 +356,8 @@
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
+        m_charaDetailsView.reloadingBtn.enabled =YES;
+
         [hud hide:YES];
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
@@ -420,9 +443,14 @@
     
     RankingViewController *ranking = [[RankingViewController alloc]init] ;
     ranking.characterid =m_characterId;
-    ranking.custType = m_charaInfo.professionalId;
+    ranking.custType = m_zhiyeId;
     ranking.server = m_serverStr;
-    
+    if ([[m_charaInfo.secondRankArray objectAtIndex:indexPath.row]intValue] <100) {
+        ranking.pageCount = -1;
+    }
+    else{
+        ranking.pageCount = 0;
+    }
     ranking.characterName =m_charaInfo.roleNickName;
     ranking. titleOfRanking = [titleArray objectAtIndex:indexPath.row];
     NSArray *array = [m_charaInfo.friendOfRanking allKeys];
@@ -491,14 +519,9 @@
 - (void)reLoadingList:(CharacterDetailsView *)characterdetailsView
 {
     m_charaDetailsView.reloadingBtn.enabled =NO;
-    if (isInTheQueue ==NO) {
         [self getUserLineInfoByNet];
         NSLog(@"刷新数据");
-    }
-    else{
-        [hud1 hide:YES];
-        isInTheQueue =NO;
-    }
+    
 }
 
 @end
