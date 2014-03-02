@@ -129,6 +129,12 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
+         
+//         if ([responseObject isEqualToString:@""]) {
+//             [self showAlertViewWithTitle:nil message:@"你还没有角色呢" buttonTitle:@"确定"];
+//             [hud hide: YES];
+//             return ;
+//         }
         if ([KISDictionaryHaveKey(responseObject, @"1") isKindOfClass:[NSArray class]])
         {
             NSMutableArray* selectArray = [[NSMutableArray alloc] init];
@@ -158,6 +164,9 @@
 
                 [self getSameRealmDataByNet];
             }
+        }else{
+            [self showAlertViewWithTitle:nil message:@"你还没有角色呢" buttonTitle:@"确定"];
+                         [hud hide: YES];
         }
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {

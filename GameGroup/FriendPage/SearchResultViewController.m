@@ -18,10 +18,8 @@
     UITableView*        m_myTableView;
     NSMutableArray*     m_tabelData;
     
-  //  NSInteger           m_searchType;//3全部 0男 1女
     
-    NSInteger           m_totalPage;
-    NSInteger           m_currentPage;//0开始
+    NSInteger           m_pageNum;
     
     PullUpRefreshView      *refreshView;
     SRRefreshView   *_slimeView;
@@ -44,7 +42,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self getNearByDataByNet];
+    //[self getNearByDataByNet];
 }
 - (void)viewDidLoad
 {
@@ -62,14 +60,6 @@
     
     
     m_tabelData = [[NSMutableArray alloc] init];
-//筛选Button
-    
-//    UIButton *menuButton=[UIButton buttonWithType:UIButtonTypeCustom];
-//    menuButton.frame=CGRectMake(270, startX - 44, 50, 44);
-//    [menuButton setBackgroundImage:KUIImage(@"menu_button_normal") forState:UIControlStateNormal];
-//    [menuButton setBackgroundImage:KUIImage(@"menu_button_click") forState:UIControlStateHighlighted];
-//    [self.view addSubview:menuButton];
-//    [menuButton addTarget:self action:@selector(menuButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     
     m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth - startX-(KISHighVersion_7?0:20))];
     m_myTableView.dataSource = self;
@@ -91,94 +81,94 @@
     [m_myTableView addSubview:refreshView];
     refreshView.pullUpDelegate = self;
     refreshView.myScrollView = m_myTableView;
-    [refreshView stopLoading:NO];
-    
-    m_totalPage = 0;
-    m_currentPage = 0;
-    
-    //if ([CLLocationManager locationServicesEnabled] && ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined)){} 是否开启了本应用的定位服务
-    [[LocationManager sharedInstance] startCheckLocationWithSuccess:^(double lat, double lon) {
-        [[TempData sharedInstance] setLat:lat Lon:lon];
-        
-        [self getNearByDataByNet];
-    } Failure:^{
-        [self showAlertViewWithTitle:@"提示" message:@"定位失败，请确认设置->隐私->定位服务中小伙伴的按钮为打开状态" buttonTitle:@"确定"];
-    }];
+    [refreshView stopLoading:YES];
+    [refreshView setRefreshViewFrame];
 
+   
+    m_pageNum = 0;
+
+//    if ([CLLocationManager locationServicesEnabled] && ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined)){}// 是否开启了本应用的定位服务
+//    
+//    [[LocationManager sharedInstance] startCheckLocationWithSuccess:^(double lat, double lon) {
+//        [[TempData sharedInstance] setLat:lat Lon:lon];
+//        
+//        [self getNearByDataByNet];
+//    } Failure:^{
+//        [self showAlertViewWithTitle:@"提示" message:@"定位失败，请确认设置->隐私->定位服务中小伙伴的按钮为打开状态" buttonTitle:@"确定"];
+//    }];
+
+    hud = [[MBProgressHUD alloc]initWithView: self.view];
+    hud.labelText = @"获取中...";
+    [self.view addSubview:hud];
+     [self getNearByDataByNet];
 }
 
 - (void)getNearByDataByNet
 {
+    [hud show:YES];
+    NSMutableDictionary *paramDict = [[NSMutableDictionary alloc]init];
+    NSMutableDictionary *postDict = [[NSMutableDictionary alloc]init];
     
-    //6222 0110 2463 0240
-        if ((m_currentPage ==0 && ![_responseObject isKindOfClass:[NSDictionary class]]) || (m_currentPage != 0 && ![_responseObject isKindOfClass:[NSArray class]])) {
+    [paramDict setObject:self.nickNameList forKey:@"nickname"];
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon]getNetCommomDic]];
+    [postDict setObject:paramDict forKey:@"params"];
+    [postDict setObject:@"150" forKey:@"method"];
+    [postDict setObject:[NSString stringWithFormat:@"%d", m_pageNum] forKey:@"pageIndex"];
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    
+    [hud show:YES];
+    
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [hud hide:YES];
+            if (m_pageNum ==0) {
+                refreshView.pullUpDelegate =self;
+                refreshView.hidden = NO;
+                [m_tabelData removeAllObjects];
+                [m_tabelData addObjectsFromArray:KISDictionaryHaveKey(responseObject, @"users")];
+            }
+            else{
+                
+                [m_tabelData addObjectsFromArray:KISDictionaryHaveKey(responseObject, @"users")];
+
+            }
+        
+        
+        if ([KISDictionaryHaveKey(responseObject, @"totalResults")integerValue]<=m_tabelData.count&&m_pageNum!=0) {
+            refreshView.pullUpDelegate =nil;
             [refreshView stopLoading:YES];
-            [_slimeView endRefresh];
+            NSLog(@"11");
             return;
-        }
-        if (m_currentPage == 0) {
-            [m_tabelData removeAllObjects];
-            
-            [m_tabelData addObjectsFromArray:KISDictionaryHaveKey(_responseObject, @"users")];
-            
-            m_totalPage = [[_responseObject objectForKey:@"totalResults"] intValue];
-        }
-        else
-        {
-            [m_tabelData addObjectsFromArray:_responseObject];
         }
         
         [m_myTableView reloadData];
-        
         [refreshView stopLoading:NO];
-        //        }
-        m_currentPage ++;//从0开始
-        
+        m_pageNum ++;
         [refreshView setRefreshViewFrame];
         [_slimeView endRefresh];
+
+
         
- 
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            NSString* warn = [error objectForKey:kFailMessageKey];
+            if ([[error objectForKey:kFailErrorCodeKey] isEqualToString:@"200002"]) {//用户不存在， 角色存在
+            }
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", warn] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+        [hud hide:YES];
+        [_slimeView endRefresh];
+        [refreshView stopLoading:YES];
+        [refreshView setRefreshViewFrame];
+
+
+    }];
+            // [refreshView stopLoading:NO];
+
 }
-
-#pragma mark 筛选
-//- (void)menuButtonClick:(id)sender
-//{
-//    UIActionSheet* actionSheet = [[UIActionSheet alloc]
-//                                  initWithTitle:@"筛选条件"
-//                                  delegate:self
-//                                  cancelButtonTitle:@"取消"
-//                                  destructiveButtonTitle:Nil
-//                                  otherButtonTitles:@"只看男", @"只看女", @"看全部", nil];
-//    actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-//    [actionSheet showInView:self.view];
-//}
-
-//-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//    if (buttonIndex == actionSheet.cancelButtonIndex) {
-//        return;
-//    }
-//    [m_tabelData removeAllObjects];
-//    [m_myTableView reloadData];
-//    
-//    m_currentPage = 0;
-//    if (buttonIndex == 0) {//男
-//        m_searchType = 0;
-//        m_titleLabel.text = @"附近的玩家(男)";
-//    }
-//    else if (buttonIndex == 1) {//女
-//        m_searchType = 1;
-//        m_titleLabel.text = @"附近的玩家(女)";
-//    }
-//    else//全部
-//    {
-//        m_titleLabel.text = @"附近的玩家";
-//        m_searchType = 2;
-//    }
-//    [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d", m_searchType] forKey:NearByKey];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
-//    [self getNearByDataByNet];
-//}
 
 #pragma mark - table
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -258,6 +248,7 @@
     [self.navigationController pushViewController:VC animated:YES];
 }
 #pragma mark  scrollView  delegate
+#pragma mark  scrollView  delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (m_myTableView.contentSize.height < m_myTableView.frame.size.height) {
@@ -266,6 +257,7 @@
     else
         refreshView.viewMaxY = m_myTableView.contentSize.height - m_myTableView.frame.size.height;
     [refreshView viewdidScroll:scrollView];
+    
     [_slimeView scrollViewDidScroll];
 }
 
@@ -287,25 +279,18 @@
         
     }
 }
-
+//上拉加载
 - (void)PullUpStartRefresh
 {
     NSLog(@"start");
-    if(m_currentPage < m_totalPage)//从0开始记录页码
-    {
-        [self getNearByDataByNet];
-    }
+    [self getNearByDataByNet];
 }
 
 #pragma mark - slimeRefresh delegate
+//刷新
 - (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
 {
-    //    [self performSelector:@selector(endRefresh)
-    //               withObject:nil
-    //               afterDelay:2
-    //                  inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
-    m_currentPage = 0;
-    
+    m_pageNum = 0;
     [self getNearByDataByNet];
 }
 

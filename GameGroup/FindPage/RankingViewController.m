@@ -246,11 +246,11 @@
     }
     if ([self.cRankvaltype isEqualToString:@"2"]) {
         m_serverBtn.selected = YES;
-        m_underListImageView.frame =CGRectMake(btnOfX+btnWidth, 41,btnWidth,4);;
+        m_underListImageView.frame =CGRectMake(btnOfX, 41,btnWidth,4);
     }
     if ([self.cRankvaltype isEqualToString:@"3"]) {
         m_countryBtn.selected = YES;
-        m_underListImageView.frame =CGRectMake(btnOfX, 41,btnWidth,4);
+        m_underListImageView.frame =CGRectMake(btnOfX+btnWidth, 41,btnWidth,4);
     }
 
     
