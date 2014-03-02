@@ -114,6 +114,18 @@
 {
     return [self.xmppStream getStateOfXMPP];
 }
+-(BOOL)isDisconnected
+{
+    return [self.xmppStream isDisconnected];
+}
+-(BOOL)isConnecting
+{
+    return [self.xmppStream isConnecting];
+}
+-(BOOL)isConnected
+{
+    return [self.xmppStream isConnected];
+}
 //获取所有联系人
 -(void)getCompleteRoster:(XMPPRosterMemoryStorageCallBack)callback{
     self.xmppRosterscallback=callback;
@@ -234,13 +246,13 @@
 //此方法在stream连接断开的时候调用
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error{
     NSLog(@"disconnected。。。：%@",error);
-    [self.notConnect notConnectted];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Notification_disconnect" object:nil userInfo:nil];
 }
 
 // 2.关于验证的
 //验证失败后调用
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(NSXMLElement *)error{
-    NSLog(@"not authenticated");
+    NSLog(@"not authenticated %@",error);
     NSError *err=[[NSError alloc] initWithDomain:@"WeShare" code:-100 userInfo:@{@"detail": @"ot-authorized"}];
     self.fail(err);
  //   [self.notConnect notConnectted];
@@ -362,6 +374,7 @@
             }
             else
                 [dict setObject:@""  forKey:@"shiptype"];
+             [self.deletePersonDelegate newAddReq:dict];
         }
         else if([msgtype isEqualToString:@"deletePerson"])//取消关注
         {
@@ -380,9 +393,9 @@
         else if ([msgtype isEqualToString:@"character"] || [msgtype isEqualToString:@"pveScore"] || [msgtype isEqualToString:@"title"])
         {
             [dict setObject:msgtype forKey:@"msgType"];
-            NSString *title = [[message attributeForName:@"title"] stringValue]?
-            [[message attributeForName:@"title"] stringValue]:@" ";
-            
+            NSString *title = [[message elementForName:@"payload"] stringValue];
+            title = KISDictionaryHaveKey([title JSONValue],@"title");
+            NSLog(@"%@",title);
             [dict setObject:title forKey:@"title"];
             
             [self.otherMsgReceiveDelegate otherMessageReceived:dict];

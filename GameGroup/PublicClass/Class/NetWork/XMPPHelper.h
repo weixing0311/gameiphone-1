@@ -74,6 +74,9 @@ typedef enum {
 - (void) goOnline;
 - (void) goOffline;
 -(BOOL)ifXMPPConnected;
+-(BOOL)isConnecting;
+-(BOOL)isDisconnected;
+-(BOOL)isConnected;
 -(BOOL)connect:(NSString *)account password:(NSString *)password host:(NSString *)host success:(CallBackBlock)Success fail:(CallBackBlockErr)Fail;
 -(void) reg:(NSString *)account password:(NSString *)password host:(NSString *)host success:(CallBackBlock)success fail:(CallBackBlockErr)fail;
 

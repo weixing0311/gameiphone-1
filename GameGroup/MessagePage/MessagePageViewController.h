@@ -11,7 +11,7 @@
 #import "NotConnectDelegate.h"
 #import "AppDelegate.h"
 
-@interface MessagePageViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,NotConnectDelegate,UISearchBarDelegate,StoreMsgDelegate,UISearchDisplayDelegate>
+@interface MessagePageViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,UISearchBarDelegate,StoreMsgDelegate,UISearchDisplayDelegate>
 
 @property (strong,nonatomic) AppDelegate * appDel;
 @end

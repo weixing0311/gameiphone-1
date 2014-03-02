@@ -55,7 +55,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     [[Custom_tabbar showTabBar] hideTabBar:NO];
 //    if (![self.appDel.xmppHelper ifXMPPConnected]) {
 //        titleLabel.text = @"消息(未连接)";
@@ -129,16 +128,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recommendFriendReceived:) name:kOtherMessage object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActiveWithNet:) name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(catchStatus:) name:@"Notification_disconnect" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logInToChatServer) name:@"Notification_BecomeActive" object:nil];
 
     [self setTopViewWithTitle:@"" withBackButton:NO];
     
-//    UIButton* cleanBtn = [[UIButton alloc] initWithFrame:CGRectMake(320-55, startX-44, 50, 44)];
-//    [cleanBtn setTitle:@"清空" forState:UIControlStateNormal];
-//    [cleanBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    [cleanBtn setBackgroundColor:[UIColor clearColor]];
-//    cleanBtn.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
-//    [cleanBtn addTarget:self action:@selector(cleanBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:cleanBtn];
+    
     
     allMsgArray = [NSMutableArray array];
     allMsgUnreadArray = [NSMutableArray array];
@@ -152,20 +147,6 @@
     [self.view addSubview:m_messageTable];
     m_messageTable.dataSource = self;
     m_messageTable.delegate = self;
-//    m_messageTable.contentOffset = CGPointMake(0, 44);
-    
-//    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-//    searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
-//    searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-//    searchBar.placeholder = @"搜索消息";
-//    m_messageTable.tableHeaderView = searchBar;
-//    [m_messageTable addSubview:searchBar];
-//    searchBar.delegate = self;
-//    
-//    searchDisplay = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
-//    searchDisplay.delegate = self;
-//    searchDisplay.searchResultsDataSource = self;
-//    searchDisplay.searchResultsDelegate = self;
     
     titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, startX - 44, 320, 44)];
     titleLabel.backgroundColor=[UIColor clearColor];
@@ -204,7 +185,6 @@
     }
     else
     {
-        titleLabel.text = @"消息(未连接)";
         [self.appDel.xmppHelper disconnect];
     }
 }
@@ -237,7 +217,11 @@
 {
     [self displayMsgsForDefaultView];
 }
-
+#pragma mark 收到下线
+- (void)catchStatus:(NSNotification *)notification
+{
+    titleLabel.text = @"消息(未连接)";
+}
 #pragma mark -清空
 - (void)cleanBtnClick:(id)sender
 {
@@ -694,28 +678,6 @@
         [self displayMsgsForDefaultView];
     }
 }
-
-#pragma mark NotConnectDelegate
--(void)notConnectted
-{
-    [titleLabel setText:@"消息(未连接)"];
-     NSLog(@"未连接上服务器");
-    if (![GameCommon shareGameCommon].haveNet)
-    {
-        [self showAlertViewWithTitle:@"提示" message:@"未检测到网络" buttonTitle:@"确定"];
-        return;
-    }
-    if ([self isHaveLogin] && [GameCommon shareGameCommon].haveNet) {
-        if([[NSUserDefaults standardUserDefaults] objectForKey:isFirstOpen]){
-            if ([GameCommon shareGameCommon].connectTimes > 3) {
-                return;
-            }
-            [titleLabel setText:@"消息(连接中...)"];
-            [self logInToChatServer];
-        }
-    }
-}
-
 #pragma mark 登陆xmpp
 - (void)getChatServer//自动登陆情况下获得服务器
 {
