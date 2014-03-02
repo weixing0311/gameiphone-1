@@ -42,18 +42,18 @@
         [self addSubview:self.titleImageView];
         
         self.titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(110, 10, 150, 18)];
-        self.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+        self.titleLabel.font = [UIFont boldSystemFontOfSize:16];
         self.titleLabel.backgroundColor =[ UIColor clearColor];
         [self addSubview:self.titleLabel];
         
         self.serverLabel =[[UILabel alloc]initWithFrame:CGRectMake(110, 37, 130, 18)];
-        self.serverLabel.font = [UIFont boldSystemFontOfSize:15];
+        self.serverLabel.font = [UIFont boldSystemFontOfSize:14];
         self.serverLabel.textColor = [UIColor grayColor];
         self.serverLabel.backgroundColor = [UIColor clearColor];
         [self addSubview:self.serverLabel];
         
         self.CountOfLabel =[[UILabel alloc]initWithFrame:CGRectMake(250, 0, 100, 60)];
-        self.CountOfLabel.font = [UIFont boldSystemFontOfSize:19];
+        self.CountOfLabel.font = [UIFont boldSystemFontOfSize:20];
         self.CountOfLabel.backgroundColor =[UIColor clearColor];
         self.CountOfLabel.textColor =UIColorFromRGBA(0x636363, 1);
         self.CountOfLabel.font = [UIFont fontWithName:@"DigifaceWide" size:14];

@@ -19,7 +19,7 @@
         [self addSubview:self.titleImgView];
         self.titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(50, 12, 100, 20)];
         self.titleLabel.textColor = [UIColor blackColor];
-        self.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+        self.titleLabel.font = [UIFont boldSystemFontOfSize:16];
         
         self.titleLabel.backgroundColor = [UIColor clearColor];
         [self addSubview:self.titleLabel];

@@ -114,7 +114,7 @@
     }
     
     UIButton *profileButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    profileButton.frame=CGRectMake(275, startX - 44, 45, 44);
+    profileButton.frame=CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30);
     [profileButton setBackgroundImage:[UIImage imageNamed:@"user_info_normal.png"] forState:UIControlStateNormal];
     [profileButton setBackgroundImage:[UIImage imageNamed:@"user_info_click.png"] forState:UIControlStateHighlighted];
     [profileButton.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];

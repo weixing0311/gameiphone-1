@@ -94,7 +94,7 @@
     {
         [self setTopViewWithTitle:@"好友动态" withBackButton:YES];
         UIButton *addButton=[UIButton buttonWithType:UIButtonTypeCustom];
-        addButton.frame=CGRectMake(270, startX - 44, 50, 44);
+        addButton.frame=CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30);
         [addButton setBackgroundImage:KUIImage(@"add_news_normal") forState:UIControlStateNormal];
         [addButton setBackgroundImage:KUIImage(@"add_news_click") forState:UIControlStateHighlighted];
         [self.view addSubview:addButton];

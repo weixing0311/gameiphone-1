@@ -117,7 +117,7 @@
     [self.view addSubview:titleLabel];
     
     m_menuButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    m_menuButton.frame=CGRectMake(0, startX - 44, 44, 44);
+    m_menuButton.frame=CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30);
     [m_menuButton setBackgroundImage:KUIImage(@"menu_button_normal") forState:UIControlStateNormal];
     [m_menuButton setBackgroundImage:KUIImage(@"menu_button_click") forState:UIControlStateHighlighted];
     [self.view addSubview:m_menuButton];
@@ -150,7 +150,7 @@
     m_otherSortAttentionArray = [NSMutableArray array];
     
     UIButton *addButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    addButton.frame=CGRectMake(270, startX - 44, 50, 44);
+    addButton.frame=CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30);
     [addButton setBackgroundImage:KUIImage(@"add_button_normal") forState:UIControlStateNormal];
     [addButton setBackgroundImage:KUIImage(@"add_button_click") forState:UIControlStateHighlighted];
     [self.view addSubview:addButton];
