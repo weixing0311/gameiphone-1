@@ -350,7 +350,8 @@
     [dict setObject: msgTime forKey:@"time"];
     
     NSLog(@"theDict%@",dict);
-    if ([type isEqualToString:@"chat"]) {
+    if ([type isEqualToString:@"chat"])
+    {
         if ([msgtype isEqualToString:@"normalchat"]) {//聊天的 或动态聊天消息
             NSString* payload = [GameCommon getNewStringWithId:[[message elementForName:@"payload"] stringValue]];//是否含payload标签
             if (payload.length > 0) {
@@ -447,7 +448,8 @@
         }
         
     }
-    if ([type isEqualToString:@"normal"]&& [msgtype isEqualToString:@"msgStatus"]) {
+    if ([type isEqualToString:@"normal"]&& [msgtype isEqualToString:@"msgStatus"])
+    {
         NSDictionary* bodyDic = [msg JSONValue];
         if ([bodyDic isKindOfClass:[NSDictionary class]]) {
             NSString* src_id = KISDictionaryHaveKey(bodyDic, @"src_id");

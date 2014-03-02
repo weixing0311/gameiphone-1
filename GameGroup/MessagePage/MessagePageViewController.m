@@ -710,7 +710,9 @@
 
 -(void)logInToChatServer
 {
-//    [hud show:YES];
+    if (![[TempData sharedInstance] getServer] || ![[TempData sharedInstance] getServer].length > 0) {
+        return;
+    }
     titleLabel.text = @"消息(连接中...)";
     self.appDel.xmppHelper.notConnect = self;
     self.appDel.xmppHelper.xmpptype = login;
