@@ -39,6 +39,7 @@
     self.rightBgImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, viewWidth, self.frame.size.height)];
     self.rightBgImage.backgroundColor = [UIColor clearColor];
     NSString *path = [RootDocPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.rightImageId]];
+    NSLog(@"path%@",path);
     NSFileManager *fm = [NSFileManager defaultManager];
     if([fm fileExistsAtPath:path])
     {

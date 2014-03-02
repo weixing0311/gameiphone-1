@@ -169,7 +169,6 @@
 		6835FFC71873AFB0004040BD /* edit_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 6835FFC61873AFB0004040BD /* edit_bg.png */; };
 		6835FFC91873C262004040BD /* picBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 6835FFC81873C262004040BD /* picBtn.png */; };
 		6835FFCC1873F36F004040BD /* recommend_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 6835FFCB1873F36F004040BD /* recommend_phone.png */; };
-		6836FD03186BC79E00AF7562 /* TitleObjDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6836FD02186BC79E00AF7562 /* TitleObjDetailViewController.m */; };
 		6836FD07186BDD3400AF7562 /* rarenum_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6836FD05186BDD3400AF7562 /* rarenum_2.png */; };
 		6836FD08186BDD3400AF7562 /* rarenum_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 6836FD06186BDD3400AF7562 /* rarenum_6.png */; };
 		6836FD0B186BDD3800AF7562 /* rarenum_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6836FD09186BDD3800AF7562 /* rarenum_1.png */; };
@@ -673,6 +672,8 @@
 		84DB92AB18BB57D7006CB36A /* RankingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DB92AA18BB57D7006CB36A /* RankingViewController.m */; };
 		84DB92AE18BB6912006CB36A /* RankingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DB92AD18BB6912006CB36A /* RankingCell.m */; };
 		84DFB13B18BAF1F100BE6905 /* HUD_isok.png in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB13A18BAF1F100BE6905 /* HUD_isok.png */; };
+		84E95EAA18C3243A0036C01B /* TitleObjDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E95EA918C3243A0036C01B /* TitleObjDetailViewController.m */; };
+		84E95EAC18C332200036C01B /* 邂逅---小衰神_03.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E95EAB18C332200036C01B /* 邂逅---小衰神_03.png */; };
 		84F2FC4118BF1D2200C2EF29 /* Dfont_kis.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84F2FC4018BF1D2200C2EF29 /* Dfont_kis.ttf */; };
 		84F2FC4818BF218600C2EF29 /* EncounterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F2FC4718BF218600C2EF29 /* EncounterCell.m */; };
 		84F2FC4B18BF247D00C2EF29 /* EncoXHViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F2FC4A18BF247D00C2EF29 /* EncoXHViewController.m */; };
@@ -967,7 +968,6 @@
 		6835FFCA1873C733004040BD /* RecommendFriendDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecommendFriendDelegate.h; sourceTree = "<group>"; };
 		6835FFCB1873F36F004040BD /* recommend_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = recommend_phone.png; sourceTree = "<group>"; };
 		6836FD01186BC79E00AF7562 /* TitleObjDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleObjDetailViewController.h; sourceTree = "<group>"; };
-		6836FD02186BC79E00AF7562 /* TitleObjDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleObjDetailViewController.m; sourceTree = "<group>"; };
 		6836FD05186BDD3400AF7562 /* rarenum_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rarenum_2.png; sourceTree = "<group>"; };
 		6836FD06186BDD3400AF7562 /* rarenum_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rarenum_6.png; sourceTree = "<group>"; };
 		6836FD09186BDD3800AF7562 /* rarenum_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rarenum_1.png; sourceTree = "<group>"; };
@@ -1717,6 +1717,8 @@
 		84DB92AC18BB6912006CB36A /* RankingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingCell.h; sourceTree = "<group>"; };
 		84DB92AD18BB6912006CB36A /* RankingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingCell.m; sourceTree = "<group>"; };
 		84DFB13A18BAF1F100BE6905 /* HUD_isok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HUD_isok.png; sourceTree = "<group>"; };
+		84E95EA918C3243A0036C01B /* TitleObjDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleObjDetailViewController.m; sourceTree = "<group>"; };
+		84E95EAB18C332200036C01B /* 邂逅---小衰神_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "邂逅---小衰神_03.png"; sourceTree = "<group>"; };
 		84F2FC4018BF1D2200C2EF29 /* Dfont_kis.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Dfont_kis.ttf; sourceTree = "<group>"; };
 		84F2FC4618BF218600C2EF29 /* EncounterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncounterCell.h; sourceTree = "<group>"; };
 		84F2FC4718BF218600C2EF29 /* EncounterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncounterCell.m; sourceTree = "<group>"; };
@@ -2352,7 +2354,7 @@
 				68397F97186AA7BB00C6A762 /* MyTitleObjViewController.h */,
 				68397F98186AA7BB00C6A762 /* MyTitleObjViewController.m */,
 				6836FD01186BC79E00AF7562 /* TitleObjDetailViewController.h */,
-				6836FD02186BC79E00AF7562 /* TitleObjDetailViewController.m */,
+				84E95EA918C3243A0036C01B /* TitleObjDetailViewController.m */,
 				6836FD1D186BF4E300AF7562 /* TitleObjUpView.h */,
 				6836FD1E186BF4E300AF7562 /* TitleObjUpView.m */,
 				6836FD3C186C3B4100AF7562 /* TitleSortTableCell.h */,
@@ -3897,6 +3899,7 @@
 		84F2FC4C18BF26A900C2EF29 /* Enco */ = {
 			isa = PBXGroup;
 			children = (
+				84E95EAB18C332200036C01B /* 邂逅---小衰神_03.png */,
 				84F2FC6E18BF585700C2EF29 /* xh_jt.png */,
 				84F2FC5518BF2A8D00C2EF29 /* meet_bg_img.jpg */,
 				84F2FC4D18BF26A900C2EF29 /* green.png */,
@@ -4319,6 +4322,7 @@
 				68EF6043185C2F2500AB3108 /* third_xiemessage_record_ani4.png in Resources */,
 				688BFBBA1851B1B600462BC8 /* radio_normal.png in Resources */,
 				6836FD08186BDD3400AF7562 /* rarenum_6.png in Resources */,
+				84E95EAC18C332200036C01B /* 邂逅---小衰神_03.png in Resources */,
 				68EF5F98185C243200AB3108 /* biaoqing062.png in Resources */,
 				682F976C185AB24E00068F56 /* find_click.png in Resources */,
 				68EF5F9C185C243200AB3108 /* biaoqing066.png in Resources */,
@@ -4546,7 +4550,6 @@
 				6834173A1857FB2000934FEF /* NSManagedObject+MagicalRequests.m in Sources */,
 				682CB22B1869180500E15D37 /* SelectView.m in Sources */,
 				68B265D9187550FD002AEA9F /* ReplyViewController.m in Sources */,
-				6836FD03186BC79E00AF7562 /* TitleObjDetailViewController.m in Sources */,
 				68CAA792184DD104007138B1 /* XMPPMUC.m in Sources */,
 				68EF6064185C57F700AB3108 /* DSFansNameIndex.m in Sources */,
 				68EF5FF3185C283B00AB3108 /* HeightCalculate.m in Sources */,
@@ -4610,6 +4613,7 @@
 				68A0EFCB1871357700D3F4C1 /* ListRoleViewController.m in Sources */,
 				68CAA7AB184DD104007138B1 /* XMPPTransports.m in Sources */,
 				6818B6BE187D3C2900829A19 /* DSFriends.m in Sources */,
+				84E95EAA18C3243A0036C01B /* TitleObjDetailViewController.m in Sources */,
 				68241C7A1872616A00B6E53A /* AttentionMessageViewController.m in Sources */,
 				68EF5FC2185C24E300AB3108 /* UIExpandingTextView.m in Sources */,
 				68EF5FBF185C24E300AB3108 /* HPTextViewInternal.m in Sources */,
