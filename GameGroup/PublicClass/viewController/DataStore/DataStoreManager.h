@@ -43,7 +43,8 @@
 +(void)deleteThumbMsgWithSender:(NSString *)sender;
 +(void)deleteMsgsWithSender:(NSString *)sender Type:(NSString *)senderType;
 
-+(NSMutableArray *)qureyAllCommonMessages:(NSString *)username;
++(NSMutableArray *)qureyAllCommonMessages:(NSString *)userid;
++(NSString*)queryMessageStatusWithId:(NSString*)msgUUID;
 +(void)deleteCommonMsg:(NSString *)content Time:(NSString *)theTime;
 +(void)deleteAllCommonMsg;
 +(void)refreshThumbMsgsAfterDeleteCommonMsg:(NSDictionary *)message ForUser:(NSString *)userid ifDel:(BOOL)del;
