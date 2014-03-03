@@ -852,6 +852,9 @@
             [messages addObjectsFromArray:[DataStoreManager qureyAllCommonMessages:self.chatWithUser]];//只能重取 要不然对应不了行号
             [self normalMsgToFinalMsg];//重算cell高度
             [self.tView reloadData];
+            if (messages.count>0) {
+                [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            }//显示位置
         }
     }
 }
