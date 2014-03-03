@@ -300,16 +300,12 @@
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
 
         
-        
+        [hud hide:YES];
         if (COME_TYPE ==1) {
             isSuccessToshuaishen =YES;
             isWXCeiling =YES;
             inABtn.enabled = YES;
             sayHelloBtn.enabled = YES;
-            
-            
-            
-            [hud hide:YES];
             getDic = nil;
             getDic = [NSDictionary dictionaryWithDictionary:responseObject];
             NSLog(@"getDic%@",getDic);
@@ -375,7 +371,6 @@
             
             if (isWXCeiling ==YES) {
                 NSLog(@"打招呼成功");
-                [hud hide:YES];
                 [self showMessageWindowWithContent:@"打招呼成功" imageType:0];
                 [self changeOtherOne];
 
@@ -387,7 +382,6 @@
             
         }
         if (COME_TYPE ==3) {
-            [hud hide:YES];
             if ([KISDictionaryHaveKey(responseObject, @"1") isKindOfClass:[NSArray class]]) {
                 NSLog(@"responseObject%@",responseObject);
                 [m_characterArray addObjectsFromArray:KISDictionaryHaveKey(responseObject, @"1")];
@@ -404,11 +398,10 @@
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         inABtn.enabled = YES;
         sayHelloBtn.enabled = YES;
-
+        [hud hide:YES];
         
         if ([error isKindOfClass:[NSDictionary class]]) {
             
-
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
                 
@@ -451,13 +444,12 @@
                  nil];
                 headImageView.animationRepeatCount = 1;
                 [headImageView startAnimating];
-                    [hud hide:YES];
                     return ;
                 }
                 UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
 
-                 [hud hide:YES];
+                
             }
             
         }
