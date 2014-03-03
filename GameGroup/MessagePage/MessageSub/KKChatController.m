@@ -830,8 +830,10 @@
     NSString* src_id = KISDictionaryHaveKey(tempDic, @"src_id");
     NSString* received = KISDictionaryHaveKey(tempDic, @"received");//{'src_id':'','received':'true'}
     if ([tempDic isKindOfClass:[NSDictionary class]]) {
-//        [DataStoreManager refreshMessageStatusWithId:src_id status:[received boolValue] ? @"1" : @"0"];
         if (rowIndex && rowIndex.length > 0) {//超时引起 5秒
+            if ([messages count] <= [rowIndex integerValue]) {//重取时防止rowindex越界（>20）
+                return;
+            }
             [DataStoreManager refreshMessageStatusWithId:src_id status:[received boolValue] ? @"1" : @"0"];
 
             NSMutableDictionary *dict = [messages objectAtIndex:[rowIndex integerValue]];
@@ -848,6 +850,7 @@
         {
             [messages removeAllObjects];
             [messages addObjectsFromArray:[DataStoreManager qureyAllCommonMessages:self.chatWithUser]];//只能重取 要不然对应不了行号
+            [self normalMsgToFinalMsg];//重算cell高度
             [self.tView reloadData];
         }
     }
