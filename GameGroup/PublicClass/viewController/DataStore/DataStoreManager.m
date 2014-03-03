@@ -358,6 +358,19 @@
     return allMsgArray;
 }
 
++(NSString*)queryMessageStatusWithId:(NSString*)msgUUID
+{
+    if (msgUUID && msgUUID.length > 0) {
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"messageuuid==[c]%@",msgUUID];
+        DSCommonMsgs * commonMsgs = [DSCommonMsgs MR_findFirstWithPredicate:predicate];
+        if (commonMsgs) {
+            return commonMsgs.status;
+        }
+        return @"";
+    }
+    return @"";
+}
+
 +(void)deleteCommonMsg:(NSString *)content Time:(NSString *)theTime
 {
     NSDate * sendTime = [NSDate dateWithTimeIntervalSince1970:[theTime doubleValue]];
