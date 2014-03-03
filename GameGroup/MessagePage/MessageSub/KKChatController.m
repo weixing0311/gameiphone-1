@@ -825,6 +825,7 @@
 - (void)messageAck:(NSNotification *)notification
 {
     NSDictionary* tempDic = notification.userInfo;
+    
     NSString* rowIndex = KISDictionaryHaveKey(tempDic, @"row");
     NSString* src_id = KISDictionaryHaveKey(tempDic, @"src_id");
     NSString* received = KISDictionaryHaveKey(tempDic, @"received");//{'src_id':'','received':'true'}
@@ -836,7 +837,6 @@
             [DataStoreManager refreshMessageStatusWithId:src_id status:[received boolValue] ? @"1" : @"0"];
 
             NSMutableDictionary *dict = [messages objectAtIndex:[rowIndex integerValue]];
-            NSLog(@"%@",dict);
             NSString* status = KISDictionaryHaveKey(dict, @"status");
             if ([status isEqualToString:@"2"] || [status isEqualToString:@"0"]) {//发送中 失败
                 [dict setObject:@"0" forKey:@"status"];
@@ -1178,7 +1178,6 @@
         NSMutableDictionary *dict = [messages objectAtIndex:(tempBtn.tag-1)];
         NSString* msgType = KISDictionaryHaveKey(dict, @"msgType");
         NSString* status = KISDictionaryHaveKey(dict, @"status");
-        NSLog(@"%@",status);
         if ([msgType isEqualToString:@"payloadchat"]) {
             NSDictionary* msgDic = [KISDictionaryHaveKey(dict, @"payload") JSONValue];
             OnceDynamicViewController* detailVC = [[OnceDynamicViewController alloc] init];
@@ -1227,7 +1226,6 @@
         //发送消息
         if (![self.appDel.xmppHelper sendMessage:mes]) {
             [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
-            [dict setObject:@"0" forKey:@"status"];
             return;
         }
         [messages replaceObjectAtIndex:cellIndex withObject:dict];
