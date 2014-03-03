@@ -180,15 +180,15 @@
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"layoutresponseObject%@", responseObject);
-        [GameCommon loginOut];//注销
+       // [GameCommon loginOut];//注销
 
-        [self.navigationController popViewControllerAnimated:NO];
+        //[self.navigationController popViewControllerAnimated:NO];
 
     } failure:^(AFHTTPRequestOperation *operation, id error) {
 
     }];
-    
-
+    [GameCommon loginOut];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 - (void)didReceiveMemoryWarning
 {

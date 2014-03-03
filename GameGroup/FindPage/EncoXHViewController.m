@@ -57,6 +57,7 @@
     NSInteger m_leftTime;
     NSTimer *m_verCodeTimer;
     BOOL     isWXCeiling;//打招呼达到上限
+    BOOL     isSuccessToshuaishen;
     
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -70,7 +71,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    m_characterArray = [[NSMutableArray alloc]init];
+   
     
     if ([[NSUserDefaults standardUserDefaults]objectForKey:@"CharacterArrayOfAllForYou"]==NULL) {
         NSLog(@"空走不走");
@@ -87,7 +88,7 @@
 {
     [super viewDidLoad];
      getDic = [[NSDictionary alloc]init];
-    
+     m_characterArray = [[NSMutableArray alloc]init];
     
     [self setTopViewWithTitle:@"邂逅" withBackButton:YES];
     
@@ -137,7 +138,7 @@
     [backgroundImageView addSubview:clazzImageView];
     clazzImageView.userInteractionEnabled = YES;
     [clazzImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showGameList:)]];
-    
+
     
     
     
@@ -297,10 +298,11 @@
     
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+
         
         
         if (COME_TYPE ==1) {
+            isSuccessToshuaishen =YES;
             isWXCeiling =YES;
             inABtn.enabled = YES;
             sayHelloBtn.enabled = YES;
@@ -409,17 +411,58 @@
 
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                [alert show];
+                
                 if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100041"]) {
                     isWXCeiling =NO;
                 }
+                
+                
+                if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100042"]) {
+ 
+                    isSuccessToshuaishen =NO;
+                isWXCeiling =YES;
+                inABtn.enabled = YES;
+                sayHelloBtn.enabled = YES;
+                
+                //男♀♂
+                    sexLabel.text = @"♂";
+                    sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
+                promptLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];
+                
+                NickNameLabel.text =@"小衰神";
+                customLabel.text = @" ？？|神 明";
+                
+                promptLabel.text =@"小衰神附体,你ROLL出了1点,什么也没遇到...";
+                headImageView.image = KUIImage(@"邂逅---小衰神_03.png");
+                
+                headImageView.layer.borderWidth = 2.0;
+                headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
+
+                UIImage *image = headImageView.image;
+                    
+                [headImageView rotate360WithDuration:1.0 repeatCount:1 timingMode:i7Rotate360TimingModeLinear];
+                headImageView.animationDuration = 2.0;
+                headImageView.animationImages =
+                [NSArray arrayWithObjects:
+                 headImageView.image,
+                 headImageView.placeholderImage,
+                 headImageView.image,
+                 image,
+                 nil];
+                headImageView.animationRepeatCount = 1;
+                [headImageView startAnimating];
+                    [hud hide:YES];
+                    return ;
+                }
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+
                  [hud hide:YES];
             }
+            
         }
     }];
 }
-
 
 #pragma mark --tableViewdelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -492,9 +535,16 @@
 #pragma mark ---查看角色详情
 -(void)enterToPernsonPage:(UIGestureRecognizer *)sender
 {
-    PersonDetailViewController *pv = [[PersonDetailViewController alloc]init];
-    pv.userId =KISDictionaryHaveKey(getDic, @"userid");
-    [self.navigationController pushViewController:pv animated:YES];
+    if (isSuccessToshuaishen ==YES) {
+        PersonDetailViewController *pv = [[PersonDetailViewController alloc]init];
+        pv.userId =KISDictionaryHaveKey(getDic, @"userid");
+        [self.navigationController pushViewController:pv animated:YES];
+    }
+    else{
+    
+    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:@"运气好背奥，什么人都没遇见" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+    [alert show];
+    }
 }
 #pragma mark--- 查看角色列表
 -(void)showGameList:(UIGestureRecognizer *)sender
