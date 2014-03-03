@@ -1234,6 +1234,7 @@
         //发送消息
         if (![self.appDel.xmppHelper sendMessage:mes]) {
             [KGStatusBar showSuccessWithStatus:@"网络有点问题，稍后再试吧" Controller:self];
+            [dict setObject:@"0" forKey:@"status"];
             return;
         }
         [messages replaceObjectAtIndex:cellIndex withObject:dict];
