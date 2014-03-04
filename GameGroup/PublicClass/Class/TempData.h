@@ -22,13 +22,14 @@
     BOOL ifNeedChat;
     
     BOOL opened;
+    
     NSString * needChatUserName;
     
 }
 @property (retain,nonatomic)NSString* myUserID;
 @property (assign,nonatomic)BOOL newFriendsReq;
 @property (nonatomic,assign)BOOL needDisplayPushNotification;//是否展示推送的消息
-
+@property (nonatomic,assign)BOOL registerNeedMsg;//是否需要验证码
 + (id)sharedInstance;
 -(void)setOpened:(BOOL)haveOpened;
 -(BOOL)ifOpened;

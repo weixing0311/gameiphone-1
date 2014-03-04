@@ -37,6 +37,7 @@ static TempData *sharedInstance=nil;
     needChatUserName = @"";
     opened = NO;
     self.needDisplayPushNotification = NO;
+    self.registerNeedMsg = YES;
 }
 -(void)setOpened:(BOOL)haveOpened
 {

@@ -781,7 +781,7 @@
     [postDict setObject:@"111" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
-    [hud show:YES];
+//    [hud show:YES];
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -799,7 +799,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
-        [hud hide:YES];
+//        [hud hide:YES];
     }];
 }
 

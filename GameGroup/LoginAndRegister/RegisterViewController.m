@@ -13,6 +13,7 @@
 #import "MePageViewController.h"
 #import "ShowTextViewController.h"
 #import "AuthViewController.h"
+#import "TempData.h"
 
 @interface RegisterViewController ()
 {
@@ -173,15 +174,6 @@
     proLabel.font = [UIFont boldSystemFontOfSize:12.0];
     proLabel.backgroundColor = [UIColor clearColor];
     [m_step1Scroll addSubview:proLabel];
-//
-//    UIButton* privacyButton = [[UIButton alloc] initWithFrame:CGRectMake(200, 71, 50, 16)];
-//    [privacyButton setBackgroundColor:[UIColor clearColor]];
-//    privacyButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
-//    [privacyButton setTitle:@"隐私政策" forState:UIControlStateNormal];
-//    [privacyButton setTitleColor:kColorWithRGB(41, 164, 246, 1.0) forState:UIControlStateNormal];
-//    privacyButton.tag = 1;
-//    [privacyButton addTarget:self action:@selector(protocolClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [m_step1Scroll addSubview:privacyButton];
     
     UIButton* protocolButton = [[UIButton alloc] initWithFrame:CGRectMake(260, 71, 50, 16)];
     [protocolButton setBackgroundColor:[UIColor clearColor]];
@@ -195,7 +187,12 @@
     UIButton* step1Button = [[UIButton alloc] initWithFrame:CGRectMake(10, 96, 300, 40)];
     [step1Button setBackgroundImage:KUIImage(@"blue_button_normal") forState:UIControlStateNormal];
     [step1Button setBackgroundImage:KUIImage(@"blue_button_click") forState:UIControlStateHighlighted];
-    [step1Button setTitle:@"获取验证码" forState:UIControlStateNormal];
+    if ([[TempData sharedInstance] registerNeedMsg]) {
+        [step1Button setTitle:@"获取验证码" forState:UIControlStateNormal];
+    }else{
+        [step1Button setTitle:@"下一步" forState:UIControlStateNormal];
+    }
+    
     [step1Button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     step1Button.backgroundColor = [UIColor clearColor];
     [step1Button addTarget:self action:@selector(getVerCodeButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -247,26 +244,37 @@ BOOL validateMobile(NSString* mobile) {
         [self showAlertViewWithTitle:@"提示" message:@"请输入正确的手机号" buttonTitle:@"确定"];
         return;
     }
+    if ([[TempData sharedInstance] registerNeedMsg]) {
+        [self getVerificationCode];
+    }else{
+        m_step1Scroll.hidden = YES;
+        m_step1Scroll_verCode.hidden = YES;
+        m_step2Scroll.hidden = NO;
+        m_topImage.image = KUIImage(@"register_step_2");
+        m_titleLabel.text = @"绑定角色";
 
-    
+    }
+}
+- (void)getVerificationCode
+{
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
     [params setObject:m_phoneNumText.text forKey:@"phoneNum"];
     [params setObject:@"register" forKey:@"type"];
-
+    
     NSMutableDictionary* body = [[NSMutableDictionary alloc]init];
     [body addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
     [body setObject:params forKey:@"params"];
     [body setObject:@"112" forKey:@"method"];
-
+    
     hud.labelText = @"获取中...";
     [hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:body TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         [hud hide:YES];
-    
+        
         m_step1Scroll.hidden = YES;
         m_step1Scroll_verCode.hidden = NO;
-    
+        
         UILabel* topLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 300, 50)];
         topLabel.numberOfLines = 2;
         topLabel.font = [UIFont boldSystemFontOfSize:13.0];
@@ -274,7 +282,6 @@ BOOL validateMobile(NSString* mobile) {
         topLabel.text = [NSString stringWithFormat:@"验证码已发送至手机号：%@，请注意查收！", m_phoneNumText.text];
         topLabel.backgroundColor = [UIColor clearColor];
         [m_step1Scroll_verCode addSubview:topLabel];
-    
         [self startRefreshTime];
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {

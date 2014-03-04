@@ -18,6 +18,7 @@
 #import "Custom_tabbar.h"
 
 #import "LocationManager.h"
+#import "TempData.h"
 
 
 #define kStartViewShowTime  (1.0f) //开机页面 显示时长
@@ -126,7 +127,7 @@
 -(void)openSuccessWithInfo:(NSDictionary *)dict From:(NSString *)where
 {
 //    NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
-    
+    [[TempData sharedInstance] setRegisterNeedMsg:[KISDictionaryHaveKey(dict, @"registerNeedMsg") doubleValue]];
     if ([KISDictionaryHaveKey(dict, @"clientUpdate") doubleValue]) {
         [[NSUserDefaults standardUserDefaults] setObject:KISDictionaryHaveKey(dict, @"clientUpdateUrl") forKey:@"IOSURL"];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -138,28 +139,28 @@
     {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"IOSURL"];
     }
-        NSMutableDictionary* openData = [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData] ? [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData] : [NSMutableDictionary dictionaryWithCapacity:1];
-        if ([KISDictionaryHaveKey(dict, @"gamelist_update") boolValue]) {
-            [openData setObject:KISDictionaryHaveKey(dict, @"gamelist") forKey:@"gamelist"];
-            [openData setObject:KISDictionaryHaveKey(dict, @"gamelist_millis") forKey:@"gamelist_millis"];
-        }
-        if ([KISDictionaryHaveKey(dict, @"wow_characterclasses_update") boolValue]) {
-            [openData setObject:KISDictionaryHaveKey(dict, @"wow_characterclasses") forKey:@"wow_characterclasses"];
-            [openData setObject:KISDictionaryHaveKey(dict, @"wow_characterclasses_millis") forKey:@"wow_characterclasses_millis"];
-        }
-        if ([KISDictionaryHaveKey(dict, @"wow_realms_update") boolValue]) {
-            [openData setObject:KISDictionaryHaveKey(dict, @"wow_realms") forKey:@"wow_realms"];
-            [openData setObject:KISDictionaryHaveKey(dict, @"wow_realms_millis") forKey:@"wow_realms_millis"];
-        }
-        [[NSUserDefaults standardUserDefaults] setObject:openData forKey:kOpenData];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        if ([KISDictionaryHaveKey(openData, @"wow_realms") isKindOfClass:[NSDictionary class]]) {//注册服务器数据
-            [[GameCommon shareGameCommon].wow_realms addEntriesFromDictionary:KISDictionaryHaveKey(openData, @"wow_realms")];
-        }
-        if ([KISDictionaryHaveKey(openData, @"wow_characterclasses") isKindOfClass:[NSArray class]]) {
-            [[GameCommon shareGameCommon].wow_clazzs addObjectsFromArray:KISDictionaryHaveKey(openData, @"wow_characterclasses")];
-        }
+    NSMutableDictionary* openData = [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData] ? [[NSUserDefaults standardUserDefaults] objectForKey:kOpenData] : [NSMutableDictionary dictionaryWithCapacity:1];
+    if ([KISDictionaryHaveKey(dict, @"gamelist_update") boolValue]) {
+        [openData setObject:KISDictionaryHaveKey(dict, @"gamelist") forKey:@"gamelist"];
+        [openData setObject:KISDictionaryHaveKey(dict, @"gamelist_millis") forKey:@"gamelist_millis"];
+    }
+    if ([KISDictionaryHaveKey(dict, @"wow_characterclasses_update") boolValue]) {
+        [openData setObject:KISDictionaryHaveKey(dict, @"wow_characterclasses") forKey:@"wow_characterclasses"];
+        [openData setObject:KISDictionaryHaveKey(dict, @"wow_characterclasses_millis") forKey:@"wow_characterclasses_millis"];
+    }
+    if ([KISDictionaryHaveKey(dict, @"wow_realms_update") boolValue]) {
+        [openData setObject:KISDictionaryHaveKey(dict, @"wow_realms") forKey:@"wow_realms"];
+        [openData setObject:KISDictionaryHaveKey(dict, @"wow_realms_millis") forKey:@"wow_realms_millis"];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:openData forKey:kOpenData];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    if ([KISDictionaryHaveKey(openData, @"wow_realms") isKindOfClass:[NSDictionary class]]) {//注册服务器数据
+        [[GameCommon shareGameCommon].wow_realms addEntriesFromDictionary:KISDictionaryHaveKey(openData, @"wow_realms")];
+    }
+    if ([KISDictionaryHaveKey(openData, @"wow_characterclasses") isKindOfClass:[NSArray class]]) {
+        [[GameCommon shareGameCommon].wow_clazzs addObjectsFromArray:KISDictionaryHaveKey(openData, @"wow_characterclasses")];
+    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
