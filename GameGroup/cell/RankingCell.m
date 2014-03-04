@@ -23,10 +23,6 @@
         self.NumLabel.layer.cornerRadius = 6.0;
         self.NumLabel.layer.borderWidth = 0.1;
         
-        int i = [self.NumLabel.text intValue];
-        if (i>99) {
-            self.NumLabel.font = [UIFont systemFontOfSize:15];
-        }
         self.NumLabel.font = [UIFont boldSystemFontOfSize:18];
         self.NumLabel.layer.borderColor = [[UIColor blackColor] CGColor];
 
@@ -35,7 +31,7 @@
         [self addSubview:self.NumLabel];
         self.titleImageView = [[EGOImageView alloc]initWithFrame:CGRectMake(50, 10, 50, 50)];
         self.titleImageView.layer.masksToBounds = YES;
-        self.titleImageView.layer.cornerRadius = 6.0;
+        self.titleImageView.layer.cornerRadius = 25;
         self.titleImageView.layer.borderWidth = 0.1;
         self.titleImageView.layer.borderColor = [[UIColor blackColor] CGColor];
 

@@ -326,13 +326,13 @@
     pageControl.currentPage = self.showIndex;
     [upScroll addSubview:pageControl];
     
-    sortButton = [CommonControlOrView setButtonWithFrame:CGRectMake(0, 0, 65, 65) title:@"" fontSize:nil textColor:nil bgImage:KUIImage(@"sort_button_normal") HighImage:KUIImage(@"sort_button_click") selectImage:nil];
-    sortButton.center = CGPointMake(upScroll.contentOffset.x + kScreenHeigth - 65/2, kScreenWidth - 40);
-    [sortButton addTarget:self action:@selector(sortButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+//    sortButton = [CommonControlOrView setButtonWithFrame:CGRectMake(0, 0, 65, 65) title:@"" fontSize:nil textColor:nil bgImage:KUIImage(@"sort_button_normal") HighImage:KUIImage(@"sort_button_click") selectImage:nil];
+//    sortButton.center = CGPointMake(upScroll.contentOffset.x + kScreenHeigth - 65/2, kScreenWidth - 40);
+//    [sortButton addTarget:self action:@selector(sortButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [upScroll addSubview:sortButton];
     
-    NSDictionary* tempDic = KISDictionaryHaveKey([self.titleObjArray objectAtIndex:self.showIndex], @"titleObj");
-    sortButton.hidden = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"rank")] isEqualToString:@"1"] ? NO : YES;
+  //  NSDictionary* tempDic = KISDictionaryHaveKey([self.titleObjArray objectAtIndex:self.showIndex], @"titleObj");
+  //  sortButton.hidden = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"rank")] isEqualToString:@"1"] ? NO : YES;
     
     if (self.isFriendTitle) {
         pageControl.hidden = YES;
@@ -846,7 +846,7 @@
     }
 }
 
-- (void)PullUpStartRefresh
+- (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
 {
     NSLog(@"start");
     m_lastPageIndex ++;

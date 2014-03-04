@@ -12,7 +12,8 @@
 {
     NSInteger m_pageNum;
     NSInteger m_typeNum;
-    
+    UILabel         * unlessLabel;
+
 }
 - (id)initWithFrame:(CGRect)frame
 {
@@ -50,11 +51,16 @@
         self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.certificationImage];
         
-        
+        unlessLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 306, 320, 55)];
+        unlessLabel.text = @"正在向英雄榜获取数据中...";
+        unlessLabel.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:unlessLabel];
+
         self.listScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 236, 320, 300)];
         self.listScrollView.pagingEnabled = YES;
         self.listScrollView.contentOffset = CGPointMake(m_pageNum*self.listScrollView.bounds.size.width, 0);
         self.listScrollView.delegate = self;
+        self.listScrollView.backgroundColor = [UIColor clearColor];
         self.listScrollView.showsHorizontalScrollIndicator =NO;
 
         [self addSubview:self.listScrollView];
@@ -63,7 +69,7 @@
         self.reloadingBtn = [[UIButton alloc]init];
         self.reloadingBtn.frame = CGRectMake(10, 545, 300, 44);
         [self.reloadingBtn setBackgroundImage:KUIImage(@"btn_updata_normol") forState:UIControlStateNormal];
-        [self.reloadingBtn setBackgroundImage:KUIImage(@"btn_updata_click") forState:UIControlStateHighlighted];
+        [self.reloadingBtn setBackgroundImage:KUIImage(@"btn_updata_click") forState:UIControlStateSelected];
         
         NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"WX_reloadBtnTitle_wx"];
         if (str ==nil) {
@@ -155,11 +161,11 @@
     [self.titleView addSubview:self.levelLabel];
 
     //装等
-    self.itemlevelView = [[UILabel alloc]initWithFrame:CGRectMake(254, 28, 80, 30)];
+    self.itemlevelView = [[UILabel alloc]initWithFrame:CGRectMake(230, 28, 90, 30)];
   //  self.itemlevelView.text = @"576/576";
     self.backgroundColor = [UIColor clearColor];
     self.itemlevelView.textColor = UIColorFromRGBA(0xe3e3e3, 1);
-    self.itemlevelView.font = [UIFont boldSystemFontOfSize:16];
+    self.itemlevelView.font = [UIFont fontWithName:@"DigifaceWide" size:16];
     [self.titleView addSubview:self.itemlevelView];
 
     
