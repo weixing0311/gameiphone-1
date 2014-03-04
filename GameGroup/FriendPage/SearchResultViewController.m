@@ -280,7 +280,7 @@
     }
 }
 //上拉加载
-- (void)PullUpStartRefresh
+- (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
 {
     NSLog(@"start");
     [self getNearByDataByNet];

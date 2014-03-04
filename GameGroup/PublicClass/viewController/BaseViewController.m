@@ -30,12 +30,24 @@
 {
     [super viewDidLoad];
     
+    //添加捏合手势
+    if (self.navigationController.viewControllers.count>=6) {
+        [self.view addGestureRecognizer:[[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(ceshi)]];
+
+    }
+    
+    
+    
 //    self.view.backgroundColor = [UIColor whiteColor];
     self.view.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
 
     startX = KISHighVersion_7 ? 64 : 44;
 }
 
+-(void)ceshi
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 - (void)setTopViewWithTitle:(NSString*)titleStr withBackButton:(BOOL)hasBacButton
 {
     UIImageView* topImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, KISHighVersion_7 ? 64 : 44)];

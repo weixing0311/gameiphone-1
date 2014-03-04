@@ -118,7 +118,7 @@
     
     // Refresh action!
 //    [[NSNotificationCenter defaultCenter]postNotificationName:@"startRefresh" object:nil];
-    [self.pullUpDelegate PullUpStartRefresh];
+    [self.pullUpDelegate PullUpStartRefresh:self];
 }
 
 - (void)stopLoading:(BOOL)isHidden

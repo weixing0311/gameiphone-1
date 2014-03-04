@@ -1084,7 +1084,7 @@
     [slimeView_fans scrollViewDidEndDraging];
 }
 
-- (void)PullUpStartRefresh
+- (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
 {
     NSLog(@"start");
   

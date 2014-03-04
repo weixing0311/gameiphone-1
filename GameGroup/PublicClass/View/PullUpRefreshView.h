@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class PullUpRefreshView;
 #define REFRESH_HEADER_HEIGHT 52.0f
 
 @protocol PullUpDelegate <NSObject>
 
-- (void)PullUpStartRefresh;
+- (void)PullUpStartRefresh:(PullUpRefreshView*)refreshView;
 
 @end
 

@@ -32,6 +32,8 @@
     NSString           *m_characterId;
     NSString           *m_zhiyeId;
     BOOL            isInTheQueue;//获取刷新数据队列中
+    
+    BOOL            isGoToNextPage;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -48,7 +50,8 @@
 {
     [super viewWillAppear:animated];
     
-    [self getUserInfoByNet];
+    
+    
     
 }
 - (void)viewDidLoad
@@ -56,6 +59,9 @@
     [super viewDidLoad];
     
     isInTheQueue =NO;
+    isGoToNextPage = YES;
+    [self getUserInfoByNet];
+    
     
     UIImageView* topImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, KISHighVersion_7 ? 64 : 44)];
     topImageView.image = KUIImage(@"nav_bg");
@@ -91,10 +97,16 @@
     
     startX = KISHighVersion_7 ? 64 : 44;
     
+
+    
+    
     m_charaDetailsView =[[CharacterDetailsView alloc]initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height - startX)];
+
     m_charaDetailsView.contentSize = CGSizeMake(320, 610);
     //m_charaDetailsView.bounces = NO;
     m_charaDetailsView.myCharaterDelegate = self;
+    
+    
     if (self.myViewType ==CHARA_INFO_MYSELF) {
         [m_charaDetailsView comeFromMy];
     }else if(self.myViewType ==CHARA_INFO_PERSON){
@@ -102,6 +114,9 @@
     }
     
     [self.view addSubview:m_charaDetailsView];
+    
+    
+
     
     [self buildScrollView];//创建下面的表格
     
@@ -115,15 +130,16 @@
     //PVE战斗力  荣誉击杀数  装备等级 成就点数  PVP竞技场）
     titleArray = [NSMutableArray arrayWithObjects:@"PVE战斗力",@"荣誉击杀",@"装备等级",@"成就点数",@"PVP竞技场", nil];
     
-    hud = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:hud];
+//    hud = [[MBProgressHUD alloc] initWithView:m_charaDetailsView];
+//    [self.view addSubview:hud];
 
-    hud1 =[[MBProgressHUD alloc]initWithView:self.view];
+    hud1 =[[MBProgressHUD alloc]initWithView:m_charaDetailsView];
     [self.view addSubview:hud1];
 }
 
 -(void)buildScrollView
 {
+    
     
     if (self.myViewType ==CHARA_INFO_MYSELF) {
         m_charaDetailsView.isComeTo = YES;
@@ -133,7 +149,6 @@
         m_contentTableView.delegate = self;
         m_contentTableView.bounces = NO;
         m_contentTableView.rowHeight = 55;
-        
         
         m_countryTableView = [[UITableView alloc] initWithFrame:CGRectMake(640, 0, 320, 300) style:UITableViewStylePlain];
         [m_charaDetailsView.listScrollView addSubview:m_countryTableView];
@@ -148,7 +163,6 @@
         m_reamlTableView.delegate = self;
         m_reamlTableView.bounces = NO;
         m_reamlTableView.rowHeight = 55;
-        
         
     }else if(self.myViewType ==CHARA_INFO_PERSON){
         m_charaDetailsView.isComeTo = NO;
@@ -175,14 +189,20 @@
         m_reamlTableView.delegate = self;
         m_reamlTableView.bounces = NO;
         m_reamlTableView.rowHeight = 60;
+     
+        
         
     }
+    
+    m_contentTableView.hidden =YES;
+    m_reamlTableView.hidden = YES;
+    m_countryTableView.hidden =YES;
 }
 
 //获取网络数据
 - (void)getUserInfoByNet
 {
-    hud.labelText = @"正拼命从英雄榜获取中...";
+    hud.labelText = @"读取中...";
     
     
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
@@ -196,10 +216,13 @@
     [postDict setObject:@"146" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
-    [hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+        m_contentTableView.hidden =NO;
+        m_reamlTableView.hidden = NO;
+        m_countryTableView.hidden =NO;
+
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
+            
             m_charaInfo = [[CharaInfo alloc] initWithCharaInfo:responseObject];
             m_charaDetailsView.NickNameLabel.text = m_charaInfo.roleNickName;
             m_charaDetailsView.guildLabel.text =[NSString stringWithFormat:@"<%@>", m_charaInfo.guild];
@@ -225,7 +248,7 @@
                        m_charaDetailsView.levelLabel.text.length*9,
                        25);
             NSLog(@"长度%u",m_charaDetailsView.levelLabel.text.length*12);
-          //  m_charaDetailsView.levelLabel.center = CGPointMake(294, 8);
+            
             
             m_charaDetailsView.itemlevelView.text = [NSString stringWithFormat:@"%@/%@",m_charaInfo.itemlevel,m_charaInfo.itemlevelequipped] ;//
             m_charaDetailsView.clazzImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%@",m_charaInfo.professionalId]];
@@ -268,10 +291,6 @@
 //队列
 -(void)getUserLineInfoByNet
 {
-//    hud = [[MBProgressHUD alloc] initWithView:self.view];
-//    [self.view addSubview:hud];
-//    hud.labelText = @"正拼命从英雄榜获取中...";
-//    
     
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
@@ -287,14 +306,14 @@
     //[hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        m_charaDetailsView.reloadingBtn.enabled =YES;
+        m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
         NSLog(@"res%@",responseObject);
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"ok"]) {
             
             [self reLoadingUserInfoFromNet];
         }
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"busy"]) {
-            m_charaDetailsView.reloadingBtn.enabled =YES;
+            m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
             KISDictionaryHaveKey(responseObject, @"time") ;
             hud1.labelText = [NSString stringWithFormat:@"进入更新队列，目前队列位置：%d，预计更新时间：%@",
                               [KISDictionaryHaveKey(responseObject, @"index") intValue],[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"time") ]]];
@@ -304,7 +323,7 @@
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
-        m_charaDetailsView.reloadingBtn.enabled =YES;
+        m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
 
         [hud hide:YES];
         if ([error isKindOfClass:[NSDictionary class]]) {
@@ -324,7 +343,7 @@
 //    [self.view addSubview:hud];
     hud.labelText = @"正拼命从英雄榜获取中...";
     
-    m_charaDetailsView.reloadingBtn.enabled =NO;
+    m_charaDetailsView.reloadingBtn.userInteractionEnabled =NO;
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
@@ -338,7 +357,7 @@
     
     [hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        m_charaDetailsView.reloadingBtn.enabled =YES;
+        m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
             
@@ -356,7 +375,7 @@
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
-        m_charaDetailsView.reloadingBtn.enabled =YES;
+        m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
 
         [hud hide:YES];
         if ([error isKindOfClass:[NSDictionary class]]) {
@@ -421,8 +440,8 @@
     }
     if (tableView ==m_reamlTableView) {
         cell.CountLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.thirdValueArray objectAtIndex:indexPath.row]];
-        cell.rankingLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.thirdRankArray objectAtIndex:indexPath.row]];
         
+        cell.rankingLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.thirdRankArray objectAtIndex:indexPath.row]];
         NSString *str =[m_charaInfo.firstCompArray objectAtIndex:indexPath.row];
         if (str==0) {
             cell.upDowmImgView.image = KUIImage(@"die");
@@ -432,71 +451,102 @@
         
     }
     
+    if ([cell.rankingLabel.text isEqualToString:@"0"]) {
+        cell.rankingLabel.text =@"--";
+        cell.upDowmImgView.hidden = YES;
+    }
+
+    
+    
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    //    TestListViewController *test = [[TestListViewController alloc]init];
-    //    [self.navigationController pushViewController:test animated:YES];
     
+    
+    NSString *alertTitle =nil;
+    alertTitle =[titleArray objectAtIndex:indexPath.row];
+
     RankingViewController *ranking = [[RankingViewController alloc]init] ;
-    ranking.characterid =m_characterId;
-    ranking.custType = m_zhiyeId;
-    ranking.server = m_serverStr;
-    if ([[m_charaInfo.secondRankArray objectAtIndex:indexPath.row]intValue] <100) {
-        ranking.pageCount = -1;
-    }
-    else{
-        ranking.pageCount = 0;
-    }
-    ranking.characterName =m_charaInfo.roleNickName;
-    ranking. titleOfRanking = [titleArray objectAtIndex:indexPath.row];
-    NSArray *array = [m_charaInfo.friendOfRanking allKeys];
-    NSLog(@"array%@",array);
-    /*
-     pvpScore,
-     pveScore,
-     itemlevel,
-     totalHonorableKills,
-     achievementPoints
-     */
+    
     if (tableView ==m_contentTableView) {
         ranking.cRankvaltype = @"1" ;
+        NSInteger i =[[m_charaInfo.firstRankArray objectAtIndex:indexPath.row]intValue];
+        if (i==0) {
+            isGoToNextPage = NO;
+        }
         
     }
     if (tableView ==m_countryTableView) {
         ranking.cRankvaltype = @"3" ;
+        NSInteger i =[[m_charaInfo.secondRankArray objectAtIndex:indexPath.row]intValue];
+        if (i==0) {
+            isGoToNextPage = NO;
+        }
+
     }
     if (tableView ==m_reamlTableView) {
         ranking.cRankvaltype = @"2" ;
+        NSInteger i =[[m_charaInfo.thirdRankArray objectAtIndex:indexPath.row]intValue];
+        if (i==0) {
+            isGoToNextPage = NO;
+        }
+
+    }
+
+    if (isGoToNextPage ==YES) {
+        ranking.characterid =m_characterId;
+        ranking.custType = m_zhiyeId;
+        ranking.server = m_serverStr;
+        
+        ranking.pageCount1 = -1;
+        ranking.pageCount2 = -1;
+        ranking.pageCount3 = -1;
+        ranking.characterName =m_charaInfo.roleNickName;
+        ranking. titleOfRanking = [titleArray objectAtIndex:indexPath.row];
+        NSArray *array = [m_charaInfo.friendOfRanking allKeys];
+        NSLog(@"array%@",array);
+        /*
+         pvpScore,
+         pveScore,
+         itemlevel,
+         totalHonorableKills,
+         achievementPoints
+         */
+        
+        switch (indexPath.row) {
+            case 0:
+                ranking.dRankvaltype = @"pveScore";
+                break;
+            case 1:
+                ranking.dRankvaltype = @"totalHonorableKills";
+                break;
+            case 2:
+                ranking.dRankvaltype = @"itemlevel";
+                break;
+            case 3:
+                ranking.dRankvaltype = @"achievementPoints";
+                break;
+            case 4:
+                ranking.dRankvaltype = @"pvpScore";
+                break;
+                
+            default:
+                break;
+        }
+        
+        ranking.COME_FROM =[NSString stringWithFormat:@"%u",self.myViewType];
+        NSLog(@"COME_FROM%@",ranking.COME_FROM);
+        [self.navigationController pushViewController:ranking animated:YES];
+
+    }else{
+        
+        [self showAlertViewWithTitle:@"提示" message:[NSString stringWithFormat:@"该角色尚未进入“%@”排行",alertTitle] buttonTitle:@"确定"];
+        isGoToNextPage =YES;
     }
     
-    switch (indexPath.row) {
-        case 0:
-            ranking.dRankvaltype = @"pveScore";
-            break;
-        case 1:
-            ranking.dRankvaltype = @"totalHonorableKills";
-            break;
-        case 2:
-            ranking.dRankvaltype = @"itemlevel";
-            break;
-        case 3:
-            ranking.dRankvaltype = @"achievementPoints";
-            break;
-        case 4:
-            ranking.dRankvaltype = @"pvpScore";
-            break;
-            
-        default:
-            break;
-    }
-    
-    ranking.COME_FROM =[NSString stringWithFormat:@"%u",self.myViewType];
-    NSLog(@"COME_FROM%@",ranking.COME_FROM);
-    [self.navigationController pushViewController:ranking animated:YES];
     
 }
 
@@ -518,7 +568,7 @@
 }
 - (void)reLoadingList:(CharacterDetailsView *)characterdetailsView
 {
-    m_charaDetailsView.reloadingBtn.enabled =NO;
+    m_charaDetailsView.reloadingBtn.userInteractionEnabled =NO;
         [self getUserLineInfoByNet];
         NSLog(@"刷新数据");
     

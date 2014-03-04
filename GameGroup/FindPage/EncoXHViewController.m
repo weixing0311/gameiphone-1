@@ -534,7 +534,7 @@
     }
     else{
     
-    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:@"运气好背奥，什么人都没遇见" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"发现一只神明!" message:@"神明的世界你无法窥伺" delegate:nil cancelButtonTitle:@"放弃" otherButtonTitles: nil];
     [alert show];
     }
 }

@@ -76,13 +76,13 @@
     [self.view addSubview:m_myScrollView];
     m_myScrollView.backgroundColor = [UIColor clearColor];
     
-    if (self.hostInfo) {//有值 查找用户
+    if (self.hostInfo!=NULL) {//有值 查找用户
         [self buildMainView];
         [self setBottomView];
         
-        hud = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:hud];
-        hud.labelText = @"请求中...";
+//        hud = [[MBProgressHUD alloc] initWithView:self.view];
+//        [self.view addSubview:hud];
+//        hud.labelText = @"请求中...";
     }
     else//没有详情 请求
     {

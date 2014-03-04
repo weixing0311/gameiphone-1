@@ -475,7 +475,7 @@
     }
 }
 
-- (void)PullUpStartRefresh
+- (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
 {    
     [self getDataByNet];
 }

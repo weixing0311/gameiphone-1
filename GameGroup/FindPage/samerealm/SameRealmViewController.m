@@ -474,7 +474,7 @@
     }
 }
 
-- (void)PullUpStartRefresh
+- (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
 {
     NSLog(@"start");
     if(m_currentPage < m_totalPage)//从0开始记录页码
