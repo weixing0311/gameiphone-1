@@ -9,6 +9,7 @@
 #import "SearchPersonViewController.h"
 #import "PersonDetailViewController.h"
 #import "SearchResultViewController.h"
+#import "TestViewController.h"
 @interface SearchPersonViewController ()
 {
     UITextField * searchContent;
@@ -355,7 +356,9 @@
             [self showAlertViewWithTitle:@"提示" message:@"您不能对自己进行搜索！" buttonTitle:@"确定"];
             return;
         }
-        PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
+//        PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
+         TestViewController* VC = [[TestViewController alloc] init];
+        
         VC.userId = KISDictionaryHaveKey(recDict, @"userid");
         VC.nickName = KISDictionaryHaveKey(recDict, @"nickname");
         HostInfo* hostInfo = [[HostInfo alloc] initWithHostInfo:responseObject];

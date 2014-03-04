@@ -156,7 +156,7 @@
     [shareButton addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:shareButton];
 
-    UILabel *lb1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 100, 320, 50)];
+    UILabel *lb1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 170, 320, 50)];
     lb1.text = @"正在向英雄榜请求数据...";
     lb1.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:lb1];
@@ -181,8 +181,8 @@
     m_backgroundScroll.showsVerticalScrollIndicator = NO;
     m_backgroundScroll.backgroundColor = [UIColor clearColor];
     [self.view addSubview:m_backgroundScroll];
-    
-    if (self.COME_FROM ==0) {
+    NSLog(@"self.come-form%@",self.COME_FROM);
+    if ([self.COME_FROM isEqualToString:@"0"]) {
         if ([self.cRankvaltype isEqualToString:@"2"]) {
             m_scroll_page=0;
         }
@@ -379,26 +379,22 @@
         }else {
             cell.backgroundColor =[UIColor whiteColor];
         }
-        
-        
-        //cell.titleImageView.image = KUIImage(@"ceshi.jpg");
-        cell.titleImageView.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-        cell.titleImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(dic, @"img")]];
+        cell.titleImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%d",[KISDictionaryHaveKey(dic,@"characterclassid")intValue]]];
         
         cell.NumLabel.text = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"rank")];
         
         NSString *str =KISDictionaryHaveKey(dic, @"nickname");
-        if (str==nil) {
+        if ([str isEqualToString:@" "]) {
+            
             cell.titleLabel.frame = CGRectMake(110, 0, 150, 70);
         }
-        if (str ==NULL) {
-            NSLog(@"测试1");
-        }
-        if ([str isEqualToString:@""]) {
-            NSLog(@"测试2");
-        }
-        if ([str isEqualToString:@" "]) {
-            NSLog(@"测试3");
+        
+        if ([KISDictionaryHaveKey(dic, @"gender")isEqualToString:@"1"]) {
+            cell.sexLabel.text = @"♀";
+            cell.sexLabel.textColor = kColorWithRGB(238, 100, 196, 1.0);
+        }else{
+           cell. sexLabel.text = @"♂";
+           cell. sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
         }
 
         
@@ -435,15 +431,17 @@
         }
         
         
-        //cell.titleImageView.image = KUIImage(@"ceshi.jpg");
-        cell.titleImageView.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-        cell.titleImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(dic, @"img")]];
+        
+        cell.titleImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%d",[KISDictionaryHaveKey(dic,@"characterclassid")intValue]]];
         
         cell.NumLabel.text = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"rank")];
         
         NSString *str =KISDictionaryHaveKey(dic, @"nickname");
-        if (str==nil) {
+        if ([str isEqualToString:@" "]) {
+            
             cell.titleLabel.frame = CGRectMake(110, 0, 150, 70);
+        }else{
+            cell.titleLabel.frame = CGRectMake(110, 10, 150, 18);
         }
 
         
@@ -480,16 +478,17 @@
         }
         
         
-        //cell.titleImageView.image = KUIImage(@"ceshi.jpg");
-        cell.titleImageView.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-        cell.titleImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(dic, @"img")]];
         
+        cell.titleImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%d",[KISDictionaryHaveKey(dic,@"characterclassid")intValue]]];
         cell.NumLabel.text = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"rank")];
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"charactername");
         
         NSString *str =KISDictionaryHaveKey(dic, @"nickname");
-        if (str==nil) {
+        if ([str isEqualToString:@" "]) {
+            
             cell.titleLabel.frame = CGRectMake(110, 0, 150, 70);
+        }else{
+            cell.titleLabel.frame = CGRectMake(110, 10, 150, 18);
         }
 
         cell.serverLabel.text = KISDictionaryHaveKey(dic, @"nickname");
@@ -696,15 +695,17 @@
 -(void)loadingFriendInfo:(UIButton *)sender
 {
     NSLog(@"---------->%hhd",m_i);
+    
+    
     if (m_i==YES) {
-        if ([[NSUserDefaults standardUserDefaults]objectForKey:@"friendWXjs"]==NULL) {
+       // if ([[NSUserDefaults standardUserDefaults]objectForKey:@"friendWXjs"]==NULL) {
             [self getSortDataByNet1];
-        }
-        else{
-            [m_cArray removeAllObjects];
-            [m_cArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"friendWXjs"]];
-            [self getSortDataByNet1];
-        }
+      //  }
+      //  else{
+      //      [m_cArray removeAllObjects];
+       //     [m_cArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"friendWXjs"]];
+       //     [self getSortDataByNet1];
+       // }
         m_i =NO;
     }
     m_friendBtn.selected = YES;
@@ -724,41 +725,57 @@
 -(void)loadingServerInfo:(UIButton *)sender
 {
     if (m_j==YES) {
-        if ([[NSUserDefaults standardUserDefaults]objectForKey:@"serverWXof"]==NULL) {
+     //   if ([[NSUserDefaults standardUserDefaults]objectForKey:@"serverWXof"]==NULL) {
              self.pageCount2 = -1;
+     //       [self getSortDataByNet2];
+     //   }else{
+     //       [m_serverArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"serverWXof"]];
             [self getSortDataByNet2];
-        }else{
-            [m_serverArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"serverWXof"]];
-            [self getSortDataByNet2];
-        }
+    //    }
         m_j =NO;
     }else{
         
     }
-    m_friendBtn.selected = NO;
-    m_countryBtn.selected = NO;
-    m_serverBtn.selected = YES;
     
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.4];
-    m_backgroundScroll.contentOffset = CGPointMake(320, 0);
+    if ([self.COME_FROM isEqualToString:@"1"]) {
+        m_friendBtn.selected = NO;
+        m_countryBtn.selected = NO;
+        m_serverBtn.selected = YES;
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.4];
+        m_backgroundScroll.contentOffset = CGPointMake(320, 0);
+        
+        m_underListImageView.frame = CGRectMake(m_serverBtn.frame.origin.x, 41, m_serverBtn.frame.size.width, 4);
+        [UIView commitAnimations];
 
-    m_underListImageView.frame = CGRectMake(m_serverBtn.frame.origin.x, 41, m_serverBtn.frame.size.width, 4);
-    [UIView commitAnimations];
+    }else{
+        m_countryBtn.selected = NO;
+        m_serverBtn.selected = YES;
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.4];
+        m_backgroundScroll.contentOffset = CGPointMake(0, 0);
+        
+        m_underListImageView.frame = CGRectMake(m_serverBtn.frame.origin.x, 41, m_serverBtn.frame.size.width, 4);
+        [UIView commitAnimations];
+
+    }
 }
 
 
 -(void)loadingCountryInfo:(UIButton *)sender
 {
     if (m_k==YES) {
-        if ([[NSUserDefaults standardUserDefaults]objectForKey:@"countryOFwxxxx"]==NULL) {
+      //  if ([[NSUserDefaults standardUserDefaults]objectForKey:@"countryOFwxxxx"]==NULL) {
             [self getSortDataByNet3];
-        }else{
-            [m_countryArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"countryOFwxxxx"]];
-            [self getSortDataByNet3];
-        }
+     //   }else{
+      //      [m_countryArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"countryOFwxxxx"]];
+     //       [self getSortDataByNet3];
+       // }
         m_k =NO;
     }
+    if ([self.COME_FROM isEqualToString:@"1"]) {
     m_friendBtn.selected = NO;
     m_countryBtn.selected = YES;
     m_serverBtn.selected = NO;
@@ -769,6 +786,20 @@
 
     m_underListImageView.frame = CGRectMake(m_countryBtn.frame.origin.x, 41, m_countryBtn.frame.size.width, 4);
     [UIView commitAnimations];
+    }else
+    {
+        m_friendBtn.selected = NO;
+        m_countryBtn.selected = YES;
+        m_serverBtn.selected = NO;
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.4];
+        m_backgroundScroll.contentOffset = CGPointMake(320, 0);
+        
+        m_underListImageView.frame = CGRectMake(m_countryBtn.frame.origin.x, 41, m_countryBtn.frame.size.width, 4);
+        [UIView commitAnimations];
+
+    }
 }
 
 #pragma mark --网络请求

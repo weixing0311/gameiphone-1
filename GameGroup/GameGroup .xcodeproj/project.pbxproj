@@ -669,6 +669,7 @@
 		84076EDB18B5D67500019462 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84076EDA18B5D67500019462 /* SearchResultViewController.m */; };
 		847DD07918B88DDD00BB0215 /* CharaDaCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 847DD07818B88DDD00BB0215 /* CharaDaCell.m */; };
 		847DD08118B8979500BB0215 /* NewsViewInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 847DD08018B8979500BB0215 /* NewsViewInfo.m */; };
+		84CB793B18C5CF080035CC92 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB793A18C5CF080035CC92 /* TestViewController.m */; };
 		84DB92AB18BB57D7006CB36A /* RankingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DB92AA18BB57D7006CB36A /* RankingViewController.m */; };
 		84DB92AE18BB6912006CB36A /* RankingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DB92AD18BB6912006CB36A /* RankingCell.m */; };
 		84DFB13B18BAF1F100BE6905 /* HUD_isok.png in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB13A18BAF1F100BE6905 /* HUD_isok.png */; };
@@ -1712,6 +1713,8 @@
 		847DD07818B88DDD00BB0215 /* CharaDaCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CharaDaCell.m; sourceTree = "<group>"; };
 		847DD07F18B8979500BB0215 /* NewsViewInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsViewInfo.h; sourceTree = "<group>"; };
 		847DD08018B8979500BB0215 /* NewsViewInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsViewInfo.m; sourceTree = "<group>"; };
+		84CB793918C5CF080035CC92 /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = "<group>"; };
+		84CB793A18C5CF080035CC92 /* TestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestViewController.m; sourceTree = "<group>"; };
 		84DB92A918BB57D7006CB36A /* RankingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingViewController.h; sourceTree = "<group>"; };
 		84DB92AA18BB57D7006CB36A /* RankingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingViewController.m; sourceTree = "<group>"; };
 		84DB92AC18BB6912006CB36A /* RankingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingCell.h; sourceTree = "<group>"; };
@@ -1859,6 +1862,8 @@
 				683FA12E18598F16007B7487 /* AddContactViewController.m */,
 				682F977D185AD47D00068F56 /* PersonDetailViewController.h */,
 				682F977E185AD47D00068F56 /* PersonDetailViewController.m */,
+				84CB793918C5CF080035CC92 /* TestViewController.h */,
+				84CB793A18C5CF080035CC92 /* TestViewController.m */,
 				6850336C185EE1690034C8D6 /* SearchPersonViewController.h */,
 				6850336D185EE1690034C8D6 /* SearchPersonViewController.m */,
 				68167420186163000073E389 /* SetRemarkNameViewController.h */,
@@ -4526,6 +4531,7 @@
 				686CE87618AC70EF00BA2422 /* DSThumbMsgs.m in Sources */,
 				686D2F16184DE33800F6E1BB /* AFHTTPClient.m in Sources */,
 				68A3AA4718640E2B0054D1EC /* FeedBackViewController.m in Sources */,
+				84CB793B18C5CF080035CC92 /* TestViewController.m in Sources */,
 				68CAA78A184DD104007138B1 /* XMPPRoomHybrid.xcdatamodeld in Sources */,
 				6850336E185EE1690034C8D6 /* SearchPersonViewController.m in Sources */,
 				682358D31862D50700982D6C /* MyCharacterCell.m in Sources */,

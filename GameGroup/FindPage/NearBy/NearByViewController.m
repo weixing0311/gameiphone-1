@@ -10,7 +10,7 @@
 #import "PersonTableCell.h"
 #import "PersonDetailViewController.h"
 #import "LocationManager.h"
-
+#import "TestViewController.h"
 @interface NearByViewController ()
 {
     UILabel*            m_titleLabel;
@@ -306,10 +306,15 @@
     
     NSDictionary* recDict = [m_tabelData objectAtIndex:indexPath.row];
     
-    PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
+   // PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
+    TestViewController* VC = [[TestViewController alloc] init];
+
+    
     VC.userId = KISDictionaryHaveKey(recDict, @"id");
     VC.nickName = KISDictionaryHaveKey(recDict, @"nickname");
     VC.isChatPage = NO;
+    VC.sexStr = KISDictionaryHaveKey(recDict, @"sender");
+    VC.ageStr = KISDictionaryHaveKey(recDict, @"age");
     [self.navigationController pushViewController:VC animated:YES];
 }
 #pragma mark  scrollView  delegate

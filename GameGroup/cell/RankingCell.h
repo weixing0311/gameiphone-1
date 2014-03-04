@@ -14,4 +14,5 @@
 @property(nonatomic,strong)UILabel *titleLabel;
 @property(nonatomic,strong)UILabel *serverLabel;
 @property(nonatomic,strong)UILabel *NumLabel;
+@property(nonatomic,strong)UILabel *sexLabel;
 @end
