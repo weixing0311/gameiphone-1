@@ -100,7 +100,12 @@
             return self;
         }
         self.infoDic = userInfo;
-
+        if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfo, @"active")] intValue] == 2) {
+            self.active = YES;
+        }else
+        {
+            self.active = NO;
+        }
         self.superstar = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfo, @"superstar")];
         self.superremark = KISDictionaryHaveKey(userInfo, @"superremark");
         self.updateTime = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfo, @"updateUserLocationDate")];

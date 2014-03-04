@@ -80,7 +80,6 @@
     m_photoWall = [[HGPhotoWall alloc] initWithFrame:CGRectZero];
     m_photoWall.descriptionType = DescriptionTypeImage;
     m_photoWall.useCache = YES;
-//    [m_photoWall setPhotos:[self imageToURL:self.hostInfo.headImgArray]];
     m_photoWall.delegate = self;
     m_photoWall.backgroundColor = kColorWithRGB(105, 105, 105, 1.0);
     m_photoWall.tag =1;
@@ -604,6 +603,7 @@
                 cell.nameLabel.text = @"小伙伴ID";
                 cell.disLabel.text = self.hostInfo.userId;
                 cell.vAuthImg.hidden = YES;
+               
             }
             else{
                 cell.vAuthImg.hidden = YES;
@@ -647,6 +647,11 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.nameLabel.text = @"小伙伴ID";
             cell.disLabel.text = self.hostInfo.userId;
+            NSLog(@"激活状态%@",self.hostInfo.action);
+            if (![self.hostInfo.action boolValue]) {
+                NSLog(@"未激活");
+                //添加一个未激活图片
+            }
         }
         else
         {

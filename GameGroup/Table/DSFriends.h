@@ -2,7 +2,7 @@
 //  DSFriends.h
 //  GameGroup
 //
-//  Created by Shen Yanping on 14-1-8.
+//  Created by wangxr on 14-3-4.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 
 @property (nonatomic, retain) NSString * achievement;
 @property (nonatomic, retain) NSString * achievementLevel;
+@property (nonatomic, retain) NSNumber * action;
 @property (nonatomic, retain) NSString * age;
 @property (nonatomic, retain) NSString * backgroundImg;
 @property (nonatomic, retain) NSString * birthday;

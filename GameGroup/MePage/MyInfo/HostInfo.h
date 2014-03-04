@@ -14,6 +14,7 @@
 @property (strong,nonatomic) NSString * userName;
 @property (strong,nonatomic) NSString * userId;
 @property (strong,nonatomic) NSString * nickName;
+@property (assign,nonatomic) BOOL  active;//激活状态
 @property (strong,nonatomic) NSString * telNumber;
 @property (strong,nonatomic) NSString * gender;
 @property (strong,nonatomic) NSString * age;

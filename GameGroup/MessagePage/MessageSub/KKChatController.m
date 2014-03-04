@@ -15,6 +15,7 @@
 #import "PersonDetailViewController.h"
 #import "KKNewsCell.h"
 #import "OnceDynamicViewController.h"
+#import "ActivateViewController.h"
 
 #ifdef NotUseSimulator
     #import "amrFileCodec.h"
@@ -23,11 +24,13 @@
 #define padding 20
 #define LocalMessage @"localMessage"
 #define NameKeys @"namekeys"
-@interface KKChatController (){
+@interface KKChatController ()<UIAlertViewDelegate>
+{
     
     NSMutableArray *messages;
     UIMenuItem *copyItem;
     UIMenuItem *copyItem3;
+    BOOL myActive;
 }
 
 @end
@@ -72,6 +75,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageAck:) name:kMessageAck object:nil];//消息是否发送成功
     
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]];
+    DSFriends *friend = [DSFriends MR_findFirstWithPredicate:predicate];
+    myActive = [friend.action boolValue];
     postDict = [NSMutableDictionary dictionary];
     canAdd = YES;
     previousTime = 0;
@@ -481,7 +487,7 @@
     }
     else
     {
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"说话时间太短了" delegate:self cancelButtonTitle:@"知道了" otherButtonTitles: nil];
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"说话时间太短了" delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles: nil];
         [alert show];
     }
     [recordAnimationIV stopAnimating];
@@ -790,8 +796,13 @@
 #pragma mark HPExpandingTextView delegate
 - (BOOL)growingTextViewShouldBeginEditing:(HPGrowingTextView *)growingTextView
 {
-    [menu setMenuItems:@[]];
-    return YES;
+    if (myActive) {
+        [menu setMenuItems:@[]];
+        return YES;
+    }
+    UIAlertView * UnActionAlertV = [[UIAlertView alloc]initWithTitle:@"您尚未激活" message:@"未激活用户不能发送聊天消息" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"去激活", nil];
+    [UnActionAlertV show];
+    return NO;
 }
 //改变键盘高度
 - (void)growingTextView:(HPGrowingTextView *)growingTextView willChangeHeight:(float)height
@@ -1391,15 +1402,9 @@
 }
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex==1) {
-        if (alertView.tag==112) {//删除聊天纪录
-//            [DataStoreManager deleteMsgsWithSender:self.chatWithUser Type:COMMONUSER];
-//            messages = [DataStoreManager qureyAllCommonMessages:self.chatWithUser];
-//            [self normalMsgToFinalMsg];
-//            [self.tView reloadData];
-        }
-        else
-            [self sureToTransform:tempDict];
+    if (buttonIndex == 1) {
+        ActivateViewController * actVC = [[ActivateViewController alloc]init];
+        [self.navigationController pushViewController:actVC animated:YES];
     }
 }
 

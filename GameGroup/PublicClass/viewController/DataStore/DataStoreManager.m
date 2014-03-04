@@ -1670,6 +1670,10 @@
     NSString * background = [GameCommon getNewStringWithId:[myInfo objectForKey:@"backgroundImg"]];
     NSString * nickName = [GameCommon getNewStringWithId:[myInfo objectForKey:@"nickname"]];
     NSString * gender = [GameCommon getNewStringWithId:[myInfo objectForKey:@"gender"]];
+    BOOL action =YES;
+    if ([[GameCommon getNewStringWithId:[myInfo objectForKey:@"active"]]intValue] == 1) {
+        action =NO;
+    }
     NSString * headImgID = [GameCommon getNewStringWithId:[myInfo objectForKey:@"img"]];
     NSString * signature = [GameCommon getNewStringWithId:[myInfo objectForKey:@"signature"]];
     
@@ -1712,6 +1716,7 @@
                 dFriend = [DSFriends MR_createInContext:localContext]; 
             dFriend.userName = myUserName;
             dFriend.nickName = nickName?(nickName.length>1?nickName:[nickName stringByAppendingString:@" "]):@"";
+            dFriend.action = [NSNumber numberWithBool:action];
             dFriend.gender = gender?gender:@"";
             dFriend.userId = userId?userId:@"";
             dFriend.headImgID = headImgID?headImgID:@"";

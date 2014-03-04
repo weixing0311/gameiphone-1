@@ -247,12 +247,32 @@ BOOL validateMobile(NSString* mobile) {
     if ([[TempData sharedInstance] registerNeedMsg]) {
         [self getVerificationCode];
     }else{
-        m_step1Scroll.hidden = YES;
-        m_step1Scroll_verCode.hidden = YES;
-        m_step2Scroll.hidden = NO;
-        m_topImage.image = KUIImage(@"register_step_2");
-        m_titleLabel.text = @"绑定角色";
-
+        NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+        [params setObject:m_phoneNumText.text forKey:@"username"];
+        NSMutableDictionary* body = [[NSMutableDictionary alloc]init];
+        [body addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+        [body setObject:params forKey:@"params"];
+        [body setObject:@"105" forKey:@"method"];
+        
+        hud.labelText = @"获取中...";
+        [hud show:YES];
+        [NetManager requestWithURLStr:BaseClientUrl Parameters:body TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [hud hide:YES];
+            m_step1Scroll.hidden = YES;
+            m_step1Scroll_verCode.hidden = YES;
+            m_step2Scroll.hidden = NO;
+            m_topImage.image = KUIImage(@"register_step_2");
+            m_titleLabel.text = @"绑定角色";
+        } failure:^(AFHTTPRequestOperation *operation, id error) {
+            if ([error isKindOfClass:[NSDictionary class]]) {
+                if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+                {
+                    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                    [alert show];
+                }
+            }
+            [hud hide:YES];
+        }];
     }
 }
 - (void)getVerificationCode

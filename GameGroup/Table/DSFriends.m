@@ -2,7 +2,7 @@
 //  DSFriends.m
 //  GameGroup
 //
-//  Created by Shen Yanping on 14-1-8.
+//  Created by wangxr on 14-3-4.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 
 @dynamic achievement;
 @dynamic achievementLevel;
+@dynamic action;
 @dynamic age;
 @dynamic backgroundImg;
 @dynamic birthday;
