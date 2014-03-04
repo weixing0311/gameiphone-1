@@ -164,10 +164,7 @@
     }
     [self.activityView stopAnimating];
 
-//    if (self.kkDelegate && [self.kkDelegate respondsToSelector:@selector(stopActivityWithRow:)]) {
-//        [self.kkDelegate stopActivityWithRow:self.cellRow];
-//    }
-    NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:self.messageuuid,@"src_id",@"0", @"received",[NSString stringWithFormat:@"%d", self.cellRow],@"row",nil];
+    NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:self.messageuuid,@"src_id",@"0", @"received",nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kMessageAck object:nil userInfo:dic];
 }
 

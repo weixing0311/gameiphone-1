@@ -397,7 +397,7 @@
             NSString *title = [[message elementForName:@"payload"] stringValue];
             title = KISDictionaryHaveKey([title JSONValue],@"title");
             NSLog(@"%@",title);
-            [dict setObject:title forKey:@"title"];
+            [dict setObject:title?title:@"" forKey:@"title"];
             
             [self.otherMsgReceiveDelegate otherMessageReceived:dict];
         }

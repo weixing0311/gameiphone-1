@@ -24,7 +24,7 @@
 @property(nonatomic, retain) UIActivityIndicatorView *activityView;
 @property(nonatomic, retain) UIButton* failImage;
 @property(nonatomic, retain) UILabel*  statusLabel;//已读 送达
-@property(nonatomic, assign) NSInteger cellRow;
+//@property(nonatomic, assign) NSInteger cellRow;
 @property(nonatomic, retain) NSString* messageuuid;
 
 - (void)refreshStatusPoint:(CGPoint)point status:(NSString*)status;
