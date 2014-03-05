@@ -64,6 +64,7 @@
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMesgReceived:) name:kNewMessageReceived object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageAck:) name:kMessageAck object:nil];//消息是否发送成功
 
     if (![[DataStoreManager queryMsgRemarkNameForUser:self.chatWithUser] isEqualToString:@""]) {
         self.nickName = [DataStoreManager queryMsgRemarkNameForUser:self.chatWithUser];//刷新别名
@@ -76,7 +77,6 @@
 {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageAck:) name:kMessageAck object:nil];//消息是否发送成功
     
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]];
     DSFriends *friend = [DSFriends MR_findFirstWithPredicate:predicate];
@@ -191,47 +191,6 @@
     titleLabel.textColor=[UIColor whiteColor];
     [self.view addSubview:titleLabel];
 
-    
-    
-  /**************   语音图片等
-    
-    audioBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [audioBtn setFrame:CGRectMake(8, inPutView.frame.size.height-12-27, 25, 27)];
-    [audioBtn setImage:[UIImage imageNamed:@"audioBtn.png"] forState:UIControlStateNormal];
-    [inPutView addSubview:audioBtn];
-    [audioBtn addTarget:self action:@selector(audioBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-    
-    audioRecordBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [audioRecordBtn setFrame:CGRectMake(40, inPutView.frame.size.height-42, 200, 35)];
-    [audioRecordBtn setBackgroundImage:[UIImage imageNamed:@"yanzhengma_normal.png"] forState:UIControlStateNormal];
-    [audioRecordBtn setTitle:@"按住说话" forState:UIControlStateNormal];
-    [inPutView addSubview:audioRecordBtn];
-    audioRecordBtn.hidden = YES;
-    [audioRecordBtn addTarget:self action:@selector(buttonDown) forControlEvents:UIControlEventTouchDown];
-
-    [audioRecordBtn addTarget:self action:@selector(buttonUp) forControlEvents:UIControlEventTouchUpInside];
-    [audioRecordBtn addTarget:self action:@selector(buttonCancel:) forControlEvents:UIControlEventTouchUpOutside];
-    [audioRecordBtn addTarget:self action:@selector(buttonCancel:) forControlEvents:UIControlEventTouchCancel];
-    
-    emojiBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [emojiBtn setFrame:CGRectMake(250, inPutView.frame.size.height-12-27, 25, 27)];
-    [emojiBtn setImage:[UIImage imageNamed:@"emoji.png"] forState:UIControlStateNormal];
-    [inPutView addSubview:emojiBtn];
-    [emojiBtn addTarget:self action:@selector(emojiBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-    
-    picBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [picBtn setFrame:CGRectMake(285, inPutView.frame.size.height-12-27, 25, 27)];
-    [picBtn setImage:[UIImage imageNamed:@"picBtn.png"] forState:UIControlStateNormal];
-    [inPutView addSubview:picBtn];
-    [picBtn addTarget:self action:@selector(picBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-   
-   ********/
-    
-//    senBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [senBtn setFrame:CGRectMake(282, inPutView.frame.size.height-37.5, 28, 27.5)];
-//    [senBtn setImage:[UIImage imageNamed:@"chat_send.png"] forState:UIControlStateNormal];
-//    [inPutView addSubview:senBtn];
-//    [senBtn addTarget:self action:@selector(sendButton:) forControlEvents:UIControlEventTouchUpInside];
 
     float version = [[[UIDevice currentDevice] systemVersion] floatValue];
     if (version >= 5.0) {
@@ -1377,6 +1336,7 @@
 {
     [DataStoreManager blankMsgUnreadCountForUser:self.chatWithUser];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kNewMessageReceived object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kMessageAck object:nil];
 }
 //-(KKAppDelegate *)appDelegate{
 //    
