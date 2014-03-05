@@ -46,8 +46,10 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
 {
     NSString * type = KISDictionaryHaveKey(messageContent, @"msgType");
     type = type?type:@"notype";
+    NSLog(@"%@",type);
     if([type isEqualToString:@"normalchat"])
     {
+        NSLog(@"%@",KISDictionaryHaveKey(messageContent, @"msgId"));
         if ([DataStoreManager savedMsgWithID:KISDictionaryHaveKey(messageContent, @"msgId")]) {
             NSLog(@"消息已存在");
             return;
