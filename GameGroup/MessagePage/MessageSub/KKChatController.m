@@ -958,7 +958,13 @@
     }
     NSLog(@"end");
 }
-
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        ActivateViewController * actVC = [[ActivateViewController alloc]init];
+        [self.navigationController pushViewController:actVC animated:YES];
+    }
+}
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (actionSheet.tag == 124) {
