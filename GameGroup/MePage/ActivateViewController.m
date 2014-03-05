@@ -10,6 +10,7 @@
 #import "ImGrilViewController.h"
 #import "AddCharacterViewController.h"
 #import "MBProgressHUD.h"
+#import "DataStoreManager.h"
 
 @interface ActivateViewController ()
 {
@@ -192,6 +193,7 @@
     [hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:body TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
+        [DataStoreManager reSetMyAction:YES];
         [self showMessageWindowWithContent:@"激活成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"acta" object:nil userInfo:nil];

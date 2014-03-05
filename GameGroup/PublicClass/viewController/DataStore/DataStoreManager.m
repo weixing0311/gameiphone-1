@@ -12,6 +12,14 @@
 @implementation DataStoreManager
 -(void)nothing
 {}
++ (void)reSetMyAction:(BOOL)action
+{
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]];
+    DSFriends *friend = [DSFriends MR_findFirstWithPredicate:predicate];
+    friend.action = [NSNumber numberWithBool:action];
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+}
+
 +(void)setDefaultDataBase:(NSString *)dataBaseName AndDefaultModel:(NSString *)modelName
 {
     [MagicalRecord cleanUp];
