@@ -25,7 +25,6 @@
     CharacterDetailsView * m_charaDetailsView;
     NSMutableArray       * titleImageArray;
     NSArray              * titleArray;
-    MBProgressHUD       *  hud1;
     NSInteger              m_pageNum;
     float startX;
     NSString           *m_serverStr;//储存服务器名称
@@ -130,16 +129,15 @@
     //PVE战斗力  荣誉击杀数  装备等级 成就点数  PVP竞技场）
     titleArray = [NSMutableArray arrayWithObjects:@"PVE战斗力",@"荣誉击杀",@"装备等级",@"成就点数",@"PVP竞技场", nil];
     
-//    hud = [[MBProgressHUD alloc] initWithView:m_charaDetailsView];
-//    [self.view addSubview:hud];
+    hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
 
-    hud1 =[[MBProgressHUD alloc]initWithView:m_charaDetailsView];
-    [self.view addSubview:hud1];
+//    hud1 =[[MBProgressHUD alloc]initWithView:m_charaDetailsView];
+//    [self.view addSubview:hud1];
 }
 
 -(void)buildScrollView
 {
-    
     
     if (self.myViewType ==CHARA_INFO_MYSELF) {
         m_charaDetailsView.isComeTo = YES;
@@ -202,7 +200,6 @@
 //获取网络数据
 - (void)getUserInfoByNet
 {
-    hud.labelText = @"读取中...";
     
     
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
@@ -250,7 +247,7 @@
             NSLog(@"长度%u",m_charaDetailsView.levelLabel.text.length*12);
             
             
-            m_charaDetailsView.itemlevelView.text = [NSString stringWithFormat:@"%@/%@",m_charaInfo.itemlevel,m_charaInfo.itemlevelequipped] ;//
+            m_charaDetailsView.itemlevelView.text = [NSString stringWithFormat:@"%@/%@",m_charaInfo.itemlevelequipped,m_charaInfo.itemlevel] ;//
             m_charaDetailsView.clazzImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%@",m_charaInfo.professionalId]];
             m_charaDetailsView.headerImageView.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
             m_charaDetailsView.headerImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",m_charaInfo.thumbnail]];
@@ -271,11 +268,9 @@
             
             
             
-            [hud hide:YES];
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
-        [hud hide:YES];
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
@@ -312,13 +307,29 @@
             
             [self reLoadingUserInfoFromNet];
         }
+        
+            if ([[responseObject allKeys]containsObject:@"entity"]) {
+                m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
+                m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
+                hud.labelText = @"正拼命从英雄榜获取中...";
+                [hud showAnimated:YES whileExecutingBlock:^{
+                    sleep(2);
+                    hud.labelText = @"获取成功";
+                    sleep(2);
+                }];
+
+            }
+        
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"busy"]) {
             m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
-            KISDictionaryHaveKey(responseObject, @"time") ;
-            hud1.labelText = [NSString stringWithFormat:@"进入更新队列，目前队列位置：%d，预计更新时间：%@",
-                              [KISDictionaryHaveKey(responseObject, @"index") intValue],[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"time") ]]];
-            [hud1 showAnimated:YES whileExecutingBlock:^{
-                sleep(3);
+            //KISDictionaryHaveKey(responseObject, @"time") ;
+            
+            NSString *timeStr =[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"time") ]];
+            NSString *indexStr = KISDictionaryHaveKey(responseObject, @"index");
+            hud.labelText = [NSString stringWithFormat:@"进入更新队列，目前队列位置：%@，预计更新时间：%@",
+                              indexStr,timeStr];
+            [hud showAnimated:YES whileExecutingBlock:^{
+                sleep(5);
             }];
         }
         
@@ -377,7 +388,7 @@
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
 
-        [hud hide:YES];
+      //  [hud hide:YES];
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {

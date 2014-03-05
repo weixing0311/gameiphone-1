@@ -9,6 +9,7 @@
 #import "FriendPageViewController.h"
 #import "AddContactViewController.h"
 #import "PersonDetailViewController.h"
+#import "TestViewController.h"
 //#import "ContactsCell.h"
 #import "PersonTableCell.h"
 
@@ -877,6 +878,7 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     NSDictionary * tempDict;
+    /*
 //    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
 //        switch (m_segmentClickIndex) {
 //            case kSegmentFrinds:
@@ -894,6 +896,7 @@
 //    }
 //    else
 //    {
+    */
         if (tableView == m_myTableView) {
             if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {//按字母排
                  tempDict = [m_friendDict objectForKey:[[[m_sectionArray_friend objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
@@ -940,7 +943,7 @@
     [cell refreshCell];
     return cell;
 }
-
+/*
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     [m_myTableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -999,6 +1002,61 @@
     detailVC.isChatPage = NO;
     [self.navigationController pushViewController:detailVC animated:YES];
 }
+*/
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+    [m_myTableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSDictionary * tempDict;
+    [[Custom_tabbar showTabBar] hideTabBar:YES];
+    // PersonDetailViewController* detailVC = [[PersonDetailViewController alloc] init];
+    TestViewController *detailVC = [[TestViewController alloc]init];
+    switch (m_segmentClickIndex) {
+        case kSegmentFrinds:
+        {
+            if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {//按字母排
+                tempDict = [m_friendDict objectForKey:[[[m_sectionArray_friend objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
+            }
+            else
+                tempDict = [m_otherSortFriendArray objectAtIndex:indexPath.row];
+            detailVC.viewType = VIEW_TYPE_FriendPage1;
+        }  break;
+        case kSegmentAttention:
+        {
+            if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"]) {//按字母排
+                tempDict = [m_attentionDict objectForKey:[[[m_sectionArray_attention objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
+            }
+            else
+                tempDict = [m_otherSortAttentionArray objectAtIndex:indexPath.row];
+            detailVC.viewType = VIEW_TYPE_AttentionPage1;
+        }  break;
+        case kSegmentFans:
+        {
+            tempDict = [m_otherSortFansArray objectAtIndex:indexPath.row];
+            
+            detailVC.viewType = VIEW_TYPE_FansPage1;
+        } break;
+        default:
+            break;
+    }
+    //    }
+    detailVC.achievementStr = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
+    detailVC.achievementColor = [GameCommon getAchievementColorWithLevel:[KISDictionaryHaveKey(tempDict, @"achievementLevel") integerValue]];
+    
+    
+    detailVC.sexStr =  KISDictionaryHaveKey(tempDict, @"sex");
+    detailVC.imgUrl = [BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]];
+    detailVC.ageStr = [GameCommon getNewStringWithId:[tempDict objectForKey:@"age"]];
+    detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
+    detailVC.nickName = KISDictionaryHaveKey(tempDict, @"displayName");
+    detailVC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"updateUserLocationDate")];
+    detailVC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"distance")];
+    detailVC.isChatPage = NO;
+    [self.navigationController pushViewController:detailVC animated:YES];
+}
+
+
+
 
 #pragma mark 索引
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;

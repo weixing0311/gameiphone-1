@@ -3,27 +3,9 @@
 //  GameGroup 
 //
 //  Created by admin on 14-2-27.
-//  Copyright (c) 2014年 Swallow. All rights reserved.
+//  Copyright (c) 2014年 vstar. All rights reserved.
 //
 
-
-/*
- 
- //打招呼  158
- [paramDict setObject:self.gameId forKey:@"gameid"];
- [paramDict setObject:self.characterId forKey:@"characterid"];
- [paramDict setObject:KISDictionaryHaveKey(getDic, @"userid") forKey:@"touserid"];
- [paramDict setObject:KISDictionaryHaveKey(getDic,@"roll") forKey:@"roll"];
- 
- //邂逅  149
- [paramDict setObject:self.gameId forKey:@"gameid"];
- [paramDict setObject:self.characterId forKey:@"characterid"];
-
- 
- //角色列表 125
- [paramDict setObject:[DataStoreManager getMyUserID] forKey:@"userid"];
-
- */
 
 
 #import "EncoXHViewController.h"
@@ -73,20 +55,25 @@
     [super viewWillAppear:animated];
 
     
-    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"CharacterArrayOfAllForYou"]==NULL) {
-        NSLog(@"空走不走");
-        NSMutableDictionary *paramDict = [[NSMutableDictionary alloc]init];
-        [paramDict setObject:[DataStoreManager getMyUserID] forKey:@"userid"];
-        [self getSayHelloForNetWithDictionary:paramDict method:@"125" prompt:@"获取中..." type:3];
-
-    }else{
-    m_characterArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"CharacterArrayOfAllForYou"];
-    }
 
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"CharacterArrayOfAllForYou"]==NULL) {
+    //        NSLog(@"空走不走");
+    NSMutableDictionary *paramDict = [[NSMutableDictionary alloc]init];
+    [paramDict setObject:[DataStoreManager getMyUserID] forKey:@"userid"];
+    [self getSayHelloForNetWithDictionary:paramDict method:@"125" prompt:@"获取中..." type:3];
+    
+    //}else{
+    //  m_characterArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"CharacterArrayOfAllForYou"];
+    //  }
+
+    
+    
+    
      getDic = [[NSDictionary alloc]init];
      m_characterArray = [[NSMutableArray alloc]init];
     
@@ -99,6 +86,7 @@
     [self.view addSubview:backgroundImageView];
     hud = [[MBProgressHUD alloc]initWithView:self.view];
     [self.view addSubview:hud];
+    
     [self buildTableView];
     
 }
@@ -117,13 +105,13 @@
     m_tableView.layer.cornerRadius = 6.0;
     m_tableView.layer.borderWidth = 0;
     m_tableView.layer.borderColor = [[UIColor whiteColor] CGColor];
-    m_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     m_tableView.rowHeight = 70;
+    m_tableView.backgroundColor =[UIColor clearColor];
     m_tableView.delegate = self;
     m_tableView.dataSource = self;
-    m_tableView.backgroundColor = [UIColor clearColor];
     m_tableView.showsVerticalScrollIndicator = NO;
     m_tableView.showsHorizontalScrollIndicator = NO;
+    m_tableView.hidden = YES;
     [self.view addSubview:m_tableView];
 }
 #pragma mark ---创建邂逅界面
@@ -137,12 +125,8 @@
     clazzImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
     [backgroundImageView addSubview:clazzImageView];
     clazzImageView.userInteractionEnabled = YES;
-    [clazzImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showGameList:)]];
+   // [clazzImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showGameList:)]];
 
-    
-    
-    
-    
     clazzLabel = [[UILabel alloc]initWithFrame:CGRectMake(260-clazzLabel.text.length/2, 53, 50+clazzLabel.text.length *12, 20)];
     clazzLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.6];
     clazzLabel.layer.masksToBounds = YES;
@@ -173,16 +157,12 @@
     customLabel = [[UILabel alloc]initWithFrame:CGRectMake(125, 276-40, 120, 15)];
     customLabel.backgroundColor = [UIColor clearColor];
     customLabel.font = [UIFont boldSystemFontOfSize:13];
-  //  customLabel.textAlignment = NSTextAlignmentCenter;
     customLabel.textColor = [UIColor whiteColor];
     [backgroundImageView addSubview:customLabel];
     
     sexLabel = [[UILabel alloc]initWithFrame:CGRectMake(customLabel.frame.origin.x-40, 276-40, 40, 15)];
-    //[sexLabel setFont:[UIFont boldSystemFontOfSize:15]];
     sexLabel.font = [UIFont fontWithName:@"menlo" size:20];
     sexLabel.backgroundColor =[UIColor clearColor];
-//    sexLabel.layer.cornerRadius = 3;
-//    sexLabel.layer.masksToBounds = YES;
     sexLabel.textAlignment = NSTextAlignmentRight;
     [backgroundImageView addSubview:sexLabel];
     
@@ -218,8 +198,6 @@
 - (void)changeOtherOne
 {
     inABtn.selected = YES;
-    inABtn.enabled = NO;
-    sayHelloBtn.enabled = NO;
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
 
     [paramDict setObject:@"1" forKey:@"gameid"];
@@ -275,7 +253,7 @@
 }
 -(void)sayHiToYou:(UIButton *)sender
 {
-    sayHelloBtn.enabled = NO;
+    //sayHelloBtn.enabled = NO;
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
     [paramDict setObject:@"1" forKey:@"gameid"];
     [paramDict setObject:self.characterId forKey:@"characterid"];
@@ -287,6 +265,9 @@
 #pragma mark ---网络请求
 - (void)getSayHelloForNetWithDictionary:(NSDictionary *)dic method:(NSString *)method prompt:(NSString *)prompt type:(NSInteger)COME_TYPE
 {
+    inABtn.enabled = NO;
+    sayHelloBtn.enabled = NO;
+
     hud.labelText = prompt;
     [hud show:YES];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
@@ -299,13 +280,13 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
 
-        
+        inABtn.enabled = YES;
+        sayHelloBtn.enabled = YES;
+
         [hud hide:YES];
         if (COME_TYPE ==1) {
             isSuccessToshuaishen =YES;
             isWXCeiling =YES;
-            inABtn.enabled = YES;
-            sayHelloBtn.enabled = YES;
             getDic = nil;
             getDic = [NSDictionary dictionaryWithDictionary:responseObject];
             NSLog(@"getDic%@",getDic);
@@ -331,33 +312,34 @@
             
             
             NSLog(@"%@",headImageView.image);
-
+            NSString *imageStr =nil;
             if([KISDictionaryHaveKey(getDic, @"img") rangeOfString:@","].location !=NSNotFound) {
                 NSString * fruits = KISDictionaryHaveKey(getDic, @"img");
                 NSArray  * array= [fruits componentsSeparatedByString:@","];
                 NSLog(@"array%@",[array objectAtIndex:0]);
                
-                headImageView.imageURL =[NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",[array objectAtIndex:0]]];
-               NSLog(@"imageUrl--->%@",headImageView.imageURL);
+            imageStr =[array objectAtIndex:0];
             }else{
                 
-            headImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(getDic, @"img")]];
-                NSLog(@"imageUrl111-->%@",headImageView.imageURL);
+            imageStr =KISDictionaryHaveKey(getDic, @"img");
             }
+            NSLog(@"imageUrl--->%@",headImageView.imageURL);
+            NSLog(@"imageUrl---->%@",headImageView.image);
             
-            
+            headImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:imageStr]]];
+
             headImageView.layer.borderWidth = 2.0;
             headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
-
-            UIImage *image = headImageView.image;
+            
+            
             [headImageView rotate360WithDuration:1.0 repeatCount:1 timingMode:i7Rotate360TimingModeLinear];
             headImageView.animationDuration = 2.0;
             headImageView.animationImages =
             [NSArray arrayWithObjects:
-             headImageView.placeholderImage,
-             headImageView.placeholderImage,
-            headImageView.placeholderImage,
-            image,
+             headImageView.image,
+             headImageView.image,
+            headImageView.image,
+            headImageView.image,
              nil];
             headImageView.animationRepeatCount = 1;
             [headImageView startAnimating];
@@ -383,14 +365,20 @@
         }
         if (COME_TYPE ==3) {
             if ([KISDictionaryHaveKey(responseObject, @"1") isKindOfClass:[NSArray class]]) {
-                NSLog(@"responseObject%@",responseObject);
                 [m_characterArray addObjectsFromArray:KISDictionaryHaveKey(responseObject, @"1")];
-                NSLog(@"m_characterArray%@",m_characterArray);
-                [m_tableView reloadData];
+                
+                if (m_characterArray.count ==1) {
+                 [self  bulidEncounterView];
+                    [self getEncoXhinfoWithNet:[m_characterArray objectAtIndex:0]];
+                }else{
+                    m_tableView.hidden =NO;
+                    [m_tableView reloadData];
+                    tf.frame =CGRectMake(0, startX+40, 200, 30);
+                    tf.center  = CGPointMake(160, startX+50);
+
+                }
                 [[NSUserDefaults standardUserDefaults]setObject:m_characterArray forKey:@"CharacterArrayOfAllForYou"];
 
-                tf.frame =CGRectMake(0, startX+40, 200, 30);
-                tf.center  = CGPointMake(160, startX+50);
 
         }
         }
@@ -495,18 +483,25 @@
     [self bulidEncounterView];
      tableView.hidden = YES;
     tf.hidden = YES;
-    headImageView.hidden = NO;
-    clazzImageView.hidden = NO;
-    clazzLabel.hidden =NO;
-    NickNameLabel.hidden = NO;
-    customLabel.hidden = NO;
-    inABtn.hidden = NO;
-    sexLabel.hidden = NO;
-    sayHelloBtn.hidden =NO;
-    promptLabel .hidden = NO;
+//    headImageView.hidden = NO;
+//    clazzImageView.hidden = NO;
+//    clazzLabel.hidden =NO;
+//    NickNameLabel.hidden = NO;
+//    customLabel.hidden = NO;
+//    inABtn.hidden = NO;
+//    sexLabel.hidden = NO;
+//    sayHelloBtn.hidden =NO;
+//    promptLabel .hidden = NO;
 
+    [self getEncoXhinfoWithNet:[m_characterArray objectAtIndex:indexPath.row]];
+   
     
-    NSDictionary* tempDic = [m_characterArray objectAtIndex:indexPath.row];
+   
+
+}
+-(void)getEncoXhinfoWithNet:(NSDictionary *)dic
+{
+    NSDictionary* tempDic = dic;
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
     self.characterId =KISDictionaryHaveKey(tempDic, @"id");
     [paramDict setObject:@"1" forKey:@"gameid"];
@@ -517,13 +512,11 @@
     clazzLabel.frame = CGRectMake(260-clazzLabel.text.length*3, 53, 10+clazzLabel.text.length *12, 20);
     
     clazzLabel.center = CGPointMake(280, 63);
-   // clazzLabel.center = CGPointMake(286, 63);
+    // clazzLabel.center = CGPointMake(286, 63);
     [paramDict setObject:KISDictionaryHaveKey(tempDic, @"id") forKey:@"characterid"];
-   
-    
-    [self getSayHelloForNetWithDictionary:paramDict method:@"149" prompt:@"邂逅中..." type:1];
-
+   [self getSayHelloForNetWithDictionary:paramDict method:@"149" prompt:@"邂逅中..." type:1];
 }
+
 #pragma mark ---查看角色详情
 -(void)enterToPernsonPage:(UIGestureRecognizer *)sender
 {

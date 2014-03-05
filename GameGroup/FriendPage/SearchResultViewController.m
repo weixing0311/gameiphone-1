@@ -10,7 +10,7 @@
 #import "PersonTableCell.h"
 #import "PersonDetailViewController.h"
 #import "LocationManager.h"
-
+#import "TestViewController.h"
 @interface SearchResultViewController ()
 {
     UILabel*            m_titleLabel;
@@ -240,11 +240,20 @@
     [m_myTableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSDictionary* recDict = [m_tabelData objectAtIndex:indexPath.row];
-    
-    PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
+    NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"img")] componentsSeparatedByString:@","];
+
+  //  PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
+    TestViewController *VC = [[TestViewController alloc]init];
     VC.userId = KISDictionaryHaveKey(recDict, @"id");
     VC.nickName = KISDictionaryHaveKey(recDict, @"nickname");
+    VC.imgUrl = [BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""];
+    VC.ageStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"age")intValue]];
+    VC.sexStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"gender")intValue]];
+    VC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"updateUserLocationDate")];
+    VC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"distance")];
+
     VC.isChatPage = NO;
+    NSLog(@"age%@ sex%@",VC.ageStr,VC.sexStr);
     [self.navigationController pushViewController:VC animated:YES];
 }
 #pragma mark  scrollView  delegate

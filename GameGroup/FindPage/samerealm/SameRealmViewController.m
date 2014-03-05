@@ -9,7 +9,7 @@
 #import "SameRealmViewController.h"
 #import "PersonDetailViewController.h"
 #import "PersonTableCell.h"
-
+#import "TestViewController.h"
 @interface SameRealmViewController ()
 {
     UIButton*           m_selectRealmButton;
@@ -431,9 +431,16 @@
     
     NSDictionary* recDict = [m_tabelData objectAtIndex:indexPath.row];
     
-    PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
+   // PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
+     TestViewController* VC = [[TestViewController alloc] init];
+    
     VC.userId = KISDictionaryHaveKey(recDict, @"id");
     VC.nickName = KISDictionaryHaveKey(recDict, @"nickname");
+    VC.ageStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"age")intValue]];
+    VC.sexStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"gender")intValue]];
+    VC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"updateUserLocationDate")];
+    VC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"distance")];
+
     VC.isChatPage = NO;
     [self.navigationController pushViewController:VC animated:YES];
 }

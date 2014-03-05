@@ -42,11 +42,18 @@
         self.titleLabel.backgroundColor =[ UIColor clearColor];
         [self addSubview:self.titleLabel];
         
-        self.serverLabel =[[UILabel alloc]initWithFrame:CGRectMake(110, 37, 130, 18)];
+        self.serverLabel =[[UILabel alloc]initWithFrame:CGRectMake(130, 37, 130, 18)];
         self.serverLabel.font = [UIFont boldSystemFontOfSize:14];
         self.serverLabel.textColor = [UIColor grayColor];
         self.serverLabel.backgroundColor = [UIColor clearColor];
         [self addSubview:self.serverLabel];
+        
+        self.sexLabel = [[UILabel alloc]initWithFrame:CGRectMake(110, 37, 20, 18)];
+        self.sexLabel.textAlignment = NSTextAlignmentCenter;
+        self.sexLabel.font = [UIFont fontWithName:@"menlo" size:14];
+        self.sexLabel.backgroundColor = [UIColor clearColor];
+        [self addSubview:self.sexLabel];
+        
         
         self.CountOfLabel =[[UILabel alloc]initWithFrame:CGRectMake(250, 0, 100, 60)];
         self.CountOfLabel.font = [UIFont boldSystemFontOfSize:20];

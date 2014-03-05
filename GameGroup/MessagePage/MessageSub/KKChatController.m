@@ -31,6 +31,9 @@
     UIMenuItem *copyItem;
     UIMenuItem *copyItem3;
     BOOL myActive;
+    
+    NSArray*   historyMsg;//历史聊天记录
+    NSInteger  currentPage;//聊天消息当前页码 从1->count
 }
 
 @end
@@ -61,6 +64,7 @@
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newMesgReceived:) name:kNewMessageReceived object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageAck:) name:kMessageAck object:nil];//消息是否发送成功
 
     if (![[DataStoreManager queryMsgRemarkNameForUser:self.chatWithUser] isEqualToString:@""]) {
         self.nickName = [DataStoreManager queryMsgRemarkNameForUser:self.chatWithUser];//刷新别名
@@ -73,7 +77,6 @@
 {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageAck:) name:kMessageAck object:nil];//消息是否发送成功
     
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]];
     DSFriends *friend = [DSFriends MR_findFirstWithPredicate:predicate];
@@ -92,17 +95,17 @@
     bgV.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
     [self.view addSubview:bgV];
     
-    [self setTopViewWithTitle:@"" withBackButton:YES];
-    
-    titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(100, startX - 44, 120, 44)];
-    titleLabel.backgroundColor=[UIColor clearColor];
-    titleLabel.text=self.nickName;
-    [titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
-    titleLabel.textAlignment=NSTextAlignmentCenter;
-    titleLabel.textColor=[UIColor whiteColor];
-    [self.view addSubview:titleLabel];
-    
-    messages = [[DataStoreManager qureyAllCommonMessages:self.chatWithUser] retain];
+    currentPage = 1;
+    historyMsg = [[NSArray alloc] initWithArray:[DataStoreManager qureyAllCommonMessages:self.chatWithUser]];
+    if ([historyMsg count] > 0) {//有记录
+        messages = [[NSMutableArray alloc] initWithArray:[historyMsg objectAtIndex:0]];
+    }
+    else
+    {
+        messages = [[NSMutableArray alloc] initWithCapacity:1];
+    }
+
+//    messages = [[DataStoreManager qureyAllCommonMessages:self.chatWithUser] retain];
     [self normalMsgToFinalMsg];
     [self sendReadedMesg];//发送已读消息
     
@@ -178,45 +181,16 @@
     [inPutView addSubview:emojiBtn];
     [emojiBtn addTarget:self action:@selector(emojiBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     
-  /**************   语音图片等
+    [self setTopViewWithTitle:@"" withBackButton:YES];
     
-    audioBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [audioBtn setFrame:CGRectMake(8, inPutView.frame.size.height-12-27, 25, 27)];
-    [audioBtn setImage:[UIImage imageNamed:@"audioBtn.png"] forState:UIControlStateNormal];
-    [inPutView addSubview:audioBtn];
-    [audioBtn addTarget:self action:@selector(audioBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-    
-    audioRecordBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [audioRecordBtn setFrame:CGRectMake(40, inPutView.frame.size.height-42, 200, 35)];
-    [audioRecordBtn setBackgroundImage:[UIImage imageNamed:@"yanzhengma_normal.png"] forState:UIControlStateNormal];
-    [audioRecordBtn setTitle:@"按住说话" forState:UIControlStateNormal];
-    [inPutView addSubview:audioRecordBtn];
-    audioRecordBtn.hidden = YES;
-    [audioRecordBtn addTarget:self action:@selector(buttonDown) forControlEvents:UIControlEventTouchDown];
+    titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(100, startX - 44, 120, 44)];
+    titleLabel.backgroundColor=[UIColor clearColor];
+    titleLabel.text=self.nickName;
+    [titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
+    titleLabel.textAlignment=NSTextAlignmentCenter;
+    titleLabel.textColor=[UIColor whiteColor];
+    [self.view addSubview:titleLabel];
 
-    [audioRecordBtn addTarget:self action:@selector(buttonUp) forControlEvents:UIControlEventTouchUpInside];
-    [audioRecordBtn addTarget:self action:@selector(buttonCancel:) forControlEvents:UIControlEventTouchUpOutside];
-    [audioRecordBtn addTarget:self action:@selector(buttonCancel:) forControlEvents:UIControlEventTouchCancel];
-    
-    emojiBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [emojiBtn setFrame:CGRectMake(250, inPutView.frame.size.height-12-27, 25, 27)];
-    [emojiBtn setImage:[UIImage imageNamed:@"emoji.png"] forState:UIControlStateNormal];
-    [inPutView addSubview:emojiBtn];
-    [emojiBtn addTarget:self action:@selector(emojiBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-    
-    picBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [picBtn setFrame:CGRectMake(285, inPutView.frame.size.height-12-27, 25, 27)];
-    [picBtn setImage:[UIImage imageNamed:@"picBtn.png"] forState:UIControlStateNormal];
-    [inPutView addSubview:picBtn];
-    [picBtn addTarget:self action:@selector(picBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-   
-   ********/
-    
-//    senBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [senBtn setFrame:CGRectMake(282, inPutView.frame.size.height-37.5, 28, 27.5)];
-//    [senBtn setImage:[UIImage imageNamed:@"chat_send.png"] forState:UIControlStateNormal];
-//    [inPutView addSubview:senBtn];
-//    [senBtn addTarget:self action:@selector(sendButton:) forControlEvents:UIControlEventTouchUpInside];
 
     float version = [[[UIDevice currentDevice] systemVersion] floatValue];
     if (version >= 5.0) {
@@ -227,22 +201,10 @@
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
-   // [self.messageTextField becomeFirstResponder];
-//    self.appDel.xmppHelper.chatDelegate = self;
-    
     btnLongTap = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(btnLongTapAction:)];
     btnLongTap.minimumPressDuration = 1;
     
     [DataStoreManager blankMsgUnreadCountForUser:self.chatWithUser];
-    
-//    if ([self.chatUserImg isEqualToString:@"no"]) {//没有头像 这个逻辑有问题 应该是回复之后成为朋友 再请求
-//        [self getUserInfoWithUserName:self.chatWithUser];
-//    }
-//  语音初始化
-//    rootRecordPath = [RootDocPath stringByAppendingPathComponent:@"localRecord"];
-//    self.session = [AVAudioSession sharedInstance];
-//    
-//    [self initTwoAudioPlayFrame];
     
     theEmojiView = [[EmojiView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-253, 320, 253) WithSendBtn:YES];
     theEmojiView.delegate = self;
@@ -253,10 +215,6 @@
 //    UIMenuItem *copyItem2 = [[UIMenuItem alloc] initWithTitle:@"转发"action:@selector(transferMsg)];
     copyItem3 = [[UIMenuItem alloc] initWithTitle:@"删除"action:@selector(deleteMsg)];
     menu = [UIMenuController sharedMenuController];
-    
-//    KKAppDelegate *del = [self appDelegate];
-//    del.messageDelegate = self;
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)sendReadedMesg//发送已读消息
@@ -278,6 +236,7 @@
     }
 }
 
+#pragma mark 计算每条消息高度
 -(void)normalMsgToFinalMsg
 {
     NSMutableArray* formattedEntries = [NSMutableArray arrayWithCapacity:messages.count];
@@ -345,50 +304,7 @@
 {
     return (theContent.length > 0)?[theContent sizeWithFont:[UIFont boldSystemFontOfSize:13.0] constrainedToSize:CGSizeMake(haveThumb ? 160 : 200, 80)] : CGSizeZero;
 }
--(void)audioBtnClicked:(UIButton *)sender
-{
-    if (!ifAudio) {
-        self.textView.text = @"";
-        ifAudio = YES;
-        [sender setImage:[UIImage imageNamed:@"keyboard.png"] forState:UIControlStateNormal];
-        audioRecordBtn.hidden = NO;
-        self.textView.hidden = YES;
-        [self.textView resignFirstResponder];
-        if ([clearView superview]) {
-            [clearView removeFromSuperview];
-        }
-        if ([popLittleView superview]) {
-            [popLittleView removeFromSuperview];
-        }
-        canAdd = YES;
-        if (ifEmoji) {
-            [self autoMovekeyBoard:0];
-            ifEmoji = NO;
-            [UIView animateWithDuration:0.2 animations:^{
-                [theEmojiView setFrame:CGRectMake(0, theEmojiView.frame.origin.y + 260 + startX - 44, 320, 253)];
-                
-                [m_EmojiScrollView setFrame:CGRectMake(0, m_EmojiScrollView.frame.origin.y+260+startX - 44, 320, 253)];
-                [emojiBGV setFrame:CGRectMake(0, emojiBGV.frame.origin.y+260+startX - 44, 320, emojiBGV.frame.size.height)];
-                [m_Emojipc setFrame:CGRectMake(0, m_Emojipc.frame.origin.y+260+startX - 44, 320, m_Emojipc.frame.size.height)];
-            } completion:^(BOOL finished) {
-                theEmojiView.hidden = YES;
-                [m_EmojiScrollView removeFromSuperview];
-                [emojiBGV removeFromSuperview];
-                [m_Emojipc removeFromSuperview];
-            }];
-            
-            [emojiBtn setImage:[UIImage imageNamed:@"emoji.png"] forState:UIControlStateNormal];
-        }
-    }
-    else
-    {
-        ifAudio = NO;
-        [sender setImage:[UIImage imageNamed:@"audioBtn.png"] forState:UIControlStateNormal];
-        self.textView.hidden = NO;
-        audioRecordBtn.hidden = YES;
-        [self.textView.internalTextView becomeFirstResponder];
-    }
-}
+
 -(void)emojiBtnClicked:(UIButton *)sender
 {
     if (!ifEmoji) {
@@ -413,147 +329,11 @@
         [sender setImage:[UIImage imageNamed:@"emoji.png"] forState:UIControlStateNormal];
     }
 }
--(void)picBtnClicked:(UIButton *)sender
-{
-    [self getAudioFromNet:@"A598A1E1C3AE4796AD8FF97028518C9E"];
-}
--(void)audioRecordBtnClicked:(UIButton *)sender
-{
-    
-}
--(void)initTwoAudioPlayFrame
-{
-    animationOne=[[NSMutableArray alloc]init] ;
-    for(int i=0;i<3;i++){
-        NSString *str=nil;
-        str=[NSString stringWithFormat:@"ReceiverVoiceNodePlaying00%d.png",i+1];
-        UIImage *img=[UIImage imageNamed:str];
-        [animationOne addObject:img];
-    }
-    animationTwo=[[NSMutableArray alloc]init] ;
-    for(int i=0;i<3;i++){
-        NSString *str=nil;
-        str=[NSString stringWithFormat:@"SenderVoiceNodePlaying00%d.png",i+1];
-        UIImage *img=[UIImage imageNamed:str];
-        [animationTwo addObject:img];
-    }
-}
--(void)buttonDown
-{
-    [audioRecordBtn setTitle:@"松开发送您说的话" forState:UIControlStateNormal];
-    beginTime = [[NSDate date] timeIntervalSince1970];
-    NSLog(@"recording voice button touchDown");
-    if (audioplayButton == nil) {
-        audioplayButton=[UIButton buttonWithType:UIButtonTypeCustom];
-        audioplayButton.frame=CGRectMake(80, self.view.frame.size.height/2-80, 160, 160);
-        [audioplayButton setImage:[UIImage imageNamed:@"third_xiemessage_record_icon.png"] forState:UIControlStateNormal];
-        [self.view addSubview:audioplayButton];
-        UILabel * textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 130, 160, 20)];
-        [textLabel setBackgroundColor:[UIColor clearColor]];
-        [textLabel setTextAlignment:NSTextAlignmentCenter];
-        [textLabel setTextColor:[UIColor whiteColor]];
-        [textLabel setFont:[UIFont systemFontOfSize:14]];
-        [textLabel setText:@"手指移出按钮取消说话"];
-        [audioplayButton addSubview:textLabel];
-        
-    }
-    if (recordAnimationIV == nil)
-    {
-        recordAnimationIV=[[UIImageView alloc]initWithFrame:CGRectMake(180, self.view.frame.size.height/2-55, 50, 100)];
-    }
-    NSMutableArray *arr=[[NSMutableArray alloc]init] ;
-    for(int i=1;i<=24;i++){
-        NSString *str=nil;
-        str=[NSString stringWithFormat:@"third_xiemessage_record_ani%d.png",i];
-        UIImage *img=[UIImage imageNamed:str];
-        [arr addObject:img];
-    }
-    recordAnimationIV.animationImages=arr;
-    recordAnimationIV.animationDuration=1.0;
-    recordAnimationIV.animationRepeatCount=0;
-    [recordAnimationIV startAnimating];
-    [self.view addSubview:recordAnimationIV];
-    [self beginRecord];
-    // beginTime =
-}
--(void)buttonUp
-{
-    [self stopRecording];
-    [audioRecordBtn setTitle:@"按住说话" forState:UIControlStateNormal];
-    NSTimeInterval endTime = [[NSDate date] timeIntervalSince1970];
-    if(endTime-beginTime>0.5)
-    {
-        
-    }
-    else
-    {
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"说话时间太短了" delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles: nil];
-        [alert show];
-    }
-    [recordAnimationIV stopAnimating];
-    [recordAnimationIV removeFromSuperview];
-    recordAnimationIV = nil;
-    [audioplayButton removeFromSuperview];
-    audioplayButton = nil;
-
-}
--(void)buttonCancel:(UIButton *)sender
-{
-    [self stopRecording];
-    [audioRecordBtn setTitle:@"按住说话" forState:UIControlStateNormal];
-    [recordAnimationIV stopAnimating];
-    [recordAnimationIV removeFromSuperview];
-    recordAnimationIV = nil;
-    [audioplayButton removeFromSuperview];
-    audioplayButton = nil;
-}
 
 -(void)showEmojiScrollView
 {
     [self.textView resignFirstResponder];
     [inPutView setFrame:CGRectMake(0, self.view.frame.size.height-227-inPutView.frame.size.height, 320, inPutView.frame.size.height)];
- /*   //表情列表如果存在就隐藏
-    //if (m_EmojiScrollView==nil)
-    //{
-    //将面板先于工具栏加入视图，避免遮挡
-    UIImageView *sixGridBGV=[[UIImageView alloc]initWithFrame:CGRectMake(-320, 0, 1280, self.view.frame.size.height-227)];//原来是253
-    [sixGridBGV setBackgroundColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1]];
-    
-    //创建表情视图
-    UIScrollView *i_emojiScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,  self.view.frame.size.height-253, 320, self.view.frame.size.height-227)];//原来是227和253
-    //设置表情列表scrollview属性
-    i_emojiScrollView.backgroundColor=[UIColor yellowColor];
-    m_EmojiScrollView = i_emojiScrollView;
-    [m_EmojiScrollView addSubview:sixGridBGV];
-    m_EmojiScrollView.delegate=self;
-    m_EmojiScrollView.bouncesZoom = YES;
-    m_EmojiScrollView.pagingEnabled = YES;
-    m_EmojiScrollView.showsHorizontalScrollIndicator = NO;
-    m_EmojiScrollView.showsVerticalScrollIndicator = NO;
-    [m_EmojiScrollView setContentSize:CGSizeMake(960,self.view.frame.size.height-227)];//原来是253
-    m_EmojiScrollView.backgroundColor = [UIColor clearColor];
-    m_EmojiScrollView.scrollEnabled = YES;
-    [self.view addSubview:m_EmojiScrollView];
-    [self emojiView];
-    //启动pagecontrol
-    [self loadPageControl];
-    emojiBGV = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-45.5-26.5-10, 320, 45.5+26.5+10)];
-    emojiBGV.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:emojiBGV];
-    UIImageView * ebgv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 26.5+10, 320, 45.5)];
-    [ebgv setImage:[UIImage imageNamed:@"qqqqq_06.png"]];
-    [emojiBGV addSubview:ebgv];
-    UIButton * backEmojiBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backEmojiBtn setFrame:CGRectMake(320-12-49.5, 5, 40.5, 23)];
-    [backEmojiBtn setImage:[UIImage imageNamed:@"qqqqq_03.png"] forState:UIControlStateNormal];
-    [emojiBGV addSubview:backEmojiBtn];
-    [backEmojiBtn addTarget:self action:@selector(backBtnDo) forControlEvents:UIControlEventTouchUpInside];
-    UIButton * sendEmojiBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [sendEmojiBtn setFrame:CGRectMake(320-12-71.5, 43.5, 71.5, 32)];
-    [sendEmojiBtn setImage:[UIImage imageNamed:@"btn_03.png"] forState:UIControlStateNormal];
-    [emojiBGV addSubview:sendEmojiBtn];
-    [sendEmojiBtn addTarget:self action:@selector(sendButton:) forControlEvents:UIControlEventTouchUpInside];
-*/
     theEmojiView.hidden = NO;
     [theEmojiView setFrame:CGRectMake(0, self.view.frame.size.height-253, 320, 253)];
     [self autoMovekeyBoard:253];
@@ -632,40 +412,10 @@
 	m_Emojipc.currentPage=page;
 }
 
-
--(void)getUserInfoWithUserName:(NSString *)userNameit
-{
-    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
-    NSMutableDictionary * mypostDict = [NSMutableDictionary dictionary];
-    [paramDict setObject:userNameit forKey:@"username"];
-    
-    [mypostDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-    [mypostDict setObject:paramDict forKey:@"params"];
-    [mypostDict setObject:@"106" forKey:@"method"];
-    [mypostDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-    
-    [NetManager requestWithURLStr:BaseClientUrl Parameters:mypostDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-
-        NSDictionary * recDict = responseObject;
-//        [DataStoreManager saveUserInfo:recDict];
-        self.chatUserImg = [self getHead:[recDict objectForKey:@"img"]];
-        self.nickName = [recDict objectForKey:@"nickname"];
-        titleLabel.text=self.nickName;
-        [self.tView reloadData];
-  
-    } failure:^(AFHTTPRequestOperation *operation, id error) {
-        
-    }];
-    
-}
 -(NSString *)getHead:(NSString *)headStr
 {
     NSArray* i = [headStr componentsSeparatedByString:@","];
 
-//    NSArray *arr = [[i objectAtIndex:0] componentsSeparatedByString:@"_"];
-//    if (arr.count>1) {
-//        return arr[0];
-//    }
     if ([i count] > 0) {
         return [i objectAtIndex:0];
     }
@@ -756,7 +506,7 @@
 -(void) autoMovekeyBoard: (float) h{
     
     [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.2];
+    [UIView setAnimationDuration:0.3];
 	//inPutView.frame = CGRectMake(0.0f, (float)(self.view.frame.size.height-h-inPutView.frame.size.height), 320.0f, inPutView.frame.size.height);
 
     
@@ -767,7 +517,8 @@
 	
 	// set views with new info
 	inPutView.frame = containerFrame;
-    
+    self.tView.frame = CGRectMake(0.0f, startX, 320.0f, self.view.frame.size.height-startX-inPutView.frame.size.height-h-10);
+
 	
 	// commit animations
 
@@ -775,7 +526,6 @@
 //	UITableView *tableView = (UITableView *)[self.view viewWithTag:TABLEVIEWTAG];
 //	tableView.frame = CGRectMake(0.0f, 0.0f, 320.0f,(float)(480.0-h-108.0));
     [UIView commitAnimations];
-    self.tView.frame = CGRectMake(0.0f, startX, 320.0f, self.view.frame.size.height-startX-inPutView.frame.size.height-h);
     if (messages.count>0) {
         [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     }
@@ -1050,7 +800,6 @@
         
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
         if (indexPath.row>0) {
-            NSLog(@"mmmm:%d",[time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]);
             if ([time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]<60) {
                 cell.senderAndTimeLabel.hidden = YES;
             }
@@ -1059,6 +808,8 @@
                 cell.senderAndTimeLabel.hidden = NO;
             }
         }
+        else
+            cell.senderAndTimeLabel.hidden = NO;
         previousTime = nowTime;
         NSString * timeStr = [self CurrentTime:[NSString stringWithFormat:@"%d",(int)nowTime] AndMessageTime:[NSString stringWithFormat:@"%d",[time intValue]]];
         if ([sender isEqualToString:@"you"]) {
@@ -1136,11 +887,10 @@
             
             [cell refreshStatusPoint:CGPointZero status:@"1"];
         }
-        
+
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
         
-        if (indexPath.row>0) {
-            NSLog(@"mmmm:%d",[time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]);
+        if (indexPath.row > 0) {
             if ([time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]<60) {
                 cell.senderAndTimeLabel.hidden = YES;
             }
@@ -1149,18 +899,16 @@
                 cell.senderAndTimeLabel.hidden = NO;
             }
         }
+        else
+            cell.senderAndTimeLabel.hidden = NO;
         previousTime = nowTime;
         NSString * timeStr = [self CurrentTime:[NSString stringWithFormat:@"%d",(int)nowTime] AndMessageTime:[NSString stringWithFormat:@"%d",[time intValue]]];
         if ([sender isEqualToString:@"you"]) {
             cell.senderAndTimeLabel.text = [NSString stringWithFormat:@"%@ %@", @"我", timeStr];
-    //        CGRect rect = [self.view convertRect:cell.frame fromView:self.tView];
-    //        NSLog(@"dsdsdsdsdsd%@",NSStringFromCGRect(rect));
         }
         else
         {
             cell.senderAndTimeLabel.text = [NSString stringWithFormat:@"%@ %@", self.nickName, timeStr];
-    //        CGRect rect = [self.view convertRect:cell.frame fromView:self.tView];
-    //        NSLog(@"dsdsdsdsdsd%@",NSStringFromCGRect(rect));
         }
         
         return cell;
@@ -1173,9 +921,6 @@
 }
 -(void)myBtnClicked
 {
-//    MyProfileViewController * myP = [[MyProfileViewController alloc] init];
-////    myP.hostInfo = [[HostInfo alloc] initWithHostInfo:[DataStoreManager queryMyInfo]];
-//    [self.navigationController pushViewController:myP animated:YES];
     PersonDetailViewController * detailV = [[PersonDetailViewController alloc] init];
     detailV.userId = [DataStoreManager getMyUserID];
     detailV.nickName = [DataStoreManager queryRemarkNameForUser:[DataStoreManager getMyUserID]];
@@ -1292,87 +1037,7 @@
 
     //[yy setBackgroundImage:nil forState:UIControlStateNormal];
 }
--(void)displayPopLittleViewWithRectX:(float)originX RectY:(float)originY TheRect:(CGRect)rect
-{
-    if ([popLittleView superview]) {
-        
-        [popLittleView removeFromSuperview];
-        
-    }
-    if (![clearView superview]) {
-        clearView = [[UIView alloc] initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height-startX-50)];
-        [clearView setBackgroundColor:[UIColor clearColor]];
-        [self.view addSubview:clearView];
-    }
 
-
-    popLittleView = [[UIView alloc] initWithFrame:CGRectMake(originX, originY+startX - 44, 182, 54.5)];
-    UIImageView * popBG = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 182, 54.5)];
-    [popBG setImage:[UIImage imageNamed:@"popview2.png"]];
-    [popLittleView addSubview:popBG];
-    [self.view addSubview:popLittleView];
-//    for (int i = 0; i<3; ++i) {
-//        UIButton * btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//        [btn setFrame:CGRectMake(10+i*50+i*10, 10, 50, 35)];
-//        [btn setBackgroundImage:[UIImage imageNamed:@"selectednormal-s.png"] forState:UIControlStateNormal];
-//        [btn setTitle:@"转发" forState:UIControlStateNormal];
-//        [popLittleView addSubview:btn];
-//    }
-    btnBG = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 182, 45)];
-    [btnBG setBackgroundColor:[UIColor clearColor]];
-    [popLittleView addSubview:btnBG];
-    UIButton * btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn1 setFrame:CGRectMake(10, 10, 50, 25)];
-    [btn1 setBackgroundImage:[UIImage imageNamed:@"selectednormal-s.png"] forState:UIControlStateNormal];
-    [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [btn1.titleLabel setFont:[UIFont systemFontOfSize:14]];
-    [btn1 setTitle:@"复制" forState:UIControlStateNormal];
-    [btn1 addTarget:self action:@selector(copyMsg) forControlEvents:UIControlEventTouchUpInside];
-
-    UIButton * btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn2 setFrame:CGRectMake(68, 10, 50, 25)];
-    [btn2 setBackgroundImage:[UIImage imageNamed:@"selectednormal-s.png"] forState:UIControlStateNormal];
-    [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [btn2.titleLabel setFont:[UIFont systemFontOfSize:14]];
-    [btn2 setTitle:@"转发" forState:UIControlStateNormal];
-    [btn2 addTarget:self action:@selector(transferMsg) forControlEvents:UIControlEventTouchUpInside];
-
-    UIButton * btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn3 setFrame:CGRectMake(126, 10, 50, 25)];
-    [btn3 setBackgroundImage:[UIImage imageNamed:@"selectednormal-s.png"] forState:UIControlStateNormal];
-    [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [btn3.titleLabel setFont:[UIFont systemFontOfSize:14]];
-    [btn3 setTitle:@"删除" forState:UIControlStateNormal];
-    [btn3 addTarget:self action:@selector(deleteMsg) forControlEvents:UIControlEventTouchUpInside];
-    [btnBG addSubview:btn1];
-    [btnBG addSubview:btn2];
-    [btnBG addSubview:btn3];
-    if (originX+182>320) {
-        originX = originX-(originX+182-320);
-        [popLittleView setFrame:CGRectMake(originX, originY+startX - 44, 182, 54.5)];
-    }
-    else if (originX<0)
-    {
-        [popLittleView setFrame:CGRectMake(0, originY+startX - 44, 182, 54.5)];
-    }
-    if (originY<startX) {
-        originY = originY+54.5+rect.size.height;
-        [popLittleView setFrame:CGRectMake(originX, originY+startX - 44, 182, 54.5)];
-        CGAffineTransform atransform;
-        atransform = CGAffineTransformRotate(popLittleView.transform, M_PI);
-        popLittleView.transform =  atransform;
-        
-        CGAffineTransform atransform2;
-        atransform2 = CGAffineTransformRotate(btnBG.transform, M_PI);
-        btnBG.transform =  atransform2;
-    }
-    
-//    if (originY-54.5-rect.size.height<44) {
-//
-//    }
-
-
-}
 -(void)copyMsg
 {
     [popLittleView removeFromSuperview];
@@ -1382,50 +1047,8 @@
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = tempStr;
 }
--(void)transferMsg
-{
-    [popLittleView removeFromSuperview];
-    if ([clearView superview]) {
-        [clearView removeFromSuperview];
-    }
-    selectContactPage * selectV = [[selectContactPage alloc] init];
-    selectV.contactDelegate = self;
-    [self presentViewController:selectV animated:YES completion:^{
-        
-    }];
-}
--(void)getContact:(NSDictionary *)userDict
-{
-    tempDict = userDict;
-    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"确定要转发给%@吗",[userDict objectForKey:@"displayName"]] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-    [alert show];
-}
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 1) {
-        ActivateViewController * actVC = [[ActivateViewController alloc]init];
-        [self.navigationController pushViewController:actVC animated:YES];
-    }
-}
 
-#pragma mark 转发
--(void)sureToTransform:(NSDictionary *)userDict
-{
-//    self.chatWithUser = [userDict objectForKey:@"username"];
-//    self.nickName = [userDict objectForKey:@"displayName"];
-//    self.chatUserImg = [userDict objectForKey:@"img"];
-//    titleLabel.text=self.nickName;
-//    
-//    self.ifFriend = YES;
-//    if (![DataStoreManager ifHaveThisFriend:self.chatWithUser]) {
-//        self.ifFriend = NO;
-//    }
-//    messages = [DataStoreManager qureyAllCommonMessages:self.chatWithUser];
-//    [self normalMsgToFinalMsg];
-//    [DataStoreManager blankMsgUnreadCountForUser:self.chatWithUser];
-//    [self sendMsg:tempStr];
-//    [self.tView reloadData];
-}
+#pragma mark 删除
 -(void)deleteMsg
 {
     [popLittleView removeFromSuperview];
@@ -1446,7 +1069,8 @@
 
 }
 -(void)btnLongTapAction:(UILongPressGestureRecognizer *)gestureRecognizer
-{if ([gestureRecognizer state] == UIGestureRecognizerStateBegan) 
+{
+    if ([gestureRecognizer state] == UIGestureRecognizerStateBegan)
     NSLog(@"222");
 }
 -(void)longPress:(UIButton*)sender
@@ -1467,7 +1091,6 @@
 }
 
 #pragma mark -发送
-
 - (void)sendButton:(id)sender {
     
     
@@ -1548,6 +1171,28 @@
     
 }
 
+#pragma mark -
+#pragma mark 历史聊天记录展示
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+
+    if (scrollView == self.tView) {
+        CGPoint offsetofScrollView = self.tView.contentOffset;
+        NSLog(@"%@", NSStringFromCGPoint(offsetofScrollView));
+        if (offsetofScrollView.y < - 20) {//向上拉出20个像素高度时加载
+            NSInteger allPage = [historyMsg count];//历史总页码
+            if (currentPage < allPage) {
+                NSArray* newMsgArray = [historyMsg objectAtIndex:currentPage];
+                for (int i = [newMsgArray count]-1; i >= 0; i--) {
+                    [messages insertObject:[newMsgArray objectAtIndex:i] atIndex:0];//插在前面位置
+                }
+                [self normalMsgToFinalMsg];
+                [self.tView reloadData];
+                currentPage ++;
+            }
+        }
+    }
+}
+
 #pragma mark KKMessageDelegate
 - (void)newMesgReceived:(NSNotification*)notification
 {
@@ -1598,17 +1243,6 @@
         return;
     }
     [DataStoreManager refreshMessageStatusWithId:msgId status:@"4"];
-}
-
--(void)makeMsgVStoreMsg:(NSDictionary *)messageContent
-{
-    
-}
-
-- (void)closeButton:(id)sender {
-    [[TempData sharedInstance] Panned:NO];
-    [self.navigationController popViewControllerAnimated:YES];
-   // [self.mlNavigationController mlPopViewController];
 }
 
 -(NSString *)CurrentTime:(NSString *)currentTime AndMessageTime:(NSString *)messageTime
@@ -1696,151 +1330,11 @@
     return finalTime;
 }
 
-- (BOOL)beginRecord
-{//录音
- /*   NSLog(@"begin record");
-	NSError *error;
-    [recordSetting setObject:
-     [NSNumber numberWithInt:16] forKey:AVLinearPCMBitDepthKey];
-	// Recording settings
-    NSDictionary *settings = [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:kAudioFormatLinearPCM], AVFormatIDKey,
-                              //[NSNumber numberWithFloat:44100.0], AVSampleRateKey,
-                              [NSNumber numberWithFloat:8000.00], AVSampleRateKey,
-                              [NSNumber numberWithInt:1], AVNumberOfChannelsKey,
-                              //  [NSData dataWithBytes:&channelLayout length:sizeof(AudioChannelLayout)], AVChannelLayoutKey,
-                              [NSNumber numberWithInt:16], AVLinearPCMBitDepthKey,
-                              [NSNumber numberWithBool:NO], AVLinearPCMIsNonInterleaved,
-                              [NSNumber numberWithBool:NO],AVLinearPCMIsFloatKey,
-                              [NSNumber numberWithBool:NO], AVLinearPCMIsBigEndianKey,
-                              nil];
-	
-	// File URL
-    NSString *path = [RootDocPath stringByAppendingPathComponent:@"localRecord"];
-    rootRecordPath = path;
-    NSFileManager *fm = [NSFileManager defaultManager];
-    if([fm fileExistsAtPath:path] == NO)
-    {
-        [fm createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
-    }
-    NSString  *localRecordPath = [NSString stringWithFormat:@"%@/audioRecord.caf",path];
-
-	NSURL *url = [NSURL fileURLWithPath:localRecordPath];
-	
-	// Create recorder
-	self.recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:&error];
-    [recorder recordForDuration:(NSTimeInterval)60];
-    [recorder prepareToRecord];
-	if (!self.recorder)
-	{
-		NSLog(@"Error: %@", [error localizedDescription]);
-		return NO;
-	}
-	// Initialize degate, metering, etc.
-	self.recorder.delegate = self;
-	self.recorder.meteringEnabled = YES;
-	
-	if (![self.recorder prepareToRecord])
-	{
-		NSLog(@"Error: Prepare to record failed");
-        
-		return NO;
-	}
-	
-	if (![self.recorder record])
-	{
-		NSLog(@"Error: Record failed");
-        
-		return NO;
-	}*/
-	return YES;
-}
-- (void) stopRecording
-{
-    NSLog(@"stop record");
-	// This causes the didFinishRecording delegate method to fire
-	[self.recorder stop];
-}
-- (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag
-{
-
-    NSLog(@"stop record delegate do");
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        #ifdef NotUseSimulator
-//        NSString *filePath1 = [NSHomeDirectory() stringByAppendingPathComponent: @"Documents/recording.caf"];
-        NSString  *localRecordPath = [NSString stringWithFormat:@"%@/audioRecord.caf",rootRecordPath];
-        
-//        NSURL *url = [NSURL fileURLWithPath:localRecordPath];
-//        NSString *filePath2 = [NSHomeDirectory() stringByAppendingPathComponent: @"Documents/recording.amr"];
-//        NSString  *localRecordPath2 = [NSString stringWithFormat:@"%@/audioRecord.amr",rootRecordPath];
-        
-        NSURL *url = [NSURL fileURLWithPath:localRecordPath];
-//        NSURL *url2 = [NSURL fileURLWithPath:localRecordPath2];
-        
-        NSData * data = [NSData dataWithContentsOfURL:url];
-        NSLog(@"LENGTH:%d",[data length]);
-        NSData * data1 =EncodeWAVEToAMR(data,1,16);
-        NSLog(@"LENGTH2:%d",[data1 length]);
-//        [data1 writeToURL:url2 atomically:YES];
-        
-        [NetManager uploadAudioFileData:data1 WithURLStr:BaseUploadImageUrl AudioName:@"recording.amr" TheController:self Success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            NSString *receiveStr = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
-            NSDictionary * dict = [receiveStr JSONValue];
-            if ([dict objectForKey:@"success"]) {
-                NSURL * myRecordPath = [NSURL URLWithString:[NSString stringWithFormat:@"%@/audio_%@.caf",rootRecordPath,[dict objectForKey:@"entity"]]];
-                [data writeToURL:myRecordPath atomically:YES];
-            }
-            else
-            {
-                NSLog(@"audioUploadError:%@",[dict objectForKey:@"entity"]);
-            }
-            NSLog(@"audioUploaded:%@",receiveStr);
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"audioUploadError:%@",error);
-        }];
-        #endif
-        dispatch_async(dispatch_get_main_queue(), ^{
-//            UIAlertView *succeful=[[UIAlertView alloc]initWithTitle:nil message:@"录音压缩完成,可以上传!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//            [succeful show];
-            
-        });
-    });
-
-
-}
--(void)getAudioFromNet:(NSString *)audioID
-{
-#ifdef NotUseSimulator
-    [NetManager downloadAudioFileWithURL:BaseImageUrl FileName:audioID TheController:self Success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString  *localRecordPath = [NSString stringWithFormat:@"%@/audio_%@.caf",rootRecordPath,audioID];
-        NSData *  wavData = DecodeAMRToWAVE(responseObject);
-        [wavData writeToURL:[NSURL URLWithString:localRecordPath] atomically:YES];
-        [self playAudioWithAudioID:audioID];
-        
-    } failure:^(AFHTTPRequestOperation *operation, id error) {
-        
-    }];
-#endif
-}
--(void)playAudioWithAudioID:(NSString *)audioID
-{
-//    NSString  *localRecordPath = [NSString stringWithFormat:@"%@/audio_%@.caf",rootRecordPath,audioID];
-//    audioPlayer=[[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:localRecordPath] error:nil];
-//    audioPlayer.delegate = self;
-//    audioPlayer.volume=1.0;
-//    [audioPlayer prepareToPlay];
-//    [audioPlayer play];
-
-}
--(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
-{
-    NSLog(@"audio play done!");
-}
-
 -(void)viewWillDisappear:(BOOL)animated
 {
     [DataStoreManager blankMsgUnreadCountForUser:self.chatWithUser];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kNewMessageReceived object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kMessageAck object:nil];
 }
 //-(KKAppDelegate *)appDelegate{
 //    

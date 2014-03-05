@@ -31,7 +31,7 @@
     [super viewDidLoad];
     
     //添加捏合手势
-    if (self.navigationController.viewControllers.count>=6) {
+    if (self.navigationController.viewControllers.count>1) {
         [self.view addGestureRecognizer:[[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(ceshi)]];
 
     }
@@ -46,6 +46,7 @@
 
 -(void)ceshi
 {
+    
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void)setTopViewWithTitle:(NSString*)titleStr withBackButton:(BOOL)hasBacButton
