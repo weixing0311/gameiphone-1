@@ -74,7 +74,7 @@
     [self setTopViewWithTitle:@"详情" withBackButton:YES];
     
     m_shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    m_shareButton.frame=CGRectMake(270, startX - 44, 50, 44);
+    m_shareButton.frame=CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30);
     [m_shareButton setBackgroundImage:KUIImage(@"share_normal") forState:UIControlStateNormal];
     [m_shareButton setBackgroundImage:KUIImage(@"share_click") forState:UIControlStateHighlighted];
     [self.view addSubview:m_shareButton];

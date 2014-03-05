@@ -39,7 +39,7 @@
 //    [AFImageRequestOperation addAcceptableContentTypes:[NSSet setWithObject:@"multipart/form-data"]];
 
     UIButton *deleteButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    deleteButton.frame=CGRectMake(270, startX - 44, 50, 44);
+    deleteButton.frame=CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30);
     [deleteButton setBackgroundImage:KUIImage(@"delete_normal") forState:UIControlStateNormal];
     [deleteButton setBackgroundImage:KUIImage(@"delete_click") forState:UIControlStateHighlighted];
     [self.view addSubview:deleteButton];

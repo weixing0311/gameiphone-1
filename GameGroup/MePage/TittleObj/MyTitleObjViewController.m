@@ -56,7 +56,7 @@
 - (void)setTopView
 {
     UIButton *addButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    addButton.frame=CGRectMake(270, startX - 44, 50, 44);
+    addButton.frame=CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30);
     [addButton setBackgroundImage:KUIImage(@"ok_normal") forState:UIControlStateNormal];
     [addButton setBackgroundImage:KUIImage(@"ok_click") forState:UIControlStateHighlighted];
     [self.view addSubview:addButton];

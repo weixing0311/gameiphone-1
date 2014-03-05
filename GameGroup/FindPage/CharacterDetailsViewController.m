@@ -33,6 +33,8 @@
     BOOL            isInTheQueue;//获取刷新数据队列中
     
     BOOL            isGoToNextPage;
+    
+    UIActivityIndicatorView   *loginActivity;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -134,6 +136,16 @@
 
 //    hud1 =[[MBProgressHUD alloc]initWithView:m_charaDetailsView];
 //    [self.view addSubview:hud1];
+    
+    
+    loginActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [m_charaDetailsView addSubview:loginActivity];
+    loginActivity.center = CGPointMake(160, 290);
+    loginActivity.color = [UIColor blackColor];
+    [loginActivity startAnimating];
+
+    
+    //(0, 306, 320, 55)
 }
 
 -(void)buildScrollView
@@ -217,6 +229,9 @@
         m_contentTableView.hidden =NO;
         m_reamlTableView.hidden = NO;
         m_countryTableView.hidden =NO;
+
+        [loginActivity stopAnimating];
+        [loginActivity removeFromSuperview];
 
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             

@@ -60,6 +60,12 @@
 {
     [super viewDidLoad];
     
+    if (self.hostInfo !=nil) {
+        [self buildMainView];
+        [self setBottomView];
+
+    }else{
+    
     if ([[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]!=nil) {//有值 查找用户
         self.hostInfo = [[HostInfo alloc] initWithHostInfo:[[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]];
         [self buildMainView];
@@ -70,10 +76,9 @@
     else//没有详情 请求
     {
         [self buildInitialize];
-        
         [self getUserInfoByNet];
     }
-    
+    }
 }
 
 - (void)getUserInfoByNet
@@ -195,14 +200,12 @@
     [self.view addSubview:m_myScrollView];
     m_myScrollView.backgroundColor = [UIColor clearColor];
     
+    UIView *view= [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 100)];
+    view.backgroundColor = [UIColor grayColor];
+    self.headImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 80, 80)];
     
-    m_photoWall = [[HGPhotoWall alloc] initWithFrame:CGRectZero];
-    m_photoWall.descriptionType = DescriptionTypeImage;
-    [m_photoWall setPhotos:[NSArray arrayWithObjects:self.imgUrl, nil]];
-    m_photoWall.delegate = self;
-    [m_myScrollView addSubview:m_photoWall];
-    m_photoWall.backgroundColor = kColorWithRGB(105, 105, 105, 1.0);
-    m_currentStartY += m_photoWall.frame.size.height;
+    [m_myScrollView addSubview:view];
+    m_currentStartY += view.frame.size.height;
     
     
     UIView* genderView = [CommonControlOrView setGenderAndAgeViewWithFrame:CGRectMake(10, m_currentStartY, kScreenWidth, 30) gender:self.sexStr age:self.ageStr star:nil gameId:@"1"];
