@@ -335,25 +335,66 @@
 
 +(NSMutableArray *)qureyAllCommonMessages:(NSString *)userid
 {
-    NSMutableArray * allMsgArray = [NSMutableArray array];
+    NSMutableArray * allMsgArray = [[NSMutableArray alloc] initWithCapacity:1];
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@ OR receiver==[c]%@",userid,userid];
     NSArray * commonMsgsArray = [DSCommonMsgs MR_findAllSortedBy:@"senTime" ascending:YES withPredicate:predicate];
-    //取前20条...
-    for (int i = (commonMsgsArray.count>20?(commonMsgsArray.count-20):0); i<commonMsgsArray.count; i++) {
-        NSMutableDictionary * thumbMsgsDict = [NSMutableDictionary dictionary];
-        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] sender] forKey:@"sender"];
-        //        [thumbMsgsDict setObject:[[thumbCommonMsgsArray objectAtIndex:i] senderNickname] forKey:@"nickname"];
-        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgContent] forKey:@"msg"];
-        NSDate * tt = [[commonMsgsArray objectAtIndex:i] senTime];
-        NSTimeInterval uu = [tt timeIntervalSince1970];
-        [thumbMsgsDict setObject:[NSString stringWithFormat:@"%f",uu] forKey:@"time"];
-        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgType]?[[commonMsgsArray objectAtIndex:i] msgType] : @"" forKey:@"msgType"];
-        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] payload]?[[commonMsgsArray objectAtIndex:i] payload] : @"" forKey:@"payload"];
-        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] messageuuid]?[[commonMsgsArray objectAtIndex:i] messageuuid] : @"" forKey:@"messageuuid"];
-        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] status]?[[commonMsgsArray objectAtIndex:i] status] : @"" forKey:@"status"];
-
-        [allMsgArray addObject:thumbMsgsDict];
-        
+//    //取前20条...
+//    for (int i = (commonMsgsArray.count>20?(commonMsgsArray.count-20):0); i<commonMsgsArray.count; i++) {
+//        NSMutableDictionary * thumbMsgsDict = [NSMutableDictionary dictionary];
+//        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] sender] forKey:@"sender"];
+//        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgContent] forKey:@"msg"];
+//        NSDate * tt = [[commonMsgsArray objectAtIndex:i] senTime];
+//        NSTimeInterval uu = [tt timeIntervalSince1970];
+//        [thumbMsgsDict setObject:[NSString stringWithFormat:@"%f",uu] forKey:@"time"];
+//        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgType]?[[commonMsgsArray objectAtIndex:i] msgType] : @"" forKey:@"msgType"];
+//        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] payload]?[[commonMsgsArray objectAtIndex:i] payload] : @"" forKey:@"payload"];
+//        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] messageuuid]?[[commonMsgsArray objectAtIndex:i] messageuuid] : @"" forKey:@"messageuuid"];
+//        [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] status]?[[commonMsgsArray objectAtIndex:i] status] : @"" forKey:@"status"];
+//
+//        [allMsgArray addObject:thumbMsgsDict];
+//        
+//    }
+    NSInteger allCount = [commonMsgsArray count];
+    if (allCount == 0) {
+        return allMsgArray;
+    }
+    NSInteger allPage = allCount/20 + (allCount%20 > 0 ? 1 : 0);//每页20条 总共几页 第一页下标为allPage－1 最后一页为0
+    for (int p = 1; p <= allPage; p++) {
+        NSMutableArray* pageDataArray = [[NSMutableArray alloc] initWithCapacity:1];
+        if (p != allPage) {//不是最后一页
+            for (int i = allCount - 20 * p; i< 20; i++) {
+                NSMutableDictionary * thumbMsgsDict = [NSMutableDictionary dictionary];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] sender] forKey:@"sender"];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgContent] forKey:@"msg"];
+                NSDate * tt = [[commonMsgsArray objectAtIndex:i] senTime];
+                NSTimeInterval uu = [tt timeIntervalSince1970];
+                [thumbMsgsDict setObject:[NSString stringWithFormat:@"%f",uu] forKey:@"time"];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgType]?[[commonMsgsArray objectAtIndex:i] msgType] : @"" forKey:@"msgType"];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] payload]?[[commonMsgsArray objectAtIndex:i] payload] : @"" forKey:@"payload"];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] messageuuid]?[[commonMsgsArray objectAtIndex:i] messageuuid] : @"" forKey:@"messageuuid"];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] status]?[[commonMsgsArray objectAtIndex:i] status] : @"" forKey:@"status"];
+                
+                [pageDataArray addObject:thumbMsgsDict];
+            }
+        }
+        else
+        {
+            for (int i = 0; i < allCount - (20 * (p - 1)); i++) {//最后一页
+                NSMutableDictionary * thumbMsgsDict = [NSMutableDictionary dictionary];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] sender] forKey:@"sender"];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgContent] forKey:@"msg"];
+                NSDate * tt = [[commonMsgsArray objectAtIndex:i] senTime];
+                NSTimeInterval uu = [tt timeIntervalSince1970];
+                [thumbMsgsDict setObject:[NSString stringWithFormat:@"%f",uu] forKey:@"time"];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgType]?[[commonMsgsArray objectAtIndex:i] msgType] : @"" forKey:@"msgType"];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] payload]?[[commonMsgsArray objectAtIndex:i] payload] : @"" forKey:@"payload"];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] messageuuid]?[[commonMsgsArray objectAtIndex:i] messageuuid] : @"" forKey:@"messageuuid"];
+                [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] status]?[[commonMsgsArray objectAtIndex:i] status] : @"" forKey:@"status"];
+                
+                [pageDataArray addObject:thumbMsgsDict];
+            }
+        }
+        [allMsgArray addObject:pageDataArray];
     }
     return allMsgArray;
 }

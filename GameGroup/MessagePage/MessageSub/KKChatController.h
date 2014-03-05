@@ -27,8 +27,6 @@
 <UITableViewDelegate,
 UITableViewDataSource,
 UITextFieldDelegate,
-StoreMsgDelegate,
-getContact,
 UIAlertViewDelegate,
 UIActionSheetDelegate,
 UIScrollViewDelegate,
@@ -107,6 +105,5 @@ EmojiViewDelegate>
 @property (nonatomic,retain) AVAudioSession *session;
 @property (nonatomic,retain) AVAudioRecorder *recorder;
 - (void)sendButton:(id)sender;
-- (void)closeButton:(id)sender;
 
 @end
