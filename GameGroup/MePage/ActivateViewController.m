@@ -8,10 +8,14 @@
 
 #import "ActivateViewController.h"
 #import "ImGrilViewController.h"
+#import "AddCharacterViewController.h"
+#import "MBProgressHUD.h"
 
 @interface ActivateViewController ()
 {
     UIScrollView * scV ;
+    UITextField * textF;
+    MBProgressHUD * hud;
 }
 
 @end
@@ -31,6 +35,8 @@
 {
     [super viewDidLoad];
     scV = [[UIScrollView alloc]initWithFrame:self.view.frame];
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cancelKeyboard)];
+    [scV addGestureRecognizer:tap];
     [self.view addSubview:scV];
     [self setTopViewWithTitle:@"激活账户" withBackButton:YES];
     
@@ -45,13 +51,14 @@
     image.frame = CGRectMake(10 , 120, 300, 40);
     [scV addSubview:image];
     
-    UITextField * textF = [[UITextField alloc]initWithFrame:CGRectMake(20, 130, 280, 20)];
+    textF = [[UITextField alloc]initWithFrame:CGRectMake(20, 130, 280, 20)];
     [scV addSubview:textF];
     
     UIButton * button = [[UIButton alloc]initWithFrame:CGRectMake(10, 180, 300, 40)];
     [button setTitle:@"激活账户" forState:UIControlStateNormal];
     [button setBackgroundImage:[UIImage imageNamed:@"btn_updata_normol"] forState:UIControlStateNormal];
     [button setBackgroundImage:[UIImage imageNamed:@"btn_updata_click"] forState:UIControlStateHighlighted];
+    [button addTarget:self action:@selector(activateUser) forControlEvents:UIControlEventTouchUpInside];
     [scV addSubview:button];
     
     UILabel * lable2 = [[UILabel alloc]initWithFrame:CGRectMake(10, 240, 300, 20)];
@@ -143,6 +150,16 @@
     lable8.font = [UIFont boldSystemFontOfSize:16];
     lable8.text = @"激活.";
     [scV addSubview:lable8];
+    
+    UIImageView * photo1 = [[UIImageView alloc]initWithFrame:CGRectMake(90, 420, 141, 117)];
+    photo1.image = [UIImage imageNamed:@"gril1"];
+    [scV addSubview:photo1];
+    
+    scV.contentSize = CGSizeMake(320, 560);
+    
+    hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    hud.labelText = @"激活中...";
 }
 - (void)ImGirl
 {
@@ -151,14 +168,53 @@
 }
 - (void)boundRole
 {
+    AddCharacterViewController* addVC = [[AddCharacterViewController alloc] init];
+    addVC.viewType = CHA_TYPE_Add;
+    [self.navigationController pushViewController:addVC animated:YES];
+}
+- (void)activateUser
+{
+    if (!textF.text.length>0) {
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"请输入激活码" delegate:nil cancelButtonTitle:@"知道啦" otherButtonTitles: nil];
+        [alert show];
+        return;
+    }
+    NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+    [params setObject:textF.text forKey:@"invitationCode"];
+    NSMutableDictionary* body = [[NSMutableDictionary alloc]init];
+    [body addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [body setObject:params forKey:@"params"];
+    [body setObject:@"156" forKey:@"method"];
+    [body setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
+    hud.labelText = @"获取中...";
+    [hud show:YES];
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:body TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [hud hide:YES];
+        [self showMessageWindowWithContent:@"激活成功" imageType:0];
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+        [hud hide:YES];
+    }];
+    
+}
+-  (void)cancelKeyboard
+{
+    [textF resignFirstResponder];
 }
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 /*
 #pragma mark - Navigation
 
