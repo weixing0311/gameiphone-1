@@ -32,5 +32,5 @@ typedef enum
 @property(nonatomic,copy)NSString *sexStr;//性别
 @property(nonatomic,copy)NSString *imgUrl;//图片
 @property(nonatomic,copy)NSString *achievementStr;//头衔
-@property(nonatomic,strong)UIColor achievementColor;
+@property(nonatomic,strong)UIColor* achievementColor;
 @end

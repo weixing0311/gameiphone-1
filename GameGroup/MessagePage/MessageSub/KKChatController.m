@@ -191,7 +191,6 @@
     titleLabel.textColor=[UIColor whiteColor];
     [self.view addSubview:titleLabel];
 
-<<<<<<< HEAD
     
     
   /**************   语音图片等
@@ -234,8 +233,6 @@
 //    [inPutView addSubview:senBtn];
 //    [senBtn addTarget:self action:@selector(sendButton:) forControlEvents:UIControlEventTouchUpInside];
 
-=======
->>>>>>> FETCH_HEAD
     float version = [[[UIDevice currentDevice] systemVersion] floatValue];
     if (version >= 5.0) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
