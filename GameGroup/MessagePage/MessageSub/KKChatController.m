@@ -177,8 +177,6 @@
     [emojiBtn setImage:[UIImage imageNamed:@"emoji.png"] forState:UIControlStateNormal];
     [inPutView addSubview:emojiBtn];
     [emojiBtn addTarget:self action:@selector(emojiBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-<<<<<<< HEAD
-    
     
     [self setTopViewWithTitle:@"" withBackButton:YES];
     
@@ -231,8 +229,6 @@
 //    [senBtn setImage:[UIImage imageNamed:@"chat_send.png"] forState:UIControlStateNormal];
 //    [inPutView addSubview:senBtn];
 //    [senBtn addTarget:self action:@selector(sendButton:) forControlEvents:UIControlEventTouchUpInside];
-=======
->>>>>>> FETCH_HEAD
 
     float version = [[[UIDevice currentDevice] systemVersion] floatValue];
     if (version >= 5.0) {

@@ -1040,6 +1040,8 @@
             break;
     }
     //    }
+    detailVC.achievementStr = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
+    cell.distLabel.textColor = [GameCommon getAchievementColorWithLevel:[KISDictionaryHaveKey(tempDict, @"achievementLevel") integerValue]];
     
     
     detailVC.sexStr =  KISDictionaryHaveKey(tempDict, @"sex");

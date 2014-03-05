@@ -26,10 +26,11 @@ typedef enum
 @property(nonatomic, strong)NSString*     nickName;
 @property(nonatomic, assign)BOOL          isChatPage;//从聊天页面进入 点发起聊天pop
 @property(nonatomic,strong)UIImageView *c_headImageView;
-@property(nonatomic,copy)NSString *timeStr;
-@property(nonatomic,copy)NSString *jlStr;
-@property(nonatomic,copy)NSString *ageStr;
-@property(nonatomic,copy)NSString *sexStr;
-@property(nonatomic,copy)NSString *imgUrl;
-
+@property(nonatomic,copy)NSString *timeStr;//更新时间
+@property(nonatomic,copy)NSString *jlStr;//距离
+@property(nonatomic,copy)NSString *ageStr;//年龄
+@property(nonatomic,copy)NSString *sexStr;//性别
+@property(nonatomic,copy)NSString *imgUrl;//图片
+@property(nonatomic,copy)NSString *achievementStr;//头衔
+@property(nonatomic,strong)UIColor achievementColor;
 @end
