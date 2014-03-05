@@ -800,7 +800,6 @@
         
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
         if (indexPath.row>0) {
-            NSLog(@"mmmm:%d",[time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]);
             if ([time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]<60) {
                 cell.senderAndTimeLabel.hidden = YES;
             }
@@ -809,6 +808,8 @@
                 cell.senderAndTimeLabel.hidden = NO;
             }
         }
+        else
+            cell.senderAndTimeLabel.hidden = NO;
         previousTime = nowTime;
         NSString * timeStr = [self CurrentTime:[NSString stringWithFormat:@"%d",(int)nowTime] AndMessageTime:[NSString stringWithFormat:@"%d",[time intValue]]];
         if ([sender isEqualToString:@"you"]) {
@@ -886,11 +887,10 @@
             
             [cell refreshStatusPoint:CGPointZero status:@"1"];
         }
-        
+
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
         
-        if (indexPath.row>0) {
-            NSLog(@"mmmm:%d",[time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]);
+        if (indexPath.row > 0) {
             if ([time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]<60) {
                 cell.senderAndTimeLabel.hidden = YES;
             }
@@ -899,18 +899,16 @@
                 cell.senderAndTimeLabel.hidden = NO;
             }
         }
+        else
+            cell.senderAndTimeLabel.hidden = NO;
         previousTime = nowTime;
         NSString * timeStr = [self CurrentTime:[NSString stringWithFormat:@"%d",(int)nowTime] AndMessageTime:[NSString stringWithFormat:@"%d",[time intValue]]];
         if ([sender isEqualToString:@"you"]) {
             cell.senderAndTimeLabel.text = [NSString stringWithFormat:@"%@ %@", @"我", timeStr];
-    //        CGRect rect = [self.view convertRect:cell.frame fromView:self.tView];
-    //        NSLog(@"dsdsdsdsdsd%@",NSStringFromCGRect(rect));
         }
         else
         {
             cell.senderAndTimeLabel.text = [NSString stringWithFormat:@"%@ %@", self.nickName, timeStr];
-    //        CGRect rect = [self.view convertRect:cell.frame fromView:self.tView];
-    //        NSLog(@"dsdsdsdsdsd%@",NSStringFromCGRect(rect));
         }
         
         return cell;
