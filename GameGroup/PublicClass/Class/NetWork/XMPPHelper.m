@@ -354,7 +354,7 @@
     {
         if ([msgtype isEqualToString:@"normalchat"]) {//聊天的 或动态聊天消息
             NSString* payload = [GameCommon getNewStringWithId:[[message elementForName:@"payload"] stringValue]];//是否含payload标签
-            if (payload.length > 0&&[payload JSONValue][@"thumb"]) {
+            if (payload.length > 0&&[payload JSONValue][@"title"]) {
                 [dict setObject:payload forKey:@"payload"];
                 
                 [dict setObject:@"payloadchat" forKey:@"msgType"];

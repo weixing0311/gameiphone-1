@@ -647,10 +647,15 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.nameLabel.text = @"小伙伴ID";
             cell.disLabel.text = self.hostInfo.userId;
-            NSLog(@"激活状态%@",self.hostInfo.action);
+            UIImageView * image = [[UIImageView alloc]initWithFrame:CGRectMake(230, 15, 29, 12)];
+            [cell.contentView addSubview:image];
             if (![self.hostInfo.action boolValue]) {
                 NSLog(@"未激活");
-                //添加一个未激活图片
+                image.image = [UIImage imageNamed:@"unactive"];
+            }else
+            {
+                NSLog(@"已状态");
+                image.image = [UIImage imageNamed:@"active"];
             }
         }
         else

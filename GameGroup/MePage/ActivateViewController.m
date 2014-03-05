@@ -174,6 +174,7 @@
 }
 - (void)activateUser
 {
+    [textF resignFirstResponder];
     if (!textF.text.length>0) {
         UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"请输入激活码" delegate:nil cancelButtonTitle:@"知道啦" otherButtonTitles: nil];
         [alert show];
@@ -193,6 +194,7 @@
         [hud hide:YES];
         [self showMessageWindowWithContent:@"激活成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"acta" object:nil userInfo:nil];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
