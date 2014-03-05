@@ -469,6 +469,11 @@ BOOL validateMobile(NSString* mobile) {
 }
 
 #pragma mark 第二步
+- (void)jump3ButtonOK
+{
+    UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"跳过绑定" message:@"不绑定游戏角色会导致你不法使用部分社交功能,你确定吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"跳过", nil];
+    [alert show];
+}
 - (void)setStep_2View
 {
     UILabel* topLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 300, 50)];
@@ -592,14 +597,23 @@ BOOL validateMobile(NSString* mobile) {
     m_roleNameText.clearButtonMode = UITextFieldViewModeWhileEditing;
     [m_step2Scroll addSubview:m_roleNameText];
 
-    UIButton* step2Button = [[UIButton alloc] initWithFrame:CGRectMake(10, 230, 300, 40)];
-    [step2Button setBackgroundImage:KUIImage(@"blue_button_normal") forState:UIControlStateNormal];
-    [step2Button setBackgroundImage:KUIImage(@"blue_button_click") forState:UIControlStateHighlighted];
-    [step2Button setTitle:@"绑定上述角色" forState:UIControlStateNormal];
+    UIButton* step2Button = [[UIButton alloc] initWithFrame:CGRectMake(160, 230, 140, 40)];
+    [step2Button setBackgroundImage:KUIImage(@"zhuce") forState:UIControlStateNormal];
+    [step2Button setBackgroundImage:KUIImage(@"zhuce_click") forState:UIControlStateHighlighted];
+//    [step2Button setTitle:@"绑定上述角色" forState:UIControlStateNormal];
     [step2Button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     step2Button.backgroundColor = [UIColor clearColor];
     [step2Button addTarget:self action:@selector(step2ButtonOK:) forControlEvents:UIControlEventTouchUpInside];
     [m_step2Scroll addSubview:step2Button];
+    
+    UIButton* step3Button = [[UIButton alloc] initWithFrame:CGRectMake(10, 230, 140, 40)];
+    [step3Button setBackgroundImage:KUIImage(@"puch") forState:UIControlStateNormal];
+    [step3Button setBackgroundImage:KUIImage(@"puch_click") forState:UIControlStateHighlighted];
+//    [step3Button setTitle:@"跳过绑定" forState:UIControlStateNormal];
+    [step3Button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    step3Button.backgroundColor = [UIColor clearColor];
+    [step3Button addTarget:self action:@selector(jump3ButtonOK) forControlEvents:UIControlEventTouchUpInside];
+    [m_step2Scroll addSubview:step3Button];
 }
 
 - (void)realmSelectClick:(id)sender
@@ -718,6 +732,15 @@ BOOL validateMobile(NSString* mobile) {
     {
         if (buttonIndex != alertView.cancelButtonIndex)
             [self continueStep3Net:@""];
+    }else
+    {
+        if (buttonIndex != alertView.cancelButtonIndex){
+            m_step2Scroll.hidden = YES;
+            m_step3Scroll.hidden = NO;
+            m_topImage.image = KUIImage(@"register_step_3");
+            m_userNameText.text = m_roleNameText.text;
+            m_titleLabel.text = @"个人信息";
+        }
     }
 }
 
