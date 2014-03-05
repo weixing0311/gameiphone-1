@@ -1041,11 +1041,10 @@
     }
     //    }
     detailVC.achievementStr = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
-    detailVC.achievementColor = [GameCommon getAchievementColorWithLevel:[KISDictionaryHaveKey(tempDict, @"achievementLevel") integerValue]];
-    
-    
+    detailVC.achievementColor =KISDictionaryHaveKey(tempDict, @"achievementLevel") ;
     detailVC.sexStr =  KISDictionaryHaveKey(tempDict, @"sex");
-    detailVC.imgUrl = [BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]];
+    detailVC.titleImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]]]]] ;
+    
     detailVC.ageStr = [GameCommon getNewStringWithId:[tempDict objectForKey:@"age"]];
     detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
     detailVC.nickName = KISDictionaryHaveKey(tempDict, @"displayName");

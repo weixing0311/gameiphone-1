@@ -60,12 +60,6 @@
 {
     [super viewDidLoad];
     
-    if (self.hostInfo !=nil) {
-        [self buildMainView];
-        [self setBottomView];
-
-    }else{
-    
     if ([[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]!=nil) {//有值 查找用户
         self.hostInfo = [[HostInfo alloc] initWithHostInfo:[[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]];
         [self buildMainView];
@@ -76,9 +70,10 @@
     else//没有详情 请求
     {
         [self buildInitialize];
+        
         [self getUserInfoByNet];
     }
-    }
+    
 }
 
 - (void)getUserInfoByNet
@@ -200,11 +195,16 @@
     [self.view addSubview:m_myScrollView];
     m_myScrollView.backgroundColor = [UIColor clearColor];
     
-    UIView *view= [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 100)];
-    view.backgroundColor = [UIColor grayColor];
-    self.headImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 80, 80)];
     
+    
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 100)];
+    view.backgroundColor =[UIColor grayColor];
     [m_myScrollView addSubview:view];
+    
+    self.headImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
+    self.headImageView.image = self.titleImage;
+    [view addSubview:self.headImageView];
+    
     m_currentStartY += view.frame.size.height;
     
     
@@ -276,9 +276,17 @@
     currentHeigth = person_id.frame.size.height;
     person_gx.frame = CGRectMake(0, m_currentStartY, kScreenWidth, currentHeigth);
     [m_myScrollView addSubview:person_gx];
-
+    m_currentStartY +=person_gx.frame.size.height;
     
+    UIImageView* topBg1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg1.image = KUIImage(@"table_heard_bg");
+    [m_myScrollView addSubview:topBg1];
+    UILabel* titleLabel1 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"我的头衔" textAlignment:NSTextAlignmentLeft];
+    [topBg addSubview:titleLabel1];
 
+    m_currentStartY +=topBg1.frame.size.height;
+    UIView* titleObjView = [CommonControlOrView setMyTitleObjWithImage:nil titleName:self.achievementStr rarenum:self.achievementColor showCurrent:0];
+    [m_myScrollView addSubview: titleObjView ];
 }
 
 
@@ -384,7 +392,7 @@
         if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.hostInfo.state, @"title")] isEqualToString:@""]) {
             tit = [NSString stringWithFormat:@"「%@」", tit];
         }
-        UIView* person_state = [CommonControlOrView setPersonStateViewTime:[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.hostInfo.state, @"createDate")]] nameText:showTitle achievement:tit achievementLevel:@"1" imgUrl:[BaseImageUrl stringByAppendingString:imageId]];
+        UIView* person_state = [CommonControlOrView setPersonStateViewTime:[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.hostInfo.state, @"createDate")]] nameText:showTitle achievement:tit achievementLevel:@"1" titleImage:[BaseImageUrl stringByAppendingString:imageId]];
         currentHeigth = person_state.frame.size.height;
         person_state.frame = CGRectMake(0, m_currentStartY, kScreenWidth, currentHeigth);
         [m_myScrollView addSubview:person_state];

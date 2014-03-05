@@ -212,7 +212,7 @@
 //获取网络数据
 - (void)getUserInfoByNet
 {
-    
+    m_charaDetailsView.reloadingBtn.userInteractionEnabled = NO;
     
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];

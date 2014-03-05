@@ -264,7 +264,7 @@
         if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.hostInfo.state, @"title")] isEqualToString:@""]) {
             tit = [NSString stringWithFormat:@"「%@」", tit];
         }
-        UIView* person_state = [CommonControlOrView setPersonStateViewTime:[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.hostInfo.state, @"createDate")]] nameText:showTitle achievement:tit achievementLevel:@"1" imgUrl:[BaseImageUrl stringByAppendingString:imageId]];
+        UIView* person_state = [CommonControlOrView setPersonStateViewTime:[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.hostInfo.state, @"createDate")]] nameText:showTitle achievement:tit achievementLevel:@"1" titleImage:[BaseImageUrl stringByAppendingString:imageId]];
         currentHeigth = person_state.frame.size.height;
         person_state.frame = CGRectMake(0, m_currentStartY, kScreenWidth, currentHeigth);
         [m_myScrollView addSubview:person_state];

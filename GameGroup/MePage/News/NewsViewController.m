@@ -448,10 +448,10 @@
     
     cell.rowIndex = indexPath.row;
     NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"thumb")];
-    NSURL * imgUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
+    NSURL * titleImage = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
     if (imgStr.length > 0 && ![imgStr isEqualToString:@"null"]) {
         cell.havePic.hidden = NO;
-        cell.havePic.imageURL = imgUrl;
+        cell.havePic.imageURL = titleImage;
     }
     else
         cell.havePic.hidden = YES;

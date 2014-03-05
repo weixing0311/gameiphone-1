@@ -92,8 +92,8 @@
     
     [self buildTableView];
     [self buildEncounterView];
-    m_tableView.hidden = NO;
-    tf.hidden = NO;
+    m_tableView.hidden = YES;
+    tf.hidden = YES;
     headImageView.hidden = YES;
     clazzImageView.hidden = YES;
     clazzLabel.hidden =YES;
@@ -399,14 +399,19 @@
 
                     [self getEncoXhinfoWithNet:[m_characterArray objectAtIndex:0]];
                 }else{
+                    tf.hidden = NO;
                     m_tableView.hidden =NO;
+                    if (m_characterArray.count>1&&m_characterArray.count<4) {
+                        m_tableView.frame = CGRectMake(45, 80+startX, 230, m_characterArray.count*70-3);
+                    }else{
+                        m_tableView.frame = CGRectMake(45, 80+startX, 230, 250);
+                    }
                     [m_tableView reloadData];
                     tf.frame =CGRectMake(0, startX+40, 200, 30);
                     tf.center  = CGPointMake(160, startX+50);
 
                 }
                 [[NSUserDefaults standardUserDefaults]setObject:m_characterArray forKey:@"CharacterArrayOfAllForYou"];
-
 
         }
         }
@@ -491,6 +496,14 @@
     NSDictionary* tempDic = [m_characterArray objectAtIndex:indexPath.row];
     
     int imageId = [KISDictionaryHaveKey(tempDic, @"clazz") intValue];
+    
+    if ([KISDictionaryHaveKey(tempDic, @"failedmsg") isEqualToString:@"404"])//角色不存在
+    {
+        cell.headerImageView.image = [UIImage imageNamed:@"clazz_0.png"];
+        cell.serverLabel.text = @"角色不存在";
+    }
+    else{
+    
     if (imageId > 0 && imageId < 12) {//1~11
         cell.headerImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%d", imageId]];
     }
@@ -500,6 +513,7 @@
     NSString* realm = [KISDictionaryHaveKey(tempDic, @"raceObj") isKindOfClass:[NSDictionary class]] ? KISDictionaryHaveKey(KISDictionaryHaveKey(tempDic, @"raceObj"), @"sidename") : @"";
     
     cell.serverLabel.text = [KISDictionaryHaveKey(tempDic, @"realm") stringByAppendingString:realm];
+        }
     cell.titleLabel.text = KISDictionaryHaveKey(tempDic, @"name");
     
     
@@ -508,6 +522,13 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *tempDic =[m_characterArray objectAtIndex:indexPath.row];
+    if ([KISDictionaryHaveKey(tempDic, @"failedmsg") isEqualToString:@"404"])//角色不存在
+    {
+    }
+    else{
+
+    
      tableView.hidden = YES;
     tf.hidden = YES;
     headImageView.hidden = NO;
@@ -521,7 +542,7 @@
     promptLabel .hidden = NO;
 
     [self getEncoXhinfoWithNet:[m_characterArray objectAtIndex:indexPath.row]];
-   
+    }
 
 }
 -(void)getEncoXhinfoWithNet:(NSDictionary *)dic

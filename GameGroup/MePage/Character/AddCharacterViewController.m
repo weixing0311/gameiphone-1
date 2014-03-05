@@ -250,6 +250,9 @@
             [hud hide:YES];
 
             NSLog(@"%@", responseObject);
+            
+            [[NSUserDefaults standardUserDefaults]setObject:KISDictionaryHaveKey(responseObject, @"lastModified") forKey:@"WX_reloadBtnTitle_wx"];
+
             [self showMessageWindowWithContent:@"添加成功" imageType:0];
             [self.navigationController popViewControllerAnimated:YES];
             
