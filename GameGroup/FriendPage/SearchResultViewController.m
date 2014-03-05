@@ -247,9 +247,13 @@
     VC.userId = KISDictionaryHaveKey(recDict, @"id");
     VC.nickName = KISDictionaryHaveKey(recDict, @"nickname");
     VC.imgUrl = [BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""];
-    VC.ageStr = KISDictionaryHaveKey(recDict, @"age");
-    VC.sexStr = KISDictionaryHaveKey(recDict, @"gender");
+    VC.ageStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"age")intValue]];
+    VC.sexStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"gender")intValue]];
+    VC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"updateUserLocationDate")];
+    VC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"distance")];
+
     VC.isChatPage = NO;
+    NSLog(@"age%@ sex%@",VC.ageStr,VC.sexStr);
     [self.navigationController pushViewController:VC animated:YES];
 }
 #pragma mark  scrollView  delegate

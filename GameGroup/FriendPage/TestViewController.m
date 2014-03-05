@@ -205,7 +205,7 @@
     m_currentStartY += m_photoWall.frame.size.height;
     
     
-    UIView* genderView = [CommonControlOrView setGenderAndAgeViewWithFrame:CGRectMake(10, m_currentStartY, kScreenWidth, 30) gender:@"1" age:self.ageStr star:nil gameId:@"1"];
+    UIView* genderView = [CommonControlOrView setGenderAndAgeViewWithFrame:CGRectMake(10, m_currentStartY, kScreenWidth, 30) gender:self.sexStr age:self.ageStr star:nil gameId:@"1"];
     [m_myScrollView addSubview:genderView];
     
     UILabel* timeLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(150, m_currentStartY, 160, 30) textColor:kColorWithRGB(151, 151, 151, 1.0) font:[UIFont systemFontOfSize:12.0] text:[GameCommon getTimeAndDistWithTime:self.timeStr Dis:self.jlStr] textAlignment:NSTextAlignmentRight];

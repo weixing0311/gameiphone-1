@@ -33,6 +33,7 @@
     BOOL myActive;
     
     NSArray*   historyMsg;//历史聊天记录
+    NSInteger  currentPage;//聊天消息当前页码 从1->count
 }
 
 @end
@@ -94,22 +95,16 @@
     bgV.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
     [self.view addSubview:bgV];
     
-    [self setTopViewWithTitle:@"" withBackButton:YES];
     
-    titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(100, startX - 44, 120, 44)];
-    titleLabel.backgroundColor=[UIColor clearColor];
-    titleLabel.text=self.nickName;
-    [titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
-    titleLabel.textAlignment=NSTextAlignmentCenter;
-    titleLabel.textColor=[UIColor whiteColor];
-    [self.view addSubview:titleLabel];
-    
-    historyMsg = [DataStoreManager qureyAllCommonMessages:self.chatWithUser];
-    if ([historyMsg count] > 0) {
+    currentPage = 1;
+    historyMsg = [[NSArray alloc] initWithArray:[DataStoreManager qureyAllCommonMessages:self.chatWithUser]];
+    if ([historyMsg count] > 0) {//有记录
         messages = [[NSMutableArray alloc] initWithArray:[historyMsg objectAtIndex:0]];
     }
     else
+    {
         messages = [[NSMutableArray alloc] initWithCapacity:1];
+    }
 
 //    messages = [[DataStoreManager qureyAllCommonMessages:self.chatWithUser] retain];
     [self normalMsgToFinalMsg];
@@ -186,6 +181,62 @@
     [emojiBtn setImage:[UIImage imageNamed:@"emoji.png"] forState:UIControlStateNormal];
     [inPutView addSubview:emojiBtn];
     [emojiBtn addTarget:self action:@selector(emojiBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+<<<<<<< HEAD
+    
+    
+    [self setTopViewWithTitle:@"" withBackButton:YES];
+    
+    titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(100, startX - 44, 120, 44)];
+    titleLabel.backgroundColor=[UIColor clearColor];
+    titleLabel.text=self.nickName;
+    [titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
+    titleLabel.textAlignment=NSTextAlignmentCenter;
+    titleLabel.textColor=[UIColor whiteColor];
+    [self.view addSubview:titleLabel];
+
+    
+    
+  /**************   语音图片等
+    
+    audioBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [audioBtn setFrame:CGRectMake(8, inPutView.frame.size.height-12-27, 25, 27)];
+    [audioBtn setImage:[UIImage imageNamed:@"audioBtn.png"] forState:UIControlStateNormal];
+    [inPutView addSubview:audioBtn];
+    [audioBtn addTarget:self action:@selector(audioBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    audioRecordBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [audioRecordBtn setFrame:CGRectMake(40, inPutView.frame.size.height-42, 200, 35)];
+    [audioRecordBtn setBackgroundImage:[UIImage imageNamed:@"yanzhengma_normal.png"] forState:UIControlStateNormal];
+    [audioRecordBtn setTitle:@"按住说话" forState:UIControlStateNormal];
+    [inPutView addSubview:audioRecordBtn];
+    audioRecordBtn.hidden = YES;
+    [audioRecordBtn addTarget:self action:@selector(buttonDown) forControlEvents:UIControlEventTouchDown];
+
+    [audioRecordBtn addTarget:self action:@selector(buttonUp) forControlEvents:UIControlEventTouchUpInside];
+    [audioRecordBtn addTarget:self action:@selector(buttonCancel:) forControlEvents:UIControlEventTouchUpOutside];
+    [audioRecordBtn addTarget:self action:@selector(buttonCancel:) forControlEvents:UIControlEventTouchCancel];
+    
+    emojiBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [emojiBtn setFrame:CGRectMake(250, inPutView.frame.size.height-12-27, 25, 27)];
+    [emojiBtn setImage:[UIImage imageNamed:@"emoji.png"] forState:UIControlStateNormal];
+    [inPutView addSubview:emojiBtn];
+    [emojiBtn addTarget:self action:@selector(emojiBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    picBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [picBtn setFrame:CGRectMake(285, inPutView.frame.size.height-12-27, 25, 27)];
+    [picBtn setImage:[UIImage imageNamed:@"picBtn.png"] forState:UIControlStateNormal];
+    [inPutView addSubview:picBtn];
+    [picBtn addTarget:self action:@selector(picBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+   
+   ********/
+    
+//    senBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [senBtn setFrame:CGRectMake(282, inPutView.frame.size.height-37.5, 28, 27.5)];
+//    [senBtn setImage:[UIImage imageNamed:@"chat_send.png"] forState:UIControlStateNormal];
+//    [inPutView addSubview:senBtn];
+//    [senBtn addTarget:self action:@selector(sendButton:) forControlEvents:UIControlEventTouchUpInside];
+=======
+>>>>>>> FETCH_HEAD
 
     float version = [[[UIDevice currentDevice] systemVersion] floatValue];
     if (version >= 5.0) {
@@ -501,7 +552,7 @@
 -(void) autoMovekeyBoard: (float) h{
     
     [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.2];
+    [UIView setAnimationDuration:0.3];
 	//inPutView.frame = CGRectMake(0.0f, (float)(self.view.frame.size.height-h-inPutView.frame.size.height), 320.0f, inPutView.frame.size.height);
 
     
@@ -512,7 +563,8 @@
 	
 	// set views with new info
 	inPutView.frame = containerFrame;
-    
+    self.tView.frame = CGRectMake(0.0f, startX, 320.0f, self.view.frame.size.height-startX-inPutView.frame.size.height-h-10);
+
 	
 	// commit animations
 
@@ -520,7 +572,6 @@
 //	UITableView *tableView = (UITableView *)[self.view viewWithTag:TABLEVIEWTAG];
 //	tableView.frame = CGRectMake(0.0f, 0.0f, 320.0f,(float)(480.0-h-108.0));
     [UIView commitAnimations];
-    self.tView.frame = CGRectMake(0.0f, startX, 320.0f, self.view.frame.size.height-startX-inPutView.frame.size.height-h);
     if (messages.count>0) {
         [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     }
@@ -1166,6 +1217,28 @@
     }
     self.textView.text = @"";
     
+}
+
+#pragma mark -
+#pragma mark 历史聊天记录展示
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+
+    if (scrollView == self.tView) {
+        CGPoint offsetofScrollView = self.tView.contentOffset;
+        NSLog(@"%@", NSStringFromCGPoint(offsetofScrollView));
+        if (offsetofScrollView.y < - 20) {//向上拉出20个像素高度时加载
+            NSInteger allPage = [historyMsg count];//历史总页码
+            if (currentPage < allPage) {
+                NSArray* newMsgArray = [historyMsg objectAtIndex:currentPage];
+                for (int i = [newMsgArray count]-1; i >= 0; i--) {
+                    [messages insertObject:[newMsgArray objectAtIndex:i] atIndex:0];//插在前面位置
+                }
+                [self normalMsgToFinalMsg];
+                [self.tView reloadData];
+                currentPage ++;
+            }
+        }
+    }
 }
 
 #pragma mark KKMessageDelegate

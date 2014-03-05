@@ -198,8 +198,6 @@
 - (void)changeOtherOne
 {
     inABtn.selected = YES;
-    inABtn.enabled = NO;
-    sayHelloBtn.enabled = NO;
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
 
     [paramDict setObject:@"1" forKey:@"gameid"];
@@ -255,7 +253,7 @@
 }
 -(void)sayHiToYou:(UIButton *)sender
 {
-    sayHelloBtn.enabled = NO;
+    //sayHelloBtn.enabled = NO;
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
     [paramDict setObject:@"1" forKey:@"gameid"];
     [paramDict setObject:self.characterId forKey:@"characterid"];
@@ -267,6 +265,9 @@
 #pragma mark ---网络请求
 - (void)getSayHelloForNetWithDictionary:(NSDictionary *)dic method:(NSString *)method prompt:(NSString *)prompt type:(NSInteger)COME_TYPE
 {
+    inABtn.enabled = NO;
+    sayHelloBtn.enabled = NO;
+
     hud.labelText = prompt;
     [hud show:YES];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
@@ -279,13 +280,13 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
 
-        
+        inABtn.enabled = YES;
+        sayHelloBtn.enabled = YES;
+
         [hud hide:YES];
         if (COME_TYPE ==1) {
             isSuccessToshuaishen =YES;
             isWXCeiling =YES;
-            inABtn.enabled = YES;
-            sayHelloBtn.enabled = YES;
             getDic = nil;
             getDic = [NSDictionary dictionaryWithDictionary:responseObject];
             NSLog(@"getDic%@",getDic);

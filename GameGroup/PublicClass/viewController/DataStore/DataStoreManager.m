@@ -362,7 +362,7 @@
     for (int p = 1; p <= allPage; p++) {
         NSMutableArray* pageDataArray = [[NSMutableArray alloc] initWithCapacity:1];
         if (p != allPage) {//不是最后一页
-            for (int i = allCount - 20 * p; i< 20; i++) {
+            for (int i = allCount - 20 * p; i < (allCount - 20 * p) + 20; i++) {
                 NSMutableDictionary * thumbMsgsDict = [NSMutableDictionary dictionary];
                 [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] sender] forKey:@"sender"];
                 [thumbMsgsDict setObject:[[commonMsgsArray objectAtIndex:i] msgContent] forKey:@"msg"];
