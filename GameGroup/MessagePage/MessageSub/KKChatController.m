@@ -33,6 +33,7 @@
     BOOL myActive;
     
     NSArray*   historyMsg;//历史聊天记录
+    NSInteger  currentPage;//聊天消息当前页码 从1->count
 }
 
 @end
@@ -94,13 +95,15 @@
     bgV.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
     [self.view addSubview:bgV];
     
-    
-    historyMsg = [DataStoreManager qureyAllCommonMessages:self.chatWithUser];
-    if ([historyMsg count] > 0) {
+    currentPage = 1;
+    historyMsg = [[NSArray alloc] initWithArray:[DataStoreManager qureyAllCommonMessages:self.chatWithUser]];
+    if ([historyMsg count] > 0) {//有记录
         messages = [[NSMutableArray alloc] initWithArray:[historyMsg objectAtIndex:0]];
     }
     else
+    {
         messages = [[NSMutableArray alloc] initWithCapacity:1];
+    }
 
 //    messages = [[DataStoreManager qureyAllCommonMessages:self.chatWithUser] retain];
     [self normalMsgToFinalMsg];
@@ -188,6 +191,7 @@
     titleLabel.textColor=[UIColor whiteColor];
     [self.view addSubview:titleLabel];
 
+<<<<<<< HEAD
     
     
   /**************   语音图片等
@@ -230,6 +234,8 @@
 //    [inPutView addSubview:senBtn];
 //    [senBtn addTarget:self action:@selector(sendButton:) forControlEvents:UIControlEventTouchUpInside];
 
+=======
+>>>>>>> FETCH_HEAD
     float version = [[[UIDevice currentDevice] systemVersion] floatValue];
     if (version >= 5.0) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -1209,6 +1215,28 @@
     }
     self.textView.text = @"";
     
+}
+
+#pragma mark -
+#pragma mark 历史聊天记录展示
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+
+    if (scrollView == self.tView) {
+        CGPoint offsetofScrollView = self.tView.contentOffset;
+        NSLog(@"%@", NSStringFromCGPoint(offsetofScrollView));
+        if (offsetofScrollView.y < - 20) {//向上拉出20个像素高度时加载
+            NSInteger allPage = [historyMsg count];//历史总页码
+            if (currentPage < allPage) {
+                NSArray* newMsgArray = [historyMsg objectAtIndex:currentPage];
+                for (int i = [newMsgArray count]-1; i >= 0; i--) {
+                    [messages insertObject:[newMsgArray objectAtIndex:i] atIndex:0];//插在前面位置
+                }
+                [self normalMsgToFinalMsg];
+                [self.tView reloadData];
+                currentPage ++;
+            }
+        }
+    }
 }
 
 #pragma mark KKMessageDelegate
