@@ -313,8 +313,11 @@
     VC.userId = KISDictionaryHaveKey(recDict, @"id");
     VC.nickName = KISDictionaryHaveKey(recDict, @"nickname");
     VC.isChatPage = NO;
-    VC.sexStr = KISDictionaryHaveKey(recDict, @"sender");
-    VC.ageStr = KISDictionaryHaveKey(recDict, @"age");
+    VC.ageStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"age")intValue]];
+    VC.sexStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"gender")intValue]];
+    VC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"updateUserLocationDate")];
+    VC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"distance")];
+
     [self.navigationController pushViewController:VC animated:YES];
 }
 #pragma mark  scrollView  delegate

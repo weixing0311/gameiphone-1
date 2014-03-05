@@ -670,6 +670,8 @@
 		847DD07918B88DDD00BB0215 /* CharaDaCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 847DD07818B88DDD00BB0215 /* CharaDaCell.m */; };
 		847DD08118B8979500BB0215 /* NewsViewInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 847DD08018B8979500BB0215 /* NewsViewInfo.m */; };
 		84CB793B18C5CF080035CC92 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB793A18C5CF080035CC92 /* TestViewController.m */; };
+		84CB794118C605D00035CC92 /* ActivateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB794018C605D00035CC92 /* ActivateViewController.m */; };
+		84CB794518C606500035CC92 /* ImGrilViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB794418C606500035CC92 /* ImGrilViewController.m */; };
 		84DB92AB18BB57D7006CB36A /* RankingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DB92AA18BB57D7006CB36A /* RankingViewController.m */; };
 		84DB92AE18BB6912006CB36A /* RankingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DB92AD18BB6912006CB36A /* RankingCell.m */; };
 		84DFB13B18BAF1F100BE6905 /* HUD_isok.png in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB13A18BAF1F100BE6905 /* HUD_isok.png */; };
@@ -1715,6 +1717,11 @@
 		847DD08018B8979500BB0215 /* NewsViewInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsViewInfo.m; sourceTree = "<group>"; };
 		84CB793918C5CF080035CC92 /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = "<group>"; };
 		84CB793A18C5CF080035CC92 /* TestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestViewController.m; sourceTree = "<group>"; };
+		84CB793F18C605D00035CC92 /* ActivateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivateViewController.h; sourceTree = "<group>"; };
+		84CB794018C605D00035CC92 /* ActivateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivateViewController.m; sourceTree = "<group>"; };
+		84CB794218C6060F0035CC92 /* ActivateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ActivateViewController.m; path = MePage/ActivateViewController.m; sourceTree = "<group>"; };
+		84CB794318C606500035CC92 /* ImGrilViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImGrilViewController.h; sourceTree = "<group>"; };
+		84CB794418C606500035CC92 /* ImGrilViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImGrilViewController.m; sourceTree = "<group>"; };
 		84DB92A918BB57D7006CB36A /* RankingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingViewController.h; sourceTree = "<group>"; };
 		84DB92AA18BB57D7006CB36A /* RankingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingViewController.m; sourceTree = "<group>"; };
 		84DB92AC18BB6912006CB36A /* RankingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingCell.h; sourceTree = "<group>"; };
@@ -1877,6 +1884,10 @@
 		6814418F185051D10094C669 /* MePage */ = {
 			isa = PBXGroup;
 			children = (
+				84CB794318C606500035CC92 /* ImGrilViewController.h */,
+				84CB794418C606500035CC92 /* ImGrilViewController.m */,
+				84CB793F18C605D00035CC92 /* ActivateViewController.h */,
+				84CB794018C605D00035CC92 /* ActivateViewController.m */,
 				681317A1188E7477001154AB /* SetView */,
 				6826AC58186D784F005716FA /* News */,
 				68397F8C186AA77000C6A762 /* Character */,
@@ -2653,6 +2664,7 @@
 		68CAA5E7184DD0ED007138B1 = {
 			isa = PBXGroup;
 			children = (
+				84CB794218C6060F0035CC92 /* ActivateViewController.m */,
 				6847F8E4187EC62300472DEE /* icon-120.png */,
 				6847F8E5187EC62300472DEE /* icon.png */,
 				6847F8E6187EC62300472DEE /* icon@2x.png */,
@@ -4412,6 +4424,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84CB794118C605D00035CC92 /* ActivateViewController.m in Sources */,
 				68CAA600184DD0ED007138B1 /* main.m in Sources */,
 				68EF5F02185C23B200AB3108 /* EmojiPictographs.m in Sources */,
 				84DB92AE18BB6912006CB36A /* RankingCell.m in Sources */,
@@ -4424,6 +4437,7 @@
 				683417351857FB2000934FEF /* NSString+MagicalDataImport.m in Sources */,
 				68CAA761184DD104007138B1 /* XMPPDeprecatedDigestAuthentication.m in Sources */,
 				84DB92AB18BB57D7006CB36A /* RankingViewController.m in Sources */,
+				84CB794518C606500035CC92 /* ImGrilViewController.m in Sources */,
 				68163F361877CC3A00ABB47F /* FriendPageViewController.m in Sources */,
 				68CAA762184DD104007138B1 /* XMPPDeprecatedPlainAuthentication.m in Sources */,
 				683417461857FB2000934FEF /* MagicalRecord+Setup.m in Sources */,

@@ -177,6 +177,7 @@
     m_backgroundScroll = [[UIScrollView alloc]initWithFrame:CGRectMake(0, startX+44, 320, self.view.frame.size.height -startX-44)];
     m_backgroundScroll.pagingEnabled = YES;
     m_backgroundScroll.delegate = self;
+    m_backgroundScroll.bounces = NO;
     m_backgroundScroll.showsHorizontalScrollIndicator = NO;
     m_backgroundScroll.showsVerticalScrollIndicator = NO;
     m_backgroundScroll.backgroundColor = [UIColor clearColor];

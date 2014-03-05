@@ -307,6 +307,19 @@
             
             [self reLoadingUserInfoFromNet];
         }
+        
+            if ([[responseObject allKeys]containsObject:@"entity"]) {
+                m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
+                m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
+                hud.labelText = @"正拼命从英雄榜获取中...";
+                [hud showAnimated:YES whileExecutingBlock:^{
+                    sleep(2);
+                    hud.labelText = @"获取成功";
+                    sleep(2);
+                }];
+
+            }
+        
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"busy"]) {
             m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
             //KISDictionaryHaveKey(responseObject, @"time") ;
@@ -339,7 +352,7 @@
 {
 //    hud = [[MBProgressHUD alloc] initWithView:self.view];
 //    [self.view addSubview:hud];
-   // hud.labelText = @"正拼命从英雄榜获取中...";
+    hud.labelText = @"正拼命从英雄榜获取中...";
     
     m_charaDetailsView.reloadingBtn.userInteractionEnabled =NO;
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
@@ -353,13 +366,13 @@
     [postDict setObject:@"160" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
-   // [hud show:YES];
+    [hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
             
-         //   [hud hide:YES];
+            [hud hide:YES];
             
             [m_contentTableView reloadData];
             [m_countryTableView reloadData];

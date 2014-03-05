@@ -92,15 +92,6 @@
     bgV.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
     [self.view addSubview:bgV];
     
-    [self setTopViewWithTitle:@"" withBackButton:YES];
-    
-    titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(100, startX - 44, 120, 44)];
-    titleLabel.backgroundColor=[UIColor clearColor];
-    titleLabel.text=self.nickName;
-    [titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
-    titleLabel.textAlignment=NSTextAlignmentCenter;
-    titleLabel.textColor=[UIColor whiteColor];
-    [self.view addSubview:titleLabel];
     
     messages = [[DataStoreManager qureyAllCommonMessages:self.chatWithUser] retain];
     [self normalMsgToFinalMsg];
@@ -177,6 +168,19 @@
     [emojiBtn setImage:[UIImage imageNamed:@"emoji.png"] forState:UIControlStateNormal];
     [inPutView addSubview:emojiBtn];
     [emojiBtn addTarget:self action:@selector(emojiBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    [self setTopViewWithTitle:@"" withBackButton:YES];
+    
+    titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(100, startX - 44, 120, 44)];
+    titleLabel.backgroundColor=[UIColor clearColor];
+    titleLabel.text=self.nickName;
+    [titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
+    titleLabel.textAlignment=NSTextAlignmentCenter;
+    titleLabel.textColor=[UIColor whiteColor];
+    [self.view addSubview:titleLabel];
+
+    
     
   /**************   语音图片等
     
@@ -756,7 +760,7 @@
 -(void) autoMovekeyBoard: (float) h{
     
     [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.2];
+    [UIView setAnimationDuration:0.3];
 	//inPutView.frame = CGRectMake(0.0f, (float)(self.view.frame.size.height-h-inPutView.frame.size.height), 320.0f, inPutView.frame.size.height);
 
     
@@ -767,7 +771,8 @@
 	
 	// set views with new info
 	inPutView.frame = containerFrame;
-    
+    self.tView.frame = CGRectMake(0.0f, startX, 320.0f, self.view.frame.size.height-startX-inPutView.frame.size.height-h-10);
+
 	
 	// commit animations
 
@@ -775,7 +780,6 @@
 //	UITableView *tableView = (UITableView *)[self.view viewWithTag:TABLEVIEWTAG];
 //	tableView.frame = CGRectMake(0.0f, 0.0f, 320.0f,(float)(480.0-h-108.0));
     [UIView commitAnimations];
-    self.tView.frame = CGRectMake(0.0f, startX, 320.0f, self.view.frame.size.height-startX-inPutView.frame.size.height-h);
     if (messages.count>0) {
         [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     }

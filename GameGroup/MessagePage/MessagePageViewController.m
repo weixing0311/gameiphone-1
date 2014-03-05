@@ -780,8 +780,8 @@
     [postDict setObject:paramDict forKey:@"params"];
     [postDict setObject:@"111" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-    
-//    [hud show:YES];
+    hud.labelText = @"正在获取好友列表...";
+    [hud show:YES];
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
