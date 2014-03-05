@@ -40,7 +40,7 @@
     NSTimer *m_verCodeTimer;
     BOOL     isWXCeiling;//打招呼达到上限
     BOOL     isSuccessToshuaishen;
-    
+    BOOL     isXiaoshuaishen;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -61,6 +61,9 @@
 {
     [super viewDidLoad];
     
+    
+    
+    isXiaoshuaishen =NO;
     //    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"CharacterArrayOfAllForYou"]==NULL) {
     //        NSLog(@"空走不走");
     NSMutableDictionary *paramDict = [[NSMutableDictionary alloc]init];
@@ -88,7 +91,19 @@
     [self.view addSubview:hud];
     
     [self buildTableView];
-    
+    [self buildEncounterView];
+    m_tableView.hidden = YES;
+    tf.hidden = YES;
+    headImageView.hidden = YES;
+    clazzImageView.hidden = YES;
+    clazzLabel.hidden =YES;
+    NickNameLabel.hidden = YES;
+    customLabel.hidden = YES;
+    inABtn.hidden = YES;
+    sexLabel.hidden = YES;
+    sayHelloBtn.hidden =YES;
+    promptLabel .hidden = YES;
+
 }
 -(void)buildTableView
 {
@@ -115,7 +130,7 @@
     [self.view addSubview:m_tableView];
 }
 #pragma mark ---创建邂逅界面
--(void)bulidEncounterView
+-(void)buildEncounterView
 {
     clazzImageView = [[UIImageView alloc]initWithFrame:CGRectMake(260,6, 40, 40)];
     clazzImageView.image = KUIImage(@"ceshi.jpg");
@@ -125,7 +140,7 @@
     clazzImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
     [backgroundImageView addSubview:clazzImageView];
     clazzImageView.userInteractionEnabled = YES;
-   // [clazzImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showGameList:)]];
+    [clazzImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showGameList:)]];
 
     clazzLabel = [[UILabel alloc]initWithFrame:CGRectMake(260-clazzLabel.text.length/2, 53, 50+clazzLabel.text.length *12, 20)];
     clazzLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.6];
@@ -140,7 +155,6 @@
     
     headImageView.layer.masksToBounds = YES;
     headImageView.layer.cornerRadius = 80;
-    headImageView.placeholderImage = KUIImage(@"moren_people.png");
     headImageView.frame = CGRectMake(80, 76-40, 160, 160);
     [backgroundImageView addSubview:headImageView];
     headImageView.userInteractionEnabled = YES;
@@ -254,6 +268,9 @@
 -(void)sayHiToYou:(UIButton *)sender
 {
     //sayHelloBtn.enabled = NO;
+    if (isSuccessToshuaishen) {
+       promptLabel.text  =@"很遗憾，无法和小衰神打招呼，点击“换一个”远离小衰神" ;
+    }else{
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
     [paramDict setObject:@"1" forKey:@"gameid"];
     [paramDict setObject:self.characterId forKey:@"characterid"];
@@ -261,6 +278,7 @@
     [paramDict setObject:KISDictionaryHaveKey(getDic,@"roll") forKey:@"roll"];
 
     [self getSayHelloForNetWithDictionary:paramDict method:@"158" prompt:@"打招呼ING" type:2];
+    }
 }
 #pragma mark ---网络请求
 - (void)getSayHelloForNetWithDictionary:(NSDictionary *)dic method:(NSString *)method prompt:(NSString *)prompt type:(NSInteger)COME_TYPE
@@ -285,7 +303,7 @@
 
         [hud hide:YES];
         if (COME_TYPE ==1) {
-            isSuccessToshuaishen =YES;
+            isSuccessToshuaishen =NO;
             isWXCeiling =YES;
             getDic = nil;
             getDic = [NSDictionary dictionaryWithDictionary:responseObject];
@@ -320,29 +338,28 @@
                
             imageStr =[array objectAtIndex:0];
             }else{
-                
             imageStr =KISDictionaryHaveKey(getDic, @"img");
             }
+           headImageView.placeholderImage = KUIImage(@"moren_people.png");
             NSLog(@"imageUrl--->%@",headImageView.imageURL);
             NSLog(@"imageUrl---->%@",headImageView.image);
-            
-            headImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:imageStr]]];
 
             headImageView.layer.borderWidth = 2.0;
             headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
             
+            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:imageStr]]]]];
             
-            [headImageView rotate360WithDuration:1.0 repeatCount:1 timingMode:i7Rotate360TimingModeLinear];
+            
+            [headImageView rotate360WithDuration:1.0 repeatCount:1 timingMode:i7Rotate360TimingModeEaseInEaseOut];
             headImageView.animationDuration = 2.0;
             headImageView.animationImages =
             [NSArray arrayWithObjects:
-             headImageView.image,
-             headImageView.image,
-            headImageView.image,
-            headImageView.image,
+             image,
              nil];
             headImageView.animationRepeatCount = 1;
             [headImageView startAnimating];
+            headImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:imageStr]]];
+            headImageView.animationImages=nil;
 
             
             i= promptLabel.text.length/23;
@@ -368,17 +385,33 @@
                 [m_characterArray addObjectsFromArray:KISDictionaryHaveKey(responseObject, @"1")];
                 
                 if (m_characterArray.count ==1) {
-                 [self  bulidEncounterView];
+                    m_tableView.hidden = YES;
+                    tf.hidden = YES;
+                    headImageView.hidden = NO;
+                    clazzImageView.hidden = NO;
+                    clazzLabel.hidden =NO;
+                    NickNameLabel.hidden = NO;
+                    customLabel.hidden = NO;
+                    inABtn.hidden = NO;
+                    sexLabel.hidden = NO;
+                    sayHelloBtn.hidden =NO;
+                    promptLabel .hidden = NO;
+
                     [self getEncoXhinfoWithNet:[m_characterArray objectAtIndex:0]];
                 }else{
+                    tf.hidden = NO;
                     m_tableView.hidden =NO;
+                    if (m_characterArray.count>1&&m_characterArray.count<4) {
+                        m_tableView.frame = CGRectMake(45, 80+startX, 230, m_characterArray.count*70-3);
+                    }else{
+                        m_tableView.frame = CGRectMake(45, 80+startX, 230, 250);
+                    }
                     [m_tableView reloadData];
                     tf.frame =CGRectMake(0, startX+40, 200, 30);
                     tf.center  = CGPointMake(160, startX+50);
 
                 }
                 [[NSUserDefaults standardUserDefaults]setObject:m_characterArray forKey:@"CharacterArrayOfAllForYou"];
-
 
         }
         }
@@ -400,7 +433,7 @@
                 
                 if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100042"]) {
  
-                    isSuccessToshuaishen =NO;
+                    isSuccessToshuaishen =YES;
                 isWXCeiling =YES;
                 inABtn.enabled = YES;
                 sayHelloBtn.enabled = YES;
@@ -463,6 +496,14 @@
     NSDictionary* tempDic = [m_characterArray objectAtIndex:indexPath.row];
     
     int imageId = [KISDictionaryHaveKey(tempDic, @"clazz") intValue];
+    
+    if ([KISDictionaryHaveKey(tempDic, @"failedmsg") isEqualToString:@"404"])//角色不存在
+    {
+        cell.headerImageView.image = [UIImage imageNamed:@"clazz_0.png"];
+        cell.serverLabel.text = @"角色不存在";
+    }
+    else{
+    
     if (imageId > 0 && imageId < 12) {//1~11
         cell.headerImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%d", imageId]];
     }
@@ -472,6 +513,7 @@
     NSString* realm = [KISDictionaryHaveKey(tempDic, @"raceObj") isKindOfClass:[NSDictionary class]] ? KISDictionaryHaveKey(KISDictionaryHaveKey(tempDic, @"raceObj"), @"sidename") : @"";
     
     cell.serverLabel.text = [KISDictionaryHaveKey(tempDic, @"realm") stringByAppendingString:realm];
+        }
     cell.titleLabel.text = KISDictionaryHaveKey(tempDic, @"name");
     
     
@@ -480,23 +522,27 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self bulidEncounterView];
+    NSDictionary *tempDic =[m_characterArray objectAtIndex:indexPath.row];
+    if ([KISDictionaryHaveKey(tempDic, @"failedmsg") isEqualToString:@"404"])//角色不存在
+    {
+    }
+    else{
+
+    
      tableView.hidden = YES;
     tf.hidden = YES;
-//    headImageView.hidden = NO;
-//    clazzImageView.hidden = NO;
-//    clazzLabel.hidden =NO;
-//    NickNameLabel.hidden = NO;
-//    customLabel.hidden = NO;
-//    inABtn.hidden = NO;
-//    sexLabel.hidden = NO;
-//    sayHelloBtn.hidden =NO;
-//    promptLabel .hidden = NO;
+    headImageView.hidden = NO;
+    clazzImageView.hidden = NO;
+    clazzLabel.hidden =NO;
+    NickNameLabel.hidden = NO;
+    customLabel.hidden = NO;
+    inABtn.hidden = NO;
+    sexLabel.hidden = NO;
+    sayHelloBtn.hidden =NO;
+    promptLabel .hidden = NO;
 
     [self getEncoXhinfoWithNet:[m_characterArray objectAtIndex:indexPath.row]];
-   
-    
-   
+    }
 
 }
 -(void)getEncoXhinfoWithNet:(NSDictionary *)dic
@@ -520,15 +566,13 @@
 #pragma mark ---查看角色详情
 -(void)enterToPernsonPage:(UIGestureRecognizer *)sender
 {
-    if (isSuccessToshuaishen ==YES) {
+    if (isSuccessToshuaishen ==NO) {
         PersonDetailViewController *pv = [[PersonDetailViewController alloc]init];
         pv.userId =KISDictionaryHaveKey(getDic, @"userid");
         [self.navigationController pushViewController:pv animated:YES];
     }
     else{
-    
-    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"发现一只神明!" message:@"神明的世界你无法窥伺" delegate:nil cancelButtonTitle:@"放弃" otherButtonTitles: nil];
-    [alert show];
+        promptLabel.text = @"发现了一只神明，但神明的世界是你无法窥伺的";
     }
 }
 #pragma mark--- 查看角色列表

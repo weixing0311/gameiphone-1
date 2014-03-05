@@ -39,7 +39,6 @@
 
 //常量
 //#define BaseClientUrl @"http://58.83.193.120/gamepro/request"//开机联网地址
-//
 //#define BaseUploadImageUrl  @"http://58.83.193.120/gamepro/fileserver/put"
 //#define BaseImageUrl  @"http://58.83.193.120/gamepro/fileserver/get/"
 //#define BaseDeleteImageUrl  @"http://58.83.193.120/gamepro/fileserver/delete/"

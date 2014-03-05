@@ -18,7 +18,7 @@
 ;
 
 //好友详情 个人动态
-+ (UIView*)setPersonStateViewTime:(NSString*)time nameText:(NSString*)nameText achievement:(NSString*)achievement achievementLevel:(NSString*)level imgUrl:(NSString*)imgUrl;
++ (UIView*)setPersonStateViewTime:(NSString*)time nameText:(NSString*)nameText achievement:(NSString*)achievement achievementLevel:(NSString*)level titleImage:(NSString*)titleImage;
 
 + (UIView*)setTwoLabelViewNameText:(NSString*)nameText text:(NSString*)text nameTextColor:(UIColor*)nameTextColor textColor:(UIColor*)textColor;
 

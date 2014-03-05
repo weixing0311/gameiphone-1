@@ -88,14 +88,14 @@
 }
 
 //好友详情 个人动态
-+ (UIView*)setPersonStateViewTime:(NSString*)time nameText:(NSString*)nameText achievement:(NSString*)achievement achievementLevel:(NSString*)level imgUrl:(NSString*)imgUrl
++ (UIView*)setPersonStateViewTime:(NSString*)time nameText:(NSString*)nameText achievement:(NSString*)achievement achievementLevel:(NSString*)level titleImage:(NSString*)titleImage
 {
     UIView* myView = [[UIView alloc] init];
     UILabel* oneLabel =  [CommonControlOrView setLabelWithFrame:CGRectMake(10, 5, 200, 20) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:12.0] text:nameText textAlignment:NSTextAlignmentLeft];
     [myView addSubview:oneLabel];
     
 //    float achiWidth = 175;
-//    if ([imgUrl isEqualToString:@""]) {
+//    if ([titleImage isEqualToString:@""]) {
 //        achiWidth = 300;
 //    }
 //    CGSize achievemnetSize = [achievement sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(achiWidth, 100)];
@@ -107,7 +107,7 @@
     [myView addSubview:thereLabel];
     
     EGOImageView* img = [[EGOImageView alloc] initWithFrame:CGRectMake(250, 20, 40, 40)];
-    img.imageURL = [NSURL URLWithString:imgUrl];
+    img.imageURL = [NSURL URLWithString:titleImage];
     img.layer.cornerRadius = 5;
     img.layer.masksToBounds = YES;
     [myView addSubview:img];

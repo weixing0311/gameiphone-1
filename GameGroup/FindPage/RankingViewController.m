@@ -87,7 +87,7 @@
     float btnOfX;
      UIView*         bgView;
     NSInteger       m_ppageCount;
-    
+    UIActivityIndicatorView   *loginActivity;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -156,6 +156,14 @@
     [shareButton addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:shareButton];
 
+    loginActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [self.view addSubview:loginActivity];
+    loginActivity.center = CGPointMake(160, 150);
+    loginActivity.color = [UIColor blackColor];
+   [loginActivity startAnimating];
+
+    
+    
     UILabel *lb1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 170, 320, 50)];
     lb1.text = @"正在向英雄榜请求数据...";
     lb1.textAlignment = NSTextAlignmentCenter;
@@ -384,19 +392,24 @@
         
         cell.NumLabel.text = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"rank")];
         
-        NSString *str =KISDictionaryHaveKey(dic, @"nickname");
-        if ([str isEqualToString:@" "]) {
-            
-            cell.titleLabel.frame = CGRectMake(110, 0, 150, 70);
-        }
-        
         if ([KISDictionaryHaveKey(dic, @"gender")isEqualToString:@"1"]) {
             cell.sexLabel.text = @"♀";
             cell.sexLabel.textColor = kColorWithRGB(238, 100, 196, 1.0);
         }else{
-           cell. sexLabel.text = @"♂";
-           cell. sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
+            cell. sexLabel.text = @"♂";
+            cell. sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
         }
+
+        
+        NSString *str =KISDictionaryHaveKey(dic, @"nickname");
+        if ([str isEqualToString:@" "]) {
+            
+            cell.titleLabel.frame = CGRectMake(110, 0, 150, 70);
+            cell.sexLabel.text = nil;
+        }else{
+            cell.titleLabel.frame =CGRectMake(110, 10, 150, 18);
+        }
+        
 
         
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"charactername");
@@ -437,13 +450,28 @@
         
         cell.NumLabel.text = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"rank")];
         
+        
+        if ([KISDictionaryHaveKey(dic, @"gender")isEqualToString:@"1"]) {
+            cell.sexLabel.text = @"♀";
+            cell.sexLabel.textColor = kColorWithRGB(238, 100, 196, 1.0);
+        }else{
+            cell. sexLabel.text = @"♂";
+            cell. sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
+        }
+
+        
+        
+        
         NSString *str =KISDictionaryHaveKey(dic, @"nickname");
         if ([str isEqualToString:@" "]) {
             
             cell.titleLabel.frame = CGRectMake(110, 0, 150, 70);
+              cell.sexLabel.text = nil;
         }else{
             cell.titleLabel.frame = CGRectMake(110, 10, 150, 18);
         }
+
+        
 
         
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"charactername");
@@ -484,13 +512,24 @@
         cell.NumLabel.text = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"rank")];
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"charactername");
         
+        if ([KISDictionaryHaveKey(dic, @"gender")isEqualToString:@"1"]) {
+            cell.sexLabel.text = @"♀";
+            cell.sexLabel.textColor = kColorWithRGB(238, 100, 196, 1.0);
+        }else{
+            cell. sexLabel.text = @"♂";
+            cell. sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
+        }
+        
         NSString *str =KISDictionaryHaveKey(dic, @"nickname");
         if ([str isEqualToString:@" "]) {
             
             cell.titleLabel.frame = CGRectMake(110, 0, 150, 70);
+            cell.sexLabel.text = nil;
         }else{
             cell.titleLabel.frame = CGRectMake(110, 10, 150, 18);
         }
+
+        
 
         cell.serverLabel.text = KISDictionaryHaveKey(dic, @"nickname");
         if ([cell.titleLabel.text isEqualToString:@""]) {
@@ -808,6 +847,7 @@
 {
 //    hud.labelText = @"请求中...";
 //    [hud show:YES];
+     [loginActivity startAnimating];
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
@@ -836,6 +876,10 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
        // [hud hide:YES];
+        
+        [loginActivity stopAnimating];
+        [loginActivity removeFromSuperview];
+
         if ([responseObject isKindOfClass:[NSArray class]]) {
             m_tableView.hidden =NO;
                 if (self.pageCount1 == 0||self.pageCount1 ==-1) {
@@ -891,6 +935,7 @@
 {
    // hud.labelText = @"请求中...";
    // [hud show:YES];
+     [loginActivity startAnimating];
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
@@ -917,6 +962,10 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
        // [hud hide:YES];
+        
+        [loginActivity stopAnimating];
+        [loginActivity removeFromSuperview];
+
         m_tableviewServer.hidden = NO;
         if ([responseObject isKindOfClass:[NSArray class]]) {
             
@@ -970,6 +1019,7 @@
 {
 //    hud.labelText = @"请求中...";
 //    [hud show:YES];
+     [loginActivity startAnimating];
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
@@ -996,6 +1046,10 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //[hud hide:YES];
+        
+        [loginActivity stopAnimating];
+        [loginActivity removeFromSuperview];
+
         m_tableviewCountry.hidden = NO;
         if ([responseObject isKindOfClass:[NSArray class]]) {
             

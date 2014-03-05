@@ -401,7 +401,7 @@
     [postDict setObject:paramDict forKey:@"params"];
     [postDict setObject:@"111" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-    [hud show:YES];
+    //[hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [[NSUserDefaults standardUserDefaults] setObject:sort forKey:sorttype_1];
         [[NSUserDefaults standardUserDefaults] synchronize];//保存方式
@@ -488,7 +488,7 @@
     [paramDict setObject:sort forKey:@"sorttype_2"];
 
     [self.view bringSubviewToFront:hud];
-    [hud show:YES];
+    //[hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [[NSUserDefaults standardUserDefaults] setObject:sort forKey:sorttype_2];
         [[NSUserDefaults standardUserDefaults] synchronize];//保存方式
@@ -573,7 +573,7 @@
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     [paramDict setObject:sort forKey:@"sorttype_3"];
     
-    [hud show:YES];
+    //[hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         [hud hide:YES];
@@ -1041,11 +1041,10 @@
     }
     //    }
     detailVC.achievementStr = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
-    detailVC.achievementColor = [GameCommon getAchievementColorWithLevel:[KISDictionaryHaveKey(tempDict, @"achievementLevel") integerValue]];
-    
-    
+    detailVC.achievementColor =KISDictionaryHaveKey(tempDict, @"achievementLevel") ;
     detailVC.sexStr =  KISDictionaryHaveKey(tempDict, @"sex");
-    detailVC.imgUrl = [BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]];
+    detailVC.titleImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]]]]] ;
+    
     detailVC.ageStr = [GameCommon getNewStringWithId:[tempDict objectForKey:@"age"]];
     detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
     detailVC.nickName = KISDictionaryHaveKey(tempDict, @"displayName");

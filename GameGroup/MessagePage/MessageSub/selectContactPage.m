@@ -332,8 +332,8 @@
             thumb.layer.masksToBounds = YES;
             thumb.placeholderImage = KUIImage(@"have_picture");
             NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(self.contentDic, @"thumb")];
-            NSURL * imgUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/50",imgStr]];
-            thumb.imageURL = imgUrl;
+            NSURL * titleImage = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/50",imgStr]];
+            thumb.imageURL = titleImage;
             [m_shareView addSubview:thumb];
             
             CGSize contentSize = [KISDictionaryHaveKey(self.contentDic, @"msg") sizeWithFont:[UIFont boldSystemFontOfSize:13.0] constrainedToSize:CGSizeMake(200, 50)];
