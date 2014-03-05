@@ -453,7 +453,17 @@
         m_currentStartY += currentHeigth;
         [self setOneLineWithY:m_currentStartY];
     }
+    
     UIView* person_id = [CommonControlOrView setTwoLabelViewNameText:@"小伙伴ID" text:self.hostInfo.userId nameTextColor:kColorWithRGB(102, 102, 102, 1.0) textColor:kColorWithRGB(51, 51, 51, 1.0)];
+    UIImageView * activeIV = [[UIImageView alloc]initWithFrame:CGRectMake(200, m_currentStartY + 13, 29, 12)];
+    [m_myScrollView addSubview:activeIV];
+    if (self.hostInfo.active)
+    {
+        activeIV.image = [UIImage imageNamed:@"active"];
+    }else
+    {
+        activeIV.image = [UIImage imageNamed:@"unactive"];
+    }
     currentHeigth = person_id.frame.size.height;
     person_id.frame = CGRectMake(0, m_currentStartY, kScreenWidth, currentHeigth);
     [m_myScrollView addSubview:person_id];
