@@ -229,11 +229,13 @@
         m_contentTableView.hidden =NO;
         m_reamlTableView.hidden = NO;
         m_countryTableView.hidden =NO;
-
+        m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
         [loginActivity stopAnimating];
         [loginActivity removeFromSuperview];
 
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
+            
+            
             
             m_charaInfo = [[CharaInfo alloc] initWithCharaInfo:responseObject];
             m_charaDetailsView.NickNameLabel.text = m_charaInfo.roleNickName;
@@ -266,6 +268,16 @@
             m_charaDetailsView.clazzImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%@",m_charaInfo.professionalId]];
             m_charaDetailsView.headerImageView.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
             m_charaDetailsView.headerImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",m_charaInfo.thumbnail]];
+            
+            
+            if ([[KISDictionaryHaveKey(responseObject, @"ranking") allKeys] containsObject:@"rankingtime"]) {
+                NSString *changeBtnTitle =[NSString stringWithFormat:@"上次更新时间：%@",[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"rankingtime")]]];
+                
+                [[NSUserDefaults standardUserDefaults]setObject:KISDictionaryHaveKey(responseObject, @"rankingtime") forKey:@"WX_reloadBtnTitle_wx"];
+                
+                [m_charaDetailsView.reloadingBtn setTitle:changeBtnTitle forState:UIControlStateNormal];
+            }
+
             
             if ([m_charaInfo.auth isEqualToString:@"1"]) {
                 m_charaDetailsView.certificationImage.image = KUIImage(@"6");
@@ -316,7 +328,6 @@
     //[hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
         NSLog(@"res%@",responseObject);
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"ok"]) {
             
@@ -337,7 +348,6 @@
         
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"busy"]) {
             m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
-            //KISDictionaryHaveKey(responseObject, @"time") ;
             
             NSString *timeStr =[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"time") ]];
             NSString *indexStr = KISDictionaryHaveKey(responseObject, @"index");

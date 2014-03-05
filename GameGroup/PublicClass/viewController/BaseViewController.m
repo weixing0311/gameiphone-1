@@ -7,11 +7,15 @@
 //
 
 #import "BaseViewController.h"
-
+#define isNieheing @"isssniehe"
 @interface BaseViewController ()
 {
     UILabel* showLabel;//黑底白字 提示文字
     UIView* showWindowView;//黑底白字 提示文字 window
+    UIImageView *SimageView;
+    UIView *nieheImageView;
+    BOOL  isAlreadyNiehe;
+    BOOL isOKniehe;
 }
 @end
 
@@ -26,27 +30,51 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    //添加捏合手势
+    if (self.navigationController.viewControllers.count>6&&![[NSUserDefaults standardUserDefaults]objectForKey:isNieheing]) {
+        [self.view bringSubviewToFront:nieheImageView];
+        nieheImageView.hidden = NO;
+        SimageView.hidden = NO;
+        isOKniehe = YES;
+
+    }
+
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    //添加捏合手势
-    if (self.navigationController.viewControllers.count>1) {
-        [self.view addGestureRecognizer:[[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(ceshi)]];
+    [self.view addGestureRecognizer:[[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(ceshi)]];
 
-    }
+    nieheImageView = [[UIView alloc]initWithFrame:self.view.bounds];
+    nieheImageView.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.7];
+    [self.view addSubview:nieheImageView];
     
+    SimageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 230, 300)];
+    SimageView.center = nieheImageView.center;
+    SimageView.image = [UIImage imageNamed:@"手势---回到首页_03"];
+    SimageView.hidden=YES;
+    nieheImageView.hidden = YES;
+    [nieheImageView addSubview:SimageView];
     
+    [nieheImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(yincangimage:)]];
     
 //    self.view.backgroundColor = [UIColor whiteColor];
     self.view.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
 
     startX = KISHighVersion_7 ? 64 : 44;
 }
-
+-(void)yincangimage:(UIGestureRecognizer *)sender
+{
+    nieheImageView.hidden = YES;
+    SimageView.hidden =YES;
+}
 -(void)ceshi
 {
-    
+    [[NSUserDefaults standardUserDefaults]setObject:@"1" forKey:isNieheing];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void)setTopViewWithTitle:(NSString*)titleStr withBackButton:(BOOL)hasBacButton

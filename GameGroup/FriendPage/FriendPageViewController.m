@@ -50,7 +50,7 @@
 
     NSMutableArray * m_attentionsArray;
     NSMutableDictionary * m_attentionDict;
-
+    NSMutableArray *m_imgArray;
 //    NSMutableArray * m_fansArray;
 //    NSMutableDictionary * m_fansDict;
     
@@ -128,7 +128,7 @@
     
     m_friendsArray = [NSMutableArray array];//搜索用
     m_friendDict = [NSMutableDictionary dictionary];//显示用
-    
+    m_imgArray = [NSMutableArray array];
     m_attentionsArray = [NSMutableArray array];
     m_attentionDict = [NSMutableDictionary dictionary];
     
@@ -932,6 +932,8 @@
     }
 
     cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]]];
+    [m_imgArray removeAllObjects];
+    [m_imgArray addObject:cell.headImageV.image];
     cell.nameLabel.text = [tempDict objectForKey:@"displayName"];
     cell.gameImg_one.image = KUIImage(@"wow");
     cell.distLabel.text = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
@@ -1043,7 +1045,7 @@
     detailVC.achievementStr = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
     detailVC.achievementColor =KISDictionaryHaveKey(tempDict, @"achievementLevel") ;
     detailVC.sexStr =  KISDictionaryHaveKey(tempDict, @"sex");
-    detailVC.titleImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]]]]] ;
+    detailVC.titleImage =[m_imgArray objectAtIndex:indexPath.row] ;
     
     detailVC.ageStr = [GameCommon getNewStringWithId:[tempDict objectForKey:@"age"]];
     detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");

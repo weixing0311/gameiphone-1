@@ -25,7 +25,7 @@
     
     PullUpRefreshView      *refreshView;
     SRRefreshView   *_slimeView;
-
+    NSMutableArray *m_imgArray;
 }
 @end
 
@@ -62,7 +62,7 @@
             m_searchType = 2;
         }
     }
-    
+    m_imgArray = [NSMutableArray array];
     m_tabelData = [[NSMutableArray alloc] init];
     
     UIButton *menuButton=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -281,7 +281,8 @@
     }
     NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")] componentsSeparatedByString:@","];
     cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""]];
-
+     [m_imgArray removeAllObjects];
+    [m_imgArray addObject:cell.headImageV.image];
     NSDictionary* titleDic = KISDictionaryHaveKey(tempDict, @"title");
     if ([titleDic isKindOfClass:[NSDictionary class]]) {
         cell.distLabel.text = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"title")] isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(KISDictionaryHaveKey(titleDic, @"titleObj"), @"title");
@@ -317,9 +318,8 @@
     VC.sexStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"gender")intValue]];
     VC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"updateUserLocationDate")];
     VC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"distance")];
-    NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"img")] componentsSeparatedByString:@","];
 
-    VC.titleImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""]]]];
+    VC.titleImage = [m_imgArray objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:VC animated:YES];
 }
 #pragma mark  scrollView  delegate
