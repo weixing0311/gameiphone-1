@@ -271,11 +271,14 @@
             
             
             if ([[KISDictionaryHaveKey(responseObject, @"ranking") allKeys] containsObject:@"rankingtime"]) {
-                NSString *changeBtnTitle =[NSString stringWithFormat:@"上次更新时间：%@",[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"rankingtime")]]];
+//                NSString *changeBtnTitle =[NSString stringWithFormat:@"上次更新时间：%@",[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"rankingtime")]]];
                 
-                [[NSUserDefaults standardUserDefaults]setObject:KISDictionaryHaveKey(responseObject, @"rankingtime") forKey:@"WX_reloadBtnTitle_wx"];
+                NSString *changeBtnTitle=[self getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"ranking"), @"rankingtime") ]];
                 
-                [m_charaDetailsView.reloadingBtn setTitle:changeBtnTitle forState:UIControlStateNormal];
+                
+                [[NSUserDefaults standardUserDefaults]setObject:KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"ranking"), @"rankingtime") forKey:@"WX_reloadBtnTitle_wx"];
+                
+                [m_charaDetailsView.reloadingBtn setTitle:[NSString stringWithFormat:@"上次更新时间:%@",changeBtnTitle] forState:UIControlStateNormal];
             }
 
             
@@ -602,6 +605,40 @@
     
     
 }
+
+- (NSString*)getTimeWithMessageTime:(NSString*)messageTime
+{
+    NSString* currentString = [GameCommon getCurrentTime];
+    if (messageTime.length < 10 || currentString.length < 10) {
+        return @"未知";
+    }
+    NSString* curStr = [currentString substringToIndex:messageTime.length-3];
+    NSString* mesStr = [messageTime substringToIndex:messageTime.length-3];
+    
+    double theCurrentT = [curStr doubleValue];
+    double theMessageT = [mesStr doubleValue];
+    
+    NSLog(@"%f--%f",theCurrentT,theMessageT);
+    NSLog(@"++%f",theCurrentT-theMessageT);
+    if (((int)(theCurrentT-theMessageT))<60) {
+        return @"1分钟以前";
+    }
+    if (((int)(theCurrentT-theMessageT))<60*59) {
+        return [NSString stringWithFormat:@"%.f分钟以前",((theCurrentT-theMessageT)/60+1)];
+    }
+    if (((int)(theCurrentT-theMessageT))<60*60*24) {
+        return [NSString stringWithFormat:@"%.f小时以前",((theCurrentT-theMessageT)/3600)==0?1:((theCurrentT-theMessageT)/3600)];
+    }
+    if (((int)(theCurrentT-theMessageT))<60*60*48) {
+        return @"昨天";
+    }
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    //设定时间格式,这里可以设置成自己需要的格式
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *messageDateStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:theMessageT]];
+    return [messageDateStr substringFromIndex:5];
+}
+
 - (void)reLoadingList:(CharacterDetailsView *)characterdetailsView
 {
     m_charaDetailsView.reloadingBtn.userInteractionEnabled =NO;
@@ -609,5 +646,101 @@
         NSLog(@"刷新数据");
     
 }
-
 @end
+
+/*
+ 
+ entity =     {
+ auth = 0;
+ ranking =         {
+ 1 =             {
+ achievementPoints =                 {
+ compare = 0;
+ rank = 12;
+ value = 10900;
+ };
+ itemlevel =                 {
+ compare = 0;
+ rank = 4;
+ value = 578;
+ };
+ pveScore =                 {
+ compare = 0;
+ rank = 3;
+ value = 49986;
+ };
+ pvpScore =                 {
+ compare = 0;
+ rank = 0;
+ value = " ";
+ };
+ totalHonorableKills =                 {
+ compare = 0;
+ rank = 5;
+ value = 18009;
+ };
+ };
+ 2 =             {
+ achievementPoints =                 {
+ compare = 0;
+ rank = 14;
+ value = 10900;
+ };
+ itemlevel =                 {
+ compare = 0;
+ rank = 2;
+ value = 578;
+ 
+ };
+ pveScore =                 {
+ compare = 0;
+ rank = 2;
+ value = 49986;
+ };
+ pvpScore =                 {
+ compare = 0;
+ rank = 0;
+ value = " ";
+ };
+ totalHonorableKills =                 {
+ compare = 0;
+ rank = 109;
+ value = 18009;
+ };
+ };
+ 3 =             {
+ achievementPoints =                 {
+ compare = 0;
+ rank = 2764;
+ value = 10900;
+ };
+ itemlevel =                 {
+ compare = 0;
+ rank = 176;
+ value = 578;
+ };
+ pveScore =                 {
+ compare = 0;
+ rank = 100;
+ value = 49986;
+ };
+ pvpScore =                 {
+ compare = 0;
+ rank = 0;
+ value = " ";
+ };
+ totalHonorableKills =                 {
+ compare = 0;
+ rank = 7826;
+ value = 18009;
+ };
+ };
+ rankingtime = 1394071104935;
+ };
+ realm = "\U5361\U62c9\U8d5e";
+ thumbnail = 30885;
+ totalHonorableKills = 18009;
+ };
+ */
+
+

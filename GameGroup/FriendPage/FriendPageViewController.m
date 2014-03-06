@@ -932,8 +932,8 @@
     }
 
     cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]]];
-    [m_imgArray removeAllObjects];
-    [m_imgArray addObject:cell.headImageV.image];
+    
+   
     cell.nameLabel.text = [tempDict objectForKey:@"displayName"];
     cell.gameImg_one.image = KUIImage(@"wow");
     cell.distLabel.text = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
@@ -1045,7 +1045,8 @@
     detailVC.achievementStr = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
     detailVC.achievementColor =KISDictionaryHaveKey(tempDict, @"achievementLevel") ;
     detailVC.sexStr =  KISDictionaryHaveKey(tempDict, @"sex");
-    detailVC.titleImage =[m_imgArray objectAtIndex:indexPath.row] ;
+    
+    detailVC.titleImage =[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]] ;
     
     detailVC.ageStr = [GameCommon getNewStringWithId:[tempDict objectForKey:@"age"]];
     detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");

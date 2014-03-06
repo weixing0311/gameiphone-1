@@ -8,6 +8,7 @@
 
 #import "BaseViewController.h"
 #define isNieheing @"isssniehe"
+#import "TempData.h"
 @interface BaseViewController ()
 {
     UILabel* showLabel;//黑底白字 提示文字
@@ -16,6 +17,7 @@
     UIView *nieheImageView;
     BOOL  isAlreadyNiehe;
     BOOL isOKniehe;
+    
 }
 @end
 
@@ -35,18 +37,20 @@
     [super viewWillAppear:animated];
     
     //添加捏合手势
-    if (self.navigationController.viewControllers.count>6&&![[NSUserDefaults standardUserDefaults]objectForKey:isNieheing]) {
+    if (self.navigationController.viewControllers.count==4&&![[NSUserDefaults standardUserDefaults]objectForKey:isNieheing]&&[[TempData sharedInstance]wxAlreadydidClickniehe]) {
         [self.view bringSubviewToFront:nieheImageView];
         nieheImageView.hidden = NO;
         SimageView.hidden = NO;
         isOKniehe = YES;
-
+        [[TempData sharedInstance]setWxAlreadydidClickniehe:NO];
     }
 
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
     [self.view addGestureRecognizer:[[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(ceshi)]];
 
     nieheImageView = [[UIView alloc]initWithFrame:self.view.bounds];

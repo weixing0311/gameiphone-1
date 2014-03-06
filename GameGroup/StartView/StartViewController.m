@@ -20,7 +20,7 @@
 #import "LocationManager.h"
 #import "TempData.h"
 
-
+#import "MLNavigationController.h"
 #define kStartViewShowTime  (1.0f) //开机页面 显示时长
 
 @interface StartViewController ()
@@ -70,22 +70,22 @@
     //消息页面
         MessagePageViewController* fist  = [[MessagePageViewController alloc] init];
         fist.hidesBottomBarWhenPushed = YES;
-        UINavigationController* navigationController_First = [[UINavigationController alloc] initWithRootViewController:fist];
+        MLNavigationController* navigationController_First = [[MLNavigationController alloc] initWithRootViewController:fist];
         navigationController_First.navigationBarHidden = YES;
 //好友页面
         FriendPageViewController* second = [[FriendPageViewController alloc] init];
         second.hidesBottomBarWhenPushed = YES;
-        UINavigationController* navigationController_Second = [[UINavigationController alloc] initWithRootViewController:second];
+        MLNavigationController* navigationController_Second = [[MLNavigationController alloc] initWithRootViewController:second];
         navigationController_Second.navigationBarHidden = YES;
 //发现页面
         FindPageViewController* third = [[FindPageViewController alloc] init];
         third.hidesBottomBarWhenPushed = YES;
-        UINavigationController* navigationController_Third = [[UINavigationController alloc] initWithRootViewController:third];
+        MLNavigationController* navigationController_Third = [[MLNavigationController alloc] initWithRootViewController:third];
         navigationController_Third.navigationBarHidden = YES;
 //我的页面
         MePageViewController* fourth = [[MePageViewController alloc] init];
         fourth.hidesBottomBarWhenPushed = YES;
-        UINavigationController* navigationController_Fourth = [[UINavigationController alloc] initWithRootViewController:fourth];
+        MLNavigationController* navigationController_Fourth = [[MLNavigationController alloc] initWithRootViewController:fourth];
         navigationController_Fourth.navigationBarHidden = YES;
 
         Custom_tabbar*  ryc_tabbarController = [[Custom_tabbar alloc] init];

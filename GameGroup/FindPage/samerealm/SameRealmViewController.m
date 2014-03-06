@@ -403,8 +403,6 @@
     NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")] componentsSeparatedByString:@","];
     cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""]];
         
-         [m_imgArray removeAllObjects];
-        [m_imgArray addObject:cell.headImageV.image];
 
     NSDictionary* titleDic = KISDictionaryHaveKey(tempDict, @"title");
     if ([titleDic isKindOfClass:[NSDictionary class]]) {
@@ -444,7 +442,9 @@
     VC.sexStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"gender")intValue]];
     VC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"updateUserLocationDate")];
     VC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"distance")];
-    VC.titleImage = [m_imgArray objectAtIndex:indexPath.row];
+    NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"img")] componentsSeparatedByString:@","];
+    
+    VC.titleImage = [BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""];
     VC.isChatPage = NO;
     [self.navigationController pushViewController:VC animated:YES];
 }

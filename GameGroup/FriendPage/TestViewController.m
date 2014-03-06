@@ -201,8 +201,10 @@
     view.backgroundColor =[UIColor grayColor];
     [m_myScrollView addSubview:view];
     
-    self.headImageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
-    self.headImageView.image = self.titleImage;
+    self.headImageView = [[EGOImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
+    
+    self.headImageView.placeholderImage = [UIImage imageNamed:@"people_man.png"];
+    self.headImageView.imageURL =[NSURL URLWithString: self.titleImage];
     [view addSubview:self.headImageView];
     
     m_currentStartY += view.frame.size.height;
@@ -318,8 +320,12 @@
     [m_myScrollView addSubview:bview];
     UIView* titleObjView = [CommonControlOrView setMyTitleObjWithImage:nil titleName:self.achievementStr rarenum:self.achievementColor showCurrent:YES];
     [bview addSubview: titleObjView ];
-    m_currentStartY +=titleObjView.frame.size.height;
+    m_currentStartY +=bview.frame.size.height;
     [self setOneLineWithY:m_currentStartY];
+    
+    UIButton* reportButton = [CommonControlOrView setButtonWithFrame:CGRectMake(0, m_myScrollView.bounds.size.height-45, 320, 45) title:@"举报该用户" fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:kColorWithRGB(51, 51, 51, 1.0) bgImage:nil HighImage:nil selectImage:nil];
+        reportButton.backgroundColor = kColorWithRGB(225, 225, 225, 1.0); [m_myScrollView addSubview:reportButton];
+
 }
 
 

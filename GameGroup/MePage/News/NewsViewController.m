@@ -517,6 +517,17 @@
     OnceDynamicViewController* detailVC = [[OnceDynamicViewController alloc] init];
     detailVC.messageid = KISDictionaryHaveKey(tempDict, @"id");
 //    detailVC.urlLink = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"urlLink")];
+    
+    NSString* imageName = [GameCommon getHeardImgId:KISDictionaryHaveKey(tempDict, @"userimg")];
+
+    detailVC.imgStr =[BaseImageUrl stringByAppendingString:imageName];
+    detailVC.nickNameStr = [KISDictionaryHaveKey(tempDict, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(tempDict, @"nickname");
+
+    
+    detailVC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"createDate")];
+   // detailVC.touxianStr = [GameCommon getHeardImgId:KISDictionaryHaveKey(destDic, @"userimg")];
+    detailVC.zanStr =[self getZanLabelWithNum:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"zannum")]];
+    
     detailVC.delegate = self;
     [self.navigationController pushViewController:detailVC animated:YES];
 }

@@ -21,7 +21,7 @@
     
     MBProgressHUD* hud;//提示框
 }
-
+@property (nonatomic,assign) BOOL canDragBack;
 - (BOOL)isHaveLogin;
 
 - (void)setTopViewWithTitle:(NSString*)titleStr withBackButton:(BOOL)hasBacButton;

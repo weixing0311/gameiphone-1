@@ -21,7 +21,6 @@
 //    UIView* inPutView;
 //    UIButton* inputButton;
     UILabel* commentLabel;
-    
     NSInteger  allPL;//总评论数
     
     double  webViewHeight;
@@ -31,6 +30,20 @@
     
     NSInteger shareType;//0为好友 1为广播
     UILabel*  sharePeopleLabel;
+    
+    
+    
+    UIImageView* bg1;
+    EGOImageButton* headBtn1;
+    UILabel* nickLabel1;
+    UILabel* titleLabel1;
+    UILabel* titleLabel_no1;
+    UIButton* zanButton1;
+    UILabel *commentLabel12;
+    UILabel* line1;
+    UIButton* inputButton1;
+    UIButton* reportButton1;
+    UIImageView *imageView1;
 }
 @property(nonatomic, strong)NSDictionary* dataDic;
 @property(nonatomic, strong)NSArray*      headImgArray;
@@ -70,7 +83,7 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
-
+    
     [self setTopViewWithTitle:@"详情" withBackButton:YES];
     
     m_shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -79,14 +92,102 @@
     [m_shareButton setBackgroundImage:KUIImage(@"share_click") forState:UIControlStateHighlighted];
     [self.view addSubview:m_shareButton];
     [m_shareButton addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    m_shareButton.hidden = YES;
-    
+     m_shareButton.hidden = YES;
+
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
     hud.labelText = @"查询中...";
     
+    [self setUpViewBeforeLoading];
+
+    
     [self getDataByNet];
 }
+
+
+- (void)setUpViewBeforeLoading
+{
+
+    
+    bg1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, + startX, kScreenWidth, 60)];
+    bg1.image = KUIImage(@"detail_top_bg");
+    [self.view addSubview:bg1];
+    
+    headBtn1 = [[EGOImageButton alloc] initWithFrame:CGRectMake(10, 10 + startX, 40, 40)];
+    headBtn1.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
+    headBtn1.imageURL = [NSURL URLWithString:self.imgStr];
+    headBtn1.layer.cornerRadius = 5;
+    headBtn1.layer.masksToBounds=YES;
+    [self.view addSubview:headBtn1];
+    
+    nickLabel1 = [CommonControlOrView setLabelWithFrame:CGRectMake(60, 8+ startX, 180, 20) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:15.0] text:self.nickNameStr textAlignment:NSTextAlignmentLeft];
+    [self.view addSubview:nickLabel1];
+    
+    NSDictionary* titleDic = KISDictionaryHaveKey(self.dataDic, @"titleObj");
+    if ([titleDic isKindOfClass:[NSDictionary class]]) {
+        titleLabel1 = [CommonControlOrView setLabelWithFrame:CGRectMake(60, 33+ startX, 180, 20) textColor:[UIColor whiteColor] font:[UIFont boldSystemFontOfSize:14.0] text:@"22222" textAlignment:NSTextAlignmentLeft];
+        [self.view addSubview:titleLabel1];
+    }
+    else
+    {
+        titleLabel_no1 = [CommonControlOrView setLabelWithFrame:CGRectMake(60, 33+ startX, 150, 20) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:13.0] text:@"暂无头衔" textAlignment:NSTextAlignmentLeft];
+        [self.view addSubview:titleLabel_no1];
+    }
+    
+    zanButton1 = [[UIButton alloc] initWithFrame:CGRectMake(230, 15+ startX, 76, 30)];
+    [zanButton1 setBackgroundImage:KUIImage(@"zan_normal") forState:UIControlStateNormal];
+    [zanButton1 setBackgroundImage:KUIImage(@"zan_click") forState:UIControlStateSelected];
+    [zanButton1 setTitle:self.zanStr forState:UIControlStateNormal];
+    if ([[GameCommon getNewStringWithId:self.zanStr] isEqualToString:@"1"]) {
+        [zanButton1 setTitleColor:kColorWithRGB(204, 204, 204, 1.0) forState:UIControlStateNormal];
+        zanButton1.selected = YES;
+        [zanButton1 setBackgroundImage:KUIImage(@"zan_hig_1") forState:UIControlStateHighlighted];
+    }
+    else
+    {
+        [zanButton1 setTitleColor:kColorWithRGB(153, 153, 153, 1.0) forState:UIControlStateNormal];
+        [zanButton1 setBackgroundImage:KUIImage(@"zan_hig_2") forState:UIControlStateHighlighted];
+        zanButton1.selected = NO;
+    }
+    zanButton1.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    zanButton1.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+    [self.view addSubview:zanButton1];
+    
+   imageView1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-40, 320, 40)];
+    imageView1.image = KUIImage(@"inputbg.png");
+    imageView1.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:imageView1];
+    
+    reportButton1 = [[UIButton alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-40, 159, 40)];
+    [reportButton1 setImage:KUIImage(@"news_report") forState:UIControlStateNormal];
+    reportButton1.imageEdgeInsets = UIEdgeInsetsMake(15.0/2, 34, 15.2/2, 100);
+    reportButton1.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 34);
+    [reportButton1 setTitle:@"举报投诉" forState:UIControlStateNormal];
+    reportButton1.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    [reportButton1 setTitleColor:kColorWithRGB(102, 102, 102, 1.0) forState:UIControlStateNormal];
+    [self.view addSubview:reportButton1];
+    
+    line1= [[UILabel alloc] initWithFrame:CGRectMake(160, self.view.frame.size.height-30, 1, 20)];
+    line1.backgroundColor = kColorWithRGB(200, 200, 200, 1.0);
+    [self.view addSubview:line1];
+    
+    inputButton1 = [[UIButton alloc] initWithFrame:CGRectMake(161, self.view.frame.size.height-40, 159, 40)];
+    [inputButton1 setImage:KUIImage(@"news_comment") forState:UIControlStateNormal];
+    inputButton1.imageEdgeInsets = UIEdgeInsetsMake(15.0/2, 34, 15.2/2, 100);
+    [self.view addSubview:inputButton1];
+    
+    commentLabel12 = [[UILabel alloc] initWithFrame:CGRectMake(225, self.view.frame.size.height-40, 85, 40)];
+    commentLabel12.textAlignment = NSTextAlignmentLeft;
+    commentLabel12.textColor = kColorWithRGB(102, 102, 102, 1.0);
+    commentLabel12.font = [UIFont boldSystemFontOfSize:12.0];
+    commentLabel12.text = [NSString stringWithFormat:@"评论 %d", allPL];
+    commentLabel12.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:commentLabel12];
+
+    
+}
+
+
 
 
 - (void)getDataByNet
@@ -105,6 +206,19 @@
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [hud hide:YES];
+        [bg1 removeFromSuperview];
+        [headBtn1 removeFromSuperview];
+        [nickLabel1 removeFromSuperview];
+        [titleLabel1 removeFromSuperview];
+        [titleLabel_no1 removeFromSuperview];
+        [zanButton1 removeFromSuperview];
+        [commentLabel12 removeFromSuperview];
+        [line1 removeFromSuperview];
+        [inputButton1 removeFromSuperview];
+        [reportButton1 removeFromSuperview];
+        [imageView1 removeFromSuperview];
+
+        
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             self.dataDic = responseObject;
             
@@ -135,6 +249,8 @@
 
 - (void)setUpView
 {
+
+    
     UIImageView* bg = [[UIImageView alloc] initWithFrame:CGRectMake(0, + startX, kScreenWidth, 60)];
     bg.image = KUIImage(@"detail_top_bg");
     [self.view addSubview:bg];

@@ -9,6 +9,7 @@
 #import "BaseViewController.h"
 #import "HGPhotoWall.h"
 #import "HostInfo.h"
+#import "EGOImageView.h"
 typedef enum
 {
     VIEW_TYPE_FriendPage1 = 0,
@@ -25,12 +26,12 @@ typedef enum
 @property(nonatomic, strong)NSString*     userId;
 @property(nonatomic, strong)NSString*     nickName;
 @property(nonatomic, assign)BOOL          isChatPage;//从聊天页面进入 点发起聊天pop
-@property(nonatomic,strong)UIImageView *headImageView;
+@property(nonatomic,strong)EGOImageView *headImageView;
 @property(nonatomic,copy)NSString *timeStr;//更新时间
 @property(nonatomic,copy)NSString *jlStr;//距离
 @property(nonatomic,copy)NSString *ageStr;//年龄
 @property(nonatomic,copy)NSString *sexStr;//性别
 @property(nonatomic,copy)NSString *achievementStr;//头衔
 @property(nonatomic,copy)NSString * achievementColor;
-@property(nonatomic,strong)UIImage *titleImage;
+@property(nonatomic,strong)NSString *titleImage;
 @end
