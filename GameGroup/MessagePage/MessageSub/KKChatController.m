@@ -307,6 +307,11 @@
 
 -(void)emojiBtnClicked:(UIButton *)sender
 {
+    if (!myActive) {
+        UIAlertView * UnActionAlertV = [[UIAlertView alloc]initWithTitle:@"您尚未激活" message:@"未激活用户不能发送聊天消息" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"去激活", nil];
+        [UnActionAlertV show];
+        return ;
+    }
     if (!ifEmoji) {
         [self.textView resignFirstResponder];
         ifEmoji = YES;

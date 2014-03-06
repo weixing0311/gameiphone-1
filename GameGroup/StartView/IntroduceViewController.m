@@ -8,7 +8,7 @@
 
 #import "IntroduceViewController.h"
 #import "LoginViewController.h"
-#import "RegisterViewController.h"
+
 
 @interface IntroduceViewController ()
 {
@@ -137,6 +137,7 @@
 - (void)registerButtonClick:(id)sender
 {
     RegisterViewController* vc = [[RegisterViewController alloc] init];
+    vc.delegate = self.delegate;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

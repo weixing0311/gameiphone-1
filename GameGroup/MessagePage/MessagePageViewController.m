@@ -17,10 +17,11 @@
 
 #import "OtherMsgsViewController.h"
 #import "FriendRecommendViewController.h"
+#import "AddAddressBookViewController.h"
 
 //#import "Reachability.h"
 
-@interface MessagePageViewController ()
+@interface MessagePageViewController ()<RegisterViewControllerDelegate>
 {
     UITableView * m_messageTable;
     
@@ -87,6 +88,7 @@
         [[Custom_tabbar showTabBar] hideTabBar:YES];
 
         IntroduceViewController* vc = [[IntroduceViewController alloc] init];
+        vc.delegate = self;
         UINavigationController * navi = [[UINavigationController alloc] initWithRootViewController:vc];
         [self presentViewController:navi animated:NO completion:^{
         }];
@@ -112,11 +114,16 @@
             [self sendDeviceToken];
             [self getMyUserInfoFromNet];//获得“我”信息
         }
-        
         [self displayMsgsForDefaultView];
     }
 }
-
+-(void)RegisterViewControllerFinishRegister
+{
+    AddAddressBookViewController* addressVC = [[AddAddressBookViewController alloc]init];
+    UINavigationController * navi = [[UINavigationController alloc] initWithRootViewController:addressVC];
+    [self presentViewController:navi animated:NO completion:^{
+    }];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];

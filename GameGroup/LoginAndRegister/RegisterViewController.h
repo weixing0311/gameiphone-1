@@ -9,7 +9,12 @@
 #import "BaseViewController.h"
 #import "RealmsSelectViewController.h"
 #import "SearchRoleViewController.h"
+@protocol RegisterViewControllerDelegate <NSObject>
+@optional
+-(void)RegisterViewControllerFinishRegister;
 
+@end
 @interface RegisterViewController : BaseViewController<UITextFieldDelegate, RealmSelectDelegate, UIAlertViewDelegate, SearchRoleDelegate, UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIGestureRecognizerDelegate>
+@property (nonatomic,retain) id <RegisterViewControllerDelegate>delegate;
 
 @end

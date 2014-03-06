@@ -471,7 +471,7 @@ BOOL validateMobile(NSString* mobile) {
 #pragma mark 第二步
 - (void)jump3ButtonOK
 {
-    UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"跳过绑定" message:@"不绑定游戏角色会导致你不法使用部分社交功能,你确定吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"跳过", nil];
+    UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"跳过绑定" message:@"不绑定游戏角色会导致你无法使用部分社交功能,你确定吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"跳过", nil];
     [alert show];
 }
 - (void)setStep_2View
@@ -1123,7 +1123,9 @@ BOOL validateMobile(NSString* mobile) {
         [self upLoadUserLocationWithLat:[[TempData sharedInstance] returnLat] Lon:[[TempData sharedInstance] returnLon]];
         
         [self dismissViewControllerAnimated:YES completion:^{
-            
+            if (_delegate && [_delegate respondsToSelector:@selector(RegisterViewControllerFinishRegister)]) {
+                [_delegate RegisterViewControllerFinishRegister];
+            }
         }];
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
