@@ -217,8 +217,6 @@
     NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")] componentsSeparatedByString:@","];
     cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""]];
     
-     [m_imgArray removeAllObjects];
-    [m_imgArray addObject:cell.headImageV.image];
     NSDictionary* titleDic = KISDictionaryHaveKey(tempDict, @"title");
     if ([titleDic isKindOfClass:[NSDictionary class]]) {
         cell.distLabel.text = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"title")] isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(KISDictionaryHaveKey(titleDic, @"titleObj"), @"title");
@@ -248,7 +246,9 @@
     TestViewController *VC = [[TestViewController alloc]init];
     VC.userId = KISDictionaryHaveKey(recDict, @"id");
     VC.nickName = KISDictionaryHaveKey(recDict, @"nickname");
-    VC.titleImage = [m_imgArray objectAtIndex:indexPath.row];
+    
+    
+    VC.titleImage =[BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""];
     
     VC.ageStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"age")intValue]];
     VC.sexStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"gender")intValue]];

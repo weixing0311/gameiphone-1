@@ -76,7 +76,7 @@
             [self.reloadingBtn setTitle:@"刷新排行榜数据" forState:UIControlStateNormal];
         }
         else{
-            [self.reloadingBtn setTitle:[NSString stringWithFormat:@"上次更新时间：%@",[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:str]]]forState:UIControlStateNormal];
+            [self.reloadingBtn setTitle:[NSString stringWithFormat:@"上次更新时间:%@",[self getTimeWithMessageTime:[GameCommon getNewStringWithId:str]]]forState:UIControlStateNormal];
         }
         
         [self.reloadingBtn setTitleColor:UIColorFromRGBA(0xffffff, 1) forState:UIControlStateNormal];
@@ -459,6 +459,38 @@
         [self.myCharaterDelegate reLoadingList:self];
     }
 
+}
+- (NSString*)getTimeWithMessageTime:(NSString*)messageTime
+{
+    NSString* currentString = [GameCommon getCurrentTime];
+    if (messageTime.length < 10 || currentString.length < 10) {
+        return @"未知";
+    }
+    NSString* curStr = [currentString substringToIndex:messageTime.length-3];
+    NSString* mesStr = [messageTime substringToIndex:messageTime.length-3];
+    
+    double theCurrentT = [curStr doubleValue];
+    double theMessageT = [mesStr doubleValue];
+    
+    NSLog(@"%f--%f",theCurrentT,theMessageT);
+    NSLog(@"++%f",theCurrentT-theMessageT);
+    if (((int)(theCurrentT-theMessageT))<60) {
+        return @"1分钟以前";
+    }
+    if (((int)(theCurrentT-theMessageT))<60*59) {
+        return [NSString stringWithFormat:@"%.f分钟以前",((theCurrentT-theMessageT)/60+1)];
+    }
+    if (((int)(theCurrentT-theMessageT))<60*60*24) {
+        return [NSString stringWithFormat:@"%.f小时以前",((theCurrentT-theMessageT)/3600)==0?1:((theCurrentT-theMessageT)/3600)];
+    }
+    if (((int)(theCurrentT-theMessageT))<60*60*48) {
+        return @"昨天";
+    }
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    //设定时间格式,这里可以设置成自己需要的格式
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *messageDateStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:theMessageT]];
+    return [messageDateStr substringFromIndex:5];
 }
 
 @end

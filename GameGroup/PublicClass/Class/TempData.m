@@ -25,6 +25,7 @@ static TempData *sharedInstance=nil;
 }
 -(void)initThis
 {
+    self.wxAlreadydidClickniehe = YES;
     panned = YES;
     needConnectChatServer = NO;
     serverAddress = @"";

@@ -72,10 +72,17 @@ static MLNavigationController *mlNavigationController;
     shadowImageView.frame = CGRectMake(-10, 0, 10, self.view.frame.size.height);
     [self.view addSubview:shadowImageView];
     
+    
+    UIView *view = [[ UIView alloc]initWithFrame:CGRectMake(0, 0, 10, self.view.bounds.size.height)];
+    view.backgroundColor =[UIColor clearColor];
+    [self.view addSubview:view];
+    
+    
+    
    self.recognizer = [[[UIPanGestureRecognizer alloc]initWithTarget:self
                                                                                  action:@selector(paningGestureReceive:)]autorelease];
     [self.recognizer delaysTouchesBegan];
-    [self.view addGestureRecognizer:self.recognizer];
+    [view addGestureRecognizer:self.recognizer];
 
 }
 -(void)canAddGesture:(BOOL)ifCan

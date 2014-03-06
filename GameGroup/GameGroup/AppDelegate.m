@@ -13,7 +13,7 @@
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 #import "GetDataAfterManager.h"
-
+#import "BaseViewController.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -24,7 +24,10 @@
     
     // Override point for customization after application launch.
     self.startViewController = [[StartViewController alloc] init];
+    
     self.window.rootViewController = self.startViewController;
+    
+    
     
     [DDLog addLogger:[DDTTYLogger sharedInstance]];//打印xmpp输出
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];

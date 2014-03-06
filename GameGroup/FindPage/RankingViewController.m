@@ -507,7 +507,7 @@
         }
         
         
-        
+        NSLog(@"服务器%@",KISDictionaryHaveKey(dic,@"realm"));
         cell.titleImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%d",[KISDictionaryHaveKey(dic,@"characterclassid")intValue]]];
         cell.NumLabel.text = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"rank")];
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"charactername");
@@ -1056,7 +1056,6 @@
                 if (self.pageCount3 == 0||self.pageCount3 ==-1) {
                     [m_countryArray removeAllObjects];
                     [m_countryArray addObjectsFromArray:responseObject];
-                    
                     NSLog(@"切换或者刷新==0");
                 }
                 else

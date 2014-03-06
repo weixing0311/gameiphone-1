@@ -30,6 +30,7 @@
 @property (assign,nonatomic)BOOL newFriendsReq;
 @property (nonatomic,assign)BOOL needDisplayPushNotification;//是否展示推送的消息
 @property (nonatomic,assign)BOOL registerNeedMsg;//是否需要验证码
+@property (nonatomic,assign)BOOL wxAlreadydidClickniehe;//捏合返回首页手势提示
 + (id)sharedInstance;
 -(void)setOpened:(BOOL)haveOpened;
 -(BOOL)ifOpened;
