@@ -10,5 +10,5 @@
 
 @protocol DodeAddressCellDelegate <NSObject>
 @optional
--(void)DodeAddressCellTouchButton;
+-(void)DodeAddressCellTouchButtonWithIndexPath:(NSIndexPath *)indexPath;
 @end

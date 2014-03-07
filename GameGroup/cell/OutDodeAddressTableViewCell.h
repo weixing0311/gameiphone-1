@@ -10,6 +10,7 @@
 #import "DodeAddressCellDelegate.h"
 @interface OutDodeAddressTableViewCell : UITableViewCell
 @property (nonatomic,assign) id<DodeAddressCellDelegate>delegate;
+@property (nonatomic,retain) NSIndexPath * indexPath;
 @property (nonatomic,retain) UILabel * nameL;
 @property (nonatomic,retain) UILabel * photoNoL;
 @end

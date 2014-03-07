@@ -328,7 +328,7 @@
     
     UIView* person_id = [CommonControlOrView setTwoLabelViewNameText:@"小伙伴ID" text:self.hostInfo.userId nameTextColor:kColorWithRGB(102, 102, 102, 1.0) textColor:kColorWithRGB(51, 51, 51, 1.0)];
     if (!self.hostInfo.active) {
-        //添加未认证图片
+        
     }
     currentHeigth = person_id.frame.size.height;
     person_id.frame = CGRectMake(0, m_currentStartY, kScreenWidth, currentHeigth);

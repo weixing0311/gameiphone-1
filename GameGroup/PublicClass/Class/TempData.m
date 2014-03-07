@@ -39,6 +39,7 @@ static TempData *sharedInstance=nil;
     opened = NO;
     self.needDisplayPushNotification = NO;
     self.registerNeedMsg = YES;
+    self.passBindingRole = NO;
 }
 -(void)setOpened:(BOOL)haveOpened
 {

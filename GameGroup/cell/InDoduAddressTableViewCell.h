@@ -11,7 +11,9 @@
 #import "EGOImageView.h"
 @interface InDoduAddressTableViewCell : UITableViewCell
 @property (nonatomic,assign) id<DodeAddressCellDelegate>delegate;
+@property (nonatomic,retain) NSIndexPath * indexPath;
 @property (nonatomic,retain) UILabel * nameL;
 @property (nonatomic,retain) UILabel * photoNoL;
+@property (nonatomic,retain) UIButton * addFriendB;
 @property (nonatomic,retain) EGOImageView * headerImage;
 @end

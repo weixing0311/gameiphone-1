@@ -675,7 +675,7 @@ BOOL validateMobile(NSString* mobile) {
         NSLog(@"%@", dic);
         
         characterid = KISDictionaryHaveKey(dic, @"id");//角色id
-    
+        [[TempData sharedInstance] setCharacterID:characterid];
         m_step2Scroll.hidden = YES;
         m_step3Scroll.hidden = NO;
         m_topImage.image = KUIImage(@"register_step_3");
@@ -740,6 +740,7 @@ BOOL validateMobile(NSString* mobile) {
             m_topImage.image = KUIImage(@"register_step_3");
             m_userNameText.text = m_roleNameText.text;
             m_titleLabel.text = @"个人信息";
+            [[TempData sharedInstance] setPassBindingRole:YES];
         }
     }
 }

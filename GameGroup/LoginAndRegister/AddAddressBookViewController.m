@@ -9,6 +9,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "AddAddressBookViewController.h"
 #import "AddressListViewController.h"
+#import "AddSameServerListViewController.h"
 
 @interface AddAddressBookViewController ()<UIAlertViewDelegate>
 
@@ -67,8 +68,9 @@
     label.font = [UIFont systemFontOfSize:12];
     label.text = @"陌游将请求访问你的手机通讯录,帮您找到已经在陌游的好友.\n\n请放心,您的信息仅用于查找好友,所有信息会被加密并安全保存,防止被不正当使用.";
     [self.view addSubview:label];
-    
-//    [self uploadAddress];
+    hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    hud.labelText = @"发送中...";
 }
 - (void)passUploadAddressBook
 {
@@ -111,15 +113,19 @@
             NSMutableDictionary * dic = [NSMutableDictionary dictionary];
             if (tmpLastName&&tmpFirstName) {
                 [dic setObject:[NSString stringWithFormat:@"%@%@",tmpLastName,tmpFirstName] forKey:@"name"];
+                [dic setObject:tmpPhoneIndex forKey:@"mobileid"];
+                [addressArray addObject:dic];
             }else if (tmpLastName)
             {
                  [dic setObject:[NSString stringWithFormat:@"%@",tmpLastName] forKey:@"name"];
+                [dic setObject:tmpPhoneIndex forKey:@"mobileid"];
+                [addressArray addObject:dic];
             }else if (tmpFirstName)
             {
                  [dic setObject:[NSString stringWithFormat:@"%@",tmpFirstName] forKey:@"name"];
+                [dic setObject:tmpPhoneIndex forKey:@"mobileid"];
+                [addressArray addObject:dic];
             }
-            [dic setObject:tmpPhoneIndex forKey:@"mobileid"];
-            [addressArray addObject:dic];
         }
         CFRelease(tmpPhones);
     }
@@ -139,7 +145,7 @@
     [body setObject:params forKey:@"params"];
     [body setObject:@"162" forKey:@"method"];
     [body setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-//    [hud show:YES];
+    [hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:body TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSMutableArray* array = [NSMutableArray array];
         for (NSDictionary * dic in responseObject) {
@@ -148,13 +154,15 @@
             [array addObject:dict];
         }
         NSArray* lingshiArray = [arr copy];
-        for (NSDictionary* dict in array) {
+        for (NSMutableDictionary* dict in array) {
             for (NSDictionary* dic in lingshiArray) {
-                if ([dic[@"mobileid"]isEqualToString:dict[@""]]) {
+                if ([dic[@"mobileid"]isEqualToString:dict[@"username"]]) {
                     [arr removeObject:dic];
+                    [dict setValue:dic[@"name"] forKey:@"addressName"];
                 }
             }
         }
+        [hud hide:YES];
         AddressListViewController* addListVC = [[AddressListViewController alloc]init];
         addListVC.inDudeArray = array;
         addListVC.outDudeArray = arr;
@@ -167,7 +175,7 @@
                 [alert show];
             }
         }
-//        [hud hide:YES];
+        [hud hide:YES];
     }];
 }
 - (void)didReceiveMemoryWarning
@@ -186,6 +194,14 @@
 }
 - (void)goToNext
 {
-    
+    if ([[TempData sharedInstance] passBindingRole]) {
+        
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    }else{
+        AddSameServerListViewController * addSameServerVC = [[AddSameServerListViewController alloc]init];
+        [self.navigationController pushViewController:addSameServerVC animated:YES];
+    }
 }
 @end
