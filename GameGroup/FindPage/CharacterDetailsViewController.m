@@ -277,7 +277,7 @@
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         [loginActivity stopAnimating];
         [loginActivity removeFromSuperview];
-
+        m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
@@ -319,10 +319,9 @@
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"busy"]) {
             m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
             
-            NSString *timeStr =[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"time") ]];
+            NSString *timeStr =[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"time")]];
             NSString *indexStr = KISDictionaryHaveKey(responseObject, @"index");
-            hud.labelText = [NSString stringWithFormat:@"进入更新队列，目前队列位置：%@，预计更新时间：%@",
-                              indexStr,timeStr];
+            hud.detailsLabelText = [NSString stringWithFormat:@"进入更新队列，目前队列位置：%@，预计更新时间：%@",indexStr,timeStr];
             [hud showAnimated:YES whileExecutingBlock:^{
                 sleep(5);
             }];
@@ -334,6 +333,12 @@
             [hud showAnimated:YES whileExecutingBlock:^{
                 sleep(3);
             }];
+        NSString *changeBtnTitle =[NSString stringWithFormat:@"上次更新时间：%@",[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"rankingtime")]]];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:KISDictionaryHaveKey(responseObject, @"rankingtime") forKey:@"WX_reloadBtnTitle_wx"];
+        
+        [m_charaDetailsView.reloadingBtn setTitle:changeBtnTitle forState:UIControlStateNormal];
+
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
 
@@ -353,7 +358,7 @@
 {
 //    hud = [[MBProgressHUD alloc] initWithView:self.view];
 //    [self.view addSubview:hud];
-    hud.labelText = @"正拼命从英雄榜获取中...";
+    hud.detailsLabelText = @"正拼命从英雄榜获取中...";
     
     m_charaDetailsView.reloadingBtn.userInteractionEnabled =NO;
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
