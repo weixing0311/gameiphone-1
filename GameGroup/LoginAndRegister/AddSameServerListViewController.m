@@ -14,6 +14,8 @@
 {
     UITableView * _tableView;
 }
+@property (nonatomic,retain) NSMutableArray * guildArray;
+@property (nonatomic,retain) NSMutableArray * realmArray;
 @end
 
 @implementation AddSameServerListViewController
@@ -23,6 +25,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.guildArray = [NSMutableArray array];
+        self.realmArray = [NSMutableArray array];
     }
     return self;
 }
@@ -80,7 +84,7 @@
     if (section == 0) {
         view.titleL.text = @"同工会的好友";
     }else{
-        view.titleL.text = @"";
+        view.titleL.text = [NSString stringWithFormat:@"%@服务器的达人",[[TempData sharedInstance] gamerealm]];
     }
     return view;
 }

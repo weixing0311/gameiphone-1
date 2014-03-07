@@ -32,7 +32,8 @@
 @property (nonatomic,assign)BOOL registerNeedMsg;//是否需要验证码
 @property (nonatomic,assign)BOOL passBindingRole;//注册时是否跳过绑定角色
 @property (nonatomic,assign)BOOL wxAlreadydidClickniehe;//捏合返回首页手势提示
-@property (nonatomic,retain)NSString * characterID;
+@property (nonatomic,retain)NSString * characterID;//注册时的角色ID
+@property (nonatomic,retain)NSString * gamerealm;//注册时的服务器名
 + (id)sharedInstance;
 -(void)setOpened:(BOOL)haveOpened;
 -(BOOL)ifOpened;

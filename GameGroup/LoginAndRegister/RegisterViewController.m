@@ -676,6 +676,7 @@ BOOL validateMobile(NSString* mobile) {
         
         characterid = KISDictionaryHaveKey(dic, @"id");//角色id
         [[TempData sharedInstance] setCharacterID:characterid];
+        [[TempData sharedInstance] setGamerealm:m_serverNameText.text];
         m_step2Scroll.hidden = YES;
         m_step3Scroll.hidden = NO;
         m_topImage.image = KUIImage(@"register_step_3");
