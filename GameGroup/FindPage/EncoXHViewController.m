@@ -270,6 +270,7 @@
     //sayHelloBtn.enabled = NO;
     if (isSuccessToshuaishen) {
        promptLabel.text  =@"很遗憾，无法和小衰神打招呼，点击“换一个”远离小衰神" ;
+        sayHelloBtn.enabled = NO;
     }else{
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
     [paramDict setObject:@"1" forKey:@"gameid"];
@@ -417,10 +418,11 @@
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
+        
         inABtn.enabled = YES;
         sayHelloBtn.enabled = YES;
         [hud hide:YES];
-        
+
         if ([error isKindOfClass:[NSDictionary class]]) {
             
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
@@ -433,7 +435,7 @@
                 
                 if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100042"]) {
  
-                    isSuccessToshuaishen =YES;
+                isSuccessToshuaishen =YES;
                 isWXCeiling =YES;
                 inABtn.enabled = YES;
                 sayHelloBtn.enabled = YES;
@@ -474,6 +476,13 @@
             }
             
         }
+        else
+        {
+            UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请求数据失败，请检查网络！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            alert.tag = 56;
+            [alert show];
+        }
+
     }];
 }
 
@@ -578,18 +587,23 @@
 #pragma mark--- 查看角色列表
 -(void)showGameList:(UIGestureRecognizer *)sender
 {
-    m_tableView.hidden = NO;
-    tf.hidden = NO;
-    headImageView.hidden = YES;
-    clazzImageView.hidden = YES;
-    clazzLabel.hidden =YES;
-    NickNameLabel.hidden = YES;
-    customLabel.hidden = YES;
-    inABtn.hidden = YES;
-    sexLabel.hidden = YES;
-    sayHelloBtn.hidden =YES;
-    promptLabel .hidden = YES;
-    
+    if (m_characterArray.count >1) {
+        m_tableView.hidden = NO;
+        tf.hidden = NO;
+        headImageView.hidden = YES;
+        clazzImageView.hidden = YES;
+        clazzLabel.hidden =YES;
+        NickNameLabel.hidden = YES;
+        customLabel.hidden = YES;
+        inABtn.hidden = YES;
+        sexLabel.hidden = YES;
+        sayHelloBtn.hidden =YES;
+        promptLabel .hidden = YES;
+
+    }
+    else{
+        [self showAlertViewWithTitle:@"提示" message:@"你只有一个角色" buttonTitle:@"确定"];
+    }
 }
 
 

@@ -353,6 +353,7 @@
     m_currentStartY += currentHeigth;
     [self setOneLineWithY:m_currentStartY];
     
+    
     UILabel* nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, m_currentStartY, 100, 37)];
     nameLabel.backgroundColor = [UIColor clearColor];
     nameLabel.textColor = kColorWithRGB(102, 102, 102, 1.0);

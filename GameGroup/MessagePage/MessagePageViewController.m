@@ -19,6 +19,7 @@
 #import "FriendRecommendViewController.h"
 #import "AddAddressBookViewController.h"
 
+
 //#import "Reachability.h"
 
 @interface MessagePageViewController ()<RegisterViewControllerDelegate>
@@ -157,7 +158,7 @@
     
     titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, startX - 44, 320, 44)];
     titleLabel.backgroundColor=[UIColor clearColor];
-    [titleLabel setFont:[UIFont boldSystemFontOfSize:18]];
+    [titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor=[UIColor whiteColor];
     [self.view addSubview:titleLabel];
@@ -799,6 +800,7 @@
         [self parseContentListWithData:responseObject];
         
         [[NSUserDefaults standardUserDefaults] setObject:[GameCommon getNewStringWithId:KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"3"), @"totalResults")] forKey:FansCount];
+        
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         //不再请求好友列表

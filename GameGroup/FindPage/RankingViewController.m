@@ -495,8 +495,17 @@
             cell.NumLabel.backgroundColor =UIColorFromRGBA(0x828be5, 1);
         }
         
-        if (i>99) {
+        if (i>99&&i<999) {
             cell.NumLabel.font = [UIFont systemFontOfSize:14];
+        }
+        if (i>999&&i<9999) {
+            cell.NumLabel.font = [UIFont systemFontOfSize:10];
+        }
+        if (i>9999) {
+            cell.NumLabel.font = [UIFont systemFontOfSize:8];
+        }
+        else{
+            cell.NumLabel.font = [UIFont boldSystemFontOfSize:18];
         }
         if ([KISDictionaryHaveKey(dic, @"charactername") isEqualToString:self.characterName]&&[KISDictionaryHaveKey(dic, @"realm") isEqualToString:self.server]) {
             cell.backgroundColor = UIColorFromRGBA(0xd0ebe9, 1);

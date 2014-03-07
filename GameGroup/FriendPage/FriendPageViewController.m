@@ -367,6 +367,7 @@
         {
             if(![[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"])
                 rowNum = [m_otherSortAttentionArray count];
+            
             else
             {
                 rowNum = [m_attentionsArray count];
@@ -1049,6 +1050,9 @@
     detailVC.titleImage =[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]] ;
     
     detailVC.ageStr = [GameCommon getNewStringWithId:[tempDict objectForKey:@"age"]];
+    detailVC.constellationStr =KISDictionaryHaveKey(tempDict, @"constellation");
+    NSLog(@"vc.VC.constellationStr%@",detailVC.constellationStr);
+
     detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
     detailVC.nickName = KISDictionaryHaveKey(tempDict, @"displayName");
     detailVC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"updateUserLocationDate")];

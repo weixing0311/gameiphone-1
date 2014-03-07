@@ -202,7 +202,8 @@
     [m_myScrollView addSubview:view];
     
     self.headImageView = [[EGOImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
-    
+    self.headImageView.layer.cornerRadius = 5;
+    self.headImageView.layer.masksToBounds=YES;
     self.headImageView.placeholderImage = [UIImage imageNamed:@"people_man.png"];
     self.headImageView.imageURL =[NSURL URLWithString: self.titleImage];
     [view addSubview:self.headImageView];
@@ -210,7 +211,7 @@
     m_currentStartY += view.frame.size.height;
     
     
-    UIView* genderView = [CommonControlOrView setGenderAndAgeViewWithFrame:CGRectMake(10, m_currentStartY, kScreenWidth, 30) gender:self.sexStr age:self.ageStr star:nil gameId:@"1"];
+    UIView* genderView = [CommonControlOrView setGenderAndAgeViewWithFrame:CGRectMake(10, m_currentStartY, kScreenWidth, 30) gender:self.sexStr age:self.ageStr star:self.constellationStr gameId:@"1"];
     [m_myScrollView addSubview:genderView];
     
     UILabel* timeLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(150, m_currentStartY, 160, 30) textColor:kColorWithRGB(151, 151, 151, 1.0) font:[UIFont systemFontOfSize:12.0] text:[GameCommon getTimeAndDistWithTime:self.timeStr Dis:self.jlStr] textAlignment:NSTextAlignmentRight];
@@ -279,6 +280,25 @@
     m_currentStartY += currentHeigth;
     [self setOneLineWithY:m_currentStartY];
     
+    
+    UIView* person_dis = [CommonControlOrView setTwoLabelViewNameText:@"个人标签" text:@"加载中..." nameTextColor:kColorWithRGB(102, 102, 102, 1.0) textColor:kColorWithRGB(51, 51, 51, 1.0)];
+    person_dis.frame = CGRectMake(0, m_currentStartY, kScreenWidth, currentHeigth);
+
+    [m_myScrollView addSubview:person_dis];
+    
+    m_currentStartY += currentHeigth;
+    [self setOneLineWithY:m_currentStartY];
+    
+    UIView* person_signature = [CommonControlOrView setTwoLabelViewNameText:@"个性签名" text:@"加载中..." nameTextColor:kColorWithRGB(102, 102, 102, 1.0) textColor:kColorWithRGB(51, 51, 51, 1.0)];
+   // currentHeigth = person_signature.frame.size.height;
+    person_signature.frame = CGRectMake(0, m_currentStartY, kScreenWidth, currentHeigth);
+    [m_myScrollView addSubview:person_signature];
+    
+    m_currentStartY += currentHeigth;
+    [self setOneLineWithY:m_currentStartY];
+
+    
+    
     NSString *gxStr;
     switch (self.viewType) {
         case VIEW_TYPE_FriendPage:
@@ -316,15 +336,19 @@
     [topBg1 addSubview:titleLabel1];
 
     m_currentStartY +=topBg1.frame.size.height;
-    UIView *bview= [[UIView alloc]initWithFrame:CGRectMake(0, m_currentStartY, 320, 30)];
+    UIView *bview= [[UIView alloc]initWithFrame:CGRectMake(0, m_currentStartY, 320, 40)];
     [m_myScrollView addSubview:bview];
-    UIView* titleObjView = [CommonControlOrView setMyTitleObjWithImage:nil titleName:self.achievementStr rarenum:self.achievementColor showCurrent:YES];
+    
+    NSString* rarenum = [NSString stringWithFormat:@"rarenum_small_%@", [GameCommon getNewStringWithId:self.achievementColor]];
+
+    UIView* titleObjView = [CommonControlOrView setMyTitleObjWithImage:rarenum titleName:self.achievementStr rarenum:self.achievementColor showCurrent:YES];
     [bview addSubview: titleObjView ];
     m_currentStartY +=bview.frame.size.height;
     [self setOneLineWithY:m_currentStartY];
     
-    UIButton* reportButton = [CommonControlOrView setButtonWithFrame:CGRectMake(0, m_myScrollView.bounds.size.height-45, 320, 45) title:@"举报该用户" fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:kColorWithRGB(51, 51, 51, 1.0) bgImage:nil HighImage:nil selectImage:nil];
-        reportButton.backgroundColor = kColorWithRGB(225, 225, 225, 1.0); [m_myScrollView addSubview:reportButton];
+    UIButton* reportButton = [CommonControlOrView setButtonWithFrame:CGRectMake(0, m_currentStartY, 320, 45) title:@"举报该用户" fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:kColorWithRGB(51, 51, 51, 1.0) bgImage:nil HighImage:nil selectImage:nil];
+    reportButton.backgroundColor = kColorWithRGB(225, 225, 225, 1.0);
+        [m_myScrollView addSubview:reportButton];
 
 }
 
