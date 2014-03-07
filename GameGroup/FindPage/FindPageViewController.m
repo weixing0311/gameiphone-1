@@ -13,6 +13,7 @@
 #import "CanRankTitleObjViewController.h"
 #import "NewsViewController.h"
 #import "EncoXHViewController.h"
+#import "WebViewViewController.h"
 @interface FindPageViewController ()
 {
     UITableView*  m_myTableView;
@@ -68,7 +69,7 @@
             return 2;
             break;
         default:
-            return 1;
+            return 2;
             break;
     }
 }
@@ -127,20 +128,20 @@
         } break;
         case 2:
         {
-//            if (0 == indexPath.row) {
-//                cell.leftImageView.image = KUIImage(@"ranking_icon");
-//                cell.titleLable.text = @"我的可排名头衔";
-//                
-//                cell.notiBgV.hidden = YES;
-//            }
-//            else
-//            {
-            cell.leftImageView.image = KUIImage(@"ranking_icon");
-            cell.titleLable.text = @"邂逅";
-            
-            cell.notiBgV.hidden = YES;
+            if (0 == indexPath.row) {
+                cell.leftImageView.image = KUIImage(@"ranking_icon");
+                cell.titleLable.text = @"邂逅";
+                
+                cell.notiBgV.hidden = YES;
+            }
+            else
+            {
+                cell.leftImageView.image = KUIImage(@"ranking_icon");
+                cell.titleLable.text = @"魔女榜";
+                
+                cell.notiBgV.hidden = YES;
 
-           // }
+            }
         } break;
 
         default:
@@ -185,19 +186,21 @@
         } break;
         case 2:
         {
-//            if (indexPath.row == 0) {
-//            [[Custom_tabbar showTabBar] hideTabBar:YES];
-//
-//            CanRankTitleObjViewController* titleVC = [[CanRankTitleObjViewController alloc] init];
-//            [self.navigationController pushViewController:titleVC animated:YES];
-//            }
-//            else if (indexPath.row == 1)
-               // {
+            if (indexPath.row == 0) {
             [[Custom_tabbar showTabBar] hideTabBar:YES];
-                    EncoXHViewController *enco = [[EncoXHViewController alloc]init];
-                    [self.navigationController pushViewController:enco animated:YES];
-                    
-               // }
+
+                [[Custom_tabbar showTabBar] hideTabBar:YES];
+                EncoXHViewController *enco = [[EncoXHViewController alloc]init];
+                [self.navigationController pushViewController:enco animated:YES];
+            }
+            else if (indexPath.row == 1)
+            {
+                [[Custom_tabbar showTabBar] hideTabBar:YES];
+                WebViewViewController *enco = [[WebViewViewController alloc]init];
+                enco.addressURL = [NSURL URLWithString:monvbangURL];
+                [self.navigationController pushViewController:enco animated:YES];
+                
+            }
         }   break;
         default:
             break;

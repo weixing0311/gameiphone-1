@@ -29,7 +29,7 @@
 {
     [super viewDidLoad];
     
-    [self setTopViewWithTitle:@"网页" withBackButton:YES];
+    [self setTopViewWithTitle:@"魔女榜" withBackButton:YES];
     
     theWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height-startX)];
     theWebView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
