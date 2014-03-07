@@ -71,22 +71,22 @@
     //消息页面
         MessagePageViewController* fist  = [[MessagePageViewController alloc] init];
         fist.hidesBottomBarWhenPushed = YES;
-        MLNavigationController* navigationController_First = [[MLNavigationController alloc] initWithRootViewController:fist];
+        UINavigationController* navigationController_First = [[UINavigationController alloc] initWithRootViewController:fist];
         navigationController_First.navigationBarHidden = YES;
 //好友页面
         FriendPageViewController* second = [[FriendPageViewController alloc] init];
         second.hidesBottomBarWhenPushed = YES;
-        MLNavigationController* navigationController_Second = [[MLNavigationController alloc] initWithRootViewController:second];
+        UINavigationController* navigationController_Second = [[UINavigationController alloc] initWithRootViewController:second];
         navigationController_Second.navigationBarHidden = YES;
 //发现页面
         NewFindViewController* third = [[NewFindViewController alloc] init];
         third.hidesBottomBarWhenPushed = YES;
-        MLNavigationController* navigationController_Third = [[MLNavigationController alloc] initWithRootViewController:third];
+        UINavigationController* navigationController_Third = [[UINavigationController alloc] initWithRootViewController:third];
         navigationController_Third.navigationBarHidden = YES;
 //我的页面
         MePageViewController* fourth = [[MePageViewController alloc] init];
         fourth.hidesBottomBarWhenPushed = YES;
-        MLNavigationController* navigationController_Fourth = [[MLNavigationController alloc] initWithRootViewController:fourth];
+        UINavigationController* navigationController_Fourth = [[UINavigationController alloc] initWithRootViewController:fourth];
         navigationController_Fourth.navigationBarHidden = YES;
 
         Custom_tabbar*  ryc_tabbarController = [[Custom_tabbar alloc] init];

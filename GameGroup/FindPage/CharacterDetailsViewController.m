@@ -11,7 +11,7 @@
 #import "CharacterDetailsView.h"
 #import "CharaDaCell.h"
 #import "RankingViewController.h"
-
+#import "SendNewsViewController.h"
 @interface CharacterDetailsViewController ()
 
 @end
@@ -30,11 +30,11 @@
     NSString           *m_serverStr;//储存服务器名称
     NSString           *m_characterId;
     NSString           *m_zhiyeId;
+    NSString           *m_characterName;
     BOOL            isInTheQueue;//获取刷新数据队列中
     
     BOOL            isGoToNextPage;
-    UILabel         * unlessLabel;
-
+    UIView              *bgView;
     UIActivityIndicatorView   *loginActivity;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -62,49 +62,23 @@
     
     isInTheQueue =NO;
     isGoToNextPage = YES;
-    [self getUserInfoByNet];
     
+    [self setTopViewWithTitle:@"角色详情" withBackButton:YES];
     
-    UIImageView* topImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, KISHighVersion_7 ? 64 : 44)];
-    topImageView.image = KUIImage(@"nav_bg");
-    topImageView.userInteractionEnabled = YES;
-    topImageView.backgroundColor = kColorWithRGB(23, 161, 240, 1.0);
-    [self.view addSubview:topImageView];
-    
-    UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTopViewClick:)];
-    tapGesture.delegate = self;
-    [topImageView addGestureRecognizer:tapGesture];
-    
-    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, KISHighVersion_7 ? 20 : 0, 220, 44)];
-    titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.text = @"角色详情";
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.font = [UIFont boldSystemFontOfSize:20];
-    [self.view addSubview:titleLabel];
-    
-    UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30)];
-    [backButton setBackgroundImage:KUIImage(@"btn_back") forState:UIControlStateNormal];
-    [backButton setBackgroundImage:KUIImage(@"btn_back_onclick") forState:UIControlStateHighlighted];
-    backButton.backgroundColor = [UIColor clearColor];
-    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];
-    
-    
-    
-    // [self setTopViewWithTitle:@"角色详情" withBackButton:YES];
-    
+    UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
+    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateNormal];
+    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateHighlighted];
+    shareButton.backgroundColor = [UIColor clearColor];
+    [shareButton addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:shareButton];
+
     self.view.backgroundColor = [UIColor whiteColor];
 	// Do any additional setup after loading the view.
     
     startX = KISHighVersion_7 ? 64 : 44;
     
-    unlessLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 306, 320, 55)];
-    unlessLabel.text = @"正在向英雄榜获取数据中...";
-    unlessLabel.textAlignment = NSTextAlignmentCenter;
-    [m_charaDetailsView.listScrollView addSubview:unlessLabel];
 
-    
+    m_charaDetailsView.listScrollView.backgroundColor = [UIColor clearColor];
     
     m_charaDetailsView =[[CharacterDetailsView alloc]initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height - startX)];
 
@@ -118,11 +92,8 @@
     }else if(self.myViewType ==CHARA_INFO_PERSON){
         [m_charaDetailsView comeFromPerson];
     }
-    
     [self.view addSubview:m_charaDetailsView];
     
-    
-
     
     [self buildScrollView];//创建下面的表格
     
@@ -139,10 +110,7 @@
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
 
-//    hud1 =[[MBProgressHUD alloc]initWithView:m_charaDetailsView];
-//    [self.view addSubview:hud1];
-    
-    
+    m_charaDetailsView.reloadingBtn.userInteractionEnabled = NO;
     loginActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [m_charaDetailsView addSubview:loginActivity];
     loginActivity.center = CGPointMake(160, 290);
@@ -150,7 +118,8 @@
     [loginActivity startAnimating];
 
     
-    //(0, 306, 320, 55)
+    [self getUserInfoByNet];
+
 }
 
 -(void)buildScrollView
@@ -217,8 +186,7 @@
 //获取网络数据
 - (void)getUserInfoByNet
 {
-    m_charaDetailsView.reloadingBtn.userInteractionEnabled = NO;
-    
+   
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
@@ -234,10 +202,10 @@
         m_contentTableView.hidden =NO;
         m_reamlTableView.hidden = NO;
         m_countryTableView.hidden =NO;
-        m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
+        m_charaDetailsView.unlessLabel.hidden =YES;
         [loginActivity stopAnimating];
         [loginActivity removeFromSuperview];
-        unlessLabel.hidden =YES;
+
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             
             
@@ -255,7 +223,7 @@
             m_serverStr = m_charaInfo.realm;
             m_characterId = m_charaInfo.characterid;
             m_zhiyeId = m_charaInfo.professionalId;
-            
+            m_characterName =m_charaInfo.roleNickName;
             m_charaDetailsView.realmView.text = [NSString stringWithFormat:@"%@ %@", m_charaInfo.realm,m_charaInfo.sidename];
             
             // m_charaDetailsView.realmView.text = m_charaInfo.realm;
@@ -301,17 +269,23 @@
             [m_countryTableView reloadData];
             [m_reamlTableView reloadData];
             
-            
+            m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
+
             
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
+        [loginActivity stopAnimating];
+        [loginActivity removeFromSuperview];
+
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
                 UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
+        }else{
+            
         }
     }];
     
@@ -340,6 +314,7 @@
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"ok"]) {
             
             [self reLoadingUserInfoFromNet];
+            return ;
         }
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"busy"]) {
             m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
@@ -351,18 +326,14 @@
             [hud showAnimated:YES whileExecutingBlock:^{
                 sleep(5);
             }];
-        }else{
+            return;
+        }
             m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
             m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
-            hud.labelText = @"正拼命从英雄榜获取中...";
+            hud.labelText = @"获取成功";
             [hud showAnimated:YES whileExecutingBlock:^{
-                sleep(2);
-                hud.labelText = @"获取成功";
-                sleep(2);
+                sleep(3);
             }];
-
-        }
-        
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
 
@@ -418,7 +389,7 @@
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
 
-      //  [hud hide:YES];
+        [hud hide:YES];
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
@@ -437,9 +408,6 @@
     }];
 
 }
-
-
-
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView ==m_contentTableView) {
@@ -503,9 +471,6 @@
         cell.rankingLabel.text =@"--";
         cell.upDowmImgView.hidden = YES;
     }
-
-    
-    
     return cell;
 }
 
@@ -548,7 +513,7 @@
         ranking.characterid =m_characterId;
         ranking.custType = m_zhiyeId;
         ranking.server = m_serverStr;
-        
+        ranking.userId = self.userId;
         ranking.pageCount1 = -1;
         ranking.pageCount2 = -1;
         ranking.pageCount3 = -1;
@@ -655,6 +620,73 @@
         NSLog(@"刷新数据");
     
 }
+
+#pragma mark ---分享button方法
+-(void)shareBtnClick:(UIButton *)sender
+{
+    if (bgView != nil) {
+        [bgView removeFromSuperview];
+    }
+    bgView = [[UIView alloc] init];
+    bgView.frame = CGRectMake(328, 0, kScreenHeigth-320, kScreenWidth);
+    bgView.backgroundColor = [UIColor blackColor];
+    bgView.alpha = 0.4;
+    [self.view addSubview:bgView];
+    
+    UIActionSheet* actionSheet = [[UIActionSheet alloc]
+                                  initWithTitle:@"分享到"
+                                  delegate:self
+                                  cancelButtonTitle:@"取消"
+                                  destructiveButtonTitle:Nil
+                                  otherButtonTitles:@"我的动态", nil];
+    actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    
+    [actionSheet showInView:self.view];
+    
+}
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+        [self performSelector:@selector(pushSendNews) withObject:nil afterDelay:1.0];
+    }
+    if (bgView != nil) {
+        [bgView removeFromSuperview];
+    }
+}
+
+- (void)pushSendNews
+{
+    //http://www.dapps.net/dev/iphone/iphone-ipad-screenshots-tips.html
+    //    CGImageRef UIGetScreenImage();
+    //    CGImageRef img = UIGetScreenImage();
+    //    UIImage* scImage=[UIImage imageWithCGImage:img];
+    UIGraphicsBeginImageContext(CGSizeMake(kScreenWidth, kScreenHeigth));
+    //    if(upScroll.center.y < 0)
+    //    {
+    //        [downScroll.layer renderInContext:UIGraphicsGetCurrentContext()];
+    //    }
+    //    else
+    //    {
+    //        CGContextRef cm = UIGraphicsGetCurrentContext();
+    //        CGContextTranslateCTM(cm, 200, 0.0);
+    //        [upScroll.layer renderInContext:cm];
+    //    }
+    [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    
+    SendNewsViewController* VC = [[SendNewsViewController alloc] init];
+    VC.titleImage = viewImage;
+    VC.delegate = self;
+   // VC.defaultContent = [NSString stringWithFormat:@"分享了%@的角色详情",self.characterName];
+    VC.defaultContent = [NSString stringWithFormat:@"分享了%@的数据",m_characterName];
+    [self.navigationController pushViewController:VC animated:NO];
+}
+
+
+
 @end
 
 

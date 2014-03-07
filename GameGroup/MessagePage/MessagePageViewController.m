@@ -699,9 +699,9 @@
     if([[NSUserDefaults standardUserDefaults] objectForKey:isFirstOpen]){
         
     }
-    else
-        [hud show:YES];
-
+    else{
+       // [hud show:YES];
+    }
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"服务器数据 %@", responseObject);
         [hud hide:YES];
@@ -789,7 +789,7 @@
     [postDict setObject:@"111" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     hud.labelText = @"正在获取好友列表...";
-    [hud show:YES];
+   // [hud show:YES];
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -823,7 +823,7 @@
     id fansList = KISDictionaryHaveKey(KISDictionaryHaveKey(dataDic, @"3"), @"users");
     dispatch_queue_t queue = dispatch_queue_create("com.living.game", NULL);
     dispatch_async(queue, ^{
-        [hud show:YES];
+     //   [hud show:YES];
         
         if ([friendsList isKindOfClass:[NSDictionary class]]) {
             NSArray* keyArr = [friendsList allKeys];

@@ -13,6 +13,7 @@
     NSInteger m_pageNum;
     NSInteger m_typeNum;
 
+
 }
 - (id)initWithFrame:(CGRect)frame
 {
@@ -60,7 +61,12 @@
 
         [self addSubview:self.listScrollView];
 
-        
+        self.unlessLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 306, 320, 55)];
+        self.unlessLabel.text = @"正在向英雄榜获取数据中...";
+        self.unlessLabel.textAlignment = NSTextAlignmentCenter;
+        self.unlessLabel.hidden =NO;
+        [self addSubview:self.unlessLabel];
+
         self.reloadingBtn = [[UIButton alloc]init];
         self.reloadingBtn.frame = CGRectMake(10, 545, 300, 44);
         [self.reloadingBtn setBackgroundImage:KUIImage(@"btn_updata_normol") forState:UIControlStateNormal];

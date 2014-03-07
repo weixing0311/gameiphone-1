@@ -177,6 +177,7 @@
 
 -(void)buildInitialize
 {
+    /*
     [self setTopViewWithTitle:@"" withBackButton:YES];
     
     m_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, startX - 44, 220, 44)];
@@ -187,7 +188,6 @@
     m_titleLabel.font = [UIFont boldSystemFontOfSize:20];
     [self.view addSubview:m_titleLabel];
     
-    m_delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     
     m_currentStartY = 0;
     
@@ -219,6 +219,7 @@
     
     m_currentStartY += 30;
     [self setOneLineWithY:m_currentStartY];
+    
     UIButton* zanBtn = [[UIButton alloc] initWithFrame:CGRectMake(10, m_currentStartY + 10, 75, 30)];
     [zanBtn setImage:KUIImage(@"detail_zan") forState:UIControlStateNormal];
     zanBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 45);
@@ -231,6 +232,12 @@
     //    [fansBtn setTitle:self.hostInfo.fanNum forState:UIControlStateNormal];
     [m_myScrollView addSubview:fansBtn];
     
+//    UIButton *ringhe = [[UIButton alloc] initWithFrame:CGRectMake(170, m_currentStartY + 10, 75, 30)];
+//    [ringhe setImage:KUIImage(@"detail_fans") forState:UIControlStateNormal];
+//    ringhe.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 45);
+//    [ringhe addTarget:self action:@selector(ltttt:) forControlEvents:UIControlEventTouchUpInside];
+
+   // [m_myScrollView addSubview:ringhe];
     
     UIButton* button_left = [CommonControlOrView
                              setButtonWithFrame:CGRectMake(227, m_currentStartY + 10, 80, 30)//120
@@ -241,24 +248,17 @@
                              selectImage:Nil];
     [m_myScrollView addSubview:button_left];
     
-    UIButton* button_right = [CommonControlOrView
-                              setButtonWithFrame:CGRectMake(170, m_currentStartY + 10, 40, 30)//120
-                              title:@""
-                              fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
-                              bgImage:KUIImage(@"chat_normal")
-                              HighImage:KUIImage(@"chat_click")
-                              selectImage:Nil];
-    [m_myScrollView addSubview:button_right];
+    UIButton* button_right1 = [CommonControlOrView setButtonWithFrame:CGRectMake(170, m_currentStartY + 10, 40, 30)title:@""fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]bgImage:KUIImage(@"chat_normal")HighImage:KUIImage(@"chat_click")selectImage:Nil];
+    [button_right1 addTarget:self action:@selector(ltttt:) forControlEvents:UIControlEventTouchUpInside];
+    [m_myScrollView addSubview:button_right1];
+    [m_myScrollView bringSubviewToFront:button_right1];
+    
 
     
     
-    
-    
-    
-    
-    m_buttonBgView = [[UIView alloc] initWithFrame:CGRectMake(165, m_currentStartY, kScreenWidth-165, 50)];
-    m_buttonBgView.backgroundColor = [UIColor clearColor];
-    [m_myScrollView addSubview:m_buttonBgView];
+//    m_buttonBgView = [[UIView alloc] initWithFrame:CGRectMake(165, m_currentStartY, kScreenWidth-165, 50)];
+//    m_buttonBgView.backgroundColor = [UIColor clearColor];
+//    [m_myScrollView addSubview:m_buttonBgView];
     
     m_currentStartY += 50;
     ////////////////////////
@@ -349,10 +349,234 @@
     UIButton* reportButton = [CommonControlOrView setButtonWithFrame:CGRectMake(0, m_currentStartY, 320, 45) title:@"举报该用户" fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:kColorWithRGB(51, 51, 51, 1.0) bgImage:nil HighImage:nil selectImage:nil];
     reportButton.backgroundColor = kColorWithRGB(225, 225, 225, 1.0);
         [m_myScrollView addSubview:reportButton];
+*/
+    
+    [self setTopViewWithTitle:@"" withBackButton:YES];
+    
+    m_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, startX - 44, 220, 44)];
+    m_titleLabel.textColor = [UIColor whiteColor];
+    m_titleLabel.backgroundColor = [UIColor clearColor];
+    m_titleLabel.text = self.nickName;
+    m_titleLabel.textAlignment = NSTextAlignmentCenter;
+    m_titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    [self.view addSubview:m_titleLabel];
+    
+    
+    m_currentStartY = 0;
+    
+    m_myScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth - startX - (KISHighVersion_7?0:20))];
+    [self.view addSubview:m_myScrollView];
+    m_myScrollView.backgroundColor = [UIColor clearColor];
+    
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 80)];
+    view.backgroundColor =[UIColor grayColor];
+    [m_myScrollView addSubview:view];
+    
+    self.headImageView = [[EGOImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
+    self.headImageView.layer.cornerRadius = 5;
+    self.headImageView.layer.masksToBounds=YES;
+    self.headImageView.placeholderImage = [UIImage imageNamed:@"people_man.png"];
+    self.headImageView.imageURL =[NSURL URLWithString: self.titleImage];
+    [view addSubview:self.headImageView];
 
+    
+    m_currentStartY +=100;
+    
+    UIView* genderView = [CommonControlOrView setGenderAndAgeViewWithFrame:CGRectMake(10, m_currentStartY, kScreenWidth, 30) gender:self.sexStr age:self.ageStr star:self.constellationStr gameId:@"1"];
+    [m_myScrollView addSubview:genderView];
+    
+    UILabel* timeLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(150, m_currentStartY, 160, 30) textColor:kColorWithRGB(151, 151, 151, 1.0) font:[UIFont systemFontOfSize:12.0] text:[GameCommon getTimeAndDistWithTime:self.timeStr Dis:self.jlStr] textAlignment:NSTextAlignmentRight];
+    [m_myScrollView addSubview:timeLabel];
+    
+    m_currentStartY += 30;
+    [self setOneLineWithY:m_currentStartY];
+    
+    //////个人动态
+    
+    m_myScrollView.contentSize = CGSizeMake(kScreenWidth, m_currentStartY);
+
+    float currentHeigth = 0;
+    
+        UIImageView* topBg7 = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+        topBg7.image = KUIImage(@"table_heard_bg");
+        [m_myScrollView addSubview:topBg7];
+        
+        UILabel* titleLabel7 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"个人动态" textAlignment:NSTextAlignmentLeft];
+        [topBg7 addSubview:titleLabel7];
+        
+        m_currentStartY += 30;
+        
+        [self setOneLineWithY:m_currentStartY];
+    
+    /////////////////
+    UIButton* zanBtn = [[UIButton alloc] initWithFrame:CGRectMake(10, m_currentStartY + 10, 75, 30)];
+    [zanBtn setImage:KUIImage(@"detail_zan") forState:UIControlStateNormal];
+    zanBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 45);
+    [zanBtn addTarget:self action:@selector(ZanButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [m_myScrollView addSubview:zanBtn];
+    
+    UILabel* zanLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(42, m_currentStartY + 10, 45, 30) textColor:kColorWithRGB(151, 151, 151, 1.0) font:[UIFont systemFontOfSize:12.0] text:self.hostInfo.zanNum textAlignment:NSTextAlignmentLeft];
+    [m_myScrollView addSubview:zanLabel];
+    
+    UIButton* fansBtn = [[UIButton alloc] initWithFrame:CGRectMake(85, m_currentStartY + 10, 75, 30)];
+    [fansBtn setImage:KUIImage(@"detail_fans") forState:UIControlStateNormal];
+    fansBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 45);
+    //    [fansBtn setTitle:self.hostInfo.fanNum forState:UIControlStateNormal];
+    [fansBtn addTarget:self action:@selector(FansButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [m_myScrollView addSubview:fansBtn];
+    
+    UILabel* fansLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(117, m_currentStartY + 10, 45, 30) textColor:kColorWithRGB(151, 151, 151, 1.0) font:[UIFont systemFontOfSize:12.0] text:self.hostInfo.fanNum textAlignment:NSTextAlignmentLeft];
+    [m_myScrollView addSubview:fansLabel];
+    
+    m_buttonBgView = [[UIView alloc] initWithFrame:CGRectMake(165, m_currentStartY, kScreenWidth-165, 50)];
+    m_buttonBgView.backgroundColor = [UIColor clearColor];
+    [m_myScrollView addSubview:m_buttonBgView];
+    
+    m_currentStartY += 50;
+    ////////////////////////
+    UIImageView* topBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg.image = KUIImage(@"table_heard_bg");
+    [m_myScrollView addSubview:topBg];
+    
+    UILabel* titleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"个人资料" textAlignment:NSTextAlignmentLeft];
+    [topBg addSubview:titleLabel];
+    
+    m_currentStartY += 30;
+    
+    
+    UIView* person_id = [CommonControlOrView setTwoLabelViewNameText:@"小伙伴ID" text:self.userId nameTextColor:kColorWithRGB(102, 102, 102, 1.0) textColor:kColorWithRGB(51, 51, 51, 1.0)];
+    UIImageView * activeIV = [[UIImageView alloc]initWithFrame:CGRectMake(200, m_currentStartY + 13, 29, 12)];
+    [m_myScrollView addSubview:activeIV];
+    currentHeigth = person_id.frame.size.height;
+    person_id.frame = CGRectMake(0, m_currentStartY, kScreenWidth, currentHeigth);
+    [m_myScrollView addSubview:person_id];
+    
+    m_currentStartY += currentHeigth;
+    [self setOneLineWithY:m_currentStartY];
+    
+    UIView* person_dis = [CommonControlOrView setTwoLabelViewNameText:@"个人标签" text: @"获取中..."  nameTextColor:kColorWithRGB(102, 102, 102, 1.0) textColor:kColorWithRGB(51, 51, 51, 1.0)];
+    currentHeigth = person_dis.frame.size.height;
+    person_dis.frame = CGRectMake(0, m_currentStartY, kScreenWidth, currentHeigth);
+    [m_myScrollView addSubview:person_dis];
+    
+    m_currentStartY += currentHeigth;
+    [self setOneLineWithY:m_currentStartY];
+    
+    UIView* person_signature = [CommonControlOrView setTwoLabelViewNameText:@"个性签名" text: @"获取中..."  nameTextColor:kColorWithRGB(102, 102, 102, 1.0) textColor:kColorWithRGB(51, 51, 51, 1.0)];
+    currentHeigth = person_signature.frame.size.height;
+    person_signature.frame = CGRectMake(0, m_currentStartY, kScreenWidth, currentHeigth);
+    [m_myScrollView addSubview:person_signature];
+    
+    m_currentStartY += currentHeigth;
+    [self setOneLineWithY:m_currentStartY];
+    
+    UILabel* nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, m_currentStartY, 100, 37)];
+    nameLabel.backgroundColor = [UIColor clearColor];
+    nameLabel.textColor = kColorWithRGB(102, 102, 102, 1.0);
+    nameLabel.font = [UIFont boldSystemFontOfSize:13.0];
+    nameLabel.text = @"关系";
+    [m_myScrollView addSubview:nameLabel];
+    
+    m_relationLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, m_currentStartY, 100, 37)];
+    m_relationLabel.backgroundColor = [UIColor clearColor];
+    m_relationLabel.textColor = kColorWithRGB(51, 51, 51, 1.0);
+    m_relationLabel.font = [UIFont boldSystemFontOfSize:14.0];
+    switch (self.viewType) {
+        case VIEW_TYPE_FriendPage:
+            m_relationLabel.text = @"好友";
+            break;
+        case VIEW_TYPE_AttentionPage:
+            m_relationLabel.text = @"关注";
+            break;
+        case VIEW_TYPE_FansPage:
+            m_relationLabel.text = @"粉丝";
+            break;
+        case VIEW_TYPE_STRANGER:
+            m_relationLabel.text = @"陌生人";
+            break;
+        case VIEW_TYPE_Self:
+            m_relationLabel.text = @"自己";
+            break;
+        default:
+            break;
+    }
+    [m_myScrollView addSubview:m_relationLabel];
+    
+    m_currentStartY += 37;
+    [self setOneLineWithY:m_currentStartY];
+
+    UIImageView* topBg3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg3.image = KUIImage(@"table_heard_bg");
+    [m_myScrollView addSubview:topBg3];
+    
+    UILabel* titleLabel3 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"我的角色" textAlignment:NSTextAlignmentLeft];
+    [topBg3 addSubview:titleLabel3];
+    
+    m_currentStartY += 30;
+    
+        UIImageView* topBg6 = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+        topBg6.image = KUIImage(@"table_heard_bg");
+        [m_myScrollView addSubview:topBg6];
+        
+        UILabel* titleLabel1 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"我的头衔" textAlignment:NSTextAlignmentLeft];
+        [topBg6 addSubview:titleLabel1];
+        
+        m_currentStartY +=topBg.frame.size.height;
+        UIView *bview= [[UIView alloc]initWithFrame:CGRectMake(0, m_currentStartY, 320, 40)];
+        [m_myScrollView addSubview:bview];
+        
+        NSString* rarenum = [NSString stringWithFormat:@"rarenum_small_%@", [GameCommon getNewStringWithId:self.achievementColor]];
+        
+        UIView* titleObjView = [CommonControlOrView setMyTitleObjWithImage:rarenum titleName:self.achievementStr rarenum:self.achievementColor showCurrent:NO];
+        [bview addSubview: titleObjView ];
+        m_currentStartY +=bview.frame.size.height;
+        [self setOneLineWithY:m_currentStartY];
+        
+    
+    UIImageView* topBg4 = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg4.image = KUIImage(@"table_heard_bg");
+    [m_myScrollView addSubview:topBg4];
+    
+    UILabel* titleLabel4 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"其他" textAlignment:NSTextAlignmentLeft];
+    [topBg4 addSubview:titleLabel4];
+    
+    m_currentStartY += 30;
+    
+    UIImageView *timeImg = [[UIImageView alloc] initWithFrame:CGRectMake(10, m_currentStartY + 5, 35, 35)];
+    timeImg.image = KUIImage(@"time");
+    [m_myScrollView addSubview:timeImg];
+    
+    UILabel* timeTitleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(55, m_currentStartY + 5, 100, 35) textColor:kColorWithRGB(51, 51, 51, 1.0) font:[UIFont boldSystemFontOfSize:15.0] text:@"注册时间" textAlignment:NSTextAlignmentLeft];
+    [m_myScrollView addSubview:timeTitleLabel];
+    
+//    NSString* timeStr = [[GameCommon shareGameCommon] getDataWithTimeInterval:self.hostInfo.createTime];
+    
+    UILabel* timeLabel4 = [CommonControlOrView setLabelWithFrame:CGRectMake(160, m_currentStartY + 5, 150, 35) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:15.0] text:@"2011-11-11" textAlignment:NSTextAlignmentRight];
+    [m_myScrollView addSubview:timeLabel4];
+    
+    m_currentStartY += 45;
+    
+    //    [self setOneLineWithY:m_currentStartY];
+    
+    UIButton* reportButton = [CommonControlOrView setButtonWithFrame:CGRectMake(0, m_currentStartY, 320, 45) title:@"举报该用户" fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:kColorWithRGB(51, 51, 51, 1.0) bgImage:nil HighImage:nil selectImage:nil];
+    reportButton.backgroundColor = kColorWithRGB(225, 225, 225, 1.0);
+    [reportButton addTarget:self action:@selector(reportButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [m_myScrollView addSubview:reportButton];
+    
+    m_currentStartY += 45;
+
+    m_myScrollView.contentSize = CGSizeMake(320, m_currentStartY);
 }
 
-
+-(void)ltttt:(id)sender
+{
+    NSLog(@"1111");
+        KKChatController * kkchat = [[KKChatController alloc] init];
+        kkchat.chatWithUser = self.hostInfo.userId;
+        kkchat.nickName = m_titleLabel.text;
+        kkchat.chatUserImg = [GameCommon getHeardImgId:self.titleImage];
+        [self.navigationController pushViewController:kkchat animated:YES];
+}
 - (void)buildMainView
 {
     [self setTopViewWithTitle:@"" withBackButton:YES];
