@@ -10,7 +10,7 @@
 #import "MessageCell.h"
 #import "CharacterEditViewController.h"
 #import "MyTitleObjViewController.h"
-
+#import "CharacterDetailsViewController.h"
 @interface OtherMsgsViewController ()
 {
     UITableView*   m_myTableView;
@@ -87,7 +87,6 @@
     
     NSDictionary * dict = [[[m_tableData objectAtIndex:indexPath.row] objectForKey:@"msgContent"] JSONValue];
     NSLog(@"dicttt%@",dict);
-
     if([[[m_tableData objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"character"])//角色
     {
         NSString* imageName = [self getCharacterHeardWithID:[GameCommon getNewStringWithId:KISDictionaryHaveKey(dict, @"gameid")]];
@@ -166,6 +165,9 @@
     }
     if ([KISDictionaryHaveKey(tempDict, @"msgType") isEqualToString:@"pveScore"])
     {
+//        CharacterDetailsViewController *charVC = [[CharacterDetailsViewController alloc]init];
+//        
+//        [self.navigationController pushViewController:charVC animated:YES];
         return;
     }
 }

@@ -12,7 +12,6 @@
 {
     NSInteger m_pageNum;
     NSInteger m_typeNum;
-    UILabel         * unlessLabel;
 
 }
 - (id)initWithFrame:(CGRect)frame
@@ -51,10 +50,6 @@
         self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.certificationImage];
         
-        unlessLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 306, 320, 55)];
-        unlessLabel.text = @"正在向英雄榜获取数据中...";
-        unlessLabel.textAlignment = NSTextAlignmentCenter;
-        [self addSubview:unlessLabel];
 
         self.listScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 236, 320, 300)];
         self.listScrollView.pagingEnabled = YES;

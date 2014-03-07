@@ -33,7 +33,8 @@
     BOOL            isInTheQueue;//获取刷新数据队列中
     
     BOOL            isGoToNextPage;
-    
+    UILabel         * unlessLabel;
+
     UIActivityIndicatorView   *loginActivity;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -98,6 +99,10 @@
     
     startX = KISHighVersion_7 ? 64 : 44;
     
+    unlessLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 306, 320, 55)];
+    unlessLabel.text = @"正在向英雄榜获取数据中...";
+    unlessLabel.textAlignment = NSTextAlignmentCenter;
+    [m_charaDetailsView.listScrollView addSubview:unlessLabel];
 
     
     
@@ -232,7 +237,7 @@
         m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
         [loginActivity stopAnimating];
         [loginActivity removeFromSuperview];
-
+        unlessLabel.hidden =YES;
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             
             
@@ -336,19 +341,6 @@
             
             [self reLoadingUserInfoFromNet];
         }
-        
-            if ([[responseObject allKeys]containsObject:@"entity"]) {
-                m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
-                m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
-                hud.labelText = @"正拼命从英雄榜获取中...";
-                [hud showAnimated:YES whileExecutingBlock:^{
-                    sleep(2);
-                    hud.labelText = @"获取成功";
-                    sleep(2);
-                }];
-
-            }
-        
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"busy"]) {
             m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
             
@@ -359,6 +351,16 @@
             [hud showAnimated:YES whileExecutingBlock:^{
                 sleep(5);
             }];
+        }else{
+            m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
+            m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
+            hud.labelText = @"正拼命从英雄榜获取中...";
+            [hud showAnimated:YES whileExecutingBlock:^{
+                sleep(2);
+                hud.labelText = @"获取成功";
+                sleep(2);
+            }];
+
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
@@ -425,6 +427,13 @@
                 
             }
         }
+        else
+        {
+            UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请求数据失败，请检查网络！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            alert.tag = 56;
+            [alert show];
+        }
+
     }];
 
 }
@@ -648,99 +657,5 @@
 }
 @end
 
-/*
- 
- entity =     {
- auth = 0;
- ranking =         {
- 1 =             {
- achievementPoints =                 {
- compare = 0;
- rank = 12;
- value = 10900;
- };
- itemlevel =                 {
- compare = 0;
- rank = 4;
- value = 578;
- };
- pveScore =                 {
- compare = 0;
- rank = 3;
- value = 49986;
- };
- pvpScore =                 {
- compare = 0;
- rank = 0;
- value = " ";
- };
- totalHonorableKills =                 {
- compare = 0;
- rank = 5;
- value = 18009;
- };
- };
- 2 =             {
- achievementPoints =                 {
- compare = 0;
- rank = 14;
- value = 10900;
- };
- itemlevel =                 {
- compare = 0;
- rank = 2;
- value = 578;
- 
- };
- pveScore =                 {
- compare = 0;
- rank = 2;
- value = 49986;
- };
- pvpScore =                 {
- compare = 0;
- rank = 0;
- value = " ";
- };
- totalHonorableKills =                 {
- compare = 0;
- rank = 109;
- value = 18009;
- };
- };
- 3 =             {
- achievementPoints =                 {
- compare = 0;
- rank = 2764;
- value = 10900;
- };
- itemlevel =                 {
- compare = 0;
- rank = 176;
- value = 578;
- };
- pveScore =                 {
- compare = 0;
- rank = 100;
- value = 49986;
- };
- pvpScore =                 {
- compare = 0;
- rank = 0;
- value = " ";
- };
- totalHonorableKills =                 {
- compare = 0;
- rank = 7826;
- value = 18009;
- };
- };
- rankingtime = 1394071104935;
- };
- realm = "\U5361\U62c9\U8d5e";
- thumbnail = 30885;
- totalHonorableKills = 18009;
- };
- */
 
 

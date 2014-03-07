@@ -13,6 +13,7 @@
 #import "FriendPageViewController.h"
 #import "FindPageViewController.h"
 #import "MePageViewController.h"
+#import "NewFindViewController.h"
 
 #import "MLNavigationController.h"
 #import "Custom_tabbar.h"
@@ -78,7 +79,7 @@
         MLNavigationController* navigationController_Second = [[MLNavigationController alloc] initWithRootViewController:second];
         navigationController_Second.navigationBarHidden = YES;
 //发现页面
-        FindPageViewController* third = [[FindPageViewController alloc] init];
+        NewFindViewController* third = [[NewFindViewController alloc] init];
         third.hidesBottomBarWhenPushed = YES;
         MLNavigationController* navigationController_Third = [[MLNavigationController alloc] initWithRootViewController:third];
         navigationController_Third.navigationBarHidden = YES;
