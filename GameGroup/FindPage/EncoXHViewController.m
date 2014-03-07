@@ -14,6 +14,7 @@
 #import "EGOImageView.h"
 #import "UIView+i7Rotate360.h"
 #import "PersonDetailViewController.h"
+#import "CharacterEditViewController.h"
 @interface EncoXHViewController ()
 
 @end
@@ -385,6 +386,7 @@
             if ([KISDictionaryHaveKey(responseObject, @"1") isKindOfClass:[NSArray class]]) {
                 [m_characterArray addObjectsFromArray:KISDictionaryHaveKey(responseObject, @"1")];
                 
+                
                 if (m_characterArray.count ==1) {
                     m_tableView.hidden = YES;
                     tf.hidden = YES;
@@ -415,6 +417,12 @@
                 [[NSUserDefaults standardUserDefaults]setObject:m_characterArray forKey:@"CharacterArrayOfAllForYou"];
 
         }
+            else{
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您还没有绑定角色" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"去绑定", nil];
+                alertView.tag = 10001;
+                [alertView show];
+
+            }
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
@@ -605,7 +613,18 @@
         [self showAlertViewWithTitle:@"提示" message:@"你只有一个角色" buttonTitle:@"确定"];
     }
 }
-
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag ==10001) {
+        if (buttonIndex ==1) {
+            CharacterEditViewController *CVC = [[CharacterEditViewController alloc]init];
+            CVC.isFromMeet = YES;
+            [self.navigationController pushViewController:CVC animated:YES];
+        }else{
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+}
 
 - (void)didReceiveMemoryWarning
 {

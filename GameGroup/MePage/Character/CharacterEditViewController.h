@@ -10,5 +10,5 @@
 #import "MyCharacterEditCell.h"
 
 @interface CharacterEditViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, MyCharacterEditDelegate, UIAlertViewDelegate>
-
+@property(nonatomic,assign)BOOL isFromMeet;
 @end

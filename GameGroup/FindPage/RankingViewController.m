@@ -5,38 +5,11 @@
 //  Created by admin on 14-2-24.
 //  Copyright (c) 2014年 Swallow. All rights reserved.
 //
-/*
- 
- 
- * 头衔排行
- *
- * @param gameid
- *            游戏id
- * @param ranktype
- *            排行类型，三个值：1，2，3， 1是好友， 2是全服， 3是全国， 大头衔也就是 基本头衔有这个字段值是多个这间用逗号分隔的
- * @param characterid
- *            角色id
- * @param rankvaltype
- *            排行值类型， 战斗力还是坐骑等
- * @param pageIndex
- *            起始页， 如果传 -1 我就认为是取角色id附近的排名， 会返回这个角色的排行，
- *            如果这个角色的排名就是前几名会返回rank排名为1的，这时pageIndex其实 就相当于为0第一页时的返回数据，
- *            所以前端要判断取角色排名的时侯是否返 回了rank = 1， 如果有下一页应该是传pageIndex = 1 而不是
- *            pageIndex = 0
- * @param maxSize
- *            记录数
- * @param realm
- *            服务器， 全服排行用这个
- * @param classid
- *            职业id， 全服和全国用这个， 不传默认全职业
- * @return
- */
-
-
 #import "RankingViewController.h"
 #import "RankingCell.h"
 #import "PersonDetailViewController.h"
 #import "SendNewsViewController.h"
+#import "MePageViewController.h"
 #define kSegmentFriend (0)
 #define kSegmentRealm (1)
 #define kSegmentCountry (2)
@@ -88,6 +61,11 @@
      UIView*         bgView;
     NSInteger       m_ppageCount;
     UIActivityIndicatorView   *loginActivity;
+    
+    BOOL  isFirstLoading1;
+    BOOL  isFirstLoading2;
+    BOOL  isFirstLoading3;
+    
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -109,6 +87,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    isFirstLoading1 =YES;
+    isFirstLoading2 =YES;
+    isFirstLoading3 =YES;
+
     isRegisterForMe =YES;
     m_i =YES;
     m_j =YES;
@@ -145,7 +127,6 @@
          m_k =NO;
     }
 
-//    [self setTopViewWithTitle:@"排行榜" withBackButton:YES];
     
     [self setTopViewWithTitle:[NSString stringWithFormat:@"%@排行",self.titleOfRanking] withBackButton:YES];
     
@@ -156,11 +137,7 @@
     [shareButton addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:shareButton];
 
-    loginActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    [self.view addSubview:loginActivity];
-    loginActivity.center = CGPointMake(160, 150);
-    loginActivity.color = [UIColor blackColor];
-   [loginActivity startAnimating];
+  
 
     
     
@@ -554,6 +531,8 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    
     PersonDetailViewController *detailVC = [[PersonDetailViewController alloc]init];
     NSDictionary *dic = [[NSDictionary alloc]init];
     if(tableView ==m_tableView){
@@ -566,8 +545,11 @@
         dic = [m_countryArray objectAtIndex:indexPath.row];
     }
     
-    
-    
+//    if ([KISDictionaryHaveKey(dic, @"userid") isEqualToString:[DataStoreManager getMyUserID]]) {
+//        [self.navigationController popToRootViewControllerAnimated:YES];
+//        return;
+//    }
+    NSLog(@"%@----%@",KISDictionaryHaveKey(dic, @"userid"),self.userId);
     NSString * str =KISDictionaryHaveKey(dic, @"nickname");
     if ([str isEqualToString:@" "]) {
         isRegisterForMe = NO;
@@ -853,7 +835,17 @@
 
 #pragma mark --网络请求
 - (void)getSortDataByNet1
+
 {
+    
+    if (isFirstLoading1) {
+        loginActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.view addSubview:loginActivity];
+        loginActivity.center = CGPointMake(160, 150);
+        loginActivity.color = [UIColor blackColor];
+        [loginActivity startAnimating];
+        isFirstLoading1 = NO;
+    }
 //    hud.labelText = @"请求中...";
 //    [hud show:YES];
      [loginActivity startAnimating];
@@ -942,6 +934,15 @@
 
 - (void)getSortDataByNet2
 {
+    if (isFirstLoading2) {
+        loginActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.view addSubview:loginActivity];
+        loginActivity.center = CGPointMake(160, 150);
+        loginActivity.color = [UIColor blackColor];
+        [loginActivity startAnimating];
+        isFirstLoading2 = NO;
+    }
+
    // hud.labelText = @"请求中...";
    // [hud show:YES];
      [loginActivity startAnimating];
@@ -1026,6 +1027,15 @@
 
 - (void)getSortDataByNet3
 {
+    if (isFirstLoading3) {
+        loginActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.view addSubview:loginActivity];
+        loginActivity.center = CGPointMake(160, 150);
+        loginActivity.color = [UIColor blackColor];
+        [loginActivity startAnimating];
+        isFirstLoading3 = NO;
+    }
+
 //    hud.labelText = @"请求中...";
 //    [hud show:YES];
      [loginActivity startAnimating];

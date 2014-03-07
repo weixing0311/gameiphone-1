@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CharacterDetailsView.h"
+#import "SendNewsViewController.h"
 /*
  gameId 暂时就1个 wow --->1
  */
@@ -17,11 +18,11 @@ typedef enum
     CHARA_INFO_MYSELF,
 }CustomViewType;
 
-@interface CharacterDetailsViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,MyCharacterDelegate>
+@interface CharacterDetailsViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,MyCharacterDelegate,TableViewDatasourceDidChange>
 
 @property(nonatomic,strong)NSString *characterId;//角色ID
 @property(nonatomic,strong)NSString *gameId;//游戏id
 @property(nonatomic,strong)NSArray*  titleObjArray;
 @property(nonatomic,assign)CustomViewType myViewType;
-
+@property(nonatomic,assign)NSString *userId;
 @end

@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 
-@interface EncoXHViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
+@interface EncoXHViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 @property(nonatomic,copy)NSString *characterId;//角色
 @property(nonatomic,copy)NSString *gameId;
 @end

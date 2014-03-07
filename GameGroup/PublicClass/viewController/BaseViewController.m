@@ -17,7 +17,7 @@
     UIView *nieheImageView;
     BOOL  isAlreadyNiehe;
     BOOL isOKniehe;
-    
+    UIView *leftView;
 }
 @end
 
@@ -35,7 +35,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    [self.view bringSubviewToFront:leftView];
     //添加捏合手势
     if (self.navigationController.viewControllers.count==4&&![[NSUserDefaults standardUserDefaults]objectForKey:isNieheing]&&[[TempData sharedInstance]wxAlreadydidClickniehe]) {
         [self.view bringSubviewToFront:nieheImageView];
@@ -70,7 +70,23 @@
     self.view.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
 
     startX = KISHighVersion_7 ? 64 : 44;
+    
+    leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, self.view.bounds.size.height)];
+    leftView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:leftView];
+    UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(backTolastPage:)];
+    [recognizer delaysTouchesBegan];
+    [leftView addGestureRecognizer:recognizer];
+    
 }
+-(void)backTolastPage:(id)sender
+{
+    NSLog(@"滑动返回");
+    if (self.navigationController.viewControllers.count>=1) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
 -(void)yincangimage:(UIGestureRecognizer *)sender
 {
     nieheImageView.hidden = YES;

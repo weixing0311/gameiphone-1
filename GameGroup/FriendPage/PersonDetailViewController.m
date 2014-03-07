@@ -472,6 +472,7 @@
         NSDictionary *dic = [characterArray objectAtIndex:sender.tag-1000];
         CVC.characterId = KISDictionaryHaveKey(dic, @"id");
         CVC.gameId = @"1";
+        CVC.userId = KISDictionaryHaveKey(dic, @"userid");
         //告诉是他人看到推过来的
     }else{
     NSDictionary *dic = KISDictionaryHaveKey(self.hostInfo.state, @"titleObj");
