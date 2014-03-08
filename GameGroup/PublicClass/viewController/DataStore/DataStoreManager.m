@@ -91,7 +91,7 @@
             commonMsg.senTime = sendTime;
             commonMsg.msgType = msgType;
             commonMsg.payload = KISDictionaryHaveKey(msg, @"payload");
-            commonMsg.messageuuid = @"";
+            commonMsg.messageuuid = msgId;
             commonMsg.status = @"1";//已发送
             
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
@@ -107,7 +107,7 @@
             int unread = [thumbMsgs.unRead intValue];
             thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
             thumbMsgs.msgType = msgType;
-            thumbMsgs.messageuuid = @"";
+            thumbMsgs.messageuuid = msgId;
             thumbMsgs.status = @"1";//已发送
         }];
     }
@@ -175,8 +175,52 @@
         }];
     }
 }
++(void)storeMyPayloadmsg:(NSDictionary *)message
+{
+    NSLog(@"message==%@",message);
+    NSString * receicer = KISDictionaryHaveKey(message, @"receiver");
+    NSString * sender = KISDictionaryHaveKey(message, @"sender");
+    NSString * receicerNickname = KISDictionaryHaveKey(message, @"nickname");
+    NSString * msgContent = KISDictionaryHaveKey(message, @"msg");
+    NSDate * sendTime = [NSDate dateWithTimeIntervalSince1970:[KISDictionaryHaveKey(message, @"time") doubleValue]];
+    
+    NSString* msgType = KISDictionaryHaveKey(message, @"msgType");
+    NSString* heardimg = KISDictionaryHaveKey(message, @"img");
+    
+    NSString* messageuuid = KISDictionaryHaveKey(message, @"messageuuid");
+    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+        DSCommonMsgs * commonMsg = [DSCommonMsgs MR_createInContext:localContext];//所有消息
+        commonMsg.sender = sender;
+        commonMsg.senderNickname = @"";
+        commonMsg.msgContent = msgContent?msgContent:@"";
+        commonMsg.senTime = sendTime;
+        commonMsg.receiver = receicer;
+        commonMsg.msgType = msgType;
+        commonMsg.payload = KISDictionaryHaveKey(message, @"payload");//动态 消息json
+        commonMsg.messageuuid = messageuuid;
+        commonMsg.status = @"2";//发送中
+        
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
+        DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+        if (!thumbMsgs)
+            thumbMsgs = [DSThumbMsgs MR_createInContext:localContext];
+        thumbMsgs.sender = receicer;
+        thumbMsgs.senderNickname = receicerNickname;
+        thumbMsgs.msgContent = msgContent;
+        thumbMsgs.sendTime = sendTime;
+        thumbMsgs.senderType = PAYLOADMSG;
+        thumbMsgs.msgType = msgType;
+        thumbMsgs.senderimg = heardimg;
+        
+        int unread = [thumbMsgs.unRead intValue];
+        thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
+        thumbMsgs.messageuuid = messageuuid;
+        thumbMsgs.status = @"2";//发送中
+    }];
+}
 +(void)storeMyMessage:(NSDictionary *)message
 {
+    NSLog(@"message==%@",message);
     NSString * receicer = KISDictionaryHaveKey(message, @"receiver");
     NSString * sender = KISDictionaryHaveKey(message, @"sender");
     NSString * receicerNickname = KISDictionaryHaveKey(message, @"nickname");

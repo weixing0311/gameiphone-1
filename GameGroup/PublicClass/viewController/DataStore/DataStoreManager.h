@@ -33,7 +33,8 @@
 + (BOOL)savedMsgWithID:(NSString*)msgId;//消息是否已存
 +(void)setDefaultDataBase:(NSString *)dataBaseName AndDefaultModel:(NSString *)modelName;
 +(void)storeNewMsgs:(NSDictionary *)msg senderType:(NSString *)sendertype;
-+(void)storeMyMessage:(NSDictionary *)message;
++(void)storeMyPayloadmsg:(NSDictionary *)message;//保存我的动态消息
++(void)storeMyMessage:(NSDictionary *)message;//保存我的聊天消息
 +(void)storeThumbMsgUser:(NSString*)userid nickName:(NSString*)nickName andImg:(NSString*)img;
 +(void)storeThumbMsgUser:(NSString*)userid nickName:(NSString*)nickName;//修改别名
 +(NSString *)queryMsgRemarkNameForUser:(NSString *)userid;

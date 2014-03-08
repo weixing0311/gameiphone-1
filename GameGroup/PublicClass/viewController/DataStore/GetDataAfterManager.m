@@ -1,4 +1,4 @@
-//
+ //
 //  GetDataAfterManager.m
 //  GameGroup
 //
@@ -44,6 +44,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
 
 -(void)storeNewMessage:(NSDictionary *)messageContent
 {
+    NSLog(@"messageContent==%@",messageContent);
     NSString * type = KISDictionaryHaveKey(messageContent, @"msgType");
     type = type?type:@"notype";
     NSLog(@"%@",type);

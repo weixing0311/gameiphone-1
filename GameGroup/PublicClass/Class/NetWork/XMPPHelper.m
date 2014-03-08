@@ -359,9 +359,9 @@
                 
                 [dict setObject:@"payloadchat" forKey:@"msgType"];
             }
-            else
+            else{
                 [dict setObject:@"normalchat" forKey:@"msgType"];
-            
+            }
             [dict setObject:msgId?msgId:@"" forKey:@"msgId"];
             
             [self.chatDelegate newMessageReceived:dict];

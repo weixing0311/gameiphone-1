@@ -1125,6 +1125,7 @@
         //如果发送信息为空或者为空格的时候弹框提示
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"不能发送空消息" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alertView show];
+        return;
     }
     //生成<body>文档
     NSXMLElement *body = [NSXMLElement elementWithName:@"body"];

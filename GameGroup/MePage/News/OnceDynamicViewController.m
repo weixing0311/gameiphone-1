@@ -13,7 +13,8 @@
 #import "MyProfileViewController.h"
 #import "PersonDetailViewController.h"
 #import "EGOImageView.h"
-
+#import "AppDelegate.h"
+#import "JSON.h"
 @interface OnceDynamicViewController ()
 {
     UIButton *m_shareButton;
@@ -107,8 +108,6 @@
 
 - (void)setUpViewBeforeLoading
 {
-
-    
     bg1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, + startX, kScreenWidth, 60)];
     bg1.image = KUIImage(@"detail_top_bg");
     [self.view addSubview:bg1];
@@ -183,8 +182,6 @@
     commentLabel12.text = [NSString stringWithFormat:@"评论 %d", allPL];
     commentLabel12.backgroundColor = [UIColor clearColor];
     [self.view addSubview:commentLabel12];
-
-    
 }
 
 
@@ -702,43 +699,85 @@
 
 - (void)okShareClick:(id)sender
 {
-    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
-    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+    [body setStringValue:@"[内容]"];
+    NSXMLElement * payload = [NSXMLElement elementWithName:@"payload"];
+    NSDictionary * dic = @{@"thumb":_dataDic[@"thumb"],@"title":_dataDic[@"title"],@"shiptype": @"1",@"messageid":_dataDic[@"id"],@"msg":_dataDic[@"msg"],@"type": @"3"};
+    [payload setStringValue:[dic JSONFragment]];
+    //生成XML消息文档
+    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+    //   [mes addAttributeWithName:@"nickname" stringValue:@"aaaa"];
+    //消息类型
+    [mes addAttributeWithName:@"type" stringValue:@"chat"];
     
-    [paramDict setObject:self.messageid forKey:@"messageid"];
-    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-
-    if (shareType == 0) {
-        [paramDict setObject:KISDictionaryHaveKey(self.shareUserDic, @"userid") forKey:@"touserid"];
-        [postDict setObject:@"144" forKey:@"method"];
-    }
-    else
-    {
-        [postDict setObject:@"145" forKey:@"method"];
-    }
-    [postDict setObject:paramDict forKey:@"params"];
-    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    //发送给谁
+    [mes addAttributeWithName:@"to" stringValue:[KISDictionaryHaveKey(self.shareUserDic, @"userid") stringByAppendingString:[[TempData sharedInstance] getDomain]]];
+    //由谁发送
+    [mes addAttributeWithName:@"from" stringValue:[[DataStoreManager getMyUserID] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
     
-    [self.view bringSubviewToFront:hud];
-    hud.labelText = @"发送中...";
-    [hud show:YES];
+    [mes addAttributeWithName:@"msgtype" stringValue:@"normalchat"];
+    [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
+    [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];
+    NSString* uuid = [[GameCommon shareGameCommon] uuid];
+    [mes addAttributeWithName:@"id" stringValue:uuid];
     
-    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [hud hide:YES];
-        m_shareViewBg.hidden = YES;
-        m_shareView.hidden = YES;
-        
-        [self showMessageWindowWithContent:@"成功" imageType:0];
-    } failure:^(AFHTTPRequestOperation *operation, id error) {
-        if ([error isKindOfClass:[NSDictionary class]]) {
-            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
-            {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                [alert show];
-            }
-        }
-        [hud hide:YES];
-    }];
+    //组合
+    [mes addChild:body];
+    [mes addChild:payload];
+    
+    //发送消息
+    [((AppDelegate*)[[UIApplication sharedApplication] delegate]).xmppHelper sendMessage:mes];
+    
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+    [dictionary setObject:@"[内容]" forKey:@"msg"];
+    [dictionary setObject:@"you" forKey:@"sender"];
+    [dictionary setObject:[GameCommon getCurrentTime] forKey:@"time"];
+    [dictionary setObject:KISDictionaryHaveKey(self.shareUserDic, @"userid") forKey:@"receiver"];
+    [dictionary setObject:[dic JSONFragment] forKey:@"payload"];
+    [dictionary setObject:@"payloadchat" forKey:@"msgType"];
+    [dictionary setObject:uuid forKey:@"messageuuid"];
+    [dictionary setObject:@"2" forKey:@"status"];
+    [DataStoreManager storeMyPayloadmsg:dictionary];
+    m_shareViewBg.hidden = YES;
+    m_shareView.hidden = YES;
+    
+//    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+//    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+//    
+//    [paramDict setObject:self.messageid forKey:@"messageid"];
+//    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+//
+//    if (shareType == 0) {
+//        [paramDict setObject:KISDictionaryHaveKey(self.shareUserDic, @"userid") forKey:@"touserid"];
+//        [postDict setObject:@"144" forKey:@"method"];
+//    }
+//    else
+//    {
+//        [postDict setObject:@"145" forKey:@"method"];
+//    }
+//    [postDict setObject:paramDict forKey:@"params"];
+//    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+//    
+//    [self.view bringSubviewToFront:hud];
+//    hud.labelText = @"发送中...";
+//    [hud show:YES];
+//    
+//    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        [hud hide:YES];
+//        m_shareViewBg.hidden = YES;
+//        m_shareView.hidden = YES;
+//        
+//        [self showMessageWindowWithContent:@"成功" imageType:0];
+//    } failure:^(AFHTTPRequestOperation *operation, id error) {
+//        if ([error isKindOfClass:[NSDictionary class]]) {
+//            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+//            {
+//                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+//                [alert show];
+//            }
+//        }
+//        [hud hide:YES];
+//    }];
 }
 
 #pragma mark 举报 或评论
