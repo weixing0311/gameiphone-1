@@ -44,7 +44,7 @@
 +(void)deleteAllThumbMsg;
 +(void)deleteThumbMsgWithSender:(NSString *)sender;
 +(void)deleteMsgsWithSender:(NSString *)sender Type:(NSString *)senderType;
-
++ (NSMutableArray *)qureyCommonMessagesWithUserID:(NSString *)userid FetchOffset:(NSInteger)integer;//根据userid分页查询
 +(NSMutableArray *)qureyAllCommonMessages:(NSString *)userid;
 +(NSString*)queryMessageStatusWithId:(NSString*)msgUUID;
 +(void)deleteCommonMsg:(NSString *)content Time:(NSString *)theTime;

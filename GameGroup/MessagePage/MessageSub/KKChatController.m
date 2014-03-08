@@ -94,16 +94,16 @@
     UIImageView * bgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
     bgV.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
     [self.view addSubview:bgV];
-    
-    currentPage = 1;
-    historyMsg = [[NSArray alloc] initWithArray:[DataStoreManager qureyAllCommonMessages:self.chatWithUser]];
-    if ([historyMsg count] > 0) {//有记录
-        messages = [[NSMutableArray alloc] initWithArray:[historyMsg objectAtIndex:0]];
-    }
-    else
-    {
-        messages = [[NSMutableArray alloc] initWithCapacity:1];
-    }
+    messages = [[NSMutableArray alloc] initWithArray:[ DataStoreManager qureyCommonMessagesWithUserID:self.chatWithUser FetchOffset:0]];
+//    currentPage = 1;
+//    historyMsg = [[NSArray alloc] initWithArray:[DataStoreManager qureyAllCommonMessages:self.chatWithUser]];
+//    if ([historyMsg count] > 0) {//有记录
+//        messages = [[NSMutableArray alloc] initWithArray:[historyMsg objectAtIndex:0]];
+//    }
+//    else
+//    {
+//        messages = [[NSMutableArray alloc] initWithCapacity:1];
+//    }
 
 //    messages = [[DataStoreManager qureyAllCommonMessages:self.chatWithUser] retain];
     [self normalMsgToFinalMsg];
@@ -722,12 +722,6 @@
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    
-    return 1;
-}
-
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [messages count];
 }
@@ -1191,16 +1185,13 @@
         CGPoint offsetofScrollView = self.tView.contentOffset;
         NSLog(@"%@", NSStringFromCGPoint(offsetofScrollView));
         if (offsetofScrollView.y < - 20) {//向上拉出20个像素高度时加载
-            NSInteger allPage = [historyMsg count];//历史总页码
-            if (currentPage < allPage) {
-                NSArray* newMsgArray = [historyMsg objectAtIndex:currentPage];
-                for (int i = [newMsgArray count]-1; i >= 0; i--) {
-                    [messages insertObject:[newMsgArray objectAtIndex:i] atIndex:0];//插在前面位置
-                }
-                [self normalMsgToFinalMsg];
-                [self.tView reloadData];
-                currentPage ++;
+            NSArray * array = [DataStoreManager qureyCommonMessagesWithUserID:self.chatWithUser FetchOffset:messages.count];
+            for (int i = 0; i < array.count; i++) {
+                [messages insertObject:array[i] atIndex:i];
             }
+            [self normalMsgToFinalMsg];
+            [self.tView reloadData];
+            [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:array.count inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
         }
     }
 }
