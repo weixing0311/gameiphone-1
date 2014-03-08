@@ -695,6 +695,8 @@ BOOL validateMobile(NSString* mobile) {
                 UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }
+        }else{
+            [self showAlertViewWithTitle:@"提示" message:@"绑定角色失败,请检查网络" buttonTitle:@"确定"];
         }
         [hud hide:YES];
     }];

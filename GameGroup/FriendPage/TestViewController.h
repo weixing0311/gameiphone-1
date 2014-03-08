@@ -35,4 +35,5 @@ typedef enum
 @property(nonatomic,copy)NSString * achievementColor;
 @property(nonatomic,strong)NSString *titleImage;
 @property(nonatomic,copy)NSString *constellationStr;//星座
+@property(nonatomic,copy)NSString *createTimeStr;
 @end

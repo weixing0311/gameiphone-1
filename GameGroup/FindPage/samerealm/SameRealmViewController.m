@@ -449,7 +449,8 @@
 
     VC.constellationStr =KISDictionaryHaveKey(recDict, @"constellation");
 
-    
+    VC.createTimeStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"createTime")];
+
     NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"img")] componentsSeparatedByString:@","];
     VC.constellationStr =KISDictionaryHaveKey(recDict, @"constellation");
     VC.titleImage = [BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""];

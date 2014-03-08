@@ -14,5 +14,10 @@
 @property(nonatomic,strong)UILabel *titleLabel;
 @property(nonatomic,strong)UILabel *serverLabel;
 @property(nonatomic,strong)UILabel *NumLabel;
-@property(nonatomic,strong)UILabel *sexLabel;
+@property(nonatomic,strong)UIImageView *sexImageView;
+@property(nonatomic,strong)UIImageView *NumImageView;
+@property(nonatomic,strong)UIButton    *bgButton;
+@property(nonatomic,strong)NSIndexPath  *myIndexPath;
+@property(nonatomic,strong)UIImageView  *bgImageView1;
+@property(nonatomic,strong)UIImageView  *bgImageView2;
 @end

@@ -152,6 +152,7 @@
     if([KISDictionaryHaveKey(tempDict, @"msgType") isEqualToString:@"character"])//角色
     {
         CharacterEditViewController* VC = [[CharacterEditViewController alloc] init];
+          VC.isFromMeet =NO;
         [self.navigationController pushViewController:VC animated:YES];
         
         return;

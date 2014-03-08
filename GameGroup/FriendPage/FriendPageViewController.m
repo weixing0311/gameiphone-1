@@ -1057,6 +1057,8 @@
     detailVC.nickName = KISDictionaryHaveKey(tempDict, @"displayName");
     detailVC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"updateUserLocationDate")];
     detailVC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"distance")];
+    detailVC.createTimeStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"createTime")];
+
     detailVC.isChatPage = NO;
     [self.navigationController pushViewController:detailVC animated:YES];
 }

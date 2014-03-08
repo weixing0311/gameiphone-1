@@ -321,7 +321,8 @@
             
             NSString *timeStr =[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"time")]];
             NSString *indexStr = KISDictionaryHaveKey(responseObject, @"index");
-            hud.detailsLabelText = [NSString stringWithFormat:@"进入更新队列，目前队列位置：%@，预计更新时间：%@",indexStr,timeStr];
+            hud.labelText = @"进入更新队列";
+            hud.detailsLabelText = [NSString stringWithFormat:@"目前队列位置：%@，预计更新时间：%@",indexStr,timeStr];
             [hud showAnimated:YES whileExecutingBlock:^{
                 sleep(5);
             }];
@@ -330,6 +331,7 @@
             m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
             m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
             hud.labelText = @"获取成功";
+            hud.detailsLabelText = nil;
             [hud showAnimated:YES whileExecutingBlock:^{
                 sleep(3);
             }];
@@ -358,7 +360,8 @@
 {
 //    hud = [[MBProgressHUD alloc] initWithView:self.view];
 //    [self.view addSubview:hud];
-    hud.detailsLabelText = @"正拼命从英雄榜获取中...";
+     hud.labelText = @"正拼命从英雄榜获取中...";
+    hud.detailsLabelText = nil;
     
     m_charaDetailsView.reloadingBtn.userInteractionEnabled =NO;
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
@@ -440,34 +443,47 @@
     if (tableView ==m_contentTableView) {
         cell.CountLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.firstValueArray objectAtIndex:indexPath.row]];
         cell.rankingLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.firstRankArray objectAtIndex:indexPath.row]];
-        NSString *str =[m_charaInfo.firstCompArray objectAtIndex:indexPath.row];
-        if (str==0) {
+        NSInteger  i =[[m_charaInfo.firstCompArray objectAtIndex:indexPath.row]integerValue];
+        if (i ==1) {
             cell.upDowmImgView.image = KUIImage(@"die");
-        }else {
-            cell.upDowmImgView.image = KUIImage(@"zhang");
         }
+        if (i==-1) {
+            
+                cell.upDowmImgView.image = KUIImage(@"zhang");
+            }
+        if (i==0) {
+                cell.upDowmImgView.image =nil;
+            }
         //
     }
     if (tableView ==m_countryTableView){
         cell.CountLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.secondValueArray objectAtIndex:indexPath.row]];
         cell.rankingLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.secondRankArray objectAtIndex:indexPath.row]];
-        NSString *str =[m_charaInfo.firstCompArray objectAtIndex:indexPath.row];
-        if (str==0) {
+        NSInteger  i =[[m_charaInfo.firstCompArray objectAtIndex:indexPath.row]integerValue];
+        if (i ==1) {
             cell.upDowmImgView.image = KUIImage(@"die");
-        }else {
+        }
+        if (i==-1) {
+          
             cell.upDowmImgView.image = KUIImage(@"zhang");
         }
-        
+        if (i==0) {
+                cell.upDowmImgView.image =nil;
+        }
     }
     if (tableView ==m_reamlTableView) {
         cell.CountLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.thirdValueArray objectAtIndex:indexPath.row]];
         
         cell.rankingLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.thirdRankArray objectAtIndex:indexPath.row]];
-        NSString *str =[m_charaInfo.firstCompArray objectAtIndex:indexPath.row];
-        if (str==0) {
+        NSInteger  i =[[m_charaInfo.firstCompArray objectAtIndex:indexPath.row]integerValue];
+        if (i ==1) {
             cell.upDowmImgView.image = KUIImage(@"die");
-        }else {
-            cell.upDowmImgView.image = KUIImage(@"zhang");
+        }
+        if (i==-1) {
+                cell.upDowmImgView.image = KUIImage(@"zhang");
+            }
+            if (i==0) {
+                cell.upDowmImgView.image =nil;
         }
         
     }

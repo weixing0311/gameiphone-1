@@ -119,7 +119,7 @@
     [self.view addSubview:titleLabel];
     
     if (hasBacButton) {
-        UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30)];
+        UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, KISHighVersion_7 ? 27 : 7, 65, 42)];
         [backButton setBackgroundImage:KUIImage(@"btn_back") forState:UIControlStateNormal];
         [backButton setBackgroundImage:KUIImage(@"btn_back_onclick") forState:UIControlStateHighlighted];
         backButton.backgroundColor = [UIColor clearColor];

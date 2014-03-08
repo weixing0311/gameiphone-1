@@ -274,8 +274,8 @@
         {
         }
         else{
-            [self showMessageWindowWithContent:@"发表成功" imageType:0];
         }
+        [self showMessageWindowWithContent:@"发表成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
