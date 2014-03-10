@@ -36,4 +36,5 @@ typedef enum
 @property(nonatomic,strong)NSString *titleImage;
 @property(nonatomic,copy)NSString *constellationStr;//星座
 @property(nonatomic,copy)NSString *createTimeStr;
+@property(nonatomic,assign)BOOL isActiveAc;//是否激活
 @end

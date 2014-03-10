@@ -309,7 +309,6 @@
     
     //[hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
         NSLog(@"res%@",responseObject);
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"ok"]) {
             
@@ -319,10 +318,15 @@
         if ([KISDictionaryHaveKey(responseObject, @"systemstate")isEqualToString:@"busy"]) {
             m_charaDetailsView.reloadingBtn.userInteractionEnabled =YES;
             
-            NSString *timeStr =[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"time")]];
+            NSString *timeStr =[NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(responseObject, @"time")intValue]/60000];
+            NSString *str = nil;
+            if ([timeStr isEqualToString:@"0"]) {
+                str = @"小于1分钟";
+            }else{
+                str =[NSString stringWithFormat:@"%@分钟",timeStr];
+            }
             NSString *indexStr = KISDictionaryHaveKey(responseObject, @"index");
-            hud.labelText = @"进入更新队列";
-            hud.detailsLabelText = [NSString stringWithFormat:@"目前队列位置：%@，预计更新时间：%@",indexStr,timeStr];
+            hud.detailsLabelText = [NSString stringWithFormat:@"进入更新队列,目前队列位置：%@，预计更新时间：%@",indexStr,str];
             [hud showAnimated:YES whileExecutingBlock:^{
                 sleep(5);
             }];
@@ -335,7 +339,7 @@
             [hud showAnimated:YES whileExecutingBlock:^{
                 sleep(3);
             }];
-        NSString *changeBtnTitle =[NSString stringWithFormat:@"上次更新时间：%@",[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"rankingtime")]]];
+        NSString *changeBtnTitle =[NSString stringWithFormat:@"上次更新时间：%@",[self getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"rankingtime")]]];
         
         [[NSUserDefaults standardUserDefaults]setObject:KISDictionaryHaveKey(responseObject, @"rankingtime") forKey:@"WX_reloadBtnTitle_wx"];
         
@@ -621,12 +625,12 @@
     if (((int)(theCurrentT-theMessageT))<60*59) {
         return [NSString stringWithFormat:@"%.f分钟以前",((theCurrentT-theMessageT)/60+1)];
     }
-    if (((int)(theCurrentT-theMessageT))<60*60*24) {
+    if (((int)(theCurrentT-theMessageT))<60*60*24&&((int)(theCurrentT-theMessageT))>60*59) {
         return [NSString stringWithFormat:@"%.f小时以前",((theCurrentT-theMessageT)/3600)==0?1:((theCurrentT-theMessageT)/3600)];
     }
     if (((int)(theCurrentT-theMessageT))<60*60*48) {
         return @"昨天";
-    }
+    }   
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     //设定时间格式,这里可以设置成自己需要的格式
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];

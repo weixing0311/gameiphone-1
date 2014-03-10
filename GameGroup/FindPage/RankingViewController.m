@@ -414,6 +414,7 @@
         cell.CountOfLabel.text =[NSString stringWithFormat:@"%@",KISDictionaryHaveKey(dic, @"value")];
 
     }
+    
     if (tableView ==m_tableviewServer) {
         
         
@@ -516,24 +517,8 @@
             cell.NumLabel.hidden = NO;
             [cell bringSubviewToFront:cell.NumLabel];
         }
-//            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x8a5d96, 1);
-//        }
-//        else{
-//            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x828be5, 1);
-//        }
-//        
-//        if (i>99&&i<999) {
-//            cell.NumLabel.font = [UIFont systemFontOfSize:14];
-//        }
-//        if (i>999&&i<9999) {
-//            cell.NumLabel.font = [UIFont systemFontOfSize:10];
-//        }
-//        if (i>9999) {
-//            cell.NumLabel.font = [UIFont systemFontOfSize:8];
-//        }
-//        else{
-//            cell.NumLabel.font = [UIFont boldSystemFontOfSize:18];
-//        }
+        
+        
         if ([KISDictionaryHaveKey(dic, @"charactername") isEqualToString:self.characterName]&&[KISDictionaryHaveKey(dic, @"realm") isEqualToString:self.server]) {
             cell.bgImageView1.image = KUIImage(@"me_normal");
             cell.bgImageView2.image = KUIImage(@"me_click");

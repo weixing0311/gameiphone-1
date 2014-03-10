@@ -289,10 +289,14 @@ static GameCommon *my_gameCommon = NULL;
     //设定时间格式,这里可以设置成自己需要的格式
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString *messageDateStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:theMessageT]];
+    
     NSString *currentStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:theCurrentT]];
+    
     NSDateFormatter *dateFormatter2 = [[NSDateFormatter alloc] init];
     [dateFormatter2 setDateFormat:@"HH:mm"];
+    
     NSString * msgT = [dateFormatter2 stringFromDate:[NSDate dateWithTimeIntervalSince1970:theMessageT]];
+    
     NSString * nowT = [dateFormatter2 stringFromDate:[NSDate dateWithTimeIntervalSince1970:theCurrentT]];
     int msgHour = [[msgT substringToIndex:2] intValue];
     int msgmin = [[msgT substringFromIndex:3] intValue];
@@ -314,7 +318,7 @@ static GameCommon *my_gameCommon = NULL;
             finalTime = [NSString stringWithFormat:@"%d分钟前",(minutes-msgmin)];
         }
     }
-    else if ([currentStr isEqualToString:messageDateStr]) {
+    else if ([currentStr isEqualToString:messageDateStr]&&hours-msgHour>=0) {
            finalTime = [NSString stringWithFormat:@"%d小时前",(hours-msgHour)];
     }
     //昨天

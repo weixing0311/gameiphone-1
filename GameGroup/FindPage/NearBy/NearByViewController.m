@@ -308,7 +308,12 @@
    // PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
     TestViewController* VC = [[TestViewController alloc] init];
 
-    
+    if([KISDictionaryHaveKey(recDict, @"active")intValue] ==2){
+        VC.isActiveAc =YES;
+    }
+    else{
+        VC.isActiveAc =NO;
+    }
     VC.userId = KISDictionaryHaveKey(recDict, @"id");
     VC.nickName = KISDictionaryHaveKey(recDict, @"nickname");
     VC.isChatPage = NO;

@@ -425,9 +425,11 @@
         NSURLRequest *request = [NSURLRequest requestWithURL:requestUrl];
         [mWebView loadRequest:request];
         
-//        UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick:)];
-//        tapGesture.delegate = self;
-//        [mWebView addGestureRecognizer:tapGesture];
+        UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick:)];
+        tapGesture.delegate = self;
+        tapGesture.numberOfTapsRequired = 1;
+        tapGesture.numberOfTouchesRequired = 1;
+        [mWebView addGestureRecognizer:tapGesture];
         
         [self.view addSubview:mWebView];
     }
@@ -493,18 +495,19 @@
 }
 
 #pragma mark 手势
-//- (void)tapClick:(id)sender
-//{
-//    [self.textView resignFirstResponder];
-//}
-//
-//-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-//{
-//    if ([touch.view isKindOfClass:[UIButton class]]) {
-//        return NO;
-//    }
-//    return YES;
-//}
+- (void)tapClick:(id)sender
+{
+    //[self.textView resignFirstResponder];
+    NSLog(@"点击啊 点击");
+}
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if ([touch.view isKindOfClass:[UIButton class]]) {
+        return NO;
+    }
+    return YES;
+}
 
 #pragma mark 详情
 - (NSString*)getDataWithTime

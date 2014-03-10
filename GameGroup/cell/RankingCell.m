@@ -28,8 +28,8 @@
         self.NumLabel =[[UILabel alloc]initWithFrame:CGRectMake(15, 0, 50, 70)];
         self.NumLabel.backgroundColor = [UIColor clearColor];
         self.NumLabel.textColor = [UIColor grayColor];
-        self.NumLabel.textAlignment = NSTextAlignmentCenter;
-        self.NumLabel.font = [UIFont fontWithName:@"汉仪菱心体简" size:19];
+        self.NumLabel.textAlignment = NSTextAlignmentLeft;
+        self.NumLabel.font = [UIFont fontWithName:@"汉仪菱心体简" size:17];
 
         //self.NumLabel.font = [UIFont fontWithName:@"液晶数字字体" size:18];
        // self.NumLabel.layer.borderColor = [[UIColor blackColor] CGColor];

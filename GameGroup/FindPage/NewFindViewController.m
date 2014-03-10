@@ -55,38 +55,28 @@
         [[Custom_tabbar showTabBar] when_tabbar_is_selected:0];
         return;
         
-        m_notibgInfoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(265, 11, 28, 22)];
-        // m_notibgInfoImageView.center =CGPointMake(m_meetBtn.center.x-22, m_meetBtn.center.y-140);
-        
-        [m_notibgInfoImageView setImage:[UIImage imageNamed:@"redCB.png"]];
-        [self.view addSubview:m_notibgInfoImageView];
-        // m_notibgInfoImageView.hidden = YES;
-        
-        lb = [[UILabel alloc] initWithFrame:CGRectMake(-1, 0, 30, 22)];
-        [lb setBackgroundColor:[UIColor clearColor]];
-        [lb setTextAlignment:NSTextAlignmentCenter];
-        [lb setTextColor:[UIColor whiteColor]];
-        lb.font = [UIFont systemFontOfSize:14.0];
-        [m_notibgInfoImageView addSubview:lb];
-        
-        if ([[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] && ![[[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] isEqualToString:@"0"])
-        {
-            NSLog(@"-------->>>%@",[[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews]);
-            m_notibgInfoImageView.hidden = NO;
-            NSString* unCont = [[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews];
-            if ([unCont integerValue] > 99) {
-                lb.text = @"99";
-            }
-            else
-                lb.text = unCont;
-        }
-        else
-        {
-            m_notibgInfoImageView.hidden = YES;
-        }
     }
 }
+-(void)ss
+{
+    NSLog(@"监听");
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] && ![[[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] isEqualToString:@"0"])
+    {
+        NSLog(@"-------->>>%@",[[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews]);
+        m_notibgInfoImageView.hidden = NO;
+        NSString* unCont = [[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews];
+        if ([unCont integerValue] > 99) {
+            lb.text = @"99";
+        }
+        else
+            lb.text = unCont;
+    }
+    else
+    {
+        m_notibgInfoImageView.hidden = YES;
+    }
 
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -102,8 +92,23 @@
     imageView.image = KUIImage(@"finder_line");
     [self.view addSubview:imageView];
     
-
-   
+    m_notibgInfoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(265, 11, 28, 22)];
+    // m_notibgInfoImageView.center =CGPointMake(m_meetBtn.center.x-22, m_meetBtn.center.y-140);
+    
+    [m_notibgInfoImageView setImage:[UIImage imageNamed:@"redCB.png"]];
+    [self.view addSubview:m_notibgInfoImageView];
+    // m_notibgInfoImageView.hidden = YES;
+    
+    lb = [[UILabel alloc] initWithFrame:CGRectMake(-1, 0, 30, 22)];
+    [lb setBackgroundColor:[UIColor clearColor]];
+    [lb setTextAlignment:NSTextAlignmentCenter];
+    [lb setTextColor:[UIColor whiteColor]];
+    lb.font = [UIFont systemFontOfSize:14.0];
+    [m_notibgInfoImageView addSubview:lb];
+    
+    [self ss];
+    
+    
     m_activateBtn = [FinderView setButtonWithFrame:CGRectMake(0, 0, 50, 38) center:CGPointMake(295, startX+19) backgroundNormalImage:@"new_activate_pressed" backgroundHighlightImage:@"new_activate_normal" setTitle:nil nextImage:nil nextImage:nil];
     m_activateBtn.backgroundColor = [UIColor clearColor];
     [m_activateBtn addTarget:self action:@selector(didClickenterMeet:) forControlEvents:UIControlEventTouchUpInside];

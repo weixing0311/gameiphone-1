@@ -1058,6 +1058,12 @@
     detailVC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"updateUserLocationDate")];
     detailVC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"distance")];
     detailVC.createTimeStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"createTime")];
+    if([KISDictionaryHaveKey(tempDict, @"active") isEqualToString:@"2"]){
+        detailVC.isActiveAc =YES;
+    }
+    else{
+        detailVC.isActiveAc =NO;
+    }
 
     detailVC.isChatPage = NO;
     [self.navigationController pushViewController:detailVC animated:YES];
