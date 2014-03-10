@@ -14,8 +14,8 @@
     UIButton *button = [[UIButton alloc]initWithFrame:frame];
     button.center = center;
     button.backgroundColor = [UIColor whiteColor];
-    [button setBackgroundImage:KUIImage(normalImage)  forState:UIControlStateNormal];
-   // [button setBackgroundImage:KUIImage(highImage) forState:UIControlStateSelected];
+    [button setBackgroundImage:KUIImage(highImage)  forState:UIControlStateNormal];
+    [button setBackgroundImage:KUIImage(normalImage) forState:UIControlStateSelected];
     [button setTitle:title forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:12];
     [button setImage:KUIImage(nImage) forState:UIControlStateNormal];

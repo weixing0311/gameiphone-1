@@ -59,7 +59,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    if (self.hostInfo!=NULL) {//有值 查找用户
+        [self buildMainView];
+        [self setBottomView];
+        
+    }
+    else//没有详情 请求
+    {
+
     if ([[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]!=nil) {//有值 查找用户
         self.hostInfo = [[HostInfo alloc] initWithHostInfo:[[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]];
         [self buildMainView];
@@ -73,7 +80,7 @@
         
         [self getUserInfoByNet];
     }
-    
+    }
 }
 
 - (void)getUserInfoByNet
@@ -549,9 +556,9 @@
     UILabel* timeTitleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(55, m_currentStartY + 5, 100, 35) textColor:kColorWithRGB(51, 51, 51, 1.0) font:[UIFont boldSystemFontOfSize:15.0] text:@"注册时间" textAlignment:NSTextAlignmentLeft];
     [m_myScrollView addSubview:timeTitleLabel];
     
-//    NSString* timeStr = [[GameCommon shareGameCommon] getDataWithTimeInterval:self.hostInfo.createTime];
+    NSString* timeStr = [[GameCommon shareGameCommon] getDataWithTimeInterval:self.createTimeStr];
     
-    UILabel* timeLabel4 = [CommonControlOrView setLabelWithFrame:CGRectMake(160, m_currentStartY + 5, 150, 35) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:15.0] text:@"2011-11-11" textAlignment:NSTextAlignmentRight];
+    UILabel* timeLabel4 = [CommonControlOrView setLabelWithFrame:CGRectMake(160, m_currentStartY + 5, 150, 35) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont boldSystemFontOfSize:15.0] text:timeStr textAlignment:NSTextAlignmentRight];
     [m_myScrollView addSubview:timeLabel4];
     
     m_currentStartY += 45;

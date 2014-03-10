@@ -68,18 +68,18 @@
     
     NSLog(@"%@", NSStringFromCGRect(m_myScrollView.frame));
     m_myScrollView.backgroundColor = [UIColor clearColor];
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {
         UIImageView* bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(320 * i, 0, 320, m_myScrollView.frame.size.height)];
-        if (i == 0 || i == 4) {
+        if (i == 0 || i == 5) {
             if (i == 0) {
-                bgImage.image = KUIImage(@"first_3.jpg");
+                bgImage.image = KUIImage(@"second_4.jpg");
             }
             else
-                bgImage.image = KUIImage(@"first_1.jpg");
+                bgImage.image = KUIImage(@"second_1.jpg");
         }
         else
         {
-            NSString* imageName = [NSString stringWithFormat:@"first_%d.jpg", i];
+            NSString* imageName = [NSString stringWithFormat:@"second_%d.jpg", i];
             bgImage.image = KUIImage(imageName);
         }
         bgImage.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
@@ -87,7 +87,7 @@
     }
     m_myScrollView.pagingEnabled = YES;
     m_myScrollView.scrollEnabled = YES;
-    m_myScrollView.contentSize = CGSizeMake(320 * 5, kScreenHeigth - ((diffH == 0) ? 20 : 0));
+    m_myScrollView.contentSize = CGSizeMake(320 * 6, kScreenHeigth - ((diffH == 0) ? 20 : 0));
 
     
     
@@ -116,7 +116,7 @@
 - (void)refreshLeftTime
 {
 //    CGRect newRect;
-    if (m_currentPage == 3) {//最后一页
+    if (m_currentPage == 4) {//最后一页
         m_myScrollView.contentOffset = CGPointMake(320, 0);
         m_currentPage = 1;
     }
@@ -150,13 +150,13 @@
     
 	NSInteger page = offsetofScrollView.x / m_myScrollView.frame.size.width;
 	
-    if(0 == page || 4 == page)
+    if(0 == page || 5 == page)
 	{
         CGRect rect;
         if (0 == page)
         {
-            rect = CGRectMake(3 * m_myScrollView.frame.size.width, 0, m_myScrollView.frame.size.width, m_myScrollView.frame.size.height);
-            m_currentPage = 3;
+            rect = CGRectMake(4 * m_myScrollView.frame.size.width, 0, m_myScrollView.frame.size.width, m_myScrollView.frame.size.height);
+            m_currentPage = 4;
         }
         else
         {

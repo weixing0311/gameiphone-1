@@ -81,7 +81,7 @@
      getDic = [[NSDictionary alloc]init];
      m_characterArray = [[NSMutableArray alloc]init];
     
-    [self setTopViewWithTitle:@"邂逅" withBackButton:YES];
+    [self setTopViewWithTitle:@"许愿池" withBackButton:YES];
     
     backgroundImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height -startX)];
     
@@ -155,10 +155,12 @@
     headImageView = [[EGOImageView alloc]init];
     
     headImageView.layer.masksToBounds = YES;
-    headImageView.layer.cornerRadius = 80;
-    headImageView.frame = CGRectMake(80, 76-40, 160, 160);
+    headImageView.layer.cornerRadius = 165/2.0;
+    headImageView.frame = CGRectMake(80, 76-40, 165, 165);
+
     [backgroundImageView addSubview:headImageView];
     headImageView.userInteractionEnabled = YES;
+    
     [headImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(enterToPernsonPage:)]];
     
     
@@ -346,12 +348,12 @@
             NSLog(@"imageUrl--->%@",headImageView.imageURL);
             NSLog(@"imageUrl---->%@",headImageView.image);
 
-            headImageView.layer.borderWidth = 2.0;
-            headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
             
             UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:imageStr]]]]];
             
-            
+            headImageView.layer.borderWidth = 2.0;
+            headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
+
             [headImageView rotate360WithDuration:1.0 repeatCount:1 timingMode:i7Rotate360TimingModeEaseInEaseOut];
             headImageView.animationDuration = 2.0;
             headImageView.animationImages =
@@ -457,8 +459,8 @@
                 customLabel.text = @" ？？|神 明";
                 
                 promptLabel.text =@"小衰神附体,你ROLL出了1点,什么也没遇到...";
-                headImageView.image = KUIImage(@"邂逅---小衰神_03.png");
-                
+                headImageView.image = KUIImage(@"roll_0");
+                headImageView.backgroundColor = [UIColor whiteColor];
                 headImageView.layer.borderWidth = 2.0;
                 headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
 
@@ -469,7 +471,7 @@
                 headImageView.animationImages =
                 [NSArray arrayWithObjects:
                  headImageView.image,
-                 headImageView.placeholderImage,
+                 headImageView.image,
                  headImageView.image,
                  image,
                  nil];

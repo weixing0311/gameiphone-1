@@ -65,8 +65,8 @@
     BOOL  isFirstLoading1;
     BOOL  isFirstLoading2;
     BOOL  isFirstLoading3;
-    
-}
+    }
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -306,7 +306,11 @@
     m_tableviewServer.hidden = YES;
     m_tableviewCountry.hidden = YES;
     
-    
+    m_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    m_tableviewServer.separatorStyle = UITableViewCellSeparatorStyleNone;
+    m_tableviewCountry.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+
     
 
 }
@@ -340,54 +344,67 @@
     if (cell == nil) {
         cell = [[RankingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (tableView ==m_tableView) {
         
         NSDictionary *dic = [m_cArray objectAtIndex:indexPath.row];
         NSLog(@"dicdic%@",dic);
         NSInteger i = [KISDictionaryHaveKey(dic, @"rank")integerValue];
         if (i <=3) {
-            cell.NumLabel.backgroundColor =UIColorFromRGBA(0xff9600, 1);
-        }else if(i>3&&i<=10) {
-            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x8a5d96, 1);
+            cell.NumLabel.hidden =YES;
+            cell.NumImageView.hidden = NO;
+            if (i==1) {
+                cell.NumImageView.image =KUIImage(@"01_17");
+            }
+            if (i==2) {
+                cell.NumImageView.image =KUIImage(@"02_17");
+            }
+            if (i==3) {
+                cell.NumImageView.image =KUIImage(@"03_17");
+            }
+            [cell bringSubviewToFront:cell.NumImageView];
+        }else{
+            cell.NumImageView.hidden =YES;
+            cell.NumLabel.hidden = NO;
+            [cell bringSubviewToFront:cell.NumLabel];
+
         }
-        else{
-            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x828be5, 1);
-        }
+//        }else if(i>3&&i<=10) {
+//            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x8a5d96, 1);
+//        }
+//        else{
+//            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x828be5, 1);
+//        }
         
-        if (i>99) {
-            cell.NumLabel.font = [UIFont systemFontOfSize:14];
-        }
+//        if (i>99) {
+//            cell.NumLabel.font = [UIFont systemFontOfSize:14];
+//        }
         if ([KISDictionaryHaveKey(dic, @"charactername") isEqualToString:self.characterName]&&[KISDictionaryHaveKey(dic, @"realm") isEqualToString:self.server]) {
-            cell.backgroundColor = UIColorFromRGBA(0xd0ebe9, 1);
+            cell.bgImageView1.image = KUIImage(@"me_normal");
+            cell.bgImageView2.image = KUIImage(@"me_click");
             m_ppageCount = [KISDictionaryHaveKey(dic, @"rank")intValue];
             
         }else {
-            cell.backgroundColor =[UIColor whiteColor];
+            cell.bgImageView1.image = KUIImage(@"other_normal");
+            cell.bgImageView2.image = KUIImage(@"other_click");
         }
         cell.titleImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%d",[KISDictionaryHaveKey(dic,@"characterclassid")intValue]]];
         
         cell.NumLabel.text = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"rank")];
         
-        if ([KISDictionaryHaveKey(dic, @"gender")isEqualToString:@"1"]) {
-            cell.sexLabel.text = @"♀";
-            cell.sexLabel.textColor = kColorWithRGB(238, 100, 196, 1.0);
-        }else{
-            cell. sexLabel.text = @"♂";
-            cell. sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
-        }
-
-        
         NSString *str =KISDictionaryHaveKey(dic, @"nickname");
         if ([str isEqualToString:@" "]) {
-            
-            cell.titleLabel.frame = CGRectMake(110, 0, 150, 70);
-            cell.sexLabel.text = nil;
+            cell.serverLabel.text = @"未绑定";
+            cell.sexImageView.image = KUIImage(@"icon_12");
         }else{
-            cell.titleLabel.frame =CGRectMake(110, 10, 150, 18);
+            cell.serverLabel.text = KISDictionaryHaveKey(dic, @"nickname");
+            if ([KISDictionaryHaveKey(dic, @"gender")isEqualToString:@"1"]) {
+                cell.sexImageView.image= KUIImage(@"icon_09");
+            }else{
+                cell. sexImageView.image= KUIImage(@"icon_07");
+            }
+            
         }
-        
-
         
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"charactername");
         cell.serverLabel.text = KISDictionaryHaveKey(dic, @"nickname");
@@ -398,27 +415,53 @@
 
     }
     if (tableView ==m_tableviewServer) {
+        
+        
+        
+        
+        
+        
        NSDictionary * dic = [m_serverArray objectAtIndex:indexPath.row];
         NSLog(@"dicdic%@",dic);
         NSInteger i = [KISDictionaryHaveKey(dic, @"rank")integerValue];
         if (i <=3) {
-            cell.NumLabel.backgroundColor =UIColorFromRGBA(0xff9600, 1);
-        }else if(i>3&&i<=10) {
-            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x8a5d96, 1);
+            cell.NumLabel.hidden =YES;
+            cell.NumImageView.hidden = NO;
+            if (i==1) {
+                cell.NumImageView.image =KUIImage(@"01_17");
+            }
+            if (i==2) {
+                cell.NumImageView.image =KUIImage(@"02_17");
+            }
+            if (i==3) {
+                cell.NumImageView.image =KUIImage(@"03_17");
+            }
+            [cell bringSubviewToFront:cell.NumImageView];
+
+        }else{
+            cell.NumImageView.hidden =YES;
+            cell.NumLabel.hidden = NO;
+            [cell bringSubviewToFront:cell.NumLabel];
+
         }
-        else{
-            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x828be5, 1);
-        }
-        
-        if (i>99) {
-            cell.NumLabel.font = [UIFont systemFontOfSize:14];
-        }
+//        }else if(i>3&&i<=10) {
+//            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x8a5d96, 1);
+//        }
+//        else{
+//            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x828be5, 1);
+//        }
+//        
+//        if (i>99) {
+//            cell.NumLabel.font = [UIFont systemFontOfSize:14];
+//        }
         if ([KISDictionaryHaveKey(dic, @"charactername") isEqualToString:self.characterName]&&[KISDictionaryHaveKey(dic, @"realm") isEqualToString:self.server]) {
-            cell.backgroundColor = UIColorFromRGBA(0xd0ebe9, 1);
+            cell.bgImageView1.image = KUIImage(@"me_normal");
+            cell.bgImageView2.image = KUIImage(@"me_click");
             m_ppageCount = [KISDictionaryHaveKey(dic, @"rank")intValue];
             
         }else {
-            cell.backgroundColor =[UIColor whiteColor];
+            cell.bgImageView1.image = KUIImage(@"other_normal");
+            cell.bgImageView2.image = KUIImage(@"other_click");
         }
         
         
@@ -428,31 +471,21 @@
         cell.NumLabel.text = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"rank")];
         
         
-        if ([KISDictionaryHaveKey(dic, @"gender")isEqualToString:@"1"]) {
-            cell.sexLabel.text = @"♀";
-            cell.sexLabel.textColor = kColorWithRGB(238, 100, 196, 1.0);
-        }else{
-            cell. sexLabel.text = @"♂";
-            cell. sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
-        }
-
-        
-        
-        
         NSString *str =KISDictionaryHaveKey(dic, @"nickname");
         if ([str isEqualToString:@" "]) {
-            
-            cell.titleLabel.frame = CGRectMake(110, 0, 150, 70);
-              cell.sexLabel.text = nil;
+            cell.serverLabel.text = @"未绑定";
+            cell.sexImageView.image = KUIImage(@"icon_12");
         }else{
-            cell.titleLabel.frame = CGRectMake(110, 10, 150, 18);
+            cell.serverLabel.text = KISDictionaryHaveKey(dic, @"nickname");
+            if ([KISDictionaryHaveKey(dic, @"gender")isEqualToString:@"1"]) {
+                cell.sexImageView.image= KUIImage(@"icon_09");
+            }else{
+                cell. sexImageView.image= KUIImage(@"icon_07");
+            }
+
         }
 
-        
-
-        
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"charactername");
-        cell.serverLabel.text = KISDictionaryHaveKey(dic, @"nickname");
         if ([cell.titleLabel.text isEqualToString:@""]) {
             cell.serverLabel.frame = CGRectMake(110, 0, 130, 70);
         }
@@ -463,33 +496,52 @@
        NSDictionary * dic = [m_countryArray objectAtIndex:indexPath.row];
         NSLog(@"dicdic%@",dic);
         NSInteger i = [KISDictionaryHaveKey(dic, @"rank")integerValue];
+
         if (i <=3) {
-            cell.NumLabel.backgroundColor =UIColorFromRGBA(0xff9600, 1);
-        }else if(i>3&&i<=10) {
-            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x8a5d96, 1);
+            cell.NumLabel.hidden =YES;
+            cell.NumImageView.hidden = NO;
+            if (i==1) {
+                cell.NumImageView.image =KUIImage(@"01_17");
+            }
+            if (i==2) {
+                cell.NumImageView.image =KUIImage(@"02_17");
+            }
+            if (i==3) {
+                cell.NumImageView.image =KUIImage(@"03_17");
+            }
+            [cell bringSubviewToFront:cell.NumImageView];
+
+        }else{
+            cell.NumImageView.hidden =YES;
+            cell.NumLabel.hidden = NO;
+            [cell bringSubviewToFront:cell.NumLabel];
         }
-        else{
-            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x828be5, 1);
-        }
-        
-        if (i>99&&i<999) {
-            cell.NumLabel.font = [UIFont systemFontOfSize:14];
-        }
-        if (i>999&&i<9999) {
-            cell.NumLabel.font = [UIFont systemFontOfSize:10];
-        }
-        if (i>9999) {
-            cell.NumLabel.font = [UIFont systemFontOfSize:8];
-        }
-        else{
-            cell.NumLabel.font = [UIFont boldSystemFontOfSize:18];
-        }
+//            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x8a5d96, 1);
+//        }
+//        else{
+//            cell.NumLabel.backgroundColor =UIColorFromRGBA(0x828be5, 1);
+//        }
+//        
+//        if (i>99&&i<999) {
+//            cell.NumLabel.font = [UIFont systemFontOfSize:14];
+//        }
+//        if (i>999&&i<9999) {
+//            cell.NumLabel.font = [UIFont systemFontOfSize:10];
+//        }
+//        if (i>9999) {
+//            cell.NumLabel.font = [UIFont systemFontOfSize:8];
+//        }
+//        else{
+//            cell.NumLabel.font = [UIFont boldSystemFontOfSize:18];
+//        }
         if ([KISDictionaryHaveKey(dic, @"charactername") isEqualToString:self.characterName]&&[KISDictionaryHaveKey(dic, @"realm") isEqualToString:self.server]) {
-            cell.backgroundColor = UIColorFromRGBA(0xd0ebe9, 1);
+            cell.bgImageView1.image = KUIImage(@"me_normal");
+            cell.bgImageView2.image = KUIImage(@"me_click");
             m_ppageCount = [KISDictionaryHaveKey(dic, @"rank")intValue];
             
         }else {
-            cell.backgroundColor =[UIColor whiteColor];
+            cell.bgImageView1.image = KUIImage(@"other_normal");
+            cell.bgImageView2.image = KUIImage(@"other_click");
         }
         
         
@@ -498,28 +550,18 @@
         cell.NumLabel.text = [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"rank")];
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"charactername");
         
-        if ([KISDictionaryHaveKey(dic, @"gender")isEqualToString:@"1"]) {
-            cell.sexLabel.text = @"♀";
-            cell.sexLabel.textColor = kColorWithRGB(238, 100, 196, 1.0);
-        }else{
-            cell. sexLabel.text = @"♂";
-            cell. sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
-        }
-        
         NSString *str =KISDictionaryHaveKey(dic, @"nickname");
         if ([str isEqualToString:@" "]) {
-            
-            cell.titleLabel.frame = CGRectMake(110, 0, 150, 70);
-            cell.sexLabel.text = nil;
+            cell.serverLabel.text = @"未绑定";
+            cell.sexImageView.image = KUIImage(@"icon_12");
         }else{
-            cell.titleLabel.frame = CGRectMake(110, 10, 150, 18);
-        }
-
-        
-
-        cell.serverLabel.text = KISDictionaryHaveKey(dic, @"nickname");
-        if ([cell.titleLabel.text isEqualToString:@""]) {
-            cell.serverLabel.frame = CGRectMake(110, 0, 130, 70);
+            cell.serverLabel.text = KISDictionaryHaveKey(dic, @"nickname");
+            if ([KISDictionaryHaveKey(dic, @"gender")isEqualToString:@"1"]) {
+                cell.sexImageView.image= KUIImage(@"icon_09");
+            }else{
+                cell. sexImageView.image= KUIImage(@"icon_07");
+            }
+            
         }
         cell.CountOfLabel.text =[NSString stringWithFormat:@"%@",KISDictionaryHaveKey(dic, @"value")];
 
@@ -528,7 +570,6 @@
     
     return cell;
 }
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     

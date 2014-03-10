@@ -647,6 +647,8 @@
         NSArray* characterArray = KISDictionaryHaveKey(m_hostInfo.characters, @"1");//魔兽世界
         if (![characterArray isKindOfClass:[NSArray class]]){
             CharacterEditViewController *characterVC = [[CharacterEditViewController alloc]init];
+            characterVC.isFromMeet =NO;
+            
             [self.navigationController pushViewController:characterVC animated:YES];
             NSLog(@"添加角色");
         }

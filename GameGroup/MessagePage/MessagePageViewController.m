@@ -492,6 +492,7 @@
 //    {
         NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",[allHeadImgArray objectAtIndex:indexPath.row]]];
         if ([[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"sayHello"] || [[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"deletePerson"]) {//关注
+            cell.headImageV.imageURL =nil;
             [cell.headImageV setImage:KUIImage(@"mess_guanzhu")];
             cell.contentLabel.text = [[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msg"];
         }
@@ -499,12 +500,16 @@
             [[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"title"] ||
             [[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"pveScore"])
         {
+            cell.headImageV.imageURL =nil;
+
             cell.headImageV.image = KUIImage(@"mess_titleobj");
             NSDictionary * dict = [[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msg"] JSONValue];
             cell.contentLabel.text = KISDictionaryHaveKey(dict, @"msg");
         }
         else if ([[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"recommendfriend"])
         {
+            cell.headImageV.imageURL =nil;
+
             cell.headImageV.image = KUIImage(@"mess_tuijian");
             
             cell.contentLabel.text = [[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msg"];

@@ -9,7 +9,7 @@
 #import "CharacterEditViewController.h"
 #import "AuthViewController.h"
 #import "AddCharacterViewController.h"
-
+#import "NewFindViewController.h"
 @interface CharacterEditViewController ()
 {
     UITableView*    m_myTabelView;
@@ -31,7 +31,15 @@
 {
     [super viewDidLoad];
     
-    [self setTopViewWithTitle:@"我的角色" withBackButton:YES];
+    [self setTopViewWithTitle:@"我的角色" withBackButton:NO];
+    
+    UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30)];
+    [backButton setBackgroundImage:KUIImage(@"btn_back") forState:UIControlStateNormal];
+    [backButton setBackgroundImage:KUIImage(@"btn_back_onclick") forState:UIControlStateHighlighted];
+    backButton.backgroundColor = [UIColor clearColor];
+    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:backButton];
+
     
     m_characterArray = [[NSMutableArray alloc] init];
     
@@ -256,10 +264,27 @@
         }];
     }
 }
-
+//-(void)backButtonClick:(UIButton *)sender
+//{
+//    if (self.isFromMeet) {
+//        NewFindViewController *nf = [[NewFindViewController alloc]init];
+//        [self.navigationController popToViewController:nf animated:YES];
+//
+//    }else{
+//        [self.navigationController popViewControllerAnimated:YES];
+//
+//    }
+//}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+- (void)backButtonClick:(id)sender
+{
+    if (self.isFromMeet ==YES) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }else
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end
