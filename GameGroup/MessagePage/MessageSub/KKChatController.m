@@ -773,28 +773,55 @@
         
         UIImage *bgImage = nil;
         
-        [cell.headImgV setFrame:CGRectMake(10, padding*2-15, 40, 40)];
-        [cell.headImgV addTarget:self action:@selector(chatToBtnClicked) forControlEvents:UIControlEventTouchUpInside];
-        cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-        NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",self.chatUserImg]];
-        cell.headImgV.imageURL = theUrl;
-        bgImage = [[UIImage imageNamed:@"bubble_03.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
-        
-        [cell.bgImageView setFrame:CGRectMake(padding-10+45, padding*2-15, size.width+27, size.height + 20)];
-        [cell.bgImageView setBackgroundImage:bgImage forState:UIControlStateNormal];
-        [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchBegin:) forControlEvents:UIControlEventTouchDown];
-        [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchEnd:) forControlEvents:UIControlEventTouchUpInside];
-        [cell.bgImageView setTag:(indexPath.row+1)];
-        
-        [cell.arrowImage setFrame:CGRectMake(padding-10+45 + size.width+27 + 10, size.height/2+27, 8, 12)];
-        
-        [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
-        if (cell.thumbImgV.hidden) {
-            [cell.contentLabel setFrame:CGRectMake(padding + 50, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
-        }
-        else
+        if ([sender isEqualToString:@"you"]) {
+            [cell.headImgV setFrame:CGRectMake(320-10-40, padding*2-15, 40, 40)];
+            [cell.headImgV addTarget:self action:@selector(chatToBtnClicked) forControlEvents:UIControlEventTouchUpInside];
+            cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
+            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",self.chatUserImg]];
+            cell.headImgV.imageURL = theUrl;
+            bgImage = [[UIImage imageNamed:@"bubble_02"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
+            
+            [cell.bgImageView setFrame:CGRectMake(320-size.width - padding-20-10-30, padding*2-15, size.width+25, size.height+20)];
+            [cell.bgImageView setBackgroundImage:bgImage forState:UIControlStateNormal];
+            [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchBegin:) forControlEvents:UIControlEventTouchDown];
+            [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchEnd:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.bgImageView setTag:(indexPath.row+1)];
+            
+            [cell.arrowImage setFrame:CGRectMake(padding-10+45 + size.width+27 + 10, size.height/2+27, 8, 12)];
+            
+            [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
+            if (cell.thumbImgV.hidden) {
+                [cell.contentLabel setFrame:CGRectMake(padding + 50, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
+            }
+            else
+            {
+                [cell.contentLabel setFrame:CGRectMake(padding + 50 + 45, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
+            }
+        }else
         {
-            [cell.contentLabel setFrame:CGRectMake(padding + 50 + 45, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
+            [cell.headImgV setFrame:CGRectMake(10, padding*2-15, 40, 40)];
+            [cell.headImgV addTarget:self action:@selector(chatToBtnClicked) forControlEvents:UIControlEventTouchUpInside];
+            cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
+            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",self.chatUserImg]];
+            cell.headImgV.imageURL = theUrl;
+            bgImage = [[UIImage imageNamed:@"bubble_03.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
+            
+            [cell.bgImageView setFrame:CGRectMake(padding-10+45, padding*2-15, size.width+27, size.height + 20)];
+            [cell.bgImageView setBackgroundImage:bgImage forState:UIControlStateNormal];
+            [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchBegin:) forControlEvents:UIControlEventTouchDown];
+            [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchEnd:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.bgImageView setTag:(indexPath.row+1)];
+            
+            [cell.arrowImage setFrame:CGRectMake(padding-10+45 + size.width+27 + 10, size.height/2+27, 8, 12)];
+            
+            [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
+            if (cell.thumbImgV.hidden) {
+                [cell.contentLabel setFrame:CGRectMake(padding + 50, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
+            }
+            else
+            {
+                [cell.contentLabel setFrame:CGRectMake(padding + 50 + 45, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
+            }
         }
         
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
@@ -883,7 +910,6 @@
             [cell.bgImageView setBackgroundImage:bgImage forState:UIControlStateNormal];
             [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchBegin:) forControlEvents:UIControlEventTouchDown];
             [cell.bgImageView setTag:(indexPath.row+1)];
-            
             [cell refreshStatusPoint:CGPointZero status:@"1"];
         }
 
