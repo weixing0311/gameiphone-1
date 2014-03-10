@@ -14,8 +14,7 @@
 {
     UITableView * _tableView;
 }
-@property (nonatomic,retain) NSMutableArray * guildArray;
-@property (nonatomic,retain) NSMutableArray * realmArray;
+@property (nonatomic,retain) NSMutableArray * guildArray;//服务器好友列表
 @end
 
 @implementation AddSameServerListViewController
@@ -26,7 +25,6 @@
     if (self) {
         // Custom initialization
         self.guildArray = [NSMutableArray array];
-        self.realmArray = [NSMutableArray array];
     }
     return self;
 }
@@ -56,23 +54,9 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 2;
-}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    switch (section) {
-        case 0:{
-            return 0;
-        }break;
-        case 1:{
-            return 0;
-        }break;
-        default:{
-            return 0;
-        }break;
-    }
+    return _guildArray.count;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -81,11 +65,7 @@
     if (view == nil) {
         view = [[MyHeadView alloc]initWithReuseIdentifier:cellIdentifier];
     }
-    if (section == 0) {
-        view.titleL.text = @"同工会的好友";
-    }else{
-        view.titleL.text = [NSString stringWithFormat:@"%@服务器的达人",[[TempData sharedInstance] gamerealm]];
-    }
+    view.titleL.text = [NSString stringWithFormat:@"%@服务器的达人",[[TempData sharedInstance] gamerealm]];
     return view;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -103,6 +83,28 @@
         }
         cell.indexPath = indexPath;
         cell.delegate = self;
+        NSString* imageID = [_guildArray[indexPath.row] objectForKey:@"img"];
+        if ([imageID componentsSeparatedByString:@","].count>0) {
+            imageID = [[imageID componentsSeparatedByString:@","] objectAtIndex:0];
+            NSLog(@"%@",imageID);
+        }
+        cell.nameL.text = [_guildArray[indexPath.row] objectForKey:@"charactername"];
+        cell.photoNoL.text =[_guildArray[indexPath.row] objectForKey:@"nickname"];
+        cell.headerImage.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",imageID]];
+        if ([[_guildArray[indexPath.row] objectForKey:@"iCare"] integerValue] == 0) {
+            [cell.addFriendB setTitle:@"加为好友" forState:UIControlStateNormal];
+            cell.addFriendB.userInteractionEnabled = YES;
+            [cell.addFriendB setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [cell.addFriendB setBackgroundImage:[UIImage imageNamed:@"addfriend2"] forState:UIControlStateNormal];
+            [cell.addFriendB setBackgroundImage:[UIImage imageNamed:@"addfriend1"] forState:UIControlStateHighlighted];
+        }else
+        {
+            [cell.addFriendB setTitle:@"已添加" forState:UIControlStateNormal];
+            cell.addFriendB.userInteractionEnabled = NO;
+            [cell.addFriendB setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            [cell.addFriendB setBackgroundImage:nil forState:UIControlStateNormal];
+            [cell.addFriendB setBackgroundImage:nil forState:UIControlStateHighlighted];
+        }
         return cell;
     }else
     {
@@ -124,12 +126,28 @@
 }
 -(void)DodeAddressCellTouchButtonWithIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
+    NSMutableDictionary * dic = _guildArray[indexPath.row];
+    [dic setObject:@"1" forKey:@"iCare"];
+    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+    [paramDict setObject:dic[@"userid"] forKey:@"frienduserid"];
+    [paramDict setObject:@"1" forKey:@"type"];
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:paramDict forKey:@"params"];
+    [postDict setObject:@"109" forKey:@"method"];
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-    }else
-    {
-        
-    }
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+    }];
 }
 - (void)passSameServer
 {
@@ -152,7 +170,12 @@
     [hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:body TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"%@",responseObject);
-        
+        for (NSDictionary * dic in responseObject[@"guild"]) {
+            NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithDictionary:dic];
+            [dict setObject:@"0" forKey:@"iCare"];
+            [_guildArray addObject:dict];
+        }
+        [_tableView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
