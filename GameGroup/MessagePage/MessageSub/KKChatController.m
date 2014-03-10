@@ -1191,11 +1191,14 @@
             }
             [self normalMsgToFinalMsg];
             [self.tView reloadData];
-            [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:array.count inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+            [self performSelector:@selector(scrollToOldMassageRang:) withObject:array afterDelay:0.00000001];
         }
     }
 }
-
+- (void)scrollToOldMassageRang:(NSArray *)array
+{
+    [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:array.count inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+}
 #pragma mark KKMessageDelegate
 - (void)newMesgReceived:(NSNotification*)notification
 {

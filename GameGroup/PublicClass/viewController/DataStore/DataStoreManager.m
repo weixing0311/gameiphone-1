@@ -200,7 +200,7 @@
         commonMsg.messageuuid = messageuuid;
         commonMsg.status = @"2";//发送中
         
-        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",sender];
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",receicer];
         DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
         if (!thumbMsgs)
             thumbMsgs = [DSThumbMsgs MR_createInContext:localContext];
@@ -564,6 +564,7 @@
 
         [allMsgArray addObject:thumbMsgsDict];
     }
+    NSLog(@"allMsgArray%@",allMsgArray);
     return allMsgArray;  
 }
 

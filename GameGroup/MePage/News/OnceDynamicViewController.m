@@ -733,6 +733,8 @@
     [dictionary setObject:@"you" forKey:@"sender"];
     [dictionary setObject:[GameCommon getCurrentTime] forKey:@"time"];
     [dictionary setObject:KISDictionaryHaveKey(self.shareUserDic, @"userid") forKey:@"receiver"];
+    [dictionary setObject:KISDictionaryHaveKey(self.shareUserDic, @"displayName") forKey:@"nickname"];
+    [dictionary setObject:KISDictionaryHaveKey(self.shareUserDic, @"img") forKey:@"img"];
     [dictionary setObject:[dic JSONFragment] forKey:@"payload"];
     [dictionary setObject:@"payloadchat" forKey:@"msgType"];
     [dictionary setObject:uuid forKey:@"messageuuid"];
