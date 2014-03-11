@@ -15,6 +15,7 @@
 #import "GetDataAfterManager.h"
 #import "BaseViewController.h"
 
+#import "AddAddressBookViewController.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -22,6 +23,12 @@
 //    [NSThread sleepForTimeInterval:3.0];//开机图停留秒数
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+//    AddAddressBookViewController * add = [[AddAddressBookViewController alloc]init];
+//    UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:add];
+//    self.window.rootViewController =nav;
+//    [self.window makeKeyAndVisible];
+//    
+//    return YES;
     // Override point for customization after application launch.
     self.startViewController = [[StartViewController alloc] init];
     

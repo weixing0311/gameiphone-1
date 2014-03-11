@@ -136,6 +136,13 @@
 {
     NSMutableArray * arr = [self getAddressBook];
     if (!arr) {
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您是否禁止本应用访问您的通讯录?如果是请打开!" delegate:nil cancelButtonTitle:@"知道啦" otherButtonTitles: nil];
+        [alert show];
+        return;
+    }
+    if (arr.count<=0) {
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"未发现您的通讯录,您可以直接跳过!" delegate:nil cancelButtonTitle:@"知道啦" otherButtonTitles: nil];
+        [alert show];
         return;
     }
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
