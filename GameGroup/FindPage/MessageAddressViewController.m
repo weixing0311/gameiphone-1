@@ -94,7 +94,7 @@
     [headV addSubview:label2];
     self.swith = [[UISwitch alloc]initWithFrame:CGRectMake(250, 30, 40, 60)];
     [headV addSubview:_swith];
-    [_swith addTarget:self action:@selector(SwithCellChangeSwith:) forControlEvents:UIControlEventTouchUpInside];
+    [_swith addTarget:self action:@selector(SwithCellChangeSwith:) forControlEvents:UIControlEventValueChanged];
     _tableView.tableHeaderView = headV;
     _tableView.backgroundColor = [UIColor clearColor];
     _swith.on = appAllowGetAddress;
@@ -117,6 +117,10 @@
     
     _unAllowView.hidden = appAllowGetAddress;
     
+    
+    hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    hud.labelText = @"激活中...";
     if (appAllowGetAddress) {
         [self uploadAddress];
     }
@@ -378,6 +382,7 @@
 }
 - (void)uploadAddress
 {
+    [hud show:YES];
     NSMutableArray * arr = [self getAddressBook];
     if (!arr) {
         UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您是否禁止本应用访问您的通讯录?如果是请打开!" delegate:nil cancelButtonTitle:@"知道啦" otherButtonTitles: nil];
@@ -413,10 +418,12 @@
                 }
             }
         }
+        [hud hide:YES];
         self.outAddressArray = arr;
         [_tableView reloadData];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
+        [hud hide:YES];
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
@@ -424,7 +431,6 @@
                 [alert show];
             }
         }
-        [hud hide:YES];
     }];
 }
 /*

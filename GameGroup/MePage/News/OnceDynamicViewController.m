@@ -759,44 +759,7 @@
     [DataStoreManager storeMyPayloadmsg:dictionary];
     m_shareViewBg.hidden = YES;
     m_shareView.hidden = YES;
-    
-//    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
-//    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-//    
-//    [paramDict setObject:self.messageid forKey:@"messageid"];
-//    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-//
-//    if (shareType == 0) {
-//        [paramDict setObject:KISDictionaryHaveKey(self.shareUserDic, @"userid") forKey:@"touserid"];
-//        [postDict setObject:@"144" forKey:@"method"];
-//    }
-//    else
-//    {
-//        [postDict setObject:@"145" forKey:@"method"];
-//    }
-//    [postDict setObject:paramDict forKey:@"params"];
-//    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-//    
-//    [self.view bringSubviewToFront:hud];
-//    hud.labelText = @"发送中...";
-//    [hud show:YES];
-//    
-//    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        [hud hide:YES];
-//        m_shareViewBg.hidden = YES;
-//        m_shareView.hidden = YES;
-//        
-//        [self showMessageWindowWithContent:@"成功" imageType:0];
-//    } failure:^(AFHTTPRequestOperation *operation, id error) {
-//        if ([error isKindOfClass:[NSDictionary class]]) {
-//            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
-//            {
-//                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-//                [alert show];
-//            }
-//        }
-//        [hud hide:YES];
-//    }];
+    [self showMessageWindowWithContent:@"发送成功" imageType:0];
 }
 
 #pragma mark 举报 或评论
