@@ -112,7 +112,6 @@
     [registerButton addTarget:self action:@selector(registerButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:registerButton];
 }
-
 - (void)refreshLeftTime
 {
 //    CGRect newRect;

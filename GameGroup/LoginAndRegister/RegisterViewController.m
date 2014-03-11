@@ -1010,7 +1010,7 @@ BOOL validateMobile(NSString* mobile) {
 {
     [picker dismissViewControllerAnimated:YES completion:^{}];
     
-    UIImage*selectImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage*selectImage = [info objectForKey:@"UIImagePickerControllerEditedImage"];
    
     [m_photoButton setImage:selectImage forState:UIControlStateNormal];
     m_photoImage = selectImage;
@@ -1026,10 +1026,12 @@ BOOL validateMobile(NSString* mobile) {
 {
     if (m_photoImage != nil)
     {
-        hud.labelText = @"上传头像中...";
+       // hud.labelText = @"上传头像中...";
         [hud show:YES];
         
-        [NetManager uploadImageWithRegister:m_photoImage WithURLStr:BaseUploadImageUrl ImageName:@"1" TheController:self Progress:nil Success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [NetManager uploadImageWithRegister:m_photoImage WithURLStr:BaseUploadImageUrl ImageName:@"1" TheController:self Progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite){
+            hud.labelText = [NSString stringWithFormat:@"%.2f％",((double)totalBytesWritten/(double)totalBytesExpectedToWrite) * 100];
+        }Success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"%@", responseObject);
             [hud hide:YES];
             if ([responseObject isKindOfClass:[NSNumber class]]) {

@@ -18,7 +18,17 @@ typedef  enum
     ActionSheetTypeOperationPic
 }ActionSheetType;
 
-@interface MyProfileViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, HGPhotoWallDelegate, UIAlertViewDelegate, BirthDayDelegate>
+@interface MyProfileViewController : BaseViewController
+<
+UITableViewDataSource,
+UITableViewDelegate,
+UIActionSheetDelegate,
+UIImagePickerControllerDelegate,
+UINavigationControllerDelegate,
+HGPhotoWallDelegate,
+UIAlertViewDelegate,
+BirthDayDelegate
+>
 
 @property(nonatomic,strong)NSString*  nickName;
 @property(nonatomic,strong)NSString*  userName;

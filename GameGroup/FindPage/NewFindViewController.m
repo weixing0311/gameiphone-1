@@ -17,6 +17,7 @@
 #import "AddressListViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "ActivateViewController.h"
+#import "EGOImageButton.h"
 
 #import "DSFriends.h"
 #import "HostInfo.h"
@@ -28,7 +29,7 @@
 
 @interface NewFindViewController ()
 {
-    UIButton    *m_dynamicBtn;//动态
+    EGOImageButton    *m_dynamicBtn;//动态
     UIButton    *m_nearByBtn;//附近
     UIButton    *m_samerealmBtn;//同F
     UIButton    *m_phoneBtn;//通讯录
@@ -39,7 +40,10 @@
     UIImageView *m_notibgInfoImageView;
     UILabel *lb;
     DSFriends   * m_userInfo;
+   // NSMutableDictionary *friendImgDic;
+    NSInteger    friendDunamicmsgCount;
 }
+@property(nonatomic,retain)NSString * friendImgStr;
 @end
 
 @implementation NewFindViewController
@@ -49,6 +53,9 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+       
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(ss:) name:@"frienddunamicmsgChange_WX" object:nil];
+
     }
     return self;
 }
@@ -62,36 +69,64 @@
         [[Custom_tabbar showTabBar] when_tabbar_is_selected:0];
         return;
     }
-    [self ss];
+    
+    
+    
+    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]];
+        m_userInfo = [DSFriends MR_findFirstWithPredicate:predicate];
+    }];
 
+    
+    NSLog(@"%@",m_userInfo.action );
+    if ([m_userInfo.action boolValue]) {
+        NSLog(@"已激活");
+        m_activateBtn.hidden = YES;
+    }else
+    {
+        NSLog(@"未激活");
+        m_activateBtn.hidden = NO;
+    }
+    
+    
+    
+    
 }
--(void)ss
+-(void)ss:(NSNotification*)sender
 {
     NSLog(@"监听");
-    if ([[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] && ![[[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews] isEqualToString:@"0"])
+    friendDunamicmsgCount ++;
+    
+    [[Custom_tabbar showTabBar] notificationWithNumber:NO AndTheNumber:0 OrDot:YES WithButtonIndex:2];
+    NSString * fruits = KISDictionaryHaveKey(sender.userInfo, @"img");
+    NSArray  * array= [fruits componentsSeparatedByString:@","];
+    self.friendImgStr =[array objectAtIndex:0];
+    
+    m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
+    if (friendDunamicmsgCount && friendDunamicmsgCount !=0)
     {
-        NSLog(@"-------->>>%@",[[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews]);
+        NSLog(@"-------->>>%d",friendDunamicmsgCount);
         m_notibgInfoImageView.hidden = NO;
-        NSString* unCont = [[NSUserDefaults standardUserDefaults]objectForKey:haveFriendNews];
-        if ([unCont integerValue] > 99) {
+        if (friendDunamicmsgCount > 99) {
             lb.text = @"99";
         }
         else
-            lb.text = unCont;
+            lb.text =[NSString stringWithFormat:@"%d",friendDunamicmsgCount] ;
     }
     else
     {
-        m_notibgInfoImageView.hidden = YES;
+       
     }
-
 }
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     [self setTopViewWithTitle:@"发现" withBackButton:NO];
     self.view.backgroundColor = UIColorFromRGBA(0xf3f3f3, 1);
-    
+
     UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
     [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateNormal];
     [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateHighlighted];
@@ -105,38 +140,12 @@
     
     
     
-    
-    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
-        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]];
-        m_userInfo = [DSFriends MR_findFirstWithPredicate:predicate];
-    }];
-
-    
-    
-    
-//    FindSubView *find = [[FindSubView alloc]initWithFrame:CGRectMake(0, startX, self.view.bounds.size.width, self.view.bounds.size.height-startX)];
-//    [self.view addSubview:find];
-    
     UIImageView *imageView =[[ UIImageView alloc]initWithFrame:CGRectMake(0, 0, 162, 191)];
     imageView.center =self.view.center;
     imageView.image = KUIImage(@"finder_line");
     [self.view addSubview:imageView];
     
-    m_notibgInfoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(265, 11, 28, 22)];
-     m_notibgInfoImageView.center =CGPointMake(m_meetBtn.center.x-22, m_meetBtn.center.y-140);
-    
-    [m_notibgInfoImageView setImage:[UIImage imageNamed:@"redCB.png"]];
-    [self.view addSubview:m_notibgInfoImageView];
-    // m_notibgInfoImageView.hidden = YES;
-    
-    lb = [[UILabel alloc] initWithFrame:CGRectMake(-1, 0, 30, 22)];
-    [lb setBackgroundColor:[UIColor clearColor]];
-    [lb setTextAlignment:NSTextAlignmentCenter];
-    [lb setTextColor:[UIColor whiteColor]];
-    lb.font = [UIFont systemFontOfSize:14.0];
-    [m_notibgInfoImageView addSubview:lb];
-    
-    
+
     
     m_activateBtn = [FinderView setButtonWithFrame:CGRectMake(0, 0, 50, 38) center:CGPointMake(295, startX+19) backgroundNormalImage:@"new_activate_pressed" backgroundHighlightImage:@"new_activate_normal" setTitle:nil nextImage:nil nextImage:nil];
     m_activateBtn.backgroundColor = [UIColor clearColor];
@@ -144,14 +153,6 @@
     [self.view addSubview:m_activateBtn];
 
 #pragma mark ----- 具体未做判定  账号是否激活
-    if (m_userInfo.action) {
-        NSLog(@"已激活");
-        m_activateBtn.hidden = YES;
-    }else
-    {
-        NSLog(@"未激活");
-        m_activateBtn.hidden = NO;
-    }
     
     m_meetBtn = [FinderView setButtonWithFrame:CGRectMake(0, 0, 102, 102) center:self.view.center backgroundNormalImage:@"trevi_fountain_pressed" backgroundHighlightImage:@"trevi_fountain_normal" setTitle:nil nextImage:nil nextImage:nil];
     //109 189
@@ -164,16 +165,35 @@
     [self.view addSubview:m_meetBtn];
     
     
-    m_dynamicBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 59, 59)];
+    
+    
+    m_dynamicBtn = [[EGOImageButton alloc]initWithFrame:CGRectMake(0, 0, 59, 59)];
     m_dynamicBtn.center =CGPointMake(m_meetBtn.center.x-49, m_meetBtn.center.y-125);
-    [m_dynamicBtn setBackgroundImage:KUIImage(@"正常_03") forState:UIControlStateNormal];
-    [m_dynamicBtn setBackgroundImage:KUIImage(@"按下_03") forState:UIControlStateHighlighted];
+    m_dynamicBtn.placeholderImage = KUIImage(@"按下_03");
+    m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
+//    [m_dynamicBtn setBackgroundImage:KUIImage(@"正常_03") forState:UIControlStateNormal];
+//    [m_dynamicBtn setBackgroundImage:KUIImage(@"按下_03") forState:UIControlStateHighlighted];
     m_dynamicBtn.layer.masksToBounds = YES;
     m_dynamicBtn.layer.cornerRadius = 59/2;
     [m_dynamicBtn addTarget:self action:@selector(didClickenterMeet:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview:m_dynamicBtn];
    
+    
+    m_notibgInfoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(123, 70+startX, 28, 22)];
+     m_notibgInfoImageView.center =CGPointMake(m_meetBtn.center.x-25, m_meetBtn.center.y-140);
+    [self.view bringSubviewToFront:m_notibgInfoImageView];
+    [m_notibgInfoImageView setImage:[UIImage imageNamed:@"redCB.png"]];
+    [self.view addSubview:m_notibgInfoImageView];
+     m_notibgInfoImageView.hidden = YES;
+    
+    lb = [[UILabel alloc] initWithFrame:CGRectMake(-1, 0, 30, 22)];
+    [lb setBackgroundColor:[UIColor clearColor]];
+    [lb setTextAlignment:NSTextAlignmentCenter];
+    [lb setTextColor:[UIColor whiteColor]];
+    lb.font = [UIFont systemFontOfSize:14.0];
+    [m_notibgInfoImageView addSubview:lb];
+    
     
 
     
@@ -260,10 +280,13 @@
         VC.userId = [DataStoreManager getMyUserID];//好友动态
         [self.navigationController pushViewController:VC animated:YES];
 
-        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:haveFriendNews];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-
-        [[GameCommon shareGameCommon] displayTabbarNotification];
+//        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:haveFriendNews];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+         m_notibgInfoImageView.hidden = YES;
+      //  [[GameCommon shareGameCommon] displayTabbarNotification];
+        
+        //清除tabbar红点 以前是上面方法 综合发现和我的动态通知
+        [[Custom_tabbar showTabBar]removeNotificatonOfIndex:2];
 
     }
     if (sender ==m_girlBtn) {
