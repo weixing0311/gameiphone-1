@@ -386,15 +386,8 @@
             
         }else {
             
-            if (indexPath.row%2==0) {
                 cell.bgImageView1.image = KUIImage(@"other_normal1");
                 cell.bgImageView2.image = KUIImage(@"other_click1");
-            }
-            else{
-                cell.bgImageView2.image = KUIImage(@"other_normal2");
-                cell.bgImageView1.image = KUIImage(@"other_click2");
-
-            }
             
             
         }
@@ -471,15 +464,8 @@
             m_ppageCount = [KISDictionaryHaveKey(dic, @"rank")intValue];
             
         }else {
-            if (indexPath.row%2==0) {
-                cell.bgImageView1.image = KUIImage(@"other_normal1");
-                cell.bgImageView2.image = KUIImage(@"other_click1");
-            }
-            else{
-                cell.bgImageView2.image = KUIImage(@"other_normal2");
-                cell.bgImageView1.image = KUIImage(@"other_click2");
-                
-            }
+            cell.bgImageView1.image = KUIImage(@"other_normal1");
+            cell.bgImageView2.image = KUIImage(@"other_click1");
         }
         
         
@@ -542,15 +528,8 @@
             m_ppageCount = [KISDictionaryHaveKey(dic, @"rank")intValue];
             
         }else {
-            if (indexPath.row%2==0) {
-                cell.bgImageView1.image = KUIImage(@"other_normal1");
-                cell.bgImageView2.image = KUIImage(@"other_click1");
-            }
-            else{
-                cell.bgImageView2.image = KUIImage(@"other_normal2");
-                cell.bgImageView1.image = KUIImage(@"other_click2");
-                
-            }
+            cell.bgImageView1.image = KUIImage(@"other_normal1");
+            cell.bgImageView2.image = KUIImage(@"other_click1");
         }
         
         

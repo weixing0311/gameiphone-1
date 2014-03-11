@@ -562,6 +562,10 @@
         [thumbMsgsDict setObject:[[thumbCommonMsgsArray objectAtIndex:i] msgType] forKey:@"msgType"];
         [thumbMsgsDict setObject:[[thumbCommonMsgsArray objectAtIndex:i] status]?[[thumbCommonMsgsArray objectAtIndex:i] status]:@"" forKey:@"status"];
 
+        //添加去重复  不知道管不管事---标记
+        if ( [[[thumbCommonMsgsArray objectAtIndex:i]messageuuid] isEqualToString:[[thumbCommonMsgsArray objectAtIndex:i]messageuuid]]) {
+            NSLog(@"[thumbCommonMsgsArray objectAtIndex:i]messageuuid]%@",[[thumbCommonMsgsArray objectAtIndex:i]messageuuid]);
+        }
         [allMsgArray addObject:thumbMsgsDict];
     }
     NSLog(@"allMsgArray%@",allMsgArray);
@@ -2545,7 +2549,7 @@
     NSString* msgContent = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"msg")];
     NSString* msgType = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"msgType")];
     NSDate * sendTime = [NSDate dateWithTimeIntervalSince1970:[[GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"time")] doubleValue]];
-    NSString* myTitle = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"title")];;
+    NSString* myTitle = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"title")];
 
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         DSOtherMsgs * otherMsgs = [DSOtherMsgs MR_createInContext:localContext];

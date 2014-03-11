@@ -537,6 +537,8 @@ static GameCommon *my_gameCommon = NULL;
     [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:PhoneNumKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
+    [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"wx_buttonTitleOfPage"];
+    
 //    [SFHFKeychainUtils deleteItemForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil];
     [SFHFKeychainUtils deleteItemForUsername:PASSWORD andServiceName:LOCALACCOUNT error:nil];
     [SFHFKeychainUtils deleteItemForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil];

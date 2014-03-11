@@ -111,6 +111,8 @@
     cell.notiBgV.hidden = YES;
     
     cell.nameLabel.text = [[m_tableData objectAtIndex:indexPath.row] objectForKey:@"myTitle"];
+    NSLog(@"cell.nameLabel.text%@",cell.nameLabel.text);
+    
     cell.timeLabel.text = [GameCommon CurrentTime:[GameCommon getCurrentTime] AndMessageTime:KISDictionaryHaveKey([m_tableData objectAtIndex:indexPath.row], @"sendTime")];
     return cell;
 }

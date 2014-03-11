@@ -440,7 +440,6 @@
                     [[NSUserDefaults standardUserDefaults] synchronize];
                 }
                 
-                [[NSNotificationCenter defaultCenter]postNotificationName:@"frienddunamicmsgChange_WX" object:nil];
 
             }
             else

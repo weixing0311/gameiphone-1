@@ -162,7 +162,9 @@
         WithURLStr:BaseUploadImageUrl
         ImageName:@"1"
         TheController:self
-        Progress:nil
+                       Progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite){
+                           hud.labelText = [NSString stringWithFormat:@"%.2f％",((double)totalBytesWritten/(double)totalBytesExpectedToWrite) * 100];
+                       }
         Success:^(AFHTTPRequestOperation *operation, id responseObject)
         {
             NSLog(@"%@",responseObject);

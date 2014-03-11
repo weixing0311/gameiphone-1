@@ -7,7 +7,6 @@
 //
 
 #import "BaseViewController.h"
-
 @interface NewFindViewController : BaseViewController
 
 @end

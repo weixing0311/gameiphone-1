@@ -179,8 +179,10 @@
         return;
     }
     
-    if (_dynamicTV.text.length>225) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您发布的字数已超出限制" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    NSInteger ziNum = m_maxZiShu - [[GameCommon shareGameCommon] unicodeLengthOfString:_dynamicTV.text];
+
+    if (ziNum<0) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您发布的字数已超出限制" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         alert.tag = 67;
         [alert show];
         return;

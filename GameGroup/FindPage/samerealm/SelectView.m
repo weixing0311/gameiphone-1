@@ -42,7 +42,11 @@
         [self addSubview:gameImg];
         
         UIButton*  tempButton = [[UIButton alloc] initWithFrame:CGRectMake(55, 18 + i * 40, 210, 40)];
-        [tempButton setTitle:[[dataDic objectForKey:kSelectRealmKey] stringByAppendingFormat:@"－%@", [dataDic objectForKey:kSelectCharacterKey]] forState:UIControlStateNormal];
+//        [tempButton setTitle:[[dataDic objectForKey:kSelectRealmKey] stringByAppendingFormat:@"－%@", [dataDic objectForKey:kSelectCharacterKey]] forState:UIControlStateNormal];
+        
+        [tempButton setTitle:[dataDic objectForKey:kSelectRealmKey] forState:UIControlStateNormal];
+
+        
         [tempButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         tempButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
         tempButton.backgroundColor = [UIColor clearColor];

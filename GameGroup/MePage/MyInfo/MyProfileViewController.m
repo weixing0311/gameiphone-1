@@ -334,15 +334,17 @@
 //        [NetManager uploadImagesWithCompres:waitingUploadImgArray WithURLStr:BaseUploadImageUrl ImageName:waitingUploadStrArray TheController:self Progress:nil Success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {//上传一张压缩图片成功后 上传一张不压缩图片
         
 //            NSDictionary* CompresID = responseObject;//"<local>0_me.jpg" = 8; 8为id
-            [NetManager uploadImages:waitingUploadImgArray WithURLStr:BaseUploadImageUrl ImageName:waitingUploadStrArray TheController:self Progress:nil Success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+        [NetManager uploadImages:waitingUploadImgArray
+                      WithURLStr:BaseUploadImageUrl
+                       ImageName:waitingUploadStrArray
+                   TheController:self
+                        Progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite)
+        {
+            hud.labelText = [NSString stringWithFormat:@"%.2f％",((double)totalBytesWritten/(double)totalBytesExpectedToWrite) * 100];
+        }
+                         Success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
            
-              //  [hud hide:YES];
-                hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD_isok"]];
-                hud.labelText = @"保存成功";
-                hud.mode = MBProgressHUDModeCustomView;
-                [hud hide:YES afterDelay:4];
-
-
+                [hud hide:YES];
                 
                 NSMutableArray * a1 = [NSMutableArray arrayWithArray:self.headImgArray];//压缩图 头像
 //                NSMutableArray * a2 = [NSMutableArray arrayWithArray:self.headBigImgArray];//大图 点开时用
@@ -408,16 +410,10 @@
     [postDict setObject:@"104" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
-   // [hud showWhileExecuting:@selector(pop) onTarget:self withObject:nil animated:YES];
     [hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"%@", responseObject);
         
-//            hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD_isok"]];
-//            hud.labelText = @"保存成功";
-//            hud.mode = MBProgressHUDModeCustomView;
-//            [hud hide:YES afterDelay:3];
-// [NSTimer scheduledTimerWithTimeInterval:3.f target:self selector:@selector(pop) userInfo:nil repeats:NO];        [DataStoreManager saveUserInfo:responseObject];
         [self showMessageWindowWithContent:@"保存成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
 
