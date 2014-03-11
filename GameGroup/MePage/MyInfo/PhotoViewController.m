@@ -56,7 +56,8 @@
         [subSC addSubview:act];
         imageV.delegate = self;
         NSRange range=[self.imgIDArray[i] rangeOfString:@"<local>"];
-        if (range.location!=NSNotFound) {
+        if (self.isComeFrmeUrl ==NO) {
+         if (range.location!=NSNotFound) {
             //        self.viewPhoto.image =
             NSString *path = [RootDocPath stringByAppendingPathComponent:@"tempImage"];
             NSString  *openImgPath = [NSString stringWithFormat:@"%@/%@",path,[self.imgIDArray[i] substringFromIndex:7]];
@@ -69,6 +70,11 @@
             imageV.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl"%@",self.imgIDArray[i]]];
 //            self.viewPhoto.imageURL = [NSURL URLWithString:url];
         
+        }
+        else{
+            imageV.imageURL = [NSURL URLWithString:self.imgIDArray[i]];
+
+        }
         subSC.maximumZoomScale = 2.0;
         subSC.bouncesZoom = NO;
         subSC.delegate = self;

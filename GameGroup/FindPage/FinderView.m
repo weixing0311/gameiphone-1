@@ -22,4 +22,25 @@
     [button setImage:KUIImage(highImage) forState:UIControlStateSelected];
     return button;
 }
+
++(UILabel *)setLabelWithFrame:(CGRect)frame backgroundColor:(UIColor *)bgColor textColor:(UIColor *)txColor font:(UIFont *)font
+{
+    UILabel *label = [[UILabel alloc]initWithFrame:frame];
+    label.backgroundColor =bgColor;
+    label.textColor = txColor;
+    label.font = font;
+    return label;
+}
+
++(UITextView *)setTextViewWithFrame:(CGRect)frame backgroundColor:(UIColor *)bgColor textColor:(UIColor *)txColor font:(UIFont *)font
+{
+    UITextView *label = [[UITextView alloc]initWithFrame:frame];
+    label.backgroundColor =bgColor;
+    label.textColor = txColor;
+    label.font = font;
+    return label;
+
+}
+
+
 @end

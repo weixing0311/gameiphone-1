@@ -385,8 +385,18 @@
             m_ppageCount = [KISDictionaryHaveKey(dic, @"rank")intValue];
             
         }else {
-            cell.bgImageView1.image = KUIImage(@"other_normal");
-            cell.bgImageView2.image = KUIImage(@"other_click");
+            
+            if (indexPath.row%2==0) {
+                cell.bgImageView1.image = KUIImage(@"other_normal1");
+                cell.bgImageView2.image = KUIImage(@"other_click1");
+            }
+            else{
+                cell.bgImageView2.image = KUIImage(@"other_normal2");
+                cell.bgImageView1.image = KUIImage(@"other_click2");
+
+            }
+            
+            
         }
         cell.titleImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"clazz_%d",[KISDictionaryHaveKey(dic,@"characterclassid")intValue]]];
         
@@ -461,8 +471,15 @@
             m_ppageCount = [KISDictionaryHaveKey(dic, @"rank")intValue];
             
         }else {
-            cell.bgImageView1.image = KUIImage(@"other_normal");
-            cell.bgImageView2.image = KUIImage(@"other_click");
+            if (indexPath.row%2==0) {
+                cell.bgImageView1.image = KUIImage(@"other_normal1");
+                cell.bgImageView2.image = KUIImage(@"other_click1");
+            }
+            else{
+                cell.bgImageView2.image = KUIImage(@"other_normal2");
+                cell.bgImageView1.image = KUIImage(@"other_click2");
+                
+            }
         }
         
         
@@ -525,8 +542,15 @@
             m_ppageCount = [KISDictionaryHaveKey(dic, @"rank")intValue];
             
         }else {
-            cell.bgImageView1.image = KUIImage(@"other_normal");
-            cell.bgImageView2.image = KUIImage(@"other_click");
+            if (indexPath.row%2==0) {
+                cell.bgImageView1.image = KUIImage(@"other_normal1");
+                cell.bgImageView2.image = KUIImage(@"other_click1");
+            }
+            else{
+                cell.bgImageView2.image = KUIImage(@"other_normal2");
+                cell.bgImageView1.image = KUIImage(@"other_click2");
+                
+            }
         }
         
         
@@ -552,7 +576,13 @@
 
     }
     
-    
+    if ([cell.NumLabel.text intValue]>10000) {
+        cell.NumLabel.font = [UIFont fontWithName:@"汉仪菱心体简" size:16];
+
+    }else{
+        cell.NumLabel.font = [UIFont fontWithName:@"汉仪菱心体简" size:18];
+
+    }
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

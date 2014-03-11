@@ -1790,7 +1790,9 @@
     NSString * nickName = [GameCommon getNewStringWithId:[myInfo objectForKey:@"nickname"]];
     NSString * gender = [GameCommon getNewStringWithId:[myInfo objectForKey:@"gender"]];
     BOOL action =YES;
-    if ([[GameCommon getNewStringWithId:[myInfo objectForKey:@"active"]]intValue] == 1) {
+    if ([[GameCommon getNewStringWithId:[myInfo objectForKey:@"active"]]intValue] == 2) {
+        action =YES;
+    }else{
         action =NO;
     }
     NSString * headImgID = [GameCommon getNewStringWithId:[myInfo objectForKey:@"img"]];
@@ -2538,6 +2540,7 @@
 
 +(void)saveOtherMsgsWithData:(NSDictionary*)userInfoDict
 {
+    NSLog(@"userinfoDict%@",userInfoDict);
     NSString* messageuuid = [[GameCommon shareGameCommon] uuid];
     NSString* msgContent = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"msg")];
     NSString* msgType = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"msgType")];

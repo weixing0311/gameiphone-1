@@ -318,7 +318,7 @@ static GameCommon *my_gameCommon = NULL;
             finalTime = [NSString stringWithFormat:@"%d分钟前",(minutes-msgmin)];
         }
     }
-    else if ([currentStr isEqualToString:messageDateStr]&&hours-msgHour>=0) {
+    else if ([currentStr isEqualToString:messageDateStr]) {
            finalTime = [NSString stringWithFormat:@"%d小时前",(hours-msgHour)];
     }
     //昨天

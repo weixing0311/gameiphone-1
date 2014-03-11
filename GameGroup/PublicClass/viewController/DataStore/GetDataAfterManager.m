@@ -228,7 +228,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
 -(void)otherMessageReceived:(NSDictionary *)info
 {
     AudioServicesPlayAlertSound(1007);
-    
+    NSLog(@"info%@",info);
     [DataStoreManager storeNewMsgs:info senderType:OTHERMESSAGE];//其他消息
     [DataStoreManager saveOtherMsgsWithData:info];
     
