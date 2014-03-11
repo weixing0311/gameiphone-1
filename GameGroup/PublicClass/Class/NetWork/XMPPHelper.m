@@ -427,27 +427,15 @@
         else if([msgtype isEqualToString:@"frienddynamicmsg"] || [msgtype isEqualToString:@"mydynamicmsg"])//动态
         {
             if ([msgtype isEqualToString:@"frienddynamicmsg"]) {
-                if ([[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews]) {
-                    
-                    NSInteger unRead = [[[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews] integerValue] + 1;
-                    [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d", unRead] forKey:haveFriendNews];
-                    [[NSUserDefaults standardUserDefaults] synchronize];
-                    
-                }
-                else
-                {
-                    [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveFriendNews];
-                    [[NSUserDefaults standardUserDefaults] synchronize];
-                }
-                
-
+                NSString* payload = [GameCommon getNewStringWithId:[[message elementForName:@"payload"] stringValue]];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"frienddunamicmsgChange_WX" object:nil userInfo:[payload JSONValue]];
             }
             else
             {
                 [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveMyNews];
                 [[NSUserDefaults standardUserDefaults] synchronize];
+                [[GameCommon shareGameCommon] displayTabbarNotification];
             }
-            [[GameCommon shareGameCommon] displayTabbarNotification];
         }
         
     }
