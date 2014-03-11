@@ -62,7 +62,7 @@
         [[Custom_tabbar showTabBar] when_tabbar_is_selected:0];
         return;
     }
-    [self ss];
+    
 
 }
 -(void)ss
@@ -91,7 +91,7 @@
     
     [self setTopViewWithTitle:@"发现" withBackButton:NO];
     self.view.backgroundColor = UIColorFromRGBA(0xf3f3f3, 1);
-    
+
     UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
     [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateNormal];
     [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateHighlighted];
@@ -122,21 +122,7 @@
     imageView.image = KUIImage(@"finder_line");
     [self.view addSubview:imageView];
     
-    m_notibgInfoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(265, 11, 28, 22)];
-     m_notibgInfoImageView.center =CGPointMake(m_meetBtn.center.x-22, m_meetBtn.center.y-140);
-    
-    [m_notibgInfoImageView setImage:[UIImage imageNamed:@"redCB.png"]];
-    [self.view addSubview:m_notibgInfoImageView];
-    // m_notibgInfoImageView.hidden = YES;
-    
-    lb = [[UILabel alloc] initWithFrame:CGRectMake(-1, 0, 30, 22)];
-    [lb setBackgroundColor:[UIColor clearColor]];
-    [lb setTextAlignment:NSTextAlignmentCenter];
-    [lb setTextColor:[UIColor whiteColor]];
-    lb.font = [UIFont systemFontOfSize:14.0];
-    [m_notibgInfoImageView addSubview:lb];
-    
-    
+
     
     m_activateBtn = [FinderView setButtonWithFrame:CGRectMake(0, 0, 50, 38) center:CGPointMake(295, startX+19) backgroundNormalImage:@"new_activate_pressed" backgroundHighlightImage:@"new_activate_normal" setTitle:nil nextImage:nil nextImage:nil];
     m_activateBtn.backgroundColor = [UIColor clearColor];
@@ -164,6 +150,8 @@
     [self.view addSubview:m_meetBtn];
     
     
+    
+    
     m_dynamicBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 59, 59)];
     m_dynamicBtn.center =CGPointMake(m_meetBtn.center.x-49, m_meetBtn.center.y-125);
     [m_dynamicBtn setBackgroundImage:KUIImage(@"正常_03") forState:UIControlStateNormal];
@@ -174,6 +162,23 @@
 
     [self.view addSubview:m_dynamicBtn];
    
+    
+    m_notibgInfoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(123, 70+startX, 28, 22)];
+    // m_notibgInfoImageView.center =CGPointMake(m_meetBtn.center.x-55, m_meetBtn.center.y-140);
+    [self.view bringSubviewToFront:m_notibgInfoImageView];
+    [m_notibgInfoImageView setImage:[UIImage imageNamed:@"redCB.png"]];
+    [self.view addSubview:m_notibgInfoImageView];
+     m_notibgInfoImageView.hidden = YES;
+    
+    lb = [[UILabel alloc] initWithFrame:CGRectMake(-1, 0, 30, 22)];
+    [lb setBackgroundColor:[UIColor clearColor]];
+    [lb setTextAlignment:NSTextAlignmentCenter];
+    [lb setTextColor:[UIColor whiteColor]];
+    lb.font = [UIFont systemFontOfSize:14.0];
+    [m_notibgInfoImageView addSubview:lb];
+    
+    [self ss];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(ss) name:@"frienddunamicmsgChange_WX" object:nil];
     
 
     
@@ -262,7 +267,7 @@
 
         [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:haveFriendNews];
         [[NSUserDefaults standardUserDefaults] synchronize];
-
+        [self ss];
         [[GameCommon shareGameCommon] displayTabbarNotification];
 
     }

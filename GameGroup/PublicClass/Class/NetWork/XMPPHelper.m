@@ -432,12 +432,16 @@
                     NSInteger unRead = [[[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews] integerValue] + 1;
                     [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d", unRead] forKey:haveFriendNews];
                     [[NSUserDefaults standardUserDefaults] synchronize];
+                    
                 }
                 else
                 {
                     [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveFriendNews];
                     [[NSUserDefaults standardUserDefaults] synchronize];
                 }
+                
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"frienddunamicmsgChange_WX" object:nil];
+
             }
             else
             {
