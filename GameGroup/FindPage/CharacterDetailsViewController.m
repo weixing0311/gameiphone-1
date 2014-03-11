@@ -64,7 +64,7 @@
     isGoToNextPage = YES;
     
     [self setTopViewWithTitle:@"角色详情" withBackButton:YES];
-    
+     startX = KISHighVersion_7 ? 64 : 44;
     UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
     [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateNormal];
     [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateHighlighted];
@@ -75,9 +75,6 @@
     self.view.backgroundColor = [UIColor whiteColor];
 	// Do any additional setup after loading the view.
     
-    startX = KISHighVersion_7 ? 64 : 44;
-    
-
     m_charaDetailsView.listScrollView.backgroundColor = [UIColor clearColor];
     
     m_charaDetailsView =[[CharacterDetailsView alloc]initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height - startX)];
@@ -542,7 +539,7 @@
         ranking.pageCount1 = -1;
         ranking.pageCount2 = -1;
         ranking.pageCount3 = -1;
-        ranking.characterName =m_charaInfo.roleNickName;
+        ranking.characterName =m_characterName;
         ranking. titleOfRanking = [titleArray objectAtIndex:indexPath.row];
         NSArray *array = [m_charaInfo.friendOfRanking allKeys];
         NSLog(@"array%@",array);

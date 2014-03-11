@@ -256,7 +256,7 @@
     VC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"distance")];
 
     VC.achievementColor =[[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"title")] isEqualToString:@""] ? @"暂无头衔" :KISDictionaryHaveKey(KISDictionaryHaveKey(KISDictionaryHaveKey(recDict, @"title"), @"titleObj"), @"rarenum");
-    if([KISDictionaryHaveKey(recDict, @"active") isEqualToString:@"2"]){
+    if([KISDictionaryHaveKey(recDict, @"active")intValue]==2){
         VC.isActiveAc =YES;
     }
     else{

@@ -26,7 +26,7 @@
 -(UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
 }
-
+/*
 - (void)viewWillDisappear:(BOOL)animated
 {
     if(m_timer != nil)
@@ -53,7 +53,7 @@
 												 userInfo:nil repeats:YES];
 	}
 }
-
+*/
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -102,13 +102,13 @@
     
     UIButton* loginButton = [[UIButton alloc] initWithFrame:CGRectMake(25, m_myScrollView.frame.size.height - 60, 120, 35)];
     [loginButton setBackgroundImage:KUIImage(@"login_button_normal") forState:UIControlStateNormal];
-    [loginButton setBackgroundImage:KUIImage(@"login_button_click") forState:UIControlStateHighlighted];
+   // [loginButton setBackgroundImage:KUIImage(@"login_button_click") forState:UIControlStateHighlighted];
     [loginButton addTarget:self action:@selector(loginButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:loginButton];
     
     UIButton* registerButton = [[UIButton alloc] initWithFrame:CGRectMake(175, m_myScrollView.frame.size.height - 60, 120, 35)];
     [registerButton setBackgroundImage:KUIImage(@"register_button_normal") forState:UIControlStateNormal];
-    [registerButton setBackgroundImage:KUIImage(@"register_button_click") forState:UIControlStateHighlighted];
+  //  [registerButton setBackgroundImage:KUIImage(@"register_button_click") forState:UIControlStateHighlighted];
     [registerButton addTarget:self action:@selector(registerButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:registerButton];
 }

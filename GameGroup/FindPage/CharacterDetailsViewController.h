@@ -18,7 +18,12 @@ typedef enum
     CHARA_INFO_MYSELF,
 }CustomViewType;
 
-@interface CharacterDetailsViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,MyCharacterDelegate,TableViewDatasourceDidChange>
+@interface CharacterDetailsViewController : BaseViewController
+<UITableViewDataSource,
+UITableViewDelegate,
+MyCharacterDelegate,
+TableViewDatasourceDidChange,
+UIActionSheetDelegate>
 
 @property(nonatomic,strong)NSString *characterId;//角色ID
 @property(nonatomic,strong)NSString *gameId;//游戏id

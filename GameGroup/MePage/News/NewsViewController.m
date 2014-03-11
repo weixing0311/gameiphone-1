@@ -442,6 +442,9 @@
     }
 
     cell.timeLabel.text = [self getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"createDate")]];
+    
+    
+    
     NSString* zanStr = [self getZanLabelWithNum:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"zannum")]];
     cell.zanLabel.text = zanStr;
     cell.zanLabel.hidden = [zanStr isEqualToString:@"0"];

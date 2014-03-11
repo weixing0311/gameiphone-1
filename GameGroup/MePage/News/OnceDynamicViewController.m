@@ -32,7 +32,7 @@
     NSInteger shareType;//0为好友 1为广播
     UILabel*  sharePeopleLabel;
     
-    
+    UIWebView* mWebView;
     
     UIImageView* bg1;
     EGOImageButton* headBtn1;
@@ -367,6 +367,16 @@
 
 }
 
+#pragma mark ---点击webview 获取图片
+- (NSString *)createJavaScript{
+    NSString *js = @"var imgArray = document.getElementsByTagName('img');for(var i = 0; i < imgArray.length; i++){var img = imgArray[i];img.onclick=function(){var url='lfyprotocol:'+this.src;document.location = url;}}";
+    return js;
+}
+
+
+
+
+
 #pragma mark html
 
 - (NSString*)htmlContentWithTitle:(NSString*)title time:(NSString*)time content:(NSString*)content
@@ -392,6 +402,10 @@
 //        [self.view addSubview:scroll];
         
         NSString* loadStr = [self htmlContentWithTitle:KISDictionaryHaveKey(self.dataDic, @"title") time:[NSString stringWithFormat:@"%@", [self getDataWithTime]] content:KISDictionaryHaveKey(self.dataDic, @"msg")];
+        
+
+        
+        
         for(int i = 0; i < [self.headImgArray count]; i++)
         {
             loadStr = [loadStr stringByAppendingString:[self imageHtmlWithId:[self.headImgArray objectAtIndex:i]]];
@@ -418,7 +432,7 @@
     }
     else
     {
-        UIWebView* mWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, startX + 60, kScreenWidth, kScreenHeigth - 40 - startX - 60-(KISHighVersion_7?0:20))];
+        mWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, startX + 60, kScreenWidth, kScreenHeigth - 40 - startX - 60-(KISHighVersion_7?0:20))];
 //        mWebView.scalesPageToFit = YES;
         mWebView.delegate = self;
         NSURL *requestUrl = [NSURL URLWithString:self.urlLink];
@@ -1008,6 +1022,12 @@
 //    NSString *htmlHeight = [webView stringByEvaluatingJavaScriptFromString:@"document.getElementById(\"foo\").offsetHeight;"];
 //    webViewHeight = [htmlHeight doubleValue];
 //    NSLog(@"%@", htmlHeight);
+    
+    NSString *str = [mWebView stringByEvaluatingJavaScriptFromString:[self createJavaScript]];
+    NSLog(@"------finish=%@",str);
+
+    
+    
 }
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
@@ -1018,6 +1038,7 @@
 //    [hud hide:YES];
     [webView stopLoading];
 }
+
 
 - (BOOL)webView:(UIWebView *)webViewLocal shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -1036,10 +1057,42 @@
         }
         NSString * imageId = [myURL substringFromIndex:range.location+1];
         PhotoViewController * photoV = [[PhotoViewController alloc] initWithSmallImages:nil images:[NSArray arrayWithObject:imageId] indext:0];
+        photoV.isComeFrmeUrl = NO;
+
         [self presentViewController:photoV animated:NO completion:^{
             
         }];
         return NO;
+    }
+    else{
+    NSString *requestString = [[request URL] absoluteString];
+    NSArray *components = [requestString componentsSeparatedByString:@":"];
+    NSLog(@"-----%@",components);
+    if ([components count] > 1 && [(NSString *)[components objectAtIndex:0] isEqualToString:@"lfyprotocol"]) {
+        if([(NSString *)[components objectAtIndex:1] isEqualToString:@"http"] || [(NSString *)[components objectAtIndex:1] isEqualToString:@"https"]){
+            //这个就是图片的路径
+            NSLog(@"+++++++%@",components);
+            NSString *path = [NSString stringWithFormat:@"%@:%@",[components objectAtIndex:1],[components objectAtIndex:2]];
+//            UIAlertView *alert = [[UIAlertView alloc]
+//                                  initWithTitle:@"图片的地址"
+//                                  message:path
+//                                  delegate:self
+//                                  cancelButtonTitle:nil
+//                                  otherButtonTitles:@"OK", nil];
+          //  [alert show];
+            //你已经有图片的路径，师兄只能帮到这儿了，接下来就靠你自己了。。。
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //这是你自己的代码
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            PhotoViewController * photoV = [[PhotoViewController alloc] initWithSmallImages:nil images:[NSArray arrayWithObject:path] indext:0];
+            photoV.isComeFrmeUrl = YES;
+            [self presentViewController:photoV animated:NO completion:^{
+                
+            }];
+            
+        }
+        return NO;
+    }
     }
 	return YES;
 }

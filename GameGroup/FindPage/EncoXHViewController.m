@@ -303,11 +303,12 @@
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
 
         inABtn.enabled = YES;
-        sayHelloBtn.enabled = YES;
 
         [hud hide:YES];
         if (COME_TYPE ==1) {
             isSuccessToshuaishen =NO;
+            sayHelloBtn.enabled = YES;
+
             isWXCeiling =YES;
             getDic = nil;
             getDic = [NSDictionary dictionaryWithDictionary:responseObject];
@@ -322,7 +323,6 @@
                 sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
 
             }
-            
             promptLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];
 
             NickNameLabel.text = KISDictionaryHaveKey(getDic, @"nickname");
@@ -375,7 +375,7 @@
             if (isWXCeiling ==YES) {
                 NSLog(@"打招呼成功");
                 [self showMessageWindowWithContent:@"打招呼成功" imageType:0];
-                [self changeOtherOne];
+               // [self changeOtherOne];
 
             }else{
                 [self showMessageWindowWithContent:@"打招呼失败,邂逅数量已达上限" imageType:0];

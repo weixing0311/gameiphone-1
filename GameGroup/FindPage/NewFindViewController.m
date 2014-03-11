@@ -16,10 +16,16 @@
 #import "MagicGirlViewController.h"
 #import "AddressListViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ActivateViewController.h"
 
+#import "DSFriends.h"
 #import "HostInfo.h"
 #import "FindSubView.h"
 #import "FinderView.h"
+
+
+#import "EveryDataNewsViewController.h"
+
 @interface NewFindViewController ()
 {
     UIButton    *m_dynamicBtn;//动态
@@ -32,6 +38,7 @@
     HostInfo    *hostInfo;
     UIImageView *m_notibgInfoImageView;
     UILabel *lb;
+    DSFriends   * m_userInfo;
 }
 @end
 
@@ -54,8 +61,9 @@
     if (![self isHaveLogin]) {
         [[Custom_tabbar showTabBar] when_tabbar_is_selected:0];
         return;
-        
     }
+    [self ss];
+
 }
 -(void)ss
 {
@@ -84,6 +92,28 @@
     [self setTopViewWithTitle:@"发现" withBackButton:NO];
     self.view.backgroundColor = UIColorFromRGBA(0xf3f3f3, 1);
     
+    UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
+    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateNormal];
+    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateHighlighted];
+    shareButton.backgroundColor = [UIColor clearColor];
+    [shareButton addTarget:self action:@selector(shareBtnClick1:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:shareButton];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+
+    
+    
+    
+    
+    
+    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]];
+        m_userInfo = [DSFriends MR_findFirstWithPredicate:predicate];
+    }];
+
+    
+    
+    
 //    FindSubView *find = [[FindSubView alloc]initWithFrame:CGRectMake(0, startX, self.view.bounds.size.width, self.view.bounds.size.height-startX)];
 //    [self.view addSubview:find];
     
@@ -93,7 +123,7 @@
     [self.view addSubview:imageView];
     
     m_notibgInfoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(265, 11, 28, 22)];
-    // m_notibgInfoImageView.center =CGPointMake(m_meetBtn.center.x-22, m_meetBtn.center.y-140);
+     m_notibgInfoImageView.center =CGPointMake(m_meetBtn.center.x-22, m_meetBtn.center.y-140);
     
     [m_notibgInfoImageView setImage:[UIImage imageNamed:@"redCB.png"]];
     [self.view addSubview:m_notibgInfoImageView];
@@ -106,7 +136,6 @@
     lb.font = [UIFont systemFontOfSize:14.0];
     [m_notibgInfoImageView addSubview:lb];
     
-    [self ss];
     
     
     m_activateBtn = [FinderView setButtonWithFrame:CGRectMake(0, 0, 50, 38) center:CGPointMake(295, startX+19) backgroundNormalImage:@"new_activate_pressed" backgroundHighlightImage:@"new_activate_normal" setTitle:nil nextImage:nil nextImage:nil];
@@ -114,15 +143,14 @@
     [m_activateBtn addTarget:self action:@selector(didClickenterMeet:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:m_activateBtn];
 
-    hostInfo = [[HostInfo alloc]init];
 #pragma mark ----- 具体未做判定  账号是否激活
-    if (hostInfo.active) {
+    if (m_userInfo.action) {
         NSLog(@"已激活");
-        m_activateBtn.hidden = NO;
+        m_activateBtn.hidden = YES;
     }else
     {
         NSLog(@"未激活");
-        m_activateBtn.hidden = YES;
+        m_activateBtn.hidden = NO;
     }
     
     m_meetBtn = [FinderView setButtonWithFrame:CGRectMake(0, 0, 102, 102) center:self.view.center backgroundNormalImage:@"trevi_fountain_pressed" backgroundHighlightImage:@"trevi_fountain_normal" setTitle:nil nextImage:nil nextImage:nil];
@@ -263,7 +291,12 @@
 //        [self.navigationController pushViewController:addVC animated:YES];
     }
 
-    
+    if (sender ==m_activateBtn) {
+        [[Custom_tabbar showTabBar] hideTabBar:YES];
+
+        ActivateViewController *activeVC = [[ActivateViewController alloc]init];
+        [self.navigationController pushViewController:activeVC animated:YES];
+    }
     
 }
 
@@ -273,4 +306,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+
+-(void)shareBtnClick1:(UIButton *)sneder
+{
+    [[Custom_tabbar showTabBar] hideTabBar:YES];
+
+    EveryDataNewsViewController *ev = [[EveryDataNewsViewController alloc]init];
+    [self.navigationController pushViewController:ev animated:YES];
+}
 @end

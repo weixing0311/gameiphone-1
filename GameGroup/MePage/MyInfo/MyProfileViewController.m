@@ -603,7 +603,17 @@
                 cell.nameLabel.text = @"小伙伴ID";
                 cell.disLabel.text = self.hostInfo.userId;
                 cell.vAuthImg.hidden = YES;
-               
+                UIImageView * image = [[UIImageView alloc]initWithFrame:CGRectMake(230, 15, 29, 12)];
+                [cell.contentView addSubview:image];
+                if (![self.hostInfo.action boolValue]) {
+                    NSLog(@"未激活");
+                    image.image = [UIImage imageNamed:@"unactive"];
+                }else
+                {
+                    NSLog(@"已状态");
+                    image.image = [UIImage imageNamed:@"active"];
+                }
+
             }
             else{
                 cell.vAuthImg.hidden = YES;
@@ -649,6 +659,8 @@
             cell.disLabel.text = self.hostInfo.userId;
             UIImageView * image = [[UIImageView alloc]initWithFrame:CGRectMake(230, 15, 29, 12)];
             [cell.contentView addSubview:image];
+            
+            NSLog(@"self.hostInfo.action%@",self.hostInfo.action);
             if (![self.hostInfo.action boolValue]) {
                 NSLog(@"未激活");
                 image.image = [UIImage imageNamed:@"unactive"];

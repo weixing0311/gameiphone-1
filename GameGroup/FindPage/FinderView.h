@@ -10,4 +10,8 @@
 
 @interface FinderView : NSObject
 +(UIButton *)setButtonWithFrame:(CGRect)frame center:(CGPoint)center backgroundNormalImage:(NSString *)normalImage backgroundHighlightImage:(NSString *)highImage setTitle:(NSString *)title nextImage:(NSString *)nImage nextImage:(NSString *)hImage;
++(UILabel *)setLabelWithFrame:(CGRect)frame backgroundColor:(UIColor *)bgColor textColor:(UIColor *)txColor font:(UIFont *)font;
+
++(UITextView *)setTextViewWithFrame:(CGRect)frame backgroundColor:(UIColor *)bgColor textColor:(UIColor *)txColor font:(UIFont *)font;
+
 @end

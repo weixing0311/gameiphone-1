@@ -113,6 +113,7 @@
     hud.labelText = @"查询中...";
     
     [self getRealmsDataByNet];//所有服务器名
+    
 }
 
 - (void)getRealmsDataByNet
@@ -154,7 +155,11 @@
                 }
             }
             if ([m_realmsArray count] > 0) {
-                [m_selectRealmButton setTitle:[m_realmsArray objectAtIndex:0] forState:UIControlStateNormal];
+                if ([[NSUserDefaults standardUserDefaults]objectForKey:@"buttonIndexForTitleForCenter"] ==nil) {
+                    [m_selectRealmButton setTitle:[m_realmsArray objectAtIndex:0] forState:UIControlStateNormal];
+                }else{
+                    [m_selectRealmButton setTitle:[m_realmsArray objectAtIndex:[[[NSUserDefaults standardUserDefaults]objectForKey:@"buttonIndexForTitleForCenter"]intValue]] forState:UIControlStateNormal];
+                }
                 
                 float viewHeight = 21 + [m_realmsArray count] * 40;
                 m_selectView.frame = CGRectMake(0, 0, kScreenWidth, viewHeight);
@@ -204,9 +209,19 @@
     }
     [paramDict setObject:@"1" forKey:@"gameid"];
     NSArray* realmArr = [m_selectRealmButton.titleLabel.text componentsSeparatedByString:@"("];
+    
+    //记忆服务器
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"sameRealmOfsb"] !=nil) {
+        [paramDict setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"sameRealmOfsb"] forKey:@"realm"];
+    }else{
     if (realmArr && [realmArr count] != 0) {
         [paramDict setObject:[realmArr objectAtIndex:0] forKey:@"realm"];
     }
+    }
+    
+    [[NSUserDefaults standardUserDefaults]setObject:[paramDict objectForKey:@"realm"] forKey:@"sameRealmOfsb"];
+
+    
     [paramDict setObject:[NSString stringWithFormat:@"%d", m_currentPage] forKey:@"pageIndex"];
     [paramDict setObject:@"10" forKey:@"maxSize"];
     
@@ -291,6 +306,7 @@
     m_currentPage = 0;
     [m_tabelData removeAllObjects];
     [self getSameRealmDataByNet];
+    [[NSUserDefaults standardUserDefaults]setObject:[NSString stringWithFormat:@"%d",buttonIndex] forKey:@"buttonIndexForTitleForCenter"];
 }
 
 #pragma mark 筛选
@@ -442,7 +458,7 @@
     VC.sexStr = [NSString stringWithFormat:@"%d",[KISDictionaryHaveKey(recDict, @"gender")intValue]];
     VC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"updateUserLocationDate")];
     VC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(recDict, @"distance")];
-    if([KISDictionaryHaveKey(recDict, @"active") isEqualToString:@"2"]){
+    if([KISDictionaryHaveKey(recDict, @"active")intValue]==2){
         VC.isActiveAc =YES;
     }
     else{
