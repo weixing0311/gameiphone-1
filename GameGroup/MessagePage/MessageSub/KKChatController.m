@@ -72,12 +72,20 @@
         [self.tView reloadData];
     }
 }
-
+- (void)changeMyActive:(NSNotification*)notification
+{
+    if ([notification.userInfo[@"active"] intValue] == 2) {
+        myActive = YES;
+    }else
+    {
+        myActive = NO;
+    }
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeMyActive:) name:@"wxr_myActiveBeChanged" object:nil];
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]];
     DSFriends *friend = [DSFriends MR_findFirstWithPredicate:predicate];
     myActive = [friend.action boolValue];

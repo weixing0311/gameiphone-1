@@ -16,6 +16,7 @@
     if (self) {
         // Initialization code
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.contentView.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
         self.nameL = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 200, 20)];
         _nameL.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:_nameL];
@@ -32,6 +33,9 @@
         [inviteV addTarget:self action:@selector(inviteFriend) forControlEvents:UIControlEventTouchUpInside];
         inviteV.frame = CGRectMake(250, 18, 48, 24);
         [self.contentView addSubview:inviteV];
+        UIView * lineV = [[UIView alloc]initWithFrame:CGRectMake(0, 59, 320, 1)];
+        lineV.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1];
+        [self.contentView addSubview:lineV];
 
     }
     return self;

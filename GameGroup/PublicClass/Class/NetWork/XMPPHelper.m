@@ -322,7 +322,6 @@
 }
 // 3.关于通信的
 #pragma mark 收到消息后调用
-/*<message xmlns="jabber:client" from="admin@gamepro.com" to="11111111111@gamepro.com" type="chat" msgtype="system" msgTime="1388032476641" fromNickname="&#x5C0F;&#x4F19;&#x4F34;" fromHeadImg="1"><body>通知：您失去了XX头衔</body></message>*/
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message{
     NSString *msg = [[message elementForName:@"body"] stringValue];
     NSLog(@"message =====%@",message);
@@ -358,8 +357,10 @@
                 [dict setObject:payload forKey:@"payload"];
                 
                 [dict setObject:@"payloadchat" forKey:@"msgType"];
-            }
-            else{
+            }else if (payload.length > 0&&[payload JSONValue][@"active"]){
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"wxr_myActiveBeChanged" object:nil userInfo:[payload JSONValue]];
+                [dict setObject:@"normalchat" forKey:@"msgType"];
+            }else{
                 [dict setObject:@"normalchat" forKey:@"msgType"];
             }
             [dict setObject:msgId?msgId:@"" forKey:@"msgId"];
@@ -427,24 +428,15 @@
         else if([msgtype isEqualToString:@"frienddynamicmsg"] || [msgtype isEqualToString:@"mydynamicmsg"])//动态
         {
             if ([msgtype isEqualToString:@"frienddynamicmsg"]) {
-                if ([[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews]) {
-                    
-                    NSInteger unRead = [[[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews] integerValue] + 1;
-                    [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d", unRead] forKey:haveFriendNews];
-                    [[NSUserDefaults standardUserDefaults] synchronize];
-                }
-                else
-                {
-                    [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveFriendNews];
-                    [[NSUserDefaults standardUserDefaults] synchronize];
-                }
+                NSString* payload = [GameCommon getNewStringWithId:[[message elementForName:@"payload"] stringValue]];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"frienddunamicmsgChange_WX" object:nil userInfo:[payload JSONValue]];
             }
             else
             {
                 [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:haveMyNews];
                 [[NSUserDefaults standardUserDefaults] synchronize];
+                [[GameCommon shareGameCommon] displayTabbarNotification];
             }
-            [[GameCommon shareGameCommon] displayTabbarNotification];
         }
         
     }

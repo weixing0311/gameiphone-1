@@ -151,6 +151,7 @@
         NSMutableDictionary * dic = _inDudeArray[indexPath.row];
         [dic setObject:@"1" forKey:@"iCare"];
         [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self showMessageWindowWithContent:@"添加成功" imageType:0];
         NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
         NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
         [paramDict setObject:dic[@"userid"] forKey:@"frienduserid"];

@@ -16,6 +16,7 @@
     if (self) {
         // Initialization code
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.contentView.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
         self.headerImage = [[EGOImageView alloc]initWithFrame:CGRectMake(10, 10, 40, 40)];
         _headerImage.placeholderImage = [UIImage imageNamed:@"people_man"];
         [self.contentView addSubview:_headerImage];
@@ -32,6 +33,9 @@
         [_addFriendB addTarget:self action:@selector(inviteFriend) forControlEvents:UIControlEventTouchUpInside];
         _addFriendB.frame = CGRectMake(234, 18, 66, 24);
         [self.contentView addSubview:_addFriendB];
+        UIView * lineV = [[UIView alloc]initWithFrame:CGRectMake(0, 59, 320, 1)];
+        lineV.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1];
+        [self.contentView addSubview:lineV];
     }
     return self;
 }

@@ -497,21 +497,7 @@ static GameCommon *my_gameCommon = NULL;
     {
         [[Custom_tabbar showTabBar] removeNotificatonOfIndex:3];
     }
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews]) {
-        if (![[[NSUserDefaults standardUserDefaults] objectForKey:haveFriendNews] isEqualToString:@"0"]) {
-            [[Custom_tabbar showTabBar] notificationWithNumber:NO AndTheNumber:0 OrDot:YES WithButtonIndex:2];
-        }
-        else
-        {
-            [[Custom_tabbar showTabBar] removeNotificatonOfIndex:2];
-        }
-    }
-    else
-    {
-        [[Custom_tabbar showTabBar] removeNotificatonOfIndex:2];
-    }
 }
-
 #pragma mark 粉丝数变化
 - (void)fansCountChanged:(BOOL)addOne
 {

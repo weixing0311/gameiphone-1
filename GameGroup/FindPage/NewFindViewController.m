@@ -23,7 +23,7 @@
 #import "FindSubView.h"
 #import "FinderView.h"
 
-
+#import "MessageAddressViewController.h"
 #import "EveryDataNewsViewController.h"
 
 @interface NewFindViewController ()
@@ -286,9 +286,9 @@
     }
     if (sender ==m_phoneBtn) {
         NSLog(@"手机通讯录");
-        
-//        AddressListViewController *addVC = [[AddressListViewController alloc]init];
-//        [self.navigationController pushViewController:addVC animated:YES];
+        [[Custom_tabbar showTabBar] hideTabBar:YES];
+        MessageAddressViewController *addVC = [[MessageAddressViewController alloc]init];
+        [self.navigationController pushViewController:addVC animated:YES];
     }
 
     if (sender ==m_activateBtn) {

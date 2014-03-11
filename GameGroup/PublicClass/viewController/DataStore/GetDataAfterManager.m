@@ -26,10 +26,19 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
         self.appDel.xmppHelper.deletePersonDelegate = self;
         self.appDel.xmppHelper.otherMsgReceiveDelegate = self;
         self.appDel.xmppHelper.recommendReceiveDelegate = self;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeMyActive:) name:@"wxr_myActiveBeChanged" object:nil];
     }
     return self;
 }
-
+- (void)changeMyActive:(NSNotification*)notification
+{
+    if ([notification.userInfo[@"active"] intValue] == 2) {
+        [DataStoreManager reSetMyAction:YES];
+    }else
+    {
+        [DataStoreManager reSetMyAction:NO];
+    }
+}
 + (GetDataAfterManager*)shareManageCommon
 {
     @synchronized(self)

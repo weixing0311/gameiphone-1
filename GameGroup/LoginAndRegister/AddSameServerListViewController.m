@@ -33,7 +33,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self setTopViewWithTitle:@"游戏小伙伴" withBackButton:YES];
+    [self setTopViewWithTitle:@"推荐达人" withBackButton:YES];
     UIButton * nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [nextButton setTitle:@"完成" forState:UIControlStateNormal];
     nextButton.titleLabel.font = [UIFont systemFontOfSize:10];
