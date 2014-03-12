@@ -7,6 +7,7 @@
 //
 
 #import "MagicGirlViewController.h"
+#import "TestViewController.h"
 @interface MagicGirlViewController ()
 {
     UIWebView *contentWebView;
@@ -66,11 +67,31 @@
         [contentWebView reload];
     }
 }
-
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+-(void)enterPersonInterfaceWithId:(NSString *)userid nickName:(NSString *)nickName
+{
+    TestViewController *testVC = [[TestViewController alloc]init];
+    testVC.userId = userid;
+    testVC.nickName = nickName;
+    [self.navigationController pushViewController:testVC animated:YES];
+}
+
+
+- (void)backButtonClick:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
 
 @end

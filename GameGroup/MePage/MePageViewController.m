@@ -23,6 +23,10 @@
 #import "TitleObjTableCell.h"
 #import "MyStateTableCell.h"
 #import "NewsViewController.h"
+
+#import "FunsOfOtherViewController.h"
+
+
 @interface MePageViewController ()
 {
     UITableView*  m_myTableView;
@@ -72,6 +76,22 @@
     [super viewDidLoad];
     [self setTopViewWithTitle:@"我" withBackButton:NO];
     
+    
+    UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
+    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateNormal];
+    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateHighlighted];
+    shareButton.backgroundColor = [UIColor clearColor];
+    [shareButton addTarget:self action:@selector(shareBtnClick1:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:shareButton];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+
+    
+    
+    
+    
+    
+    
     m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth - 50 - 64)];
     m_myTableView.delegate = self;
     m_myTableView.dataSource = self;
@@ -82,7 +102,12 @@
     [self.view addSubview:hud];
     hud.labelText = @"查询中...";
 }
-
+-(void)shareBtnClick1:(UIButton *)sender
+{
+    FunsOfOtherViewController *f = [[FunsOfOtherViewController alloc]init];
+    f.userId = @"10110253";
+    [self.navigationController pushViewController:f animated:YES];
+}
 - (void)getUserInfoByNet
 {
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];

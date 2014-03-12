@@ -11,7 +11,7 @@
 #import "AddCharacterViewController.h"
 #import "MBProgressHUD.h"
 #import "DataStoreManager.h"
-
+#import "AddContactViewController.h"
 @interface ActivateViewController ()
 {
     UIScrollView * scV ;
@@ -62,99 +62,93 @@
     [button addTarget:self action:@selector(activateUser) forControlEvents:UIControlEventTouchUpInside];
     [scV addSubview:button];
     
-    UILabel * lable2 = [[UILabel alloc]initWithFrame:CGRectMake(10, 240, 300, 20)];
+    UITextView * lable2 = [[UITextView alloc]initWithFrame:CGRectMake(10, 240, 300, 60)];
+    lable2.userInteractionEnabled = NO;
     lable2.backgroundColor = [UIColor clearColor];
     lable2.textColor = [UIColor grayColor];
     lable2.font = [UIFont boldSystemFontOfSize:16];
-    lable2.text = @"若您没有激活码,亲尝试以下激活方式:";
+    lable2.text = @"由于您没有达到封测资格，您可以通过以下任意一种方式来激活账户";
     [scV addSubview:lable2];
     
-    UILabel * numL1 = [[UILabel alloc]initWithFrame:CGRectMake(10, 280, 20, 20)];
-    numL1.textColor = [UIColor grayColor];
-    numL1.backgroundColor = [UIColor clearColor];
-    numL1.text = @"1.";
-    numL1.font = [UIFont boldSystemFontOfSize:16];
-    [scV addSubview:numL1];
     
-    UILabel * lable3 = [[UILabel alloc]initWithFrame:CGRectMake(30, 280, 50, 20)];
-    lable3.backgroundColor = [UIColor clearColor];
-    lable3.textColor = [UIColor grayColor];
-    lable3.font = [UIFont boldSystemFontOfSize:16];
-    lable3.text = @"请优先";
-    [scV addSubview:lable3];
+    UIButton * addFriend = [UIButton buttonWithType:UIButtonTypeCustom];
+    addFriend.frame = CGRectMake(83, 310, 154, 30);
+    [addFriend setBackgroundImage:KUIImage(@"add_friend_normal_.png") forState:UIControlStateNormal];
+    [addFriend setBackgroundImage:KUIImage(@"add_friend_click_.png") forState:UIControlStateHighlighted];
+
+    [addFriend addTarget:self action:@selector(addFriends:) forControlEvents:UIControlEventTouchUpInside];
+    [scV addSubview:addFriend];
     
-    UIButton * bangdingB = [UIButton buttonWithType:UIButtonTypeCustom];
-    bangdingB.frame = CGRectMake(70, 280, 50, 20);
-    [bangdingB setTitle:@"绑定" forState:UIControlStateNormal];
-    bangdingB.titleLabel.font =[UIFont boldSystemFontOfSize:16];
-    [bangdingB setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [bangdingB addTarget:self action:@selector(boundRole) forControlEvents:UIControlEventTouchUpInside];
-    [scV addSubview:bangdingB];
-    
-    UILabel * lable4 = [[UILabel alloc]initWithFrame:CGRectMake(112, 280, 190, 20)];
+    UILabel * lable4 = [[UILabel alloc]initWithFrame:CGRectMake(10, 350, 170, 20)];
     lable4.backgroundColor = [UIColor clearColor];
     lable4.textColor = [UIColor grayColor];
     lable4.font = [UIFont boldSystemFontOfSize:16];
-    lable4.text = @"您的主要角色,若此角色为";
+    lable4.text = @"如您有角色位于服务器";
     [scV addSubview:lable4];
     
-    UILabel * lable5 = [[UILabel alloc]initWithFrame:CGRectMake(30, 300, 270, 40)];
+    UILabel * lable5 = [[UILabel alloc]initWithFrame:CGRectMake(180, 350, 40, 20)];
     lable5.backgroundColor = [UIColor clearColor];
-    lable5.numberOfLines = 0;
-    lable5.textColor = [UIColor grayColor];
+    lable5.textColor = UIColorFromRGBA(0x16a3f0, 1);
     lable5.font = [UIFont boldSystemFontOfSize:16];
-    lable5.text = @"服务器前10名,系统将会自动激活您的账号.";
+    lable5.text = @"前十";
     [scV addSubview:lable5];
-    
-    UILabel * numL2 = [[UILabel alloc]initWithFrame:CGRectMake(10, 340, 20, 20)];
-    numL2.textColor = [UIColor grayColor];
-    numL2.backgroundColor = [UIColor clearColor];
-    numL2.text = @"2.";
-    numL2.font = [UIFont boldSystemFontOfSize:16];
-    [scV addSubview:numL2];
-    
-    UILabel * lable6 = [[UILabel alloc]initWithFrame:CGRectMake(30, 340, 270, 40)];
+
+    UILabel * lable6 = [[UILabel alloc]initWithFrame:CGRectMake(220, 350, 100, 20)];
     lable6.backgroundColor = [UIColor clearColor];
-    lable6.numberOfLines = 0;
     lable6.textColor = [UIColor grayColor];
     lable6.font = [UIFont boldSystemFontOfSize:16];
-    lable6.text = @"当您拥有8为好友时,系统将会自动激活您的账号.";
+    lable6.text = @"，请点击";
     [scV addSubview:lable6];
+
+    UIButton * bangdingB = [UIButton buttonWithType:UIButtonTypeCustom];
+    bangdingB.frame = CGRectMake(83, 380, 154, 30);
+    [bangdingB setBackgroundImage:KUIImage(@"binding_normal.png") forState:UIControlStateNormal];
+    [bangdingB setBackgroundImage:KUIImage(@"binding_click.png") forState:UIControlStateHighlighted];
     
-    UILabel * numL3 = [[UILabel alloc]initWithFrame:CGRectMake(10, 380, 20, 20)];
-    numL3.textColor = [UIColor grayColor];
-    numL3.backgroundColor = [UIColor clearColor];
-    numL3.text = @"3.";
-    numL3.font = [UIFont boldSystemFontOfSize:16];
-    [scV addSubview:numL3];
+    [bangdingB addTarget:self action:@selector(boundRole) forControlEvents:UIControlEventTouchUpInside];
+    [scV addSubview:bangdingB];
     
-    UILabel * lable7 = [[UILabel alloc]initWithFrame:CGRectMake(30, 380, 170, 20)];
+    
+    
+    UILabel * lable7 = [[UILabel alloc]initWithFrame:CGRectMake(10, 420, 65, 20)];
     lable7.backgroundColor = [UIColor clearColor];
     lable7.numberOfLines = 0;
     lable7.textColor = [UIColor grayColor];
     lable7.font = [UIFont boldSystemFontOfSize:16];
-    lable7.text = @"如果您是妹子,可以通过";
+    lable7.text = @"如果您是";
     [scV addSubview:lable7];
     
+    UILabel * lable8 = [[UILabel alloc]initWithFrame:CGRectMake(74, 420, 40, 20)];
+    lable8.backgroundColor = [UIColor clearColor];
+    lable8.numberOfLines = 0;
+    lable8.textColor = UIColorFromRGBA(0x16a3f0, 1);
+    lable8.font = [UIFont boldSystemFontOfSize:16];
+    lable8.text = @"妹子";
+    [scV addSubview:lable8];
+
+    
+    UILabel * lable9 = [[UILabel alloc]initWithFrame:CGRectMake(114, 420, 100, 20)];
+    lable9.backgroundColor = [UIColor clearColor];
+    lable9.numberOfLines = 0;
+    lable9.textColor = [UIColor grayColor];
+    lable9.font = [UIFont boldSystemFontOfSize:16];
+    lable9.text = @",可点击";
+    [scV addSubview:lable9];
+
+    
     UIButton * meiziB = [UIButton buttonWithType:UIButtonTypeCustom];
-    meiziB.frame = CGRectMake(187, 380, 80, 20);
-    [meiziB setTitle:@"妹子认证" forState:UIControlStateNormal];
+    meiziB.frame = CGRectMake(83, 450, 154, 30);
+    [meiziB setBackgroundImage:KUIImage(@"girl_ certification_normal") forState:UIControlStateNormal];
+    [meiziB setBackgroundImage:KUIImage(@"girl_ girl_certification_click") forState:UIControlStateHighlighted];
     meiziB.titleLabel.font =[UIFont boldSystemFontOfSize:16];
     [meiziB setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [meiziB addTarget:self action:@selector(ImGirl) forControlEvents:UIControlEventTouchUpInside];
     [scV addSubview:meiziB];
     
-    UILabel * lable8 = [[UILabel alloc]initWithFrame:CGRectMake(260, 380, 40, 20)];
-    lable8.backgroundColor = [UIColor clearColor];
-    lable8.numberOfLines = 0;
-    lable8.textColor = [UIColor grayColor];
-    lable8.font = [UIFont boldSystemFontOfSize:16];
-    lable8.text = @"激活.";
-    [scV addSubview:lable8];
     
-    UIImageView * photo1 = [[UIImageView alloc]initWithFrame:CGRectMake(90, 420, 141, 117)];
-    photo1.image = [UIImage imageNamed:@"gril1"];
-    [scV addSubview:photo1];
+//    UIImageView * photo1 = [[UIImageView alloc]initWithFrame:CGRectMake(90, 420, 141, 117)];
+//    photo1.image = [UIImage imageNamed:@"gril1"];
+//    [scV addSubview:photo1];
     
     scV.contentSize = CGSizeMake(320, 560);
     
@@ -172,6 +166,11 @@
     AddCharacterViewController* addVC = [[AddCharacterViewController alloc] init];
     addVC.viewType = CHA_TYPE_Add;
     [self.navigationController pushViewController:addVC animated:YES];
+}
+-(void)addFriends:(UIButton *)sender
+{
+    AddContactViewController * addV = [[AddContactViewController alloc] init];
+    [self.navigationController pushViewController:addV animated:YES];
 }
 - (void)activateUser
 {

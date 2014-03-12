@@ -141,8 +141,10 @@
     clazzImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
     [backgroundImageView addSubview:clazzImageView];
     clazzImageView.userInteractionEnabled = YES;
-    [clazzImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showGameList:)]];
+    [clazzImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showChararcter:)]];
 
+    [clazzImageView addGestureRecognizer:[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showGameList:)]];
+    
     clazzLabel = [[UILabel alloc]initWithFrame:CGRectMake(260-clazzLabel.text.length/2, 53, 50+clazzLabel.text.length *12, 20)];
     clazzLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.6];
     clazzLabel.layer.masksToBounds = YES;
@@ -159,8 +161,9 @@
     headImageView.frame = CGRectMake(80, 76-40, 165, 165);
     headImageView.userInteractionEnabled = YES;
    // headImageView.backgroundColor =[UIColor whiteColor];
+    headImageView.image = KUIImage(@"许愿池头像");
     headImageView.placeholderImage = KUIImage(@"moren_people");
-    headImageView.image = KUIImage(@"moren_people");
+
     headImageView.layer.borderWidth = 2.0;
     headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
     [headImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(enterToPernsonPage:)]];
@@ -174,12 +177,18 @@
     NickNameLabel.font = [UIFont boldSystemFontOfSize:17];
     NickNameLabel.textAlignment = NSTextAlignmentCenter;
     NickNameLabel.textColor = [UIColor whiteColor];
+    NickNameLabel.text  = @"许愿池";
     [backgroundImageView addSubview:NickNameLabel];
+    
+    
+
     
     customLabel = [[UILabel alloc]initWithFrame:CGRectMake(125, 276-40, 120, 15)];
     customLabel.backgroundColor = [UIColor clearColor];
     customLabel.font = [UIFont boldSystemFontOfSize:13];
     customLabel.textColor = [UIColor whiteColor];
+    customLabel.text = [NSString stringWithFormat:@" ?? |神迹"];
+
     [backgroundImageView addSubview:customLabel];
     
     sexLabel = [[UILabel alloc]initWithFrame:CGRectMake(customLabel.frame.origin.x-40, 276-40, 40, 15)];
@@ -189,12 +198,15 @@
     [backgroundImageView addSubview:sexLabel];
     
     
-    promptLabel = [[UITextView alloc]initWithFrame:CGRectMake(0,318-40, 320, 30)];
+    promptLabel = [[UITextView alloc]initWithFrame:CGRectMake(0,318-40, 320, 50)];
     promptLabel.textColor = UIColorFromRGBA(0xc3c3c3, 1);
     promptLabel.backgroundColor =[UIColor clearColor];
     promptLabel.textAlignment =NSTextAlignmentCenter;
     promptLabel.userInteractionEnabled = NO;
     promptLabel.font = [UIFont boldSystemFontOfSize:12];
+    promptLabel.text = @"在许愿池你会遇见冥冥之中与你有缘的神奇事物或是有趣之人,点击“换一个”试试手气吧";
+    promptLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];
+
     [backgroundImageView addSubview:promptLabel];
     
     
@@ -328,8 +340,6 @@
                 sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
 
             }
-            promptLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];
-
             NickNameLabel.text = KISDictionaryHaveKey(getDic, @"nickname");
             customLabel.text = [NSString stringWithFormat:@" %@ |%@",KISDictionaryHaveKey(getDic, @"age"),KISDictionaryHaveKey(getDic, @"constellation")];
             
@@ -590,6 +600,13 @@
     }
 }
 #pragma mark--- 查看角色列表
+
+-(void)showChararcter:(UIGestureRecognizer *)sender
+{
+    
+}
+
+
 -(void)showGameList:(UIGestureRecognizer *)sender
 {
     if (m_characterArray.count >1) {

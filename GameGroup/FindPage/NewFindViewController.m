@@ -298,6 +298,7 @@
 //        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:haveFriendNews];
 //        [[NSUserDefaults standardUserDefaults] synchronize];
          m_notibgInfoImageView.hidden = YES;
+        friendDunamicmsgCount =0;
       //  [[GameCommon shareGameCommon] displayTabbarNotification];
         
         //清除tabbar红点 以前是上面方法 综合发现和我的动态通知

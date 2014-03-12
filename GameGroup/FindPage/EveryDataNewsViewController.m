@@ -7,6 +7,8 @@
 //
 
 #import "EveryDataNewsViewController.h"
+#import "TestViewController.h"
+#import "OnceDynamicViewController.h"
 #import "DayNewsCell.h"
 @interface EveryDataNewsViewController ()
 {
@@ -16,6 +18,7 @@
     SRRefreshView   *_slimeView;
     NSInteger    *m_pageNum;
     NSMutableDictionary *dictDic;
+
 }
 @end
 
@@ -74,15 +77,15 @@
     
     
     dictDic = [NSMutableDictionary dictionary];
-    [dictDic setObject:@"ceshi.jpg" forKey:@"headimg"];
-    [dictDic setObject:@"小小鱼" forKey:@"nickname"];
-    [dictDic setObject:@"生命在于运动，每天不运动就胖了" forKey:@"qianming"];
-    [dictDic setObject:@"wowall.jpg" forKey:@"bgImg"];
-    [dictDic setObject:@"图/百事可乐" forKey:@"author"];
-    [dictDic setObject:@"02" forKey:@"number"];
-    [dictDic setObject:@"Mar 2014" forKey:@"time"];
-    [dictDic setObject:@"测试标题上线了" forKey:@"title"];
-    [dictDic setObject:@"其实内容没有那么长 只不过是在凑字数，怎么还没够啊，应该差不多了吧，那就不打了" forKey:@"contnet"];
+//    [dictDic setObject:@"ceshi.jpg" forKey:@"headimg"];
+//    [dictDic setObject:@"小小鱼" forKey:@"nickname"];
+//    [dictDic setObject:@"生命在于运动，每天不运动就胖了" forKey:@"qianming"];
+//    [dictDic setObject:@"wowall.jpg" forKey:@"bgImg"];
+//    [dictDic setObject:@"图/百事可乐" forKey:@"author"];
+//    [dictDic setObject:@"02" forKey:@"number"];
+//    [dictDic setObject:@"Mar 2014" forKey:@"time"];
+//    [dictDic setObject:@"测试标题上线了" forKey:@"title"];
+//    [dictDic setObject:@"其实内容没有那么长 只不过是在凑字数，怎么还没够啊，应该差不多了吧，那就不打了" forKey:@"contnet"];
 
     
     [self getNewsInfoByNet];
@@ -91,18 +94,34 @@
 }
 -(void)getNewsInfoByNet
 {
-    if (m_pageNum ==0) {
-        [m_tableArray removeAllObjects];
-        [m_tableArray addObject:dictDic];
-    }else{
-        [m_tableArray addObject:dictDic];
+    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+    
+    [paramDict setObject:@"3" forKey:@"dailyNewsId"];
+    
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:paramDict forKey:@"params"];
+    [postDict setObject:@"165" forKey:@"method"];
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject){
+        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+            //[dictDic setValuesForKeysWithDictionary:responseObject];
+            [m_tableArray addObject:responseObject];
+            NSLog(@"dicdic%@",dictDic);
+             [m_myTableView reloadData];
+        }
     }
-    m_pageNum ++;
-    [refreshView stopLoading:NO];
-    [refreshView setRefreshViewFrame];
-    [_slimeView endRefresh];
+    failure:^(AFHTTPRequestOperation *operation, id error) {
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+    }];
 
-    [m_myTableView reloadData];
     
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -117,19 +136,45 @@
         cell = [[DayNewsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
         NSDictionary *dic= [m_tableArray objectAtIndex:indexPath.row];
+    NSString * fruits = KISDictionaryHaveKey(dic, @"userImg");
+    NSArray  * array= [fruits componentsSeparatedByString:@","];
+    NSString*friendImgStr =[array objectAtIndex:0];
 
-        [cell.headImageBtn setBackgroundImage:[UIImage imageNamed:KISDictionaryHaveKey(dic, @"headimg")] forState:UIControlStateNormal];
+    cell.headImageBtn.imageURL =[NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",friendImgStr]];
+    cell.headImageBtn.tag = indexPath.row;
+    [cell.headImageBtn addTarget:self action:@selector(enterToPerson:) forControlEvents:UIControlEventTouchUpInside];
         cell.nickNameLabel.text = KISDictionaryHaveKey(dic, @"nickname");
-        cell.signatureLabel.text = KISDictionaryHaveKey(dic, @"qianming");
-        cell.bigImageView.image = KUIImage(KISDictionaryHaveKey(dic, @"bgImg"));
-        cell.authorLabel.text = KISDictionaryHaveKey(dic, @"author");
-        cell.NumLabel.text = KISDictionaryHaveKey(dic, @"number");
-        cell.timeLabel.text = KISDictionaryHaveKey(dic, @"time");
+        cell.signatureLabel.text = KISDictionaryHaveKey(dic, @"editorNote");
+    cell.bigImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(dic, @"img")]];
+        cell.authorLabel.text = KISDictionaryHaveKey(dic, @"imgQuote");
+        cell.NumLabel.text =[self getDataWithTimeDataInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
+                             
+    cell.timeLabel.text = [self getDataWithTimeInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"title");
-        cell.contentLabel.text = KISDictionaryHaveKey(dic, @"contnet");
-        
+        cell.contentLabel.text = KISDictionaryHaveKey(dic, @"content");
+    [cell.newsOfBtn addTarget:self action:@selector(toViewNews:) forControlEvents:UIControlEventTouchUpInside];
+    cell.newsOfBtn.tag =1000 +indexPath.row;
     return cell;
 }
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
+-(void)toViewNews:(UIButton *)sender
+{
+    OnceDynamicViewController* detailVC = [[OnceDynamicViewController alloc] init];
+    detailVC.messageid = [GameCommon getNewStringWithId:KISDictionaryHaveKey([m_tableArray objectAtIndex:sender.tag-1000], @"messageId")];
+    [self.navigationController pushViewController:detailVC animated:YES];
+}
+
+-(void)enterToPerson:(UIButton *)sender
+{
+    TestViewController *tv =[[TestViewController alloc]init];
+    tv.userId =[GameCommon getNewStringWithId:KISDictionaryHaveKey([m_tableArray objectAtIndex:sender.tag], @"userid")];
+    [self.navigationController pushViewController:tv animated:YES];
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -146,6 +191,8 @@
     [refreshView viewdidScroll:scrollView];
     [_slimeView scrollViewDidScroll];
 }
+
+
 
 #pragma mark pull up refresh
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -189,6 +236,39 @@
     [_slimeView endRefreshFinish:^{
         
     }];
+}
+
+#pragma mark----处理时间戳
+- (NSString*)getDataWithTimeInterval:(NSString*)timeInterval
+{
+    if ([NSString stringWithFormat:@"%.f", [timeInterval doubleValue]].length < 10) {
+        return timeInterval;
+    }
+    NSString* timeStr = [timeInterval substringToIndex:timeInterval.length-3];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];//location设置为中国
+    [dateFormatter setDateFormat:@"MMM,YYYY"];
+    
+    double time = [timeStr doubleValue];
+    NSLog(@"%@", [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]]);
+    return [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]];
+}
+
+
+- (NSString*)getDataWithTimeDataInterval:(NSString*)timeInterval
+{
+    if ([NSString stringWithFormat:@"%.f", [timeInterval doubleValue]].length < 10) {
+        return timeInterval;
+    }
+    NSString* timeStr = [timeInterval substringToIndex:timeInterval.length-3];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]];//location设置为中国
+    [dateFormatter setDateFormat:@"dd"];
+    
+    double time = [timeStr doubleValue];
+    NSLog(@"%@", [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]]);
+    return [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]];
 }
 
 

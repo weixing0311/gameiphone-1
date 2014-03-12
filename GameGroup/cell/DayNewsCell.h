@@ -10,7 +10,7 @@
 #import "EGOImageButton.h"
 #import "EGOImageView.h"
 @interface DayNewsCell : UITableViewCell
-@property(nonatomic,strong)UIButton *headImageBtn;
+@property(nonatomic,strong)EGOImageButton *headImageBtn;
 @property(nonatomic,strong)UILabel  * nickNameLabel;
 @property(nonatomic,strong)UILabel  * signatureLabel;
 @property(nonatomic,strong)EGOImageView *bigImageView;
