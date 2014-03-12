@@ -14,6 +14,7 @@
 #import "EGOImageView.h"
 #import "UIView+i7Rotate360.h"
 #import "PersonDetailViewController.h"
+#import "CharacterDetailsViewController.h"
 #import "CharacterEditViewController.h"
 @interface EncoXHViewController ()
 
@@ -37,11 +38,14 @@
     UIImageView *backgroundImageView;//背景图片
     UILabel *sexLabel;//性别
     
+    NSString *charaterId;
+    
     NSInteger m_leftTime;
     NSTimer *m_verCodeTimer;
     BOOL     isWXCeiling;//打招呼达到上限
     BOOL     isSuccessToshuaishen;
     BOOL     isXiaoshuaishen;
+    BOOL     isXuyuanchi;//刚开始的时候
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -63,7 +67,7 @@
     [super viewDidLoad];
     
     
-    
+    isXuyuanchi =YES;
     isXiaoshuaishen =NO;
     //    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"CharacterArrayOfAllForYou"]==NULL) {
     //        NSLog(@"空走不走");
@@ -143,7 +147,12 @@
     clazzImageView.userInteractionEnabled = YES;
     [clazzImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showChararcter:)]];
 
-    [clazzImageView addGestureRecognizer:[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showGameList:)]];
+    UITapGestureRecognizer *tapG = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showChararcter:)];
+    
+    [clazzImageView addGestureRecognizer:tapG];
+    
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showGameList:)];
+    [clazzImageView addGestureRecognizer:longPress];
     
     clazzLabel = [[UILabel alloc]initWithFrame:CGRectMake(260-clazzLabel.text.length/2, 53, 50+clazzLabel.text.length *12, 20)];
     clazzLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.6];
@@ -288,6 +297,12 @@
 -(void)sayHiToYou:(UIButton *)sender
 {
     //sayHelloBtn.enabled = NO;
+    
+    if (isXuyuanchi ==YES) {
+        promptLabel.text  =@"虽然它很想回复你,但是它不会说话..哗哗哗..." ;
+        return;
+    }
+    
     if (isSuccessToshuaishen) {
        promptLabel.text  =@"很遗憾，无法和小衰神打招呼，点击“换一个”远离小衰神" ;
         sayHelloBtn.enabled = NO;
@@ -323,6 +338,7 @@
 
         [hud hide:YES];
         if (COME_TYPE ==1) {
+            isXuyuanchi=NO;
             isSuccessToshuaishen =NO;
             sayHelloBtn.enabled = YES;
 
@@ -412,7 +428,7 @@
                     sexLabel.hidden = NO;
                     sayHelloBtn.hidden =NO;
                     promptLabel .hidden = NO;
-
+                    charaterId =KISDictionaryHaveKey([m_characterArray objectAtIndex:0], @"id");
                     [self getEncoXhinfoWithNet:[m_characterArray objectAtIndex:0]];
                 }else{
                     tf.hidden = NO;
@@ -564,7 +580,9 @@
     sexLabel.hidden = NO;
     sayHelloBtn.hidden =NO;
     promptLabel .hidden = NO;
-
+        
+    charaterId = KISDictionaryHaveKey([m_characterArray objectAtIndex:indexPath.row], @"id");
+        
     [self getEncoXhinfoWithNet:[m_characterArray objectAtIndex:indexPath.row]];
     }
 
@@ -590,6 +608,10 @@
 #pragma mark ---查看角色详情
 -(void)enterToPernsonPage:(UIGestureRecognizer *)sender
 {
+    if (isXuyuanchi ==YES) {
+        promptLabel.text = @"这是泰坦的遗迹,你无法窥伺";
+        return;
+    }
     if (isSuccessToshuaishen ==NO) {
         PersonDetailViewController *pv = [[PersonDetailViewController alloc]init];
         pv.userId =KISDictionaryHaveKey(getDic, @"userid");
@@ -603,7 +625,10 @@
 
 -(void)showChararcter:(UIGestureRecognizer *)sender
 {
-    
+    CharacterDetailsViewController *cv =[[CharacterDetailsViewController alloc]init];
+    cv.characterId = charaterId;
+    cv.gameId = @"1";
+    [self.navigationController pushViewController:cv animated:YES];
 }
 
 

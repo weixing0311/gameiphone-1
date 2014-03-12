@@ -104,8 +104,10 @@
 }
 -(void)shareBtnClick1:(UIButton *)sender
 {
+    [[Custom_tabbar showTabBar] hideTabBar:YES];
+
     FunsOfOtherViewController *f = [[FunsOfOtherViewController alloc]init];
-    f.userId = @"10110253";
+    f.userId = @"10110225";
     [self.navigationController pushViewController:f animated:YES];
 }
 - (void)getUserInfoByNet

@@ -8,6 +8,7 @@
 
 #import "MagicGirlViewController.h"
 #import "TestViewController.h"
+#import "FunsOfOtherViewController.h"
 @interface MagicGirlViewController ()
 {
     UIWebView *contentWebView;
@@ -33,6 +34,7 @@
     contentWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, (KISHighVersion_7?0:20), 320, self.view.bounds.size.height)];
     contentWebView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     contentWebView.delegate = self;
+    
     [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]]]];
     
     [(UIScrollView *)[[contentWebView subviews] objectAtIndex:0] setBounces:NO];
@@ -54,6 +56,10 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [hud hide:YES];
+    NSString *currentURL = [webView stringByEvaluatingJavaScriptFromString:@"document.location.href"];
+    
+    NSString *title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     [hud hide:YES];
@@ -77,7 +83,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+//进入个人资料界面
 -(void)enterPersonInterfaceWithId:(NSString *)userid nickName:(NSString *)nickName
 {
     TestViewController *testVC = [[TestViewController alloc]init];
@@ -86,8 +92,14 @@
     [self.navigationController pushViewController:testVC animated:YES];
 }
 
+-(void)enterFansPageWithId:(NSString*)userid
+{
+    FunsOfOtherViewController *fans = [[FunsOfOtherViewController alloc]init];
+    fans.userId = userid;
+    [self.navigationController pushViewController:fans animated:YES];
+}
 
-- (void)backButtonClick:(id)sender
+- (void)backButtonClick
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
