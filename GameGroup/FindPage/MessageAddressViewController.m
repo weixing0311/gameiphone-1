@@ -13,6 +13,8 @@
 #import "InDoduAddressTableViewCell.h"
 #import "OutDodeAddressTableViewCell.h"
 #import "TeachMeViewController.h"
+#import "PuthMessageViewController.h"
+#import "TestViewController.h"
 
 @interface MessageAddressViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,DodeAddressCellDelegate,MFMessageComposeViewControllerDelegate>
 {
@@ -239,12 +241,23 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.section == 0) {
+        TestViewController *testVC = [[TestViewController alloc]init];
+        testVC.userId = [_addressArray[indexPath.row] objectForKey:@"userid"];
+        testVC.titleImage = [_addressArray[indexPath.row] objectForKey:@"userid"];
+        testVC.nickName = [_addressArray[indexPath.row] objectForKey:@"nickname"];
+        [self.navigationController pushViewController:testVC animated:YES];
+    }else{
+        PuthMessageViewController * puthmsgVC = [[PuthMessageViewController alloc]init];
+        puthmsgVC.addressDic = _outAddressArray[indexPath.row];
+        [self.navigationController pushViewController:puthmsgVC animated:YES];
+    }
 }
 -(void)SwithCellChangeSwith:(UISwitch*)swith
 {
     if (!systemAllowGetAddress&&swith.on) {
         [swith setOn:!swith.on animated:YES];
-        UIAlertView * alertV = [[UIAlertView alloc]initWithTitle:@"通讯录禁用" message:@"请在 设置-隐私-通讯录 启用陌游" delegate:self cancelButtonTitle:@"放弃" otherButtonTitles:@"告诉我怎么做", nil];
+        UIAlertView * alertV = [[UIAlertView alloc]initWithTitle:@"通讯录已禁用" message:@"请在 设置-隐私-通讯录 启用陌游" delegate:self cancelButtonTitle:@"放弃" otherButtonTitles:@"告诉我怎么做", nil];
         [alertV show];
         return;
     }
@@ -384,7 +397,6 @@
 }
 - (void)uploadAddress
 {
-    [hud show:YES];
     NSMutableArray * arr = [self getAddressBook];
     if (!arr) {
         UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您是否禁止本应用访问您的通讯录?如果是请打开!" delegate:nil cancelButtonTitle:@"知道啦" otherButtonTitles: nil];
@@ -396,6 +408,7 @@
         [alert show];
         return;
     }
+    [hud show:YES];
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
     [params setObject:arr forKey:@"contacts"];
     NSMutableDictionary* body = [[NSMutableDictionary alloc]init];
