@@ -397,9 +397,7 @@
             [dict setObject:msgtype forKey:@"msgType"];
             NSString *title = [[message elementForName:@"payload"] stringValue];
             title = KISDictionaryHaveKey([title JSONValue],@"title");
-            NSLog(@"%@",title);
             [dict setObject:title?title:@"" forKey:@"title"];
-            
             [self.otherMsgReceiveDelegate otherMessageReceived:dict];
         }
         else if ([msgtype isEqualToString:@"recommendfriend"])//好友推荐
@@ -438,7 +436,14 @@
                 [[GameCommon shareGameCommon] displayTabbarNotification];
             }
         }
-        
+        else if([msgtype isEqualToString:@"dailynews"])//新闻
+        {
+            [dict setObject:msgtype forKey:@"msgType"];
+            NSString *title = [[message elementForName:@"payload"] stringValue];
+            [dict setObject:title?title:@"" forKey:@"title"];
+            [self.otherMsgReceiveDelegate otherMessageReceived:dict];
+            [self.chatDelegate newMessageReceived:dict];
+        }
     }
     if ([type isEqualToString:@"normal"]&& [msgtype isEqualToString:@"msgStatus"])
     {

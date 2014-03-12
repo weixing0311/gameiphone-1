@@ -168,9 +168,12 @@
     }
     if ([KISDictionaryHaveKey(tempDict, @"msgType") isEqualToString:@"pveScore"])
     {
-//        CharacterDetailsViewController *charVC = [[CharacterDetailsViewController alloc]init];
-//        
-//        [self.navigationController pushViewController:charVC animated:YES];
+        CharacterDetailsViewController *charVC = [[CharacterDetailsViewController alloc]init];
+        NSDictionary * dic = [tempDict[@"msgContent"] JSONValue];
+        charVC.characterId = dic[@"characterid"];
+        charVC.gameId = @"1";
+        charVC.myViewType = CHARA_INFO_MYSELF;
+        [self.navigationController pushViewController:charVC animated:YES];
         return;
     }
 }

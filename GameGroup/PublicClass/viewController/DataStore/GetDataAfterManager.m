@@ -87,7 +87,11 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
         [DataStoreManager storeNewMsgs:messageContent senderType:RECOMMENDFRIEND];
     }
 }
-
+#pragma mark 收到聊天消息
+-(void)dailynewsReceived:(NSDictionary * )messageContent
+{
+    
+}
 #pragma mark 收到聊天消息
 -(void)newMessageReceived:(NSDictionary *)messageContent
 {

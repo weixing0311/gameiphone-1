@@ -2493,7 +2493,7 @@
     }
     else if ([fromID isEqualToString:@"2"])
     {
-        fromStr = @"明星";
+        fromStr = userInfoDict[@"superremark"]?userInfoDict[@"superremark"]:@"明星";
     }
     else if ([fromID isEqualToString:@"3"])
     {
