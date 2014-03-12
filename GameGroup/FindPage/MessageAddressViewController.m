@@ -12,6 +12,7 @@
 #import "MyHeadView.h"
 #import "InDoduAddressTableViewCell.h"
 #import "OutDodeAddressTableViewCell.h"
+#import "TeachMeViewController.h"
 
 @interface MessageAddressViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,DodeAddressCellDelegate,MFMessageComposeViewControllerDelegate>
 {
@@ -322,7 +323,8 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex != alertView.cancelButtonIndex) {
-        
+        TeachMeViewController * teachMeV = [[TeachMeViewController alloc]init];
+        [self.navigationController pushViewController:teachMeV animated:YES];
     }
 }
 - (NSMutableArray*)getAddressBook
