@@ -438,11 +438,11 @@
         }
         else if([msgtype isEqualToString:@"dailynews"])//新闻
         {
-            [dict setObject:msgtype forKey:@"msgType"];
+            [dict setObject:msgtype forKey:@"dailynews"];
             NSString *title = [[message elementForName:@"payload"] stringValue];
             [dict setObject:title?title:@"" forKey:@"title"];
             [self.otherMsgReceiveDelegate otherMessageReceived:dict];
-            [self.chatDelegate newMessageReceived:dict];
+            [self.chatDelegate dailynewsReceived:dict];
         }
     }
     if ([type isEqualToString:@"normal"]&& [msgtype isEqualToString:@"msgStatus"])
