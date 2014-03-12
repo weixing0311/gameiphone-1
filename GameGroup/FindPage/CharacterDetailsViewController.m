@@ -445,6 +445,12 @@
         cell.CountLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.firstValueArray objectAtIndex:indexPath.row]];
         cell.rankingLabel.text = [NSString stringWithFormat:@"%@",[m_charaInfo.firstRankArray objectAtIndex:indexPath.row]];
         NSInteger  i =[[m_charaInfo.firstCompArray objectAtIndex:indexPath.row]integerValue];
+        if ([[NSString stringWithFormat:@"%@",[m_charaInfo.firstRankArray objectAtIndex:indexPath.row]] isEqualToString:@""]) {
+            cell.upDowmImgView.hidden = YES;
+        }else
+        {
+            cell.upDowmImgView.hidden =NO;
+        }
         if (i ==1) {
             cell.upDowmImgView.image = KUIImage(@"die");
         }
@@ -452,7 +458,7 @@
             
                 cell.upDowmImgView.image = KUIImage(@"zhang");
             }
-        if (i==0) {
+        else{
                 cell.upDowmImgView.image =nil;
             }
         //

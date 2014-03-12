@@ -14,14 +14,10 @@
     UITableView * m_myFansTableView;
     SRRefreshView          *slimeView_fans;
     PullUpRefreshView      *refreshView;
-    NSMutableDictionary * m_attentionDict;
-    NSMutableArray * m_sectionArray_attention;
-    NSMutableArray * m_sectionIndexArray_attention;
-    NSMutableArray * m_attentionsArray;
     NSMutableDictionary*  m_sortTypeDic;
     NSMutableArray * m_otherSortFansArray;
     NSInteger              m_currentPage;
-
+    NSInteger                 m_allcurrentPage;
 }
 
 @end
@@ -41,11 +37,17 @@
     [super viewDidLoad];
     
     [self setTopViewWithTitle:@"粉丝" withBackButton:YES];
-    m_myFansTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40, 320, self.view.frame.size.height - (40 + 50 + startX)) style:UITableViewStylePlain];
+    
+    
+    m_sortTypeDic= [NSMutableDictionary dictionary];
+    m_otherSortFansArray = [NSMutableArray array];
+    m_currentPage=0;
+    m_allcurrentPage =0;
+    
+    m_myFansTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, 320, self.view.frame.size.height - startX) style:UITableViewStylePlain];
     m_myFansTableView.dataSource = self;
     m_myFansTableView.delegate = self;
     [self.view addSubview:m_myFansTableView];
-    m_myFansTableView.hidden = YES;
     
     slimeView_fans = [[SRRefreshView alloc] init];
     slimeView_fans.delegate = self;
@@ -65,6 +67,10 @@
     [refreshView stopLoading:NO];
     
     [self getFansBySort];
+    
+    
+    hud = [[MBProgressHUD alloc]initWithView:self.view];
+    hud.labelText = @"获取中";
 	// Do any additional setup after loading the view.
 }
 
@@ -97,26 +103,26 @@
                 [slimeView_fans endRefresh];
                 return;
             }
+
             if (m_currentPage == 0) {//默认展示存储的
+                m_allcurrentPage = [KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"3"), @"totalResults") intValue]/20;
+
                 [m_otherSortFansArray removeAllObjects];
+                [m_otherSortFansArray addObjectsFromArray:KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"3"), @"users")];
                 
-                [m_myFansTableView reloadData];
-                
-                [DataStoreManager cleanFansList];
-                [self parseFansList:[KISDictionaryHaveKey(responseObject, @"3") objectForKey:@"users"]];
-                
-                [[NSUserDefaults standardUserDefaults] setObject:[GameCommon getNewStringWithId:KISDictionaryHaveKey(KISDictionaryHaveKey(responseObject, @"3"), @"totalResults")] forKey:FansCount];
-                [[NSUserDefaults standardUserDefaults] synchronize];
             }
-            else
-                [self parseFansList:KISDictionaryHaveKey(responseObject, @"3")];
+            else{
+                [m_otherSortFansArray addObjectsFromArray:KISDictionaryHaveKey(responseObject, @"3")];
+            }
             
             m_currentPage ++;//从0开始
-            
+            [m_myFansTableView reloadData];
             [refreshView stopLoading:NO];
             [refreshView setRefreshViewFrame];
             
             [slimeView_fans endRefresh];
+        }else{
+            
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
@@ -183,10 +189,10 @@
     cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]]];
     
     
-    cell.nameLabel.text = [tempDict objectForKey:@"displayName"];
+    cell.nameLabel.text = [tempDict objectForKey:@"nickname"];
     cell.gameImg_one.image = KUIImage(@"wow");
-    cell.distLabel.text = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
-    cell.distLabel.textColor = [GameCommon getAchievementColorWithLevel:[KISDictionaryHaveKey(tempDict, @"achievementLevel") integerValue]];
+    cell.distLabel.text = [KISDictionaryHaveKey(tempDict, @"charactername") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
+    cell.distLabel.textColor = [GameCommon getAchievementColorWithLevel:[KISDictionaryHaveKey(tempDict, @"characterid") integerValue]];
     
     cell.timeLabel.text = [GameCommon getTimeAndDistWithTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"updateUserLocationDate")] Dis:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"distance")]];
     
@@ -230,18 +236,17 @@
 
 
 
-#pragma mark  scrollView  delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (scrollView == m_myFansTableView) {
-        if (m_myFansTableView.contentSize.height < m_myFansTableView.frame.size.height) {
-            refreshView.viewMaxY = 0;
-        }
-        else
-            refreshView.viewMaxY = m_myFansTableView.contentSize.height - m_myFansTableView.frame.size.height;
-        [refreshView viewdidScroll:scrollView];
+    if (m_myFansTableView.contentSize.height < m_myFansTableView.frame.size.height) {
+        refreshView.viewMaxY = 0;
     }
+    else
+        refreshView.viewMaxY = m_myFansTableView.contentSize.height - m_myFansTableView.frame.size.height;
+    [refreshView viewdidScroll:scrollView];
+    [slimeView_fans scrollViewDidScroll];
 }
+
 
 
 #pragma mark pull up refresh
@@ -258,21 +263,28 @@
     if(scrollView == m_myFansTableView)
     {
         [refreshView didEndDragging:scrollView];
+        [slimeView_fans scrollViewDidEndDraging];
+        
     }
 }
 
 - (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
 {
     NSLog(@"start");
-    
-    [self getFansBySort];
+    if (m_currentPage<m_allcurrentPage) {
+        NSLog(@"加载更多");
+        [self getFansBySort];
+    }else{
+        
+    }
 }
 
 #pragma mark - slimeRefresh delegate
 - (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
 {
-            m_currentPage = 0;
-            [self getFansBySort];
+    m_currentPage = 0;
+    
+    [self getFansBySort];
 }
 
 -(void)endRefresh
