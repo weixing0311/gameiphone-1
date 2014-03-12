@@ -169,8 +169,13 @@
     
     m_dynamicBtn = [[EGOImageButton alloc]initWithFrame:CGRectMake(0, 0, 59, 59)];
     m_dynamicBtn.center =CGPointMake(m_meetBtn.center.x-49, m_meetBtn.center.y-125);
-    m_dynamicBtn.placeholderImage = KUIImage(@"按下_03");
+    m_dynamicBtn.placeholderImage = KUIImage(@"正常_03");
     m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
+    
+    
+    
+      
+    
 //    [m_dynamicBtn setBackgroundImage:KUIImage(@"正常_03") forState:UIControlStateNormal];
 //    [m_dynamicBtn setBackgroundImage:KUIImage(@"按下_03") forState:UIControlStateHighlighted];
     m_dynamicBtn.layer.masksToBounds = YES;
@@ -195,6 +200,16 @@
     [m_notibgInfoImageView addSubview:lb];
     
     
+    if (friendDunamicmsgCount && friendDunamicmsgCount !=0)
+    {
+        m_notibgInfoImageView.hidden = NO;
+        if (friendDunamicmsgCount > 99) {
+            lb.text = @"99";
+        }
+        else
+            lb.text =[NSString stringWithFormat:@"%d",friendDunamicmsgCount] ;
+    }
+
 
     
     //-----小红点-----

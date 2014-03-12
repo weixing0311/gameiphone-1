@@ -472,7 +472,7 @@
     if (messageTime.length < 10 || currentString.length < 10) {
         return @"未知";
     }
-    NSString * finalTime;
+   // NSString * finalTime;
     NSString* curStr = [currentString substringToIndex:messageTime.length-3];
     NSString* mesStr = [messageTime substringToIndex:messageTime.length-3];
     

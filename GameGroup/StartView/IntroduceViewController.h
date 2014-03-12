@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "RegisterViewController.h"
-@interface IntroduceViewController : BaseViewController<UIScrollViewDelegate>
+@interface IntroduceViewController : UIViewController<UIScrollViewDelegate>
 @property (nonatomic,retain) id <RegisterViewControllerDelegate>delegate;
 @end

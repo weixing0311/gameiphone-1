@@ -157,11 +157,16 @@
     headImageView.layer.masksToBounds = YES;
     headImageView.layer.cornerRadius = 165/2.0;
     headImageView.frame = CGRectMake(80, 76-40, 165, 165);
+    headImageView.userInteractionEnabled = YES;
+   // headImageView.backgroundColor =[UIColor whiteColor];
+    headImageView.placeholderImage = KUIImage(@"moren_people");
+    headImageView.image = KUIImage(@"moren_people");
+    headImageView.layer.borderWidth = 2.0;
+    headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
+    [headImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(enterToPernsonPage:)]];
 
     [backgroundImageView addSubview:headImageView];
-    headImageView.userInteractionEnabled = YES;
     
-    [headImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(enterToPernsonPage:)]];
     
     
     NickNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0,251-40, 320, 20)];
@@ -344,15 +349,11 @@
             }else{
             imageStr =KISDictionaryHaveKey(getDic, @"img");
             }
-           headImageView.placeholderImage = KUIImage(@"moren_people.png");
             NSLog(@"imageUrl--->%@",headImageView.imageURL);
             NSLog(@"imageUrl---->%@",headImageView.image);
 
             
             UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:imageStr]]]]];
-            
-            headImageView.layer.borderWidth = 2.0;
-            headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
 
             [headImageView rotate360WithDuration:1.0 repeatCount:1 timingMode:i7Rotate360TimingModeEaseInEaseOut];
             headImageView.animationDuration = 2.0;
@@ -460,9 +461,9 @@
                 
                 promptLabel.text =@"小衰神附体,你ROLL出了1点,什么也没遇到...";
                 headImageView.image = KUIImage(@"roll_0");
-                headImageView.backgroundColor = [UIColor whiteColor];
-                headImageView.layer.borderWidth = 2.0;
-                headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
+//                headImageView.backgroundColor = [UIColor whiteColor];
+//                headImageView.layer.borderWidth = 2.0;
+//                headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
 
                 UIImage *image = headImageView.image;
                     
@@ -572,8 +573,8 @@
     
     clazzLabel.center = CGPointMake(280, 63);
     // clazzLabel.center = CGPointMake(286, 63);
-    [paramDict setObject:KISDictionaryHaveKey(tempDic, @"id") forKey:@"characterid"];
-   [self getSayHelloForNetWithDictionary:paramDict method:@"149" prompt:@"邂逅中..." type:1];
+   // [paramDict setObject:KISDictionaryHaveKey(tempDic, @"id") forKey:@"characterid"];
+  // [self getSayHelloForNetWithDictionary:paramDict method:@"149" prompt:@"邂逅中..." type:1];
 }
 
 #pragma mark ---查看角色详情

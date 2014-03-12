@@ -63,8 +63,9 @@
 
     diffH = [GameCommon diffHeight:self];
 
-    m_myScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, kScreenHeigth - ((diffH == 0) ? 20 : 0))];
+//    m_myScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, kScreenHeigth - ((diffH == 0) ? 20 : 0))];
 
+    m_myScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.bounds.size.height)];
     
     NSLog(@"%@", NSStringFromCGRect(m_myScrollView.frame));
     m_myScrollView.backgroundColor = [UIColor clearColor];
