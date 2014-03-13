@@ -29,14 +29,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor clearColor];
     
-    contentWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, (KISHighVersion_7?0:20), 320, self.view.bounds.size.height)];
+    contentWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, (KISHighVersion_7?20:0), 320, self.view.bounds.size.height-(KISHighVersion_7?20:0))];
     contentWebView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     contentWebView.delegate = self;
     
     [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]]]];
     
+    
+    NSLog(@"%@",[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]);
     [(UIScrollView *)[[contentWebView subviews] objectAtIndex:0] setBounces:NO];
     [self.view addSubview:contentWebView];
     
@@ -56,9 +58,29 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [hud hide:YES];
-    NSString *currentURL = [webView stringByEvaluatingJavaScriptFromString:@"document.location.href"];
+    NSString *js = @"document.documentElement.innerHTML";
+    NSString *html = [webView stringByEvaluatingJavaScriptFromString:js];
+    NSLog(@"======%@",html);
+    //移除div
+    [webView stringByEvaluatingJavaScriptFromString:@"var script = document.createElement('script');"
+     "script.type = 'text/javascript';"
+     //设置方法
+     "script.text = \"function myFunction() { "
+     //设置div的高度为0px
+     "document.body.style.padding='0px';"
+     //设置header的高度为0px
+     "var headerTitle = document.getElementsByTagName('header')[0];"
+     "headerTitle.style.height = '0px';"
+     //设置header的字为空
+     "headerTitle.innerHTML = '';"
+     "}\";"
+     "document.getElementsByTagName('head')[0].appendChild(script);"
+    //调用方法
+    "document.group.getElementsByTagName('supper')[0].appendChild(bg)"];
     
-    NSString *title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    
+    [webView stringByEvaluatingJavaScriptFromString:@"myFunction();"];
+
     
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
@@ -76,6 +98,22 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     
+        NSString *requestString = [[request URL] absoluteString];
+        
+        NSArray *components = [requestString componentsSeparatedByString:@":"];
+        NSLog(@"-----%@",components);
+        NSLog(@"requsetstring%@",requestString);
+        if ([components count] > 1 && [(NSString *)[components objectAtIndex:0] isEqualToString:@"lfyprotocol"]) {
+            if([(NSString *)[components objectAtIndex:1] isEqualToString:@"http"] || [(NSString *)[components objectAtIndex:1] isEqualToString:@"https"]){
+                //这个就是图片的路径
+                NSLog(@"+++++++%@",components);
+                NSString *path = [NSString stringWithFormat:@"%@:%@",[components objectAtIndex:1],[components objectAtIndex:2]];
+                NSLog(@"path%@",path);
+            }
+            return NO;
+        }
+    
+    return YES;
 }
 - (void)didReceiveMemoryWarning
 {

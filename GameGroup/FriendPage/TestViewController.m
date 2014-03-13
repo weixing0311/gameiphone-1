@@ -687,7 +687,7 @@
         {
             UIButton* button_left = [CommonControlOrView
                                      setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
-                                     title:@"添加好友"
+                                     title:nil
                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
                                      bgImage:KUIImage(@"add_friend_normal")
                                      HighImage:KUIImage(@"add_friend_click")
@@ -1351,7 +1351,7 @@
         {
             UIButton* button_left = [CommonControlOrView
                                      setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
-                                     title:@"添加好友"
+                                     title:nil
                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
                                      bgImage:KUIImage(@"add_friend_normal")
                                      HighImage:KUIImage(@"add_friend_click")
