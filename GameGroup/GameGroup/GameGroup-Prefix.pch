@@ -75,7 +75,7 @@
 
 #define OTHERMESSAGE  @"otherMessage"//头衔 角色 战斗力
 #define RECOMMENDFRIEND @"recommendfriend"
-
+#define DAILYNEWS @"dailynews"
 #define ZhaoHuLan  @"新朋友"
 
 #define PhoneNumKey @"phoneKey"//用于判断是否自动登陆

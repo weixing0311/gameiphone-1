@@ -86,11 +86,16 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     {
         [DataStoreManager storeNewMsgs:messageContent senderType:RECOMMENDFRIEND];
     }
+    else if([type isEqualToString:@"dailynews"])
+    {
+        [DataStoreManager storeNewMsgs:messageContent senderType:DAILYNEWS];
+    }
 }
 #pragma mark 收到聊天消息
 -(void)dailynewsReceived:(NSDictionary * )messageContent
 {
-    
+    [self storeNewMessage:messageContent];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNewsMessage object:nil userInfo:messageContent];
 }
 #pragma mark 收到聊天消息
 -(void)newMessageReceived:(NSDictionary *)messageContent
@@ -160,7 +165,6 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             [tempDic setObject:fromUser forKey:@"fromUser"];
             [tempDic setObject:msg forKey:@"addtionMsg"];
             [DataStoreManager addPersonToReceivedHellos:tempDic];
-            
             [DataStoreManager saveUserFriendWithAttentionList:fromUser];
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
 

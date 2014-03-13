@@ -127,7 +127,7 @@
             thumbMsgs.senderType = sendertype;
             thumbMsgs.msgType = msgType;
             thumbMsgs.unRead = @"1";
-            thumbMsgs.messageuuid = @"";
+            thumbMsgs.messageuuid = msgId;
             thumbMsgs.status = @"1";//已发送
         }];
     }
@@ -150,7 +150,7 @@
             thumbMsgs.sendTimeStr = [msg objectForKey:@"time"];
             int unread = [thumbMsgs.unRead intValue];
             thumbMsgs.unRead = [NSString stringWithFormat:@"%d",unread+1];
-            thumbMsgs.messageuuid = [[GameCommon shareGameCommon] uuid];
+            thumbMsgs.messageuuid = msgId;
             thumbMsgs.status = @"1";//已发送
         }];
     }
@@ -159,7 +159,6 @@
         [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
             
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",@"12345"];
-            
             DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
             if (!thumbMsgs)
                 thumbMsgs = [DSThumbMsgs MR_createInContext:localContext];
@@ -170,7 +169,33 @@
             thumbMsgs.senderType = sendertype;
             thumbMsgs.msgType = msgType;
             thumbMsgs.unRead = @"1";
-            thumbMsgs.messageuuid = [[GameCommon shareGameCommon] uuid];
+            thumbMsgs.messageuuid = msgId;
+            thumbMsgs.status = @"1";//已发送
+        }];
+    }
+    else if([sendertype isEqualToString:DAILYNEWS])//新闻
+    {
+        NSString* title = KISDictionaryHaveKey(msg, @"title");
+        [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+            DSNewsMsgs * newsMsg = [DSNewsMsgs MR_createInContext:localContext];//所有消息
+            newsMsg.messageuuid = msgId;
+            newsMsg.msgcontent = msgContent;
+            newsMsg.msgtype = msgType;
+            newsMsg.mytitle = title;
+            newsMsg.sendtime = sendTime;
+            
+            NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",@"12345"];
+            DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+            if (!thumbMsgs)
+                thumbMsgs = [DSThumbMsgs MR_createInContext:localContext];
+            thumbMsgs.sender = @"sys00000011";
+            thumbMsgs.senderNickname = @"每日一闻";
+            thumbMsgs.msgContent = msgContent;
+            thumbMsgs.sendTime = sendTime;
+            thumbMsgs.senderType = sendertype;
+            thumbMsgs.msgType = msgType;
+            thumbMsgs.unRead = @"1";
+            thumbMsgs.messageuuid = msgId;
             thumbMsgs.status = @"1";//已发送
         }];
     }
@@ -543,6 +568,17 @@
         }
         
     }];
+}
++(NSArray *)qureyAllNewsMessage
+{
+    NSArray * newsMessage = [DSNewsMsgs MR_findAllSortedBy:@"sendtime" ascending:NO];
+    NSMutableArray* array = [NSMutableArray array];
+    for (DSNewsMsgs* news in newsMessage) {
+        NSString * str = news.mytitle;
+        NSDictionary * dic = [str JSONValue];
+        [array addObject:dic];
+    }
+    return array;
 }
 
 +(NSArray *)qureyAllThumbMessages

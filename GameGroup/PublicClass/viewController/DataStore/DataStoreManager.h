@@ -28,6 +28,8 @@
 #import "DSRecommendList.h"//好友推荐
 #import "DSOtherMsgs.h"
 
+#import "DSNewsMsgs.h"//新闻
+
 @interface DataStoreManager : NSObject
 + (void)reSetMyAction:(BOOL)action;//重置我的激活状态
 + (BOOL)savedMsgWithID:(NSString*)msgId;//消息是否已存
@@ -52,7 +54,7 @@
 +(void)refreshThumbMsgsAfterDeleteCommonMsg:(NSDictionary *)message ForUser:(NSString *)userid ifDel:(BOOL)del;
 +(NSArray *)qureyAllThumbMessages;
 +(void)refreshMessageStatusWithId:(NSString*)messageuuid status:(NSString*)status;
-
++(NSArray *)qureyAllNewsMessage;
 +(NSArray *)queryAllReceivedHellos;
 +(NSDictionary *)qureyLastReceivedHello;
 

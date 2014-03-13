@@ -341,6 +341,7 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:msg forKey:@"msg"];
     [dict setObject:from forKey:@"sender"];
+    [dict setObject:msgId forKey:@"msgId"];
     
     //消息接收到的时间
     if ([msgTime doubleValue]>9999999999) {
@@ -438,10 +439,9 @@
         }
         else if([msgtype isEqualToString:@"dailynews"])//新闻
         {
-            [dict setObject:msgtype forKey:@"dailynews"];
+            [dict setObject:msgtype forKey:@"msgType"];
             NSString *title = [[message elementForName:@"payload"] stringValue];
             [dict setObject:title?title:@"" forKey:@"title"];
-            [self.otherMsgReceiveDelegate otherMessageReceived:dict];
             [self.chatDelegate dailynewsReceived:dict];
         }
     }

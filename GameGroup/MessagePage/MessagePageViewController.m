@@ -18,6 +18,7 @@
 #import "OtherMsgsViewController.h"
 #import "FriendRecommendViewController.h"
 #import "AddAddressBookViewController.h"
+#import "EveryDataNewsViewController.h"
 
 
 //#import "Reachability.h"
@@ -136,6 +137,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(otherMessageReceived:) name:kOtherMessage object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recommendFriendReceived:) name:kOtherMessage object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dailynewsReceived:) name:kNewsMessage object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActiveWithNet:) name:kReachabilityChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(catchStatus:) name:@"Notification_disconnect" object:nil];
@@ -198,7 +200,10 @@
         [self.appDel.xmppHelper disconnect];
     }
 }
-
+- (void)dailynewsReceived:(NSNotificationCenter*)notification
+{
+    [self displayMsgsForDefaultView];
+}
 #pragma mark 收到聊天消息或其他消息
 - (void)newMesgReceived:(NSNotification*)notification
 {
@@ -516,6 +521,14 @@
             
             cell.contentLabel.text = [[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msg"];
         }
+        else if ([[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"dailynews"])
+        {
+            cell.headImageV.imageURL =nil;
+            
+            cell.headImageV.image = KUIImage(@"mess_tuijian");
+            
+            cell.contentLabel.text = [[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msg"];
+        }
         else
         {
             cell.headImageV.imageURL = theUrl;
@@ -614,6 +627,15 @@
 
         return;
     }
+    if([[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"dailynews"])//新闻
+    {
+        [[Custom_tabbar showTabBar] hideTabBar:YES];
+        EveryDataNewsViewController * newsVC = [[EveryDataNewsViewController alloc]init];
+        [self.navigationController pushViewController:newsVC animated:YES];
+        [searchDisplay setActive:NO animated:NO];
+        [self cleanUnReadCountWithType:4 Content:@"" typeStr:@""];
+        return;
+    }
     if ([[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"character"] ||
         [[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"title"] ||
         [[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"pveScore"])
@@ -664,6 +686,14 @@
     {
         [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
             NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",@"1234"];
+            DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+            thumbMsgs.unRead = @"0";
+        }];//清数字
+    }
+    else if (4 == type)//新闻
+    {
+        [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+            NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",@"sys00000011"];
             DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
             thumbMsgs.unRead = @"0";
         }];//清数字

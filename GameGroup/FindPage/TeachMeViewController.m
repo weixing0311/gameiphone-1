@@ -84,7 +84,7 @@
     [scrollV addSubview:label6];
     
     UIImageView * imageV4 = [[UIImageView alloc]initWithFrame:CGRectMake(66, 670, 188.5, 94)];
-    imageV4.image = [UIImage imageNamed:@"screenshot3"];
+    imageV4.image = [UIImage imageNamed:@"screenshot4"];
     [scrollV addSubview:imageV4];
     
     scrollV.contentSize = CGSizeMake(320, 800);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5041" systemVersion="13B42" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5041" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="DSAttentionNameIndex" representedClassName="DSAttentionNameIndex" syncable="YES">
         <attribute name="index" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -114,6 +114,13 @@
     <entity name="DSNameIndex" representedClassName="DSNameIndex" syncable="YES">
         <attribute name="index" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="DSNewsMsgs" representedClassName="DSNewsMsgs" syncable="YES">
+        <attribute name="messageuuid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="msgcontent" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="msgtype" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mytitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sendtime" optional="YES" attributeType="Date" syncable="YES"/>
+    </entity>
     <entity name="DSOtherMsgs" representedClassName="DSOtherMsgs" syncable="YES">
         <attribute name="messageuuid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="msgContent" optional="YES" attributeType="String" syncable="YES"/>
@@ -175,5 +182,6 @@
         <element name="DSRecommendList" positionX="0" positionY="0" width="128" height="165"/>
         <element name="DSThumbMsgs" positionX="0" positionY="0" width="128" height="225"/>
         <element name="DSUnreadCount" positionX="0" positionY="0" width="128" height="90"/>
+        <element name="DSNewsMsgs" positionX="0" positionY="153" width="128" height="118"/>
     </elements>
 </model>
