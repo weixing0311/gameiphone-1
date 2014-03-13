@@ -88,10 +88,16 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     }
     else if([type isEqualToString:@"dailynews"])
     {
+        NSLog(@"%@",KISDictionaryHaveKey(messageContent, @"msgId"));
+        if ([DataStoreManager savedNewsMsgWithID:KISDictionaryHaveKey(messageContent, @"msgId")]) {
+            NSLog(@"消息已存在");
+            return;
+        }
+        AudioServicesPlayAlertSound(1007);
         [DataStoreManager storeNewMsgs:messageContent senderType:DAILYNEWS];
     }
 }
-#pragma mark 收到聊天消息
+#pragma mark 收到新闻消息
 -(void)dailynewsReceived:(NSDictionary * )messageContent
 {
     [self storeNewMessage:messageContent];

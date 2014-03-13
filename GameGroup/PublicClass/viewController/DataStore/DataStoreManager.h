@@ -33,6 +33,7 @@
 @interface DataStoreManager : NSObject
 + (void)reSetMyAction:(BOOL)action;//重置我的激活状态
 + (BOOL)savedMsgWithID:(NSString*)msgId;//消息是否已存
++ (BOOL)savedNewsMsgWithID:(NSString*)msgId;//消息是否已存
 +(void)setDefaultDataBase:(NSString *)dataBaseName AndDefaultModel:(NSString *)modelName;
 +(void)storeNewMsgs:(NSDictionary *)msg senderType:(NSString *)sendertype;
 +(void)storeMyPayloadmsg:(NSDictionary *)message;//保存我的动态消息

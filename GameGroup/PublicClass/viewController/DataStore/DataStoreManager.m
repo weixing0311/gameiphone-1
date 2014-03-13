@@ -34,6 +34,14 @@
     }
     return NO;
 }
++ (BOOL)savedNewsMsgWithID:(NSString*)msgId//消息是否已存
+{
+    NSArray * array = [DSNewsMsgs MR_findByAttribute:@"messageuuid" withValue:msgId];
+    if (array.count > 0) {
+        return YES;
+    }
+    return NO;
+}
 #pragma mark - 存储消息相关
 +(void)storeNewMsgs:(NSDictionary *)msg senderType:(NSString *)sendertype
 {
@@ -184,7 +192,7 @@
             newsMsg.mytitle = title;
             newsMsg.sendtime = sendTime;
             
-            NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",@"12345"];
+            NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",@"sys00000011"];
             DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
             if (!thumbMsgs)
                 thumbMsgs = [DSThumbMsgs MR_createInContext:localContext];

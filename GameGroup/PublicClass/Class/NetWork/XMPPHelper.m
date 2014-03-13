@@ -321,6 +321,35 @@
     return YES;
 }
 // 3.关于通信的
+- (void)comeBackDelivered:(NSString*)sender msgId:(NSString*)msgId//发送送达消息
+{
+    NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:msgId,@"src_id",@"true",@"received",@"Delivered",@"msgStatus", nil];
+    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+    [body setStringValue:[dic JSONRepresentation]];
+    
+    //生成XML消息文档
+    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+    [mes addAttributeWithName:@"id" stringValue:msgId];
+    [mes addAttributeWithName:@"msgtype" stringValue:@"msgStatus"];
+    //消息类型
+    [mes addAttributeWithName:@"type" stringValue:@"normal"];
+    
+    //发送给谁
+    [mes addAttributeWithName:@"to" stringValue:sender];
+    //由谁发送
+    [mes addAttributeWithName:@"from" stringValue:[[DataStoreManager getMyUserID] stringByAppendingString:[[TempData sharedInstance] getDomain]]];
+    
+    //    [mes addAttributeWithName:@"msgtype" stringValue:@"normalchat"];
+    [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];
+    //    NSString* uuid = [[GameCommon shareGameCommon] uuid];
+    //    [mes addAttributeWithName:@"id" stringValue:uuid];
+    //    NSLog(@"消息uuid ~!~~ %@", uuid);
+    //组合
+    [mes addChild:body];
+    if (![self sendMessage:mes]) {
+        return;
+    }
+}
 #pragma mark 收到消息后调用
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message{
     NSString *msg = [[message elementForName:@"body"] stringValue];
@@ -378,6 +407,7 @@
             else
                 [dict setObject:@""  forKey:@"shiptype"];
              [self.deletePersonDelegate newAddReq:dict];
+            [self comeBackDelivered:from msgId:msgId];
         }
         else if([msgtype isEqualToString:@"deletePerson"])//取消关注
         {
@@ -392,6 +422,7 @@
 
             
             [self.deletePersonDelegate deletePersonReceived:dict];
+            [self comeBackDelivered:from msgId:msgId];
         }
         else if ([msgtype isEqualToString:@"character"] || [msgtype isEqualToString:@"pveScore"] || [msgtype isEqualToString:@"title"])
         {
@@ -400,6 +431,7 @@
             title = KISDictionaryHaveKey([title JSONValue],@"title");
             [dict setObject:title?title:@"" forKey:@"title"];
             [self.otherMsgReceiveDelegate otherMessageReceived:dict];
+            [self comeBackDelivered:from msgId:msgId];
         }
         else if ([msgtype isEqualToString:@"recommendfriend"])//好友推荐
         {
@@ -423,6 +455,7 @@
             }
             [dict setObject:dis forKey:@"disStr"];
             [self.recommendReceiveDelegate recommendFriendReceived:dict];
+            [self comeBackDelivered:from msgId:msgId];
         }
         else if([msgtype isEqualToString:@"frienddynamicmsg"] || [msgtype isEqualToString:@"mydynamicmsg"])//动态
         {
@@ -436,6 +469,7 @@
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 [[GameCommon shareGameCommon] displayTabbarNotification];
             }
+            [self comeBackDelivered:from msgId:msgId];
         }
         else if([msgtype isEqualToString:@"dailynews"])//新闻
         {
@@ -443,6 +477,7 @@
             NSString *title = [[message elementForName:@"payload"] stringValue];
             [dict setObject:title?title:@"" forKey:@"title"];
             [self.chatDelegate dailynewsReceived:dict];
+            [self comeBackDelivered:from msgId:msgId];
         }
     }
     if ([type isEqualToString:@"normal"]&& [msgtype isEqualToString:@"msgStatus"])
