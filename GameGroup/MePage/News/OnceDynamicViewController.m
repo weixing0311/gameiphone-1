@@ -11,7 +11,7 @@
 #import "PhotoViewController.h"
 #import "ReplyViewController.h"
 #import "MyProfileViewController.h"
-#import "PersonDetailViewController.h"
+#import "TestViewController.h"
 #import "EGOImageView.h"
 #import "AppDelegate.h"
 #import "JSON.h"
@@ -303,7 +303,7 @@
 //    }
 //    else
 //    {
-        PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
+        TestViewController* detailV = [[TestViewController alloc] init];
         detailV.userId = KISDictionaryHaveKey(self.dataDic, @"userid");
         detailV.nickName = KISDictionaryHaveKey(self.dataDic, @"nickname");
         detailV.isChatPage = NO;

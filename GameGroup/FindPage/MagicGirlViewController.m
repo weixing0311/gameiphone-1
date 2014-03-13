@@ -35,8 +35,8 @@
     contentWebView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     contentWebView.delegate = self;
     
-//    [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]]]];
-    [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://58.83.193.119/h5/index.html?0B5DAE32FC15470B862E961E41A8B2E5&from_client_ios"]]];
+    [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@&from_client_ios",[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]]]]];
+//    [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://58.83.193.119/h5/index.html?0B5DAE32FC15470B862E961E41A8B2E5&from_client_ios"]]];
     
     
     NSLog(@"%@",[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]);
@@ -85,6 +85,7 @@
                                                        objectAtIndex:1] componentsSeparatedByString:@":/"];
         NSString *funcStr = [arrFucnameAndParameter objectAtIndex:0];
         NSLog(@"%@",funcStr);
+        NSLog(@"%@--%d",arrFucnameAndParameter,arrFucnameAndParameter.count);
         if (1 == [arrFucnameAndParameter count])
         {
             // 没有参数
@@ -95,17 +96,24 @@
                 /*调用本地函数1*/
                 NSLog(@"doFunc1");
                 [self closeWindows];
+            }else{
+                
+                NSArray  * array= [funcStr componentsSeparatedByString:@"/"];
+                NSString *str = [array objectAtIndex:0];
+                NSString *str2 = [array objectAtIndex:1];
+                if ([str isEqualToString:@"enterPersonInterfaceWithId"]) {
+                    [self enterPersonInterfaceWithId:str2];
+
+                }
+               else if ([str isEqualToString:@"enterFansPageWithId"]) {
+                    [self enterFansPageWithId:str2];
+
+                }
+               else{
+                   
+               }
             }
-        }
-        else if(2 == [arrFucnameAndParameter count])
-        {
-            //有参数的
-            if([funcStr isEqualToString:@"closeWindows"] &&
-               [arrFucnameAndParameter objectAtIndex:1])
-            {
-                /*调用本地函数1*/
-                NSLog(@"doFunc1:parameter");
-            }
+        
         }
         return NO;
     };

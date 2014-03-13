@@ -8,7 +8,6 @@
 
 #import "SearchResultViewController.h"
 #import "PersonTableCell.h"
-#import "PersonDetailViewController.h"
 #import "LocationManager.h"
 #import "TestViewController.h"
 @interface SearchResultViewController ()

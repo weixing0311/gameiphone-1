@@ -66,51 +66,72 @@
 //    m_myScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, kScreenHeigth - ((diffH == 0) ? 20 : 0))];
 
     m_myScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.bounds.size.height)];
-    
+    m_myScrollView.backgroundColor =[UIColor greenColor];
     NSLog(@"%@", NSStringFromCGRect(m_myScrollView.frame));
     m_myScrollView.backgroundColor = [UIColor clearColor];
-    for (int i = 0; i < 6; i++) {
-        UIImageView* bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(320 * i, 0, 320, m_myScrollView.frame.size.height)];
-        if (i == 0 || i == 5) {
-            if (i == 0) {
-                bgImage.image = KUIImage(@"second_4.jpg");
-            }
-            else
-                bgImage.image = KUIImage(@"second_1.jpg");
-        }
-        else
-        {
-            NSString* imageName = [NSString stringWithFormat:@"second_%d.jpg", i];
+    for (int i = 0; i < 4; i++) {
+        UIImageView* bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(320 * i, 0, 320, m_myScrollView.bounds.size.height)];
+        UIImageView *dianImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 36, 8)];
+        
+        
+        if (iPhone5) {
+            dianImage.center = CGPointMake(m_myScrollView.center.x+320*i, 455);
+            NSString* imageName = [NSString stringWithFormat:@"second_%d", i+1];
+            NSString *imgName = [NSString stringWithFormat:@"second_1%d",i+1];
             bgImage.image = KUIImage(imageName);
+            dianImage.image = KUIImage(imgName);
+        }else{
+            dianImage.center = CGPointMake(m_myScrollView.center.x+320*i, 383);
+            NSString* imageName = [NSString stringWithFormat:@"first_%d", i+1];
+            NSString *imgName = [NSString stringWithFormat:@"first_1%d",i+1];
+
+            bgImage.image = KUIImage(imageName);
+            dianImage.image = KUIImage(imgName);
         }
+        
+       // }
         bgImage.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
         [m_myScrollView addSubview:bgImage];
+        [m_myScrollView addSubview:dianImage];
     }
     m_myScrollView.pagingEnabled = YES;
     m_myScrollView.scrollEnabled = YES;
-    m_myScrollView.contentSize = CGSizeMake(320 * 6, kScreenHeigth - ((diffH == 0) ? 20 : 0));
+    m_myScrollView.contentSize = CGSizeMake(320 * 4, 0);
 
     
     
     m_myScrollView.showsHorizontalScrollIndicator = NO;
     m_myScrollView.showsVerticalScrollIndicator = NO;
     m_myScrollView.delegate = self;
-    m_myScrollView.contentOffset = CGPointMake(320, KISHighVersion_7 ? 20 : 0);//开始展示第2页
+   // m_myScrollView.contentOffset = CGPointMake(320, 0);//开始展示第2页
     m_myScrollView.bounces = NO;
     [self.view addSubview:m_myScrollView];
     
-    m_currentPage = 1;
+   // m_currentPage = 1;
     
     UIButton* loginButton = [[UIButton alloc] initWithFrame:CGRectMake(25, m_myScrollView.frame.size.height - 60, 120, 35)];
-    [loginButton setBackgroundImage:KUIImage(@"login_button_normal") forState:UIControlStateNormal];
-   // [loginButton setBackgroundImage:KUIImage(@"login_button_click") forState:UIControlStateHighlighted];
     [loginButton addTarget:self action:@selector(loginButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:loginButton];
+   
     
     UIButton* registerButton = [[UIButton alloc] initWithFrame:CGRectMake(175, m_myScrollView.frame.size.height - 60, 120, 35)];
-    [registerButton setBackgroundImage:KUIImage(@"register_button_normal") forState:UIControlStateNormal];
-  //  [registerButton setBackgroundImage:KUIImage(@"register_button_click") forState:UIControlStateHighlighted];
+    
+    if (iPhone5) {
+        [loginButton setBackgroundImage:KUIImage(@"second_login_normal") forState:UIControlStateNormal];
+        [loginButton setBackgroundImage:KUIImage(@"second_login_click") forState:UIControlStateHighlighted];
+        [registerButton setBackgroundImage:KUIImage(@"second_regist_normal") forState:UIControlStateNormal];
+        [registerButton setBackgroundImage:KUIImage(@"second_regist_click") forState:UIControlStateHighlighted];
+
+    }
+    else{
+        [loginButton setBackgroundImage:KUIImage(@"first_login_normnal") forState:UIControlStateNormal];
+        [loginButton setBackgroundImage:KUIImage(@"first_login_click") forState:UIControlStateHighlighted];
+        [registerButton setBackgroundImage:KUIImage(@"first_regist_normal") forState:UIControlStateNormal];
+        [registerButton setBackgroundImage:KUIImage(@"first_regist_click") forState:UIControlStateHighlighted];
+
+    }
+
     [registerButton addTarget:self action:@selector(registerButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+     [self.view addSubview:loginButton];
     [self.view addSubview:registerButton];
 }
 - (void)refreshLeftTime
@@ -144,34 +165,34 @@
 #pragma mark scrollView 手动划
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-	CGPoint offsetofScrollView = scrollView.contentOffset;
+	//CGPoint offsetofScrollView = scrollView.contentOffset;
     
     //[m_pageController setCurrentPage:offsetofScrollView.x / self.scroll.frame.size.width];
     
-	NSInteger page = offsetofScrollView.x / m_myScrollView.frame.size.width;
-	
-    if(0 == page || 5 == page)
-	{
-        CGRect rect;
-        if (0 == page)
-        {
-            rect = CGRectMake(4 * m_myScrollView.frame.size.width, 0, m_myScrollView.frame.size.width, m_myScrollView.frame.size.height);
-            m_currentPage = 4;
-        }
-        else
-        {
-            rect = CGRectMake(m_myScrollView.frame.size.width, 0, m_myScrollView.frame.size.width, m_myScrollView.frame.size.height);
-            m_currentPage = 1;
-        }
-        [m_myScrollView scrollRectToVisible:rect animated:NO];
-    }
-    else
-    {
-        CGRect rect = CGRectMake(page * m_myScrollView.frame.size.width, 0,
-                                 m_myScrollView.frame.size.width, m_myScrollView.frame.size.height);
-        [m_myScrollView scrollRectToVisible:rect animated:NO];
-        m_currentPage = page;
-    }
+//	NSInteger page = offsetofScrollView.x / m_myScrollView.frame.size.width;
+//	
+//    if(0 == page || 5 == page)
+//	{
+//        CGRect rect;
+//        if (0 == page)
+//        {
+//            rect = CGRectMake(4 * m_myScrollView.bounds.size.width, 0, m_myScrollView.bounds.size.width, m_myScrollView.bounds.size.height);
+//            m_currentPage = 4;
+//        }
+//        else
+//        {
+//            rect = CGRectMake(m_myScrollView.bounds.size.width, 0, m_myScrollView.bounds.size.width, m_myScrollView.bounds.size.height);
+//            m_currentPage = 1;
+//        }
+//        [m_myScrollView scrollRectToVisible:rect animated:NO];
+//    }
+//    else
+//    {
+//        CGRect rect = CGRectMake(page * m_myScrollView.bounds.size.width, 0,
+//                                 m_myScrollView.bounds.size.width, m_myScrollView.bounds.size.height);
+//        [m_myScrollView scrollRectToVisible:rect animated:NO];
+//        m_currentPage = page;
+//    }
 }
 
 

@@ -13,7 +13,7 @@
 #import "EnteroCell.h"
 #import "EGOImageView.h"
 #import "UIView+i7Rotate360.h"
-#import "PersonDetailViewController.h"
+#import "TestViewController.h"
 #import "CharacterDetailsViewController.h"
 #import "CharacterEditViewController.h"
 @interface EncoXHViewController ()
@@ -292,7 +292,7 @@
 }
 -(void)sayHiToYou:(UIButton *)sender
 {
-    //sayHelloBtn.enabled = NO;
+    sayHelloBtn.enabled = NO;
     
     if (isXuyuanchi ==YES) {
         promptLabel.text  =@"虽然它很想回复你,但是它不会说话..哗哗哗..." ;
@@ -406,7 +406,7 @@
 
             }else{
                 [self showMessageWindowWithContent:@"打招呼失败,邂逅数量已达上限" imageType:0];
-                sayHelloBtn.enabled = YES;
+                //sayHelloBtn.enabled = YES;
             }
             
             
@@ -609,12 +609,13 @@
 -(void)enterToPernsonPage:(UIGestureRecognizer *)sender
 {
     if (isXuyuanchi ==YES) {
-        promptLabel.text = @"这是泰坦的遗迹,你无法窥伺";
+        promptLabel.text = @"不要触碰神迹! 这有可能会影响你接下来的运气…";
         return;
     }
     if (isSuccessToshuaishen ==NO) {
-        PersonDetailViewController *pv = [[PersonDetailViewController alloc]init];
+        TestViewController *pv = [[TestViewController alloc]init];
         pv.userId =KISDictionaryHaveKey(getDic, @"userid");
+        pv.nickName = KISDictionaryHaveKey(getDic, @"nickname");
         [self.navigationController pushViewController:pv animated:YES];
     }
     else{

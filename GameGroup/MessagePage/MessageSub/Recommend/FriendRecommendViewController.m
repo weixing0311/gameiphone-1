@@ -10,8 +10,7 @@
 #import "AddContactViewController.h"
 #import "DSRecommendList.h"
 #import "AppDelegate.h"
-#import "PersonDetailViewController.h"
-
+#import "TestViewController.h"
 @interface FriendRecommendViewController ()
 {
     UITableView*   m_myTableView;
@@ -152,7 +151,9 @@
 {
     NSDictionary* tempDict = [m_tableData objectAtIndex:myCell.myIndexPath.row];
 
-    PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
+    //PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
+    TestViewController *detailV = [[TestViewController alloc] init];
+    
     detailV.userId = KISDictionaryHaveKey(tempDict, @"userid");
     detailV.nickName = KISDictionaryHaveKey(tempDict, @"nickname");
     detailV.isChatPage = NO;

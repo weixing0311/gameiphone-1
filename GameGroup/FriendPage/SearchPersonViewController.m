@@ -7,7 +7,6 @@
 //
 
 #import "SearchPersonViewController.h"
-#import "PersonDetailViewController.h"
 #import "SearchResultViewController.h"
 #import "TestViewController.h"
 @interface SearchPersonViewController ()

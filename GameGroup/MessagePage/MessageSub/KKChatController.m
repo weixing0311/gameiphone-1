@@ -12,11 +12,10 @@
 #import "XMPPHelper.h"
 #import "JSON.h"
 #import "HeightCalculate.h"
-#import "PersonDetailViewController.h"
 #import "KKNewsCell.h"
 #import "OnceDynamicViewController.h"
 #import "ActivateViewController.h"
-
+#import "TestViewController.h"
 #ifdef NotUseSimulator
     #import "amrFileCodec.h"
 #endif
@@ -434,7 +433,9 @@
 #pragma mark 用户详情
 -(void)userInfoClick
 {
-    PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
+//    PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
+    TestViewController *detailV = [[TestViewController alloc]init];
+
     detailV.userId = self.chatWithUser;
     detailV.nickName = self.nickName;
     detailV.isChatPage = YES;
@@ -443,7 +444,7 @@
 
 -(void)toContactProfile
 {
-    PersonDetailViewController * detailV = [[PersonDetailViewController alloc] init];
+    TestViewController * detailV = [[TestViewController alloc] init];
     detailV.userId = self.chatWithUser;
     detailV.nickName = self.nickName;
     detailV.isChatPage = YES;
@@ -949,7 +950,8 @@
 }
 -(void)myBtnClicked
 {
-    PersonDetailViewController * detailV = [[PersonDetailViewController alloc] init];
+    TestViewController * detailV = [[TestViewController alloc] init];
+    
     detailV.userId = [DataStoreManager getMyUserID];
     detailV.nickName = [DataStoreManager queryRemarkNameForUser:[DataStoreManager getMyUserID]];
     detailV.isChatPage = YES;

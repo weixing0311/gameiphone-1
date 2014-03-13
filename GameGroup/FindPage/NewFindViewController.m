@@ -126,19 +126,8 @@
     
     [self setTopViewWithTitle:@"发现" withBackButton:NO];
     self.view.backgroundColor = UIColorFromRGBA(0xf3f3f3, 1);
-
-    UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
-    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateNormal];
-    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateHighlighted];
-    shareButton.backgroundColor = [UIColor clearColor];
-    [shareButton addTarget:self action:@selector(shareBtnClick1:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:shareButton];
-    
     self.view.backgroundColor = [UIColor whiteColor];
 
-    
-    
-    
     
     UIImageView *imageView =[[ UIImageView alloc]initWithFrame:CGRectMake(0, 0, 162, 191)];
     imageView.center =self.view.center;
@@ -343,15 +332,5 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-
-
--(void)shareBtnClick1:(UIButton *)sneder
-{
-    [[Custom_tabbar showTabBar] hideTabBar:YES];
-
-    EveryDataNewsViewController *ev = [[EveryDataNewsViewController alloc]init];
-    [self.navigationController pushViewController:ev animated:YES];
 }
 @end

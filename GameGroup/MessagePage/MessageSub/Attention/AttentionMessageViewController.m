@@ -8,9 +8,8 @@
 
 #import "AttentionMessageViewController.h"
 //#import "MyNormalTableCell.h"
-#import "PersonDetailViewController.h"
 #import "MessageCell.h"
-
+#import "TestViewController.h"
 @interface AttentionMessageViewController ()
 {
     UITableView*  m_myTableView;
@@ -131,8 +130,8 @@
     
     NSDictionary* tempDict = [m_tableData objectAtIndex:indexPath.row];
     
-    PersonDetailViewController* detailVC = [[PersonDetailViewController alloc] init];
-    
+   // PersonDetailViewController* detailVC = [[PersonDetailViewController alloc] init];
+    TestViewController *detailVC = [[TestViewController alloc]init];
     detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
     NSLog(@"detailVC.userId%@",detailVC.userId);
     detailVC.nickName = KISDictionaryHaveKey(tempDict, @"nickName");

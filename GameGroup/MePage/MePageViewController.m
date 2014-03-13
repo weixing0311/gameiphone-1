@@ -77,20 +77,6 @@
     [self setTopViewWithTitle:@"我" withBackButton:NO];
     
     
-    UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
-    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateNormal];
-    [shareButton setBackgroundImage:KUIImage(@"share_normal.png") forState:UIControlStateHighlighted];
-    shareButton.backgroundColor = [UIColor clearColor];
-    [shareButton addTarget:self action:@selector(shareBtnClick1:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:shareButton];
-    
-    self.view.backgroundColor = [UIColor whiteColor];
-
-    
-    
-    
-    
-    
     
     m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth - 50 - 64)];
     m_myTableView.delegate = self;
@@ -101,14 +87,6 @@
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
     hud.labelText = @"查询中...";
-}
--(void)shareBtnClick1:(UIButton *)sender
-{
-    [[Custom_tabbar showTabBar] hideTabBar:YES];
-
-    FunsOfOtherViewController *f = [[FunsOfOtherViewController alloc]init];
-    f.userId = @"10110225";
-    [self.navigationController pushViewController:f animated:YES];
 }
 - (void)getUserInfoByNet
 {

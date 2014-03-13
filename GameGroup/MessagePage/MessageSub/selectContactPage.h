@@ -8,7 +8,6 @@
 
 #import "TempData.h"
 #import "AddContactViewController.h"
-#import "PersonDetailViewController.h"
 #import "HostInfo.h"
 
 #import "BaseViewController.h"

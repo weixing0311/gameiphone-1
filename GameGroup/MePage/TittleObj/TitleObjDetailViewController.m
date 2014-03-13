@@ -8,7 +8,7 @@
 
 #import "TitleObjDetailViewController.h"
 #import "TitleObjUpView.h"
-#import "PersonDetailViewController.h"
+//#import "TestViewController.h"
 #import "SendNewsViewController.h"
 
 #define degreesToRadians(x) (M_PI*(x)/180.0)//弧度

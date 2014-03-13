@@ -8,7 +8,6 @@
 
 #import "FriendPageViewController.h"
 #import "AddContactViewController.h"
-#import "PersonDetailViewController.h"
 #import "TestViewController.h"
 //#import "ContactsCell.h"
 #import "PersonTableCell.h"

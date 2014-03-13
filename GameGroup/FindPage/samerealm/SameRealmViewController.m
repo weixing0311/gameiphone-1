@@ -7,7 +7,6 @@
 //
 
 #import "SameRealmViewController.h"
-#import "PersonDetailViewController.h"
 #import "PersonTableCell.h"
 #import "TestViewController.h"
 @interface SameRealmViewController ()
@@ -448,7 +447,6 @@
     
     NSDictionary* recDict = [m_tabelData objectAtIndex:indexPath.row];
     
-   // PersonDetailViewController* VC = [[PersonDetailViewController alloc] init];
      TestViewController* VC = [[TestViewController alloc] init];
     
     VC.userId = KISDictionaryHaveKey(recDict, @"id");

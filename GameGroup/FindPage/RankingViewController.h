@@ -7,13 +7,10 @@
 //
 
 #import "BaseViewController.h"
-#import "PullUpRefreshView.h"
-#import "SRRefreshView.h"
 #import "NotConnectDelegate.h"
-#import "PullDownRefreshView.h"
 #import "SendNewsViewController.h"
 #import "RankingCell.h"
-@interface RankingViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, PullUpDelegate, SRRefreshDelegate,UIScrollViewDelegate,TableViewDatasourceDidChange>
+@interface RankingViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate,UIScrollViewDelegate,TableViewDatasourceDidChange>
 @property(nonatomic,copy)NSString *custType;//职业
 @property(nonatomic,copy)NSString *characterid;//角色
 @property(nonatomic,copy)NSString *characterName;//角色名称

@@ -66,17 +66,20 @@
     refreshView.myScrollView = m_myFansTableView;
     [refreshView stopLoading:NO];
     
-    [self getFansBySort];
+    
     
     
     hud = [[MBProgressHUD alloc]initWithView:self.view];
     hud.labelText = @"获取中";
+    [self.view addSubview:hud];
+    [self getFansBySort];
 	// Do any additional setup after loading the view.
 }
 
 #pragma mark -粉丝列表 只有距离排序
 - (void)getFansBySort
 {
+    [hud show:YES];
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     [paramDict setObject:self.userId forKey:@"userid"];
@@ -174,7 +177,7 @@
     
     tempDict = [m_otherSortFansArray objectAtIndex:indexPath.row];
 
-    if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"sex")] isEqualToString:@"0"]) {//男♀♂
+    if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"gender")] isEqualToString:@"0"]) {//男♀♂
         cell.ageLabel.text = [@"♂ " stringByAppendingString:[GameCommon getNewStringWithId:[tempDict objectForKey:@"age"]]];
         cell.ageLabel.backgroundColor = kColorWithRGB(33, 193, 250, 1.0);
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"people_man.png"];
@@ -186,7 +189,11 @@
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"people_woman.png"];
     }
     
-    cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]]];
+    NSString * fruits = KISDictionaryHaveKey(tempDict, @"img");
+    NSArray  * array= [fruits componentsSeparatedByString:@","];
+
+    
+    cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:[array objectAtIndex:0]]]];
     
     
     cell.nameLabel.text = [tempDict objectForKey:@"nickname"];
@@ -205,11 +212,21 @@
 {
     [m_myFansTableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary * tempDict;
+    tempDict = [m_otherSortFansArray objectAtIndex:indexPath.row];
     [[Custom_tabbar showTabBar] hideTabBar:YES];
     TestViewController *detailVC = [[TestViewController alloc]init];
+    
+    detailVC.userId = KISDictionaryHaveKey(tempDict, @"id");
+    detailVC.nickName = KISDictionaryHaveKey(tempDict, @"nickname");
+
+    
+    
+    
     detailVC.achievementStr = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
+    
     detailVC.achievementColor =KISDictionaryHaveKey(tempDict, @"achievementLevel") ;
-    detailVC.sexStr =  KISDictionaryHaveKey(tempDict, @"sex");
+    
+    detailVC.sexStr =  KISDictionaryHaveKey(tempDict, @"gender");
     
     detailVC.titleImage =[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]] ;
     
@@ -217,8 +234,6 @@
     detailVC.constellationStr =KISDictionaryHaveKey(tempDict, @"constellation");
     NSLog(@"vc.VC.constellationStr%@",detailVC.constellationStr);
     
-    detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
-    detailVC.nickName = KISDictionaryHaveKey(tempDict, @"displayName");
     detailVC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"updateUserLocationDate")];
     detailVC.jlStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"distance")];
     detailVC.createTimeStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"createTime")];
@@ -301,3 +316,43 @@
 }
 
 @end
+/*
+ 
+ {
+ active = 2;
+ age = 27;
+ alias = " ";
+ appType = " ";
+ backgroundImg = " ";
+ birthdate = 19860821;
+ city = " ";
+ constellation = "\U72ee\U5b50\U5ea7";
+ createTime = " ";
+ deviceToken = " ";
+ distance = "15.929373176287228";
+ email = "306750047@qq.com";
+ fan = 55;
+ gender = 0;
+ hobby = " ";
+ id = 10110207;
+ ifFraudulent = " ";
+ img = "1635,28313,41068,41069,41077,41078,";
+ lastForbiddenTime = " ";
+ latitude = "39.982788";
+ longitude = "116.304398";
+ modTime = 1394593408000;
+ nickname = "\U53ef\U4e50";
+ password = "lueSGJZetyySpUndWjMBEg==";
+ phoneNumber = " ";
+ rarenum = 4;
+ realname = " ";
+ remark = " ";
+ signature = " ";
+ state = 0;
+ superremark = ll;
+ superstar = 1;
+ updateUserLocationDate = 1394698915202;
+ username = 18000109959;
+ }
+ 
+ */

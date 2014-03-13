@@ -7,7 +7,7 @@
 //
 #import "RankingViewController.h"
 #import "RankingCell.h"
-#import "PersonDetailViewController.h"
+#import "TestViewController.h"
 #import "SendNewsViewController.h"
 #import "MePageViewController.h"
 #define kSegmentFriend (0)
@@ -38,20 +38,10 @@
     
     
     
-    PullUpRefreshView      *refreshView1;
-    SRRefreshView   *_slimeView1;
-
-    PullUpRefreshView      *refreshView2;
-    SRRefreshView   *_slimeView2;
-    PullUpRefreshView      *refreshView3;
-    SRRefreshView   *_slimeView3;
 
     NSInteger          m_scroll_page;
     
     
-    BOOL    m_i;
-    BOOL    m_j;
-    BOOL    m_k;
     BOOL    isRegisterForMe;
     
     UIImageView *m_underListImageView;
@@ -92,42 +82,9 @@
     isFirstLoading3 =YES;
 
     isRegisterForMe =YES;
-    m_i =YES;
-    m_j =YES;
-    m_k =YES;
-    if ([self.cRankvaltype isEqualToString:@"1"]) {
-      //  if ([[NSUserDefaults standardUserDefaults]objectForKey:@"friendWXjs"]==NULL) {
-     //       [self getSortDataByNet1];
-    //    }
-    //    else{
-   //         [m_cArray removeAllObjects];
-        //    [m_cArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"friendWXjs"]];
-            [self getSortDataByNet1];
-    //    }
-        
-         m_i =NO;
-    }
-    if ([self.cRankvaltype isEqualToString:@"2"]) {
-     //   if ([[NSUserDefaults standardUserDefaults]objectForKey:@"serverWXof"]==NULL) {
-
-       // [self getSortDataByNet2];
-      //  }else{
-      //  [m_serverArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"serverWXof"]];
-        [self getSortDataByNet2];
-     //   }
-        m_j =NO;
-    }
-    if ([self.cRankvaltype isEqualToString:@"3"]) {
-      //  if ([[NSUserDefaults standardUserDefaults]objectForKey:@"countryOFwxxxx"]==NULL) {
-     //   [self getSortDataByNet3];
-    //    }else{
-    //    [m_countryArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"countryOFwxxxx"]];
-        [self getSortDataByNet3];
-    //    }
-         m_k =NO;
-    }
-
-    
+    [self getSortDataByNet1];
+    [self getSortDataByNet2];
+    [self getSortDataByNet3];
     [self setTopViewWithTitle:[NSString stringWithFormat:@"%@排行",self.titleOfRanking] withBackButton:YES];
     
     UIButton *shareButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30)];
@@ -249,58 +206,6 @@
 //    [self.view addSubview:hud];
 //    hud.labelText = @"查询中...";
     
-    _slimeView1 = [[SRRefreshView alloc] init];
-    _slimeView1.delegate = self;
-    _slimeView1.upInset = 0;
-    _slimeView1.slimeMissWhenGoingBack = NO;
-    _slimeView1.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    _slimeView1.slime.skinColor = [UIColor whiteColor];
-    _slimeView1.slime.lineWith = 1;
-    _slimeView1.slime.shadowBlur = 4;
-    _slimeView1.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    [m_tableView addSubview:_slimeView1];
-    
-    
-    refreshView1 = [[PullUpRefreshView alloc] initWithFrame:CGRectMake(0, kScreenHeigth - startX-(KISHighVersion_7?0:20), 320, REFRESH_HEADER_HEIGHT)];//上拉加载
-    [m_tableView addSubview:refreshView1];
-    refreshView1.pullUpDelegate = self;
-    refreshView1.myScrollView = m_tableView;
-    [refreshView1 stopLoading:NO];
-
-    
-    _slimeView2 = [[SRRefreshView alloc] init];
-    _slimeView2.delegate = self;
-    _slimeView2.upInset = 0;
-    _slimeView2.slimeMissWhenGoingBack = NO;
-    _slimeView2.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    _slimeView2.slime.skinColor = [UIColor whiteColor];
-    _slimeView2.slime.lineWith = 1;
-    _slimeView2.slime.shadowBlur = 4;
-    _slimeView2.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    [m_tableviewServer addSubview:_slimeView2];
-    
-    refreshView2 = [[PullUpRefreshView alloc] initWithFrame:CGRectMake(0, kScreenHeigth - startX-(KISHighVersion_7?0:20), 320, REFRESH_HEADER_HEIGHT)];//上拉加载
-    [m_tableviewServer addSubview:refreshView2];
-    refreshView2.pullUpDelegate = self;
-    refreshView2.myScrollView = m_tableviewServer;
-    [refreshView2 stopLoading:NO];
-
-    _slimeView3 = [[SRRefreshView alloc] init];
-    _slimeView3.delegate = self;
-    _slimeView3.upInset = 0;
-    _slimeView3.slimeMissWhenGoingBack = NO;
-    _slimeView3.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    _slimeView3.slime.skinColor = [UIColor whiteColor];
-    _slimeView3.slime.lineWith = 1;
-    _slimeView3.slime.shadowBlur = 4;
-    _slimeView3.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    [m_tableviewCountry addSubview:_slimeView3];
-    
-    refreshView3 = [[PullUpRefreshView alloc] initWithFrame:CGRectMake(0, kScreenHeigth - startX-(KISHighVersion_7?0:20), 320, REFRESH_HEADER_HEIGHT)];//上拉加载
-    [m_tableviewCountry addSubview:refreshView3];
-    refreshView3.pullUpDelegate = self;
-    refreshView3.myScrollView = m_tableviewCountry;
-    [refreshView3 stopLoading:NO];
     
     m_tableView.hidden = YES;
     m_tableviewServer.hidden = YES;
@@ -568,7 +473,7 @@
 {
     
     
-    PersonDetailViewController *detailVC = [[PersonDetailViewController alloc]init];
+    TestViewController *detailVC = [[TestViewController alloc]init];
     NSDictionary *dic = [[NSDictionary alloc]init];
     if(tableView ==m_tableView){
     dic = [m_cArray objectAtIndex:indexPath.row];
@@ -760,20 +665,7 @@
 #pragma mark --顶部分类button方法
 -(void)loadingFriendInfo:(UIButton *)sender
 {
-    NSLog(@"---------->%hhd",m_i);
     
-    
-    if (m_i==YES) {
-       // if ([[NSUserDefaults standardUserDefaults]objectForKey:@"friendWXjs"]==NULL) {
-            [self getSortDataByNet1];
-      //  }
-      //  else{
-      //      [m_cArray removeAllObjects];
-       //     [m_cArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"friendWXjs"]];
-       //     [self getSortDataByNet1];
-       // }
-        m_i =NO;
-    }
     m_friendBtn.selected = YES;
     m_countryBtn.selected = NO;
     m_serverBtn.selected = NO;
@@ -790,18 +682,6 @@
 
 -(void)loadingServerInfo:(UIButton *)sender
 {
-    if (m_j==YES) {
-     //   if ([[NSUserDefaults standardUserDefaults]objectForKey:@"serverWXof"]==NULL) {
-             self.pageCount2 = -1;
-     //       [self getSortDataByNet2];
-     //   }else{
-     //       [m_serverArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"serverWXof"]];
-            [self getSortDataByNet2];
-    //    }
-        m_j =NO;
-    }else{
-        
-    }
     
     if ([self.COME_FROM isEqualToString:@"1"]) {
         m_friendBtn.selected = NO;
@@ -827,20 +707,24 @@
         [UIView commitAnimations];
 
     }
+    //    if (m_j==YES) {
+    //     //   if ([[NSUserDefaults standardUserDefaults]objectForKey:@"serverWXof"]==NULL) {
+    //             self.pageCount2 = -1;
+    //     //       [self getSortDataByNet2];
+    //     //   }else{
+    //     //       [m_serverArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"serverWXof"]];
+    //          //  [self getSortDataByNet2];
+    //    //    }
+    //        m_j =NO;
+    //    }else{
+    //        
+    //    }
+
 }
 
 
 -(void)loadingCountryInfo:(UIButton *)sender
 {
-    if (m_k==YES) {
-      //  if ([[NSUserDefaults standardUserDefaults]objectForKey:@"countryOFwxxxx"]==NULL) {
-            [self getSortDataByNet3];
-     //   }else{
-      //      [m_countryArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"countryOFwxxxx"]];
-     //       [self getSortDataByNet3];
-       // }
-        m_k =NO;
-    }
     if ([self.COME_FROM isEqualToString:@"1"]) {
     m_friendBtn.selected = NO;
     m_countryBtn.selected = YES;
@@ -881,8 +765,6 @@
         [loginActivity startAnimating];
         isFirstLoading1 = NO;
     }
-//    hud.labelText = @"请求中...";
-//    [hud show:YES];
      [loginActivity startAnimating];
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
@@ -898,10 +780,9 @@
     [paramDict setObject:self.server forKey:@"realm"];
     [paramDict setObject:@"1" forKey:@"gameid"];
     [paramDict setObject:self.characterid forKey:@"characterid"];
-    [paramDict setObject:self.cRankvaltype forKey:@"ranktype"];
+    [paramDict setObject:@"1" forKey:@"ranktype"];
     [paramDict setObject:self.dRankvaltype forKey:@"rankvaltype"];
-    [paramDict setObject:[NSString stringWithFormat:@"%d",self.pageCount1] forKey:@"pageIndex"];
-    [paramDict setObject:@"10" forKey:@"maxSize"];
+   // [paramDict setObject:@"10" forKey:@"maxSize"];
     
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
     [postDict setObject:paramDict forKey:@"params"];
@@ -918,37 +799,11 @@
 
         if ([responseObject isKindOfClass:[NSArray class]]) {
             m_tableView.hidden =NO;
-                if (self.pageCount1 == 0||self.pageCount1 ==-1) {
-                    [m_cArray removeAllObjects];
-                    
                     [m_cArray addObjectsFromArray:responseObject];
-                    
-                    NSLog(@"切换或者刷新==0");
-                }
-                else
-                {
-                    [m_cArray addObjectsFromArray:responseObject];
-                    
-                    NSLog(@"要加载更多");
-                }
-            
             
             [[NSUserDefaults standardUserDefaults]setObject:m_cArray forKey:@"friendWXjs"];
                 [m_tableView reloadData];
-                
-                [refreshView1 stopLoading:NO];
-                //        }
-                self.pageCount1 ++;
-                NSLog(@"m_PageCount ++%d",self.pageCount1);
-                [refreshView1 setRefreshViewFrame];
-                [_slimeView1 endRefresh];
-            }else
-            {
-                [refreshView1 stopLoading:YES];
-                [_slimeView1 endRefresh];
-            }
-
-        
+        }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
@@ -958,8 +813,6 @@
                 [alert show];
                 
                 
-                [refreshView1 stopLoading:YES];
-                [_slimeView1 endRefresh];
             }
         }
         
@@ -967,6 +820,206 @@
     }];
 }
 
+
+- (void)getSortDataByNet2
+
+{
+    
+    if (isFirstLoading1) {
+        loginActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.view addSubview:loginActivity];
+        loginActivity.center = CGPointMake(160, 150);
+        loginActivity.color = [UIColor blackColor];
+        [loginActivity startAnimating];
+        isFirstLoading1 = NO;
+    }
+    [loginActivity startAnimating];
+    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+    
+    NSLog(@"self.drank%@",self.dRankvaltype);
+    if ([self.dRankvaltype isEqualToString:@"pveScore"]||[self.dRankvaltype isEqualToString:@"totalHonorableKills"]) {
+        NSLog(@"传职业");
+        [paramDict setObject:self.custType forKey:@"classid"];
+        
+    }
+    
+    
+    [paramDict setObject:self.server forKey:@"realm"];
+    [paramDict setObject:@"1" forKey:@"gameid"];
+    [paramDict setObject:self.characterid forKey:@"characterid"];
+    [paramDict setObject:@"2" forKey:@"ranktype"];
+    [paramDict setObject:self.dRankvaltype forKey:@"rankvaltype"];
+    // [paramDict setObject:@"10" forKey:@"maxSize"];
+    
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:paramDict forKey:@"params"];
+    [postDict setObject:@"130" forKey:@"method"];
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    
+    
+    
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        [loginActivity stopAnimating];
+        [loginActivity removeFromSuperview];
+        
+        if ([responseObject isKindOfClass:[NSArray class]]) {
+         m_tableviewServer.hidden =NO;
+         
+         [m_serverArray addObjectsFromArray:responseObject];
+        
+         [[NSUserDefaults standardUserDefaults]setObject:m_serverArray forKey:@"friendWXjs"];
+         [m_tableviewServer reloadData];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
+        }
+        
+        //[hud hide:YES];
+    }];
+}
+
+
+- (void)getSortDataByNet3
+
+{
+    if (isFirstLoading1) {
+        loginActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.view addSubview:loginActivity];
+        loginActivity.center = CGPointMake(160, 150);
+        loginActivity.color = [UIColor blackColor];
+        [loginActivity startAnimating];
+        isFirstLoading1 = NO;
+    }
+    [loginActivity startAnimating];
+    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+    
+    NSLog(@"self.drank%@",self.dRankvaltype);
+    if ([self.dRankvaltype isEqualToString:@"pveScore"]||[self.dRankvaltype isEqualToString:@"totalHonorableKills"]) {
+        NSLog(@"传职业");
+        [paramDict setObject:self.custType forKey:@"classid"];
+    }
+    [paramDict setObject:self.server forKey:@"realm"];
+    [paramDict setObject:@"1" forKey:@"gameid"];
+    [paramDict setObject:self.characterid forKey:@"characterid"];
+    [paramDict setObject:@"3" forKey:@"ranktype"];
+    [paramDict setObject:self.dRankvaltype forKey:@"rankvaltype"];
+    
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:paramDict forKey:@"params"];
+    [postDict setObject:@"130" forKey:@"method"];
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // [hud hide:YES];
+        
+        [loginActivity stopAnimating];
+        [loginActivity removeFromSuperview];
+        
+       if ([responseObject isKindOfClass:[NSArray class]]) {
+         m_tableviewCountry.hidden =NO;
+         [m_countryArray addObjectsFromArray:responseObject];
+         
+         NSLog(@"要加载更多");
+         [[NSUserDefaults standardUserDefaults]setObject:m_countryArray forKey:@"friendWXjs"];
+         [m_tableviewCountry reloadData];
+       }
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        if ([error isKindOfClass:[NSDictionary class]]) {
+            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+                
+                
+            }
+        }
+        
+        //[hud hide:YES];
+    }];
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (scrollView == m_backgroundScroll) {
+        m_scroll_page = (NSInteger)m_backgroundScroll.contentOffset.x/m_backgroundScroll.bounds.size.width;
+        if ([self.COME_FROM isEqualToString:@"1"])  {
+            NSLog(@"PageNum%d",m_scroll_page);
+            
+            if (m_scroll_page==0) {
+                [self loadingFriendInfo:m_friendBtn];
+                m_friendBtn.selected = YES;
+                m_countryBtn.selected = NO;
+                m_serverBtn.selected = NO;
+                [UIView beginAnimations:nil context:nil];
+                [UIView setAnimationDuration:0.4];
+                m_underListImageView.frame = CGRectMake(0, 41, 106, 4);
+                [UIView commitAnimations];
+                
+            }
+            if (m_scroll_page==1) {
+                [self loadingServerInfo:m_serverBtn];
+                m_friendBtn.selected = NO;
+                m_countryBtn.selected = NO;
+                m_serverBtn.selected = YES;
+                [UIView beginAnimations:nil context:nil];
+                [UIView setAnimationDuration:0.4];
+                m_underListImageView.frame = CGRectMake(106, 41, 106, 4);
+                [UIView commitAnimations];
+                
+            }
+            if (m_scroll_page==2) {
+                [self loadingCountryInfo:m_countryBtn];
+                m_friendBtn.selected = NO;
+                m_countryBtn.selected = YES;
+                m_serverBtn.selected = NO;
+                [UIView beginAnimations:nil context:nil];
+                [UIView setAnimationDuration:0.4];
+                m_underListImageView.frame = CGRectMake(212, 41, 106, 4);
+                [UIView commitAnimations];
+                
+            }
+        }
+        else{
+            if (m_scroll_page ==0) {
+                [self loadingServerInfo:m_serverBtn];
+                m_countryBtn.selected = NO;
+                m_serverBtn.selected = YES;
+                [UIView beginAnimations:nil context:nil];
+                [UIView setAnimationDuration:0.4];
+                m_underListImageView.frame = CGRectMake(0, 41, 160, 4);
+                [UIView commitAnimations];
+            }
+            if (m_scroll_page ==1) {
+                [self loadingCountryInfo:m_countryBtn];
+                
+                m_friendBtn.selected = NO;
+                m_countryBtn.selected = YES;
+                m_serverBtn.selected = NO;
+                
+                m_countryBtn.selected = YES;
+                m_serverBtn.selected = NO;
+                [UIView beginAnimations:nil context:nil];
+                [UIView setAnimationDuration:0.4];
+                m_underListImageView.frame = CGRectMake(160, 41,160, 4);
+                [UIView commitAnimations];
+            }
+            
+            
+        }
+        
+    }
+    
+}
+
+
+/*
 - (void)getSortDataByNet2
 {
     if (isFirstLoading2) {
@@ -1235,81 +1288,7 @@
  
 }
 
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    if (scrollView == m_backgroundScroll) {
-        m_scroll_page = (NSInteger)m_backgroundScroll.contentOffset.x/m_backgroundScroll.bounds.size.width;
-        if ([self.COME_FROM isEqualToString:@"1"])  {
-            NSLog(@"PageNum%d",m_scroll_page);
-            
-            if (m_scroll_page==0) {
-                [self loadingFriendInfo:m_friendBtn];
-                m_friendBtn.selected = YES;
-                m_countryBtn.selected = NO;
-                m_serverBtn.selected = NO;
-                [UIView beginAnimations:nil context:nil];
-                [UIView setAnimationDuration:0.4];
-                m_underListImageView.frame = CGRectMake(0, 41, 106, 4);
-                [UIView commitAnimations];
-                
-            }
-            if (m_scroll_page==1) {
-                [self loadingServerInfo:m_serverBtn];
-                m_friendBtn.selected = NO;
-                m_countryBtn.selected = NO;
-                m_serverBtn.selected = YES;
-                [UIView beginAnimations:nil context:nil];
-                [UIView setAnimationDuration:0.4];
-                m_underListImageView.frame = CGRectMake(106, 41, 106, 4);
-                [UIView commitAnimations];
-                
-            }
-            if (m_scroll_page==2) {
-                [self loadingCountryInfo:m_countryBtn];
-                m_friendBtn.selected = NO;
-                m_countryBtn.selected = YES;
-                m_serverBtn.selected = NO;
-                [UIView beginAnimations:nil context:nil];
-                [UIView setAnimationDuration:0.4];
-                m_underListImageView.frame = CGRectMake(212, 41, 106, 4);
-                [UIView commitAnimations];
-                if (m_countryArray ==NULL) {
-                    [self getSortDataByNet3];
-                }
-                
-            }
-        }
-        else{
-            if (m_scroll_page ==0) {
-                [self loadingServerInfo:m_serverBtn];
-                m_countryBtn.selected = NO;
-                m_serverBtn.selected = YES;
-                [UIView beginAnimations:nil context:nil];
-                [UIView setAnimationDuration:0.4];
-                m_underListImageView.frame = CGRectMake(0, 41, 160, 4);
-                [UIView commitAnimations];
-            }
-            if (m_scroll_page ==1) {
-                [self loadingCountryInfo:m_countryBtn];
-                
-                m_friendBtn.selected = NO;
-                m_countryBtn.selected = YES;
-                m_serverBtn.selected = NO;
 
-                m_countryBtn.selected = YES;
-                m_serverBtn.selected = NO;
-                [UIView beginAnimations:nil context:nil];
-                [UIView setAnimationDuration:0.4];
-                m_underListImageView.frame = CGRectMake(160, 41,160, 4);
-                [UIView commitAnimations];
-            }
-            
-            
-        }
-        
-    }
-
-}
 //上拉加载
 - (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
 {
@@ -1400,11 +1379,5 @@
         
     }];
 }
-@end
-/*
- "ranktype":"3","realm":"卡拉赞","gameid":"1","maxSize":"10","pageIndex":"0","rankvaltype":"pveScore","characterid":"155846"},"isCompression":"0"}
- 
- 
- "ranktype":"1","realm":"卡拉赞","gameid":"1","maxSize":"10","pageIndex":"0","rankvaltype":"pveScore","characterid":"155846"},"isCompression":"0"}
- 
  */
+@end

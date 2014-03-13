@@ -12,9 +12,8 @@
 #import "SendNewsViewController.h"
 #import "SendArticleViewController.h"
 #import "MyProfileViewController.h"
-#import "PersonDetailViewController.h"
+#import "TestViewController.h"
 #import "ReplyViewController.h"
-
 //alias = " ";
 //commentObj = " ";评论
 //commentnum = 0;
@@ -546,7 +545,10 @@
 //        }
 //        else
 //        {
-            PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
+        
+        
+            TestViewController* detailV = [[TestViewController alloc] init];
+        
             detailV.userId = KISDictionaryHaveKey(destDic, @"userid");
             detailV.nickName = KISDictionaryHaveKey(destDic, @"nickname");
             detailV.isChatPage = NO;
@@ -561,7 +563,7 @@
 //        }
 //        else
 //        {
-            PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
+            TestViewController* detailV = [[TestViewController alloc] init];
             detailV.userId = KISDictionaryHaveKey(tempDict, @"userid");
             detailV.nickName = KISDictionaryHaveKey(tempDict, @"nickname");
             detailV.isChatPage = NO;

@@ -9,7 +9,7 @@
 #import "ReplyViewController.h"
 #import "ReplyCell.h"
 #import "MyProfileViewController.h"
-#import "PersonDetailViewController.h"
+#import "TestViewController.h"
 #import "OnceDynamicViewController.h"
 
 @interface ReplyViewController ()
@@ -434,7 +434,7 @@
 //    }
 //    else
 //    {
-        PersonDetailViewController* detailV = [[PersonDetailViewController alloc] init];
+        TestViewController* detailV = [[TestViewController alloc] init];
         detailV.userId = KISDictionaryHaveKey(tempDict, @"userid");
         detailV.nickName = KISDictionaryHaveKey(tempDict, @"nickname");
         detailV.isChatPage = NO;
