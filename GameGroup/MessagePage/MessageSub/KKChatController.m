@@ -227,20 +227,15 @@
 
 - (void)sendReadedMesg//发送已读消息
 {
-    NSString* readMagIdString = @"";
     for(NSDictionary* plainEntry in messages)
     {
         NSString *msgType = KISDictionaryHaveKey(plainEntry, @"msgType");
         NSString *status = KISDictionaryHaveKey(plainEntry, @"status");
         NSString *sender = KISDictionaryHaveKey(plainEntry, @"sender");
         if ([msgType isEqualToString:@"normalchat"] && ![status isEqualToString:@"4"] && ![sender isEqualToString:@"you"]) {
-            if ([KISDictionaryHaveKey(plainEntry, @"messageuuid") length] > 0) {
-                readMagIdString = [readMagIdString stringByAppendingFormat:@"%@,", KISDictionaryHaveKey(plainEntry, @"messageuuid")];
-            }
+            NSString*readMagIdString = KISDictionaryHaveKey(plainEntry, @"messageuuid");
+            [self comeBackDisplayed:self.chatWithUser msgId:readMagIdString];
         }
-    }
-    if (readMagIdString.length > 0) {
-        [self comeBackDisplayed:self.chatWithUser msgId:readMagIdString];
     }
 }
 

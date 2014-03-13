@@ -70,7 +70,7 @@
     UILabel * label2 = [[UILabel alloc]initWithFrame:CGRectMake(10, 300, 300, 160)];
     label2.backgroundColor = [UIColor clearColor];
     label2.textColor = [UIColor grayColor];
-    label2.text = @"此照片只作系统自动审核只用,任何人无法查看,请放心上传.\n\n牌子上需写明您在陌游上的昵称,字迹要清晰!\n\n若是不想露脸,也要能够表示您是女孩子的身份才行哦.请参考如下举牌实例:";
+    label2.text = @"此照片只作系统自动审核使用,任何人无法查看,请放心上传.\n\n牌子上需写明您在陌游上的昵称,字迹要清晰!\n\n若是不想露脸,也要能够表示您是女孩子的身份才行哦.请参考如下举牌实例:";
     label2.numberOfLines = 0;
     label2.font = [UIFont boldSystemFontOfSize:16];
     [scV addSubview:label2];
