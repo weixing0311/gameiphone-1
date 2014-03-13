@@ -667,7 +667,7 @@
                                      setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
                                      title:nil
                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
-                                     bgImage:KUIImage(@"Focus_off_normal")
+                                    bgImage:KUIImage(@"Focus_off_normal")
                                      HighImage:KUIImage(@"Focus_off_click")
                                      selectImage:Nil];
             [button_left addTarget:self action:@selector(cancelAttentionClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -687,7 +687,7 @@
         {
             UIButton* button_left = [CommonControlOrView
                                      setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
-                                     title:@"添加好友"
+                                     title:nil
                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
                                      bgImage:KUIImage(@"add_friend_normal")
                                      HighImage:KUIImage(@"add_friend_click")
@@ -890,6 +890,11 @@
                 //                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];
                 
                 ////////////////////////
+                
+                if (self.myDelegate&&[self.myDelegate respondsToSelector:@selector(isAttention:attentionSuccess:backValue:)]) {
+                    [self.myDelegate isAttention:self attentionSuccess:self.testRow backValue:@"off"];
+                }
+                
                 [DataStoreManager deleteAttentionWithUserName:self.hostInfo.userName];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
@@ -1002,6 +1007,12 @@
             //            [GameCommon shareGameCommon].friendTableChanged = YES;
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
         }
+        
+        if (self.myDelegate&&[self.myDelegate respondsToSelector:@selector(isAttention:attentionSuccess:backValue:)]) {
+            [self.myDelegate isAttention:self attentionSuccess:self.testRow backValue:@"on"];
+        }
+
+        
         [self showMessageWindowWithContent:@"关注成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
         
@@ -1294,108 +1305,6 @@
     m_myScrollView.contentSize = CGSizeMake(320, m_currentStartY);
     
     
-    switch (self.viewType) {
-        case VIEW_TYPE_FriendPage1:
-        {
-            
-            UIButton* button_left = [CommonControlOrView
-                                     setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
-                                     title:nil
-                                     fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
-                                     bgImage:KUIImage(@"del_friend_normal")
-                                     HighImage:KUIImage(@"del_friend_click")
-                                     selectImage:Nil];
-            [button_left addTarget:self action:@selector(deleteFriend:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_left];
-            
-            UIButton* button_right = [CommonControlOrView
-                                      setButtonWithFrame:CGRectMake(0, self.view.bounds.size.height -44, 106, 44)//120
-                                      title:@""
-                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
-                                      bgImage:KUIImage(@"chat_normal")
-                                      HighImage:KUIImage(@"chat_click")
-                                      selectImage:Nil];
-            [button_right addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_right];
-        }break;
-        case VIEW_TYPE_AttentionPage1:
-        {
-            UIButton *editButton=[UIButton buttonWithType:UIButtonTypeCustom];
-            editButton.frame=CGRectMake(270, startX - 44, 50, 44);
-            [editButton setBackgroundImage:KUIImage(@"edit_normal") forState:UIControlStateNormal];
-            [editButton setBackgroundImage:KUIImage(@"edit_click") forState:UIControlStateHighlighted];
-            [self.view addSubview:editButton];
-            [editButton addTarget:self action:@selector(editButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-            
-            UIButton* button_left = [CommonControlOrView
-                                     setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
-                                     title:nil
-                                     fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
-                                     bgImage:KUIImage(@"Focus_off_normal")
-                                     HighImage:KUIImage(@"Focus_off_click")
-                                     selectImage:Nil];
-            [button_left addTarget:self action:@selector(cancelAttentionClick:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_left];
-            
-            UIButton* button_right = [CommonControlOrView
-                                      setButtonWithFrame:CGRectMake(0, self.view.bounds.size.height -44, 106, 44)//120
-                                      title:@""
-                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
-                                      bgImage:KUIImage(@"chat_normal")
-                                      HighImage:KUIImage(@"chat_click")
-                                      selectImage:Nil];
-            [button_right addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_right];
-        }  break;
-        case VIEW_TYPE_FansPage1:
-        {
-            UIButton* button_left = [CommonControlOrView
-                                     setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
-                                     title:@"添加好友"
-                                     fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
-                                     bgImage:KUIImage(@"add_friend_normal")
-                                     HighImage:KUIImage(@"add_friend_click")
-                                     selectImage:Nil];
-            [button_left addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_left];
-            
-            UIButton* button_right = [CommonControlOrView
-                                      setButtonWithFrame:CGRectMake(0, self.view.bounds.size.height -44, 106, 44)//120
-                                      title:@""
-                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
-                                      bgImage:KUIImage(@"chat_normal")
-                                      HighImage:KUIImage(@"chat_click")
-                                      selectImage:Nil];
-            [button_right addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_right];
-        }break;
-        case VIEW_TYPE_STRANGER1:
-        {
-            UIButton* button_left = [CommonControlOrView
-                                     setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
-                                     title:nil
-                                     fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
-                                     bgImage:KUIImage(@"Focus_on_normal")
-                                     HighImage:KUIImage(@"Focus_on_click")
-                                     selectImage:Nil];
-            [button_left addTarget:self action:@selector(attentionClick:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_left];
-            
-            UIButton* button_right = [CommonControlOrView
-                                      setButtonWithFrame:CGRectMake(0, self.view.bounds.size.height -44, 106, 44)//120
-                                      title:@""
-                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
-                                      bgImage:KUIImage(@"chat_normal")
-                                      HighImage:KUIImage(@"chat_click")
-                                      selectImage:Nil];
-            [button_right addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_right];
-        }break;
-        default:
-        {
-            
-        }break;
-    }
     
 }
 

@@ -18,9 +18,10 @@ typedef enum
     VIEW_TYPE_STRANGER1,//陌生人
     VIEW_TYPE_Self1,//自己
 }MyViewType1;
+@protocol testViewDelegate;
 
 @interface TestViewController : BaseViewController<HGPhotoWallDelegate, UIAlertViewDelegate>
-
+@property(nonatomic, assign)id<testViewDelegate>myDelegate;
 @property(nonatomic, assign)MyViewType1    viewType;
 @property(nonatomic, strong)HostInfo*     hostInfo;
 @property(nonatomic, strong)NSString*     userId;
@@ -37,4 +38,11 @@ typedef enum
 @property(nonatomic,copy)NSString *constellationStr;//星座
 @property(nonatomic,copy)NSString *createTimeStr;
 @property(nonatomic,assign)BOOL isActiveAc;//是否激活
+@property(nonatomic,assign)NSInteger  testRow;
+@end
+
+@protocol testViewDelegate <NSObject>
+
+-(void)isAttention:(TestViewController *)view attentionSuccess:(NSInteger)i backValue:(NSString *)valueStr;
+
 @end

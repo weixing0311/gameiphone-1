@@ -241,22 +241,18 @@
 - (void)changeOtherOne
 {
     inABtn.selected = YES;
+    inABtn.enabled = NO;
+    sayHelloBtn.enabled = NO;
+    headImageView.userInteractionEnabled = NO;
+    clazzImageView.userInteractionEnabled = NO;
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
 
     [paramDict setObject:@"1" forKey:@"gameid"];
     [paramDict setObject:self.characterId forKey:@"characterid"];
     
-    [self getSayHelloForNetWithDictionary:paramDict method:@"149" prompt:@"邂逅中..." type:1];
+    [self getSayHelloForNetWithDictionary:paramDict method:@"149" prompt:nil type:1];
 
-    
-//    [self headPhotoAnimation];
-//    m_leftTime = 3;
-//    if ([m_verCodeTimer isValid]) {
-//        [m_verCodeTimer invalidate];
-//        m_verCodeTimer = nil;
-//    }
-//    m_verCodeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(refrenshVerCodeTime) userInfo:nil repeats:YES];
-    
+    promptLabel.text =@"正在换一个。。。";
 }
 
 - (void)refrenshVerCodeTime
@@ -319,11 +315,9 @@
 #pragma mark ---网络请求
 - (void)getSayHelloForNetWithDictionary:(NSDictionary *)dic method:(NSString *)method prompt:(NSString *)prompt type:(NSInteger)COME_TYPE
 {
-    inABtn.enabled = NO;
-    sayHelloBtn.enabled = NO;
 
     hud.labelText = prompt;
-    [hud show:YES];
+   // [hud show:YES];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
     
@@ -342,6 +336,12 @@
             isSuccessToshuaishen =NO;
             sayHelloBtn.enabled = YES;
 
+            inABtn.enabled = YES;
+            sayHelloBtn.enabled = YES;
+            headImageView.userInteractionEnabled = YES;
+            clazzImageView.userInteractionEnabled = YES;
+
+            
             isWXCeiling =YES;
             getDic = nil;
             getDic = [NSDictionary dictionaryWithDictionary:responseObject];

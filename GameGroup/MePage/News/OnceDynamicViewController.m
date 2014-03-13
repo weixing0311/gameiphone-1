@@ -1029,24 +1029,18 @@
     }
     else{
     NSString *requestString = [[request URL] absoluteString];
+       
     NSArray *components = [requestString componentsSeparatedByString:@":"];
     NSLog(@"-----%@",components);
+         NSLog(@"requsetstring%@",requestString);
     if ([components count] > 1 && [(NSString *)[components objectAtIndex:0] isEqualToString:@"lfyprotocol"]) {
         if([(NSString *)[components objectAtIndex:1] isEqualToString:@"http"] || [(NSString *)[components objectAtIndex:1] isEqualToString:@"https"]){
             //这个就是图片的路径
             NSLog(@"+++++++%@",components);
             NSString *path = [NSString stringWithFormat:@"%@:%@",[components objectAtIndex:1],[components objectAtIndex:2]];
-//            UIAlertView *alert = [[UIAlertView alloc]
-//                                  initWithTitle:@"图片的地址"
-//                                  message:path
-//                                  delegate:self
-//                                  cancelButtonTitle:nil
-//                                  otherButtonTitles:@"OK", nil];
-          //  [alert show];
-            //你已经有图片的路径，师兄只能帮到这儿了，接下来就靠你自己了。。。
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            //这是你自己的代码
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+            
+            
             PhotoViewController * photoV = [[PhotoViewController alloc] initWithSmallImages:nil images:[NSArray arrayWithObject:path] indext:0];
             photoV.isComeFrmeUrl = YES;
             [self presentViewController:photoV animated:NO completion:^{
