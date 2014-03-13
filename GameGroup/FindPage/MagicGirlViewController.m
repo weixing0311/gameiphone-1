@@ -35,11 +35,12 @@
     contentWebView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     contentWebView.delegate = self;
     
-    [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]]]];
-    
+//    [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]]]];
+    [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://58.83.193.119/h5/index.html?0B5DAE32FC15470B862E961E41A8B2E5&from_client_ios"]]];
     
     
     NSLog(@"%@",[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]);
+    
     [(UIScrollView *)[[contentWebView subviews] objectAtIndex:0] setBounces:NO];
     [self.view addSubview:contentWebView];
     
@@ -58,37 +59,6 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [hud hide:YES];
-    NSString *js = @"document.documentElement.innerHTML";
-    NSString *html = [webView stringByEvaluatingJavaScriptFromString:js];
-    NSLog(@"======%@",html);
-    //移除div
-    [webView stringByEvaluatingJavaScriptFromString:@"var script = document.createElement('script');"
-     "script.type = 'text/javascript';"
-     //设置方法
-     "script.text = \"function myFunction() { "
-     //设置div的高度为0px
-     "document.body.style.padding='0px';"
-     //设置header的高度为0px
-     "var headerTitle = document.getElementsByTagName('header')[0];"
-     "headerTitle.style.height = '0px';"
-     //设置header的字为空
-     "headerTitle.innerHTML = '';"
-     "}\";"
-     "document.getElementsByTagName('head')[0].appendChild(script);"
-    //调用方法
-    "document.group.getElementsByTagName('supper')[0].appendChild(bg)"];
-    
-    
-    [webView stringByEvaluatingJavaScriptFromString:@"myFunction();"];
-
-    
-//    NSString *allHTML = [webView stringByEvaluatingJavaScriptFromString:@"document.body.innerHTML"];
-//    NSLog(@"allHTML: %@", allHTML);
-
-   
-    
-    NSString *str1 = [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByTagName('body')"];
-     NSLog(@"str1%@",str1);
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     [hud hide:YES];
@@ -103,32 +73,45 @@
     }
 }
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
 
-    
-    
-   NSString * urlS = [[request URL] absoluteString];
-    //将字符串切割成数组
-    
-    
-    NSArray *urlComps = [urlS componentsSeparatedByString:@"://"];
-    if([urlComps count] && [[urlComps objectAtIndex:0] isEqualToString:@"http"])
+{
+    NSString *urlString = [[request URL] absoluteString];
+    NSArray *urlComps = [urlString
+                         componentsSeparatedByString:@"://"];
+    if([urlComps count] && [[urlComps objectAtIndex:0]
+                            isEqualToString:@"objc"])
     {
-        NSArray *arrFucnameAndParameter = [(NSString*)[urlComps objectAtIndex:1] componentsSeparatedByString:@"/"];
+        NSArray *arrFucnameAndParameter = [(NSString*)[urlComps
+                                                       objectAtIndex:1] componentsSeparatedByString:@":/"];
         NSString *funcStr = [arrFucnameAndParameter objectAtIndex:0];
-        
-        NSLog(@"funstr%@",funcStr);
-        if ([funcStr isEqualToString:@"vt3.douban.com"]) {
-            //调用自己的OC方法
-            NSLog(@"asdfasdasdfasdasdfsa");
-        }
-        else
+        NSLog(@"%@",funcStr);
+        if (1 == [arrFucnameAndParameter count])
         {
-            return YES;
+            // 没有参数
+            
+            
+            if([funcStr isEqualToString:@"closeWindows"])
+            {
+                /*调用本地函数1*/
+                NSLog(@"doFunc1");
+                [self closeWindows];
+            }
         }
-    }
-    return NO;
+        else if(2 == [arrFucnameAndParameter count])
+        {
+            //有参数的
+            if([funcStr isEqualToString:@"closeWindows"] &&
+               [arrFucnameAndParameter objectAtIndex:1])
+            {
+                /*调用本地函数1*/
+                NSLog(@"doFunc1:parameter");
+            }
+        }
+        return NO;
+    };
+    return YES;
 }
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -136,11 +119,10 @@
 }
 
 //进入个人资料界面
--(void)enterPersonInterfaceWithId:(NSString *)userid nickName:(NSString *)nickName
+-(void)enterPersonInterfaceWithId:(NSString *)userid
 {
     TestViewController *testVC = [[TestViewController alloc]init];
     testVC.userId = userid;
-    testVC.nickName = nickName;
     [self.navigationController pushViewController:testVC animated:YES];
 }
 
