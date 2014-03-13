@@ -857,7 +857,7 @@
 
                 ////////////////////////
                 [DataStoreManager deleteAttentionWithUserName:self.hostInfo.userName];
-
+  
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"1"];
 
                 [self.navigationController popViewControllerAnimated:YES];
@@ -968,6 +968,8 @@
 //            [GameCommon shareGameCommon].friendTableChanged = YES;
             [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"0"];
         }
+        
+        
         [self showMessageWindowWithContent:@"关注成功" imageType:0];
         [self.navigationController popViewControllerAnimated:YES];
         

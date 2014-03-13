@@ -38,6 +38,7 @@
     [super viewDidLoad];
     m_pageNum =0;
     m_tableArray = [NSMutableArray array];
+    [m_tableArray addObjectsFromArray:[DataStoreManager qureyAllNewsMessage]];
     
     [self setTopViewWithTitle:@"" withBackButton:YES];
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, KISHighVersion_7 ? 64 : 44)];
@@ -56,74 +57,31 @@
     m_myTableView.delegate = self;
     m_myTableView.dataSource = self;
     m_myTableView.rowHeight = m_myTableView.bounds.size.height;
+    m_myTableView.contentOffset = CGPointMake(0,m_myTableView.bounds.size.height*(m_tableArray.count-1));
     [self.view addSubview:m_myTableView];
     
-    _slimeView = [[SRRefreshView alloc] init];
-    _slimeView.delegate = self;
-    _slimeView.upInset = 0;
-    _slimeView.slimeMissWhenGoingBack = NO;
-    _slimeView.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    _slimeView.slime.skinColor = [UIColor whiteColor];
-    _slimeView.slime.lineWith = 1;
-    _slimeView.slime.shadowBlur = 4;
-    _slimeView.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    [m_myTableView addSubview:_slimeView];
-    
-    refreshView = [[PullUpRefreshView alloc] initWithFrame:CGRectMake(0, kScreenHeigth - startX-(KISHighVersion_7?0:20), 320, REFRESH_HEADER_HEIGHT)];//上拉加载
-    [m_myTableView addSubview:refreshView];
-    refreshView.pullUpDelegate = self;
-    refreshView.myScrollView = m_myTableView;
-    [refreshView stopLoading:NO];
-    
+//    _slimeView = [[SRRefreshView alloc] init];
+//    _slimeView.delegate = self;
+//    _slimeView.upInset = 0;
+//    _slimeView.slimeMissWhenGoingBack = NO;
+//    _slimeView.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
+//    _slimeView.slime.skinColor = [UIColor whiteColor];
+//    _slimeView.slime.lineWith = 1;
+//    _slimeView.slime.shadowBlur = 4;
+//    _slimeView.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
+//    [m_myTableView addSubview:_slimeView];
+//    
+//    refreshView = [[PullUpRefreshView alloc] initWithFrame:CGRectMake(0, kScreenHeigth - startX-(KISHighVersion_7?0:20), 320, REFRESH_HEADER_HEIGHT)];//上拉加载
+//    [m_myTableView addSubview:refreshView];
+//    refreshView.pullUpDelegate = self;
+//    refreshView.myScrollView = m_myTableView;
+//    [refreshView stopLoading:NO];
+//    
     
     dictDic = [NSMutableDictionary dictionary];
-//    [dictDic setObject:@"ceshi.jpg" forKey:@"headimg"];
-//    [dictDic setObject:@"小小鱼" forKey:@"nickname"];
-//    [dictDic setObject:@"生命在于运动，每天不运动就胖了" forKey:@"qianming"];
-//    [dictDic setObject:@"wowall.jpg" forKey:@"bgImg"];
-//    [dictDic setObject:@"图/百事可乐" forKey:@"author"];
-//    [dictDic setObject:@"02" forKey:@"number"];
-//    [dictDic setObject:@"Mar 2014" forKey:@"time"];
-//    [dictDic setObject:@"测试标题上线了" forKey:@"title"];
-//    [dictDic setObject:@"其实内容没有那么长 只不过是在凑字数，怎么还没够啊，应该差不多了吧，那就不打了" forKey:@"contnet"];
-
-    
-    [self getNewsInfoByNet];
-    
 	// Do any additional setup after loading the view.
 }
--(void)getNewsInfoByNet
-{
-    NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
-    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
-    
-    [paramDict setObject:@"3" forKey:@"dailyNewsId"];
-    
-    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
-    [postDict setObject:paramDict forKey:@"params"];
-    [postDict setObject:@"165" forKey:@"method"];
-    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-    
-    [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject){
-        if ([responseObject isKindOfClass:[NSDictionary class]]) {
-            //[dictDic setValuesForKeysWithDictionary:responseObject];
-            [m_tableArray addObject:responseObject];
-            NSLog(@"dicdic%@",dictDic);
-             [m_myTableView reloadData];
-        }
-    }
-    failure:^(AFHTTPRequestOperation *operation, id error) {
-        if ([error isKindOfClass:[NSDictionary class]]) {
-            if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
-            {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                [alert show];
-            }
-        }
-    }];
 
-    
-}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return m_tableArray.count;
@@ -181,62 +139,62 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (m_myTableView.contentSize.height < m_myTableView.frame.size.height) {
-        refreshView.viewMaxY = 0;
-    }
-    else
-        refreshView.viewMaxY = m_myTableView.contentSize.height - m_myTableView.frame.size.height;
-    [refreshView viewdidScroll:scrollView];
-    [_slimeView scrollViewDidScroll];
-}
-
-
-
-#pragma mark pull up refresh
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if(scrollView == m_myTableView)
-    {
-        [refreshView viewWillBeginDragging:scrollView];
-    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if(scrollView == m_myTableView)
-    {
-        [refreshView didEndDragging:scrollView];
-        [_slimeView scrollViewDidEndDraging];
-        
-    }
-}
-
-- (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
-{
-    NSLog(@"start");
-        [self getNewsInfoByNet];
-}
-
-#pragma mark - slimeRefresh delegate
-- (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
-{
-    //    [self performSelector:@selector(endRefresh)
-    //               withObject:nil
-    //               afterDelay:2
-    //                  inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
-    m_pageNum = 0;
-    
-    [self getNewsInfoByNet];
-}
-
--(void)endRefresh
-{
-    [_slimeView endRefreshFinish:^{
-        
-    }];
-}
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    if (m_myTableView.contentSize.height < m_myTableView.frame.size.height) {
+//        refreshView.viewMaxY = 0;
+//    }
+//    else
+//        refreshView.viewMaxY = m_myTableView.contentSize.height - m_myTableView.frame.size.height;
+//    [refreshView viewdidScroll:scrollView];
+//    [_slimeView scrollViewDidScroll];
+//}
+//
+//
+//
+//#pragma mark pull up refresh
+//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//{
+//    if(scrollView == m_myTableView)
+//    {
+//        [refreshView viewWillBeginDragging:scrollView];
+//    }
+//}
+//
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+//{
+//    if(scrollView == m_myTableView)
+//    {
+//        [refreshView didEndDragging:scrollView];
+//        [_slimeView scrollViewDidEndDraging];
+//        
+//    }
+//}
+//
+//- (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
+//{
+//    NSLog(@"start");
+//        //[self getNewsInfoByNet];
+//}
+//
+//#pragma mark - slimeRefresh delegate
+//- (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
+//{
+//    //    [self performSelector:@selector(endRefresh)
+//    //               withObject:nil
+//    //               afterDelay:2
+//    //                  inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
+//    m_pageNum = 0;
+//    
+//    //[self getNewsInfoByNet];
+//}
+//
+//-(void)endRefresh
+//{
+//    [_slimeView endRefreshFinish:^{
+//        
+//    }];
+//}
 
 #pragma mark----处理时间戳
 - (NSString*)getDataWithTimeInterval:(NSString*)timeInterval

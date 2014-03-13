@@ -38,6 +38,7 @@
     [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]]]];
     
     
+    
     NSLog(@"%@",[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]);
     [(UIScrollView *)[[contentWebView subviews] objectAtIndex:0] setBounces:NO];
     [self.view addSubview:contentWebView];
@@ -50,7 +51,6 @@
 
 
 }
-
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     [hud show:YES];
@@ -82,6 +82,13 @@
     [webView stringByEvaluatingJavaScriptFromString:@"myFunction();"];
 
     
+//    NSString *allHTML = [webView stringByEvaluatingJavaScriptFromString:@"document.body.innerHTML"];
+//    NSLog(@"allHTML: %@", allHTML);
+
+   
+    
+    NSString *str1 = [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByTagName('body')"];
+     NSLog(@"str1%@",str1);
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     [hud hide:YES];
@@ -97,23 +104,30 @@
 }
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
+
     
-        NSString *requestString = [[request URL] absoluteString];
+    
+   NSString * urlS = [[request URL] absoluteString];
+    //将字符串切割成数组
+    
+    
+    NSArray *urlComps = [urlS componentsSeparatedByString:@"://"];
+    if([urlComps count] && [[urlComps objectAtIndex:0] isEqualToString:@"http"])
+    {
+        NSArray *arrFucnameAndParameter = [(NSString*)[urlComps objectAtIndex:1] componentsSeparatedByString:@"/"];
+        NSString *funcStr = [arrFucnameAndParameter objectAtIndex:0];
         
-        NSArray *components = [requestString componentsSeparatedByString:@":"];
-        NSLog(@"-----%@",components);
-        NSLog(@"requsetstring%@",requestString);
-        if ([components count] > 1 && [(NSString *)[components objectAtIndex:0] isEqualToString:@"lfyprotocol"]) {
-            if([(NSString *)[components objectAtIndex:1] isEqualToString:@"http"] || [(NSString *)[components objectAtIndex:1] isEqualToString:@"https"]){
-                //这个就是图片的路径
-                NSLog(@"+++++++%@",components);
-                NSString *path = [NSString stringWithFormat:@"%@:%@",[components objectAtIndex:1],[components objectAtIndex:2]];
-                NSLog(@"path%@",path);
-            }
-            return NO;
+        NSLog(@"funstr%@",funcStr);
+        if ([funcStr isEqualToString:@"vt3.douban.com"]) {
+            //调用自己的OC方法
+            NSLog(@"asdfasdasdfasdasdfsa");
         }
-    
-    return YES;
+        else
+        {
+            return YES;
+        }
+    }
+    return NO;
 }
 - (void)didReceiveMemoryWarning
 {
@@ -137,7 +151,7 @@
     [self.navigationController pushViewController:fans animated:YES];
 }
 
-- (void)backButtonClick
+- (void)closeWindows
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
