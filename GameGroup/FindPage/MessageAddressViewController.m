@@ -16,7 +16,7 @@
 #import "PuthMessageViewController.h"
 #import "TestViewController.h"
 
-@interface MessageAddressViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,DodeAddressCellDelegate,MFMessageComposeViewControllerDelegate>
+@interface MessageAddressViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,DodeAddressCellDelegate,MFMessageComposeViewControllerDelegate,testViewDelegate>
 {
     BOOL systemAllowGetAddress;
     BOOL appAllowGetAddress;
@@ -243,6 +243,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
         TestViewController *testVC = [[TestViewController alloc]init];
+        testVC.myDelegate = self;
+        testVC.testRow = indexPath.row;
         testVC.userId = [_addressArray[indexPath.row] objectForKey:@"userid"];
         testVC.titleImage = [_addressArray[indexPath.row] objectForKey:@"userid"];
         testVC.nickName = [_addressArray[indexPath.row] objectForKey:@"nickname"];
@@ -262,6 +264,20 @@
         PuthMessageViewController * puthmsgVC = [[PuthMessageViewController alloc]init];
         puthmsgVC.addressDic = _outAddressArray[indexPath.row];
         [self.navigationController pushViewController:puthmsgVC animated:YES];
+    }
+}
+-(void)isAttention:(TestViewController *)view attentionSuccess:(NSInteger)i backValue:(NSString *)valueStr
+{
+    if ([valueStr isEqualToString:@"off"]) {
+        NSMutableDictionary * dic = _addressArray[i];
+        [dic setObject:@"unkown" forKey:@"friendShipType"];
+        [dic setObject:@"0" forKey:@"iCare"];
+        [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }else{
+        NSMutableDictionary * dic = _addressArray[i];
+        [dic setObject:@"unkown" forKey:@"friendShipType"];
+        [dic setObject:@"1" forKey:@"iCare"];
+        [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 -(void)SwithCellChangeSwith:(UISwitch*)swith
