@@ -300,11 +300,11 @@
 
 - (CGSize)getPayloadMsgTitleSize:(NSString*)theTitle
 {
-     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(200, 50)] : CGSizeZero;
+     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(180, 50)] : CGSizeZero;
 }
 - (CGSize)getPayloadMsgContentSize:(NSString*)theContent withThumb:(BOOL)haveThumb
 {
-    return (theContent.length > 0)?[theContent sizeWithFont:[UIFont boldSystemFontOfSize:13.0] constrainedToSize:CGSizeMake(haveThumb ? 160 : 200, 80)] : CGSizeZero;
+    return (theContent.length > 0)?[theContent sizeWithFont:[UIFont boldSystemFontOfSize:13.0] constrainedToSize:CGSizeMake(haveThumb ? 160 : 180, 80)] : CGSizeZero;
 }
 
 -(void)emojiBtnClicked:(UIButton *)sender
@@ -761,12 +761,24 @@
 
         cell.titleLabel.text = KISDictionaryHaveKey(msgDic, @"title");
         if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")].length > 0 && ![KISDictionaryHaveKey(msgDic, @"thumb") isEqualToString:@"null"]) {
-            NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")];
-            NSURL * titleImage = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
-            cell.thumbImgV.hidden = NO;
-            cell.thumbImgV.imageURL = titleImage;
-            [cell.thumbImgV setFrame:CGRectMake(70, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), 40, 40)];
-            contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:YES];
+            if ([sender isEqualToString:@"you"]) {
+                NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")];
+                NSURL * titleImage = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
+                cell.thumbImgV.hidden = NO;
+                cell.thumbImgV.imageURL = titleImage;
+                [cell.thumbImgV setFrame:CGRectMake(54, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), 40, 40)];
+                contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:YES];
+            }
+            else{
+                NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")];
+                NSURL * titleImage = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
+                cell.thumbImgV.hidden = NO;
+                cell.thumbImgV.imageURL = titleImage;
+                [cell.thumbImgV setFrame:CGRectMake(70, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), 40, 40)];
+                contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:YES];
+
+            }
+            
         }
         else
         {
@@ -799,7 +811,7 @@
             }
             else
             {
-                [cell.contentLabel setFrame:CGRectMake(padding + 50 + 45, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
+                [cell.contentLabel setFrame:CGRectMake(padding + 50 +28, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
             }
         }else
         {

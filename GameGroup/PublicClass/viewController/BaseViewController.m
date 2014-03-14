@@ -37,7 +37,7 @@
     [super viewWillAppear:animated];
     [self.view bringSubviewToFront:leftView];
     //添加捏合手势
-    if (self.navigationController.viewControllers.count==4&&![[NSUserDefaults standardUserDefaults]objectForKey:isNieheing]&&[[TempData sharedInstance]wxAlreadydidClickniehe]) {
+    if (self.navigationController.viewControllers.count==6&&![[NSUserDefaults standardUserDefaults]objectForKey:isNieheing]&&[[TempData sharedInstance]wxAlreadydidClickniehe]) {
         [self.view bringSubviewToFront:nieheImageView];
         nieheImageView.hidden = NO;
         SimageView.hidden = NO;

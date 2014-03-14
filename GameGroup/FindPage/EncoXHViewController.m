@@ -38,6 +38,8 @@
     UIImageView *backgroundImageView;//背景图片
     UILabel *sexLabel;//性别
     
+    UIView *promptView;
+    
     NSString *charaterId;
     
     NSInteger m_leftTime;
@@ -207,7 +209,11 @@
     [backgroundImageView addSubview:sexLabel];
     
     
-    promptLabel = [[UITextView alloc]initWithFrame:CGRectMake(0,318-40, 320, 50)];
+    promptView = [[UIView alloc]initWithFrame:CGRectMake(0,318-40, 320, 50)];
+    promptView.backgroundColor =UIColorFromRGBA(0xc3c3c3, 1);
+    [backgroundImageView addSubview:promptView];
+    
+    promptLabel = [[UITextView alloc]initWithFrame:CGRectMake(20,0, 280, 50)];
     promptLabel.textColor = UIColorFromRGBA(0xc3c3c3, 1);
     promptLabel.backgroundColor =[UIColor clearColor];
     promptLabel.textAlignment =NSTextAlignmentCenter;
@@ -216,7 +222,7 @@
     promptLabel.text = @"在许愿池你会遇见冥冥之中与你有缘的神奇事物或是有趣之人,点击“换一个”试试手气吧";
     promptLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];
 
-    [backgroundImageView addSubview:promptLabel];
+    [promptView addSubview:promptLabel];
     
     
     inABtn =[UIButton buttonWithType:UIButtonTypeCustom];
@@ -252,7 +258,7 @@
     
     [self getSayHelloForNetWithDictionary:paramDict method:@"149" prompt:nil type:1];
 
-    promptLabel.text =@"正在换一个。。。";
+    promptLabel.text =@"你将一枚金币抛入了许愿池中，然后耐心的等待池水平静下来…";
 }
 
 - (void)refrenshVerCodeTime
@@ -295,7 +301,7 @@
     sayHelloBtn.enabled = NO;
     
     if (isXuyuanchi ==YES) {
-        promptLabel.text  =@"虽然它很想回复你,但是它不会说话..哗哗哗..." ;
+        promptLabel.text  =@"你和许愿池打了个招呼, 但是许愿池完全没有鸟你， 点击”换一个”来遇到有缘人吧。" ;
         return;
     }
     
@@ -394,6 +400,7 @@
 
             
             i= promptLabel.text.length/23;
+            promptView.frame = CGRectMake(0, 318-40, 320, 30+15*i);
             promptLabel.frame = CGRectMake(0, 318-40, 320, 30+15*i);
             
         }
