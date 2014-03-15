@@ -130,13 +130,6 @@
         [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     }
     
-    UIButton *profileButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    profileButton.frame=CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30);
-    [profileButton setBackgroundImage:[UIImage imageNamed:@"user_info_normal.png"] forState:UIControlStateNormal];
-    [profileButton setBackgroundImage:[UIImage imageNamed:@"user_info_click.png"] forState:UIControlStateHighlighted];
-    [profileButton.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
-    [self.view addSubview:profileButton];
-    [profileButton addTarget:self action:@selector(userInfoClick) forControlEvents:UIControlEventTouchUpInside];
     
     ifAudio = NO;
     ifEmoji = NO;
@@ -223,6 +216,15 @@
 //    UIMenuItem *copyItem2 = [[UIMenuItem alloc] initWithTitle:@"转发"action:@selector(transferMsg)];
     copyItem3 = [[UIMenuItem alloc] initWithTitle:@"删除"action:@selector(deleteMsg)];
     menu = [UIMenuController sharedMenuController];
+    UIButton *profileButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    profileButton.frame=CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30);
+    [profileButton setBackgroundImage:[UIImage imageNamed:@"user_info_normal.png"] forState:UIControlStateNormal];
+    [profileButton setBackgroundImage:[UIImage imageNamed:@"user_info_click.png"] forState:UIControlStateHighlighted];
+    [profileButton.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
+    [self.view addSubview:profileButton];
+    [self.view bringSubviewToFront:profileButton];
+    [profileButton addTarget:self action:@selector(userInfoClick) forControlEvents:UIControlEventTouchUpInside];
+
 }
 
 - (void)sendReadedMesg//发送已读消息
