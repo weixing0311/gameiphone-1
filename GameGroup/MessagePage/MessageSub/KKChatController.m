@@ -1249,8 +1249,6 @@
     NSDictionary* tempDic = notification.userInfo;
     NSRange range = [KISDictionaryHaveKey(tempDic,  @"sender") rangeOfString:@"@"];
     NSString * sender = [KISDictionaryHaveKey(tempDic,  @"sender") substringToIndex:range.location];
-    NSString* msgType = KISDictionaryHaveKey(tempDic, @"msgType");
-   
     if ([sender isEqualToString:self.chatWithUser]) {
         [messages addObject:tempDic];
         
@@ -1259,10 +1257,8 @@
         if (messages.count>0) {
             [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
-        if ([msgType isEqualToString:@"normalchat"]) {
-            NSString* msgId = KISDictionaryHaveKey(tempDic, @"msgId");
-            [self comeBackDisplayed:sender msgId:msgId];//发送已读消息
-        }
+        NSString* msgId = KISDictionaryHaveKey(tempDic, @"msgId");
+        [self comeBackDisplayed:sender msgId:msgId];//发送已读消息
     }
 }
 

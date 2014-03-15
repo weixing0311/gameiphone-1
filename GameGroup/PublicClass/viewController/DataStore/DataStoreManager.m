@@ -619,25 +619,16 @@
 +(void)refreshMessageStatusWithId:(NSString*)messageuuid status:(NSString*)status
 {
     if (messageuuid && messageuuid.length > 0) {//0失败 1发送到服务器 2发送中 3已送达 4已读
-//        [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
-            NSArray* idArray = [messageuuid componentsSeparatedByString:@","];
-            for (int i = 0; i < [idArray count]; i++) {
-                NSString* oneId = [idArray objectAtIndex:i];
-                if (oneId && oneId.length > 0) {
-                    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"messageuuid==[c]%@", oneId];
-                    DSCommonMsgs * commonMsgs = [DSCommonMsgs MR_findFirstWithPredicate:predicate];
-                    if (commonMsgs) {
-                        commonMsgs.status = status;
-                    }
-                    
-                    DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
-                    if (thumbMsgs){
-                        thumbMsgs.status = status;
-                    }
-                }
-            }
-//        }];
-
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"messageuuid==[c]%@", messageuuid];
+        DSCommonMsgs * commonMsgs = [DSCommonMsgs MR_findFirstWithPredicate:predicate];
+        if (commonMsgs) {
+            commonMsgs.status = status;
+        }
+        DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+        if (thumbMsgs){
+            thumbMsgs.status = status;
+        }
+        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
     }
 }
 

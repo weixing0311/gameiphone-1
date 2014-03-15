@@ -60,19 +60,11 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     if([type isEqualToString:@"normalchat"])
     {
         NSLog(@"%@",KISDictionaryHaveKey(messageContent, @"msgId"));
-        if ([DataStoreManager savedMsgWithID:KISDictionaryHaveKey(messageContent, @"msgId")]) {
-            NSLog(@"消息已存在");
-            return;
-        }
         AudioServicesPlayAlertSound(1007);
         [DataStoreManager storeNewMsgs:messageContent senderType:COMMONUSER];//普通聊天消息
     }
     else if([type isEqualToString:@"payloadchat"])
     {
-        if ([DataStoreManager savedMsgWithID:KISDictionaryHaveKey(messageContent, @"msgId")]) {
-            NSLog(@"消息已存在");
-            return;
-        }
         AudioServicesPlayAlertSound(1007);
         [DataStoreManager storeNewMsgs:messageContent senderType:PAYLOADMSG];//动态消息
     }
@@ -109,6 +101,10 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     NSRange range = [[messageContent objectForKey:@"sender"] rangeOfString:@"@"];
     NSString * sender = [[messageContent objectForKey:@"sender"] substringToIndex:range.location];
     NSString* msgId = KISDictionaryHaveKey(messageContent, @"msgId");
+    if ([DataStoreManager savedMsgWithID:KISDictionaryHaveKey(messageContent, @"msgId")]) {
+        NSLog(@"消息已存在");
+        return;
+    }
     [self storeNewMessage:messageContent];
     [self comeBackDelivered:sender msgId:msgId];
     
