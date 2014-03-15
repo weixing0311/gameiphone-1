@@ -340,7 +340,7 @@
                    TheController:self
                         Progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite)
         {
-            hud.labelText = [NSString stringWithFormat:@"%.2f％",((double)totalBytesWritten/(double)totalBytesExpectedToWrite) * 100];
+            hud.labelText = [NSString stringWithFormat:@"图片上传中..%.2f％",((double)totalBytesWritten/(double)totalBytesExpectedToWrite) * 100];
         }
                          Success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
            

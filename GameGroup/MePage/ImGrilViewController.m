@@ -106,6 +106,7 @@
         if (imagePicker==nil) {
             imagePicker=[[UIImagePickerController alloc]init];
             imagePicker.delegate=self;
+            imagePicker.allowsEditing = YES;
         }
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
             imagePicker.sourceType=UIImagePickerControllerSourceTypeCamera;
@@ -122,6 +123,7 @@
         if (imagePicker==nil) {
             imagePicker=[[UIImagePickerController alloc]init];
             imagePicker.delegate=self;
+            imagePicker.allowsEditing = YES;
         }
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
             imagePicker.sourceType=UIImagePickerControllerSourceTypePhotoLibrary;

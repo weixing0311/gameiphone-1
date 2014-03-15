@@ -102,7 +102,7 @@
     NSArray  * array= [fruits componentsSeparatedByString:@","];
     self.friendImgStr =[array objectAtIndex:0];
     
-    [[NSUserDefaults standardUserDefaults]setValue:self.friendImgStr forKey:@"friendImgStr_wx"];
+    [[NSUserDefaults standardUserDefaults]setValue:self.friendImgStr forKey:@"preload_img_wx_dongtai"];
     
     m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
     if (friendDunamicmsgCount && friendDunamicmsgCount !=0)
@@ -161,8 +161,12 @@
     m_dynamicBtn = [[EGOImageButton alloc]initWithFrame:CGRectMake(0, 0, 59, 59)];
     m_dynamicBtn.center =CGPointMake(m_meetBtn.center.x-49, m_meetBtn.center.y-125);
     m_dynamicBtn.placeholderImage = KUIImage(@"people_man");
+    
+    if (_friendImgStr ==nil) {
+        m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"preload_img_wx_dongtai"]]];
+    }else{
         m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
-
+    }
 //    m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
     
     m_dynamicBtn.layer.masksToBounds = YES;

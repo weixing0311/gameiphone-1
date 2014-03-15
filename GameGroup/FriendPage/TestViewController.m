@@ -30,6 +30,11 @@
     AppDelegate*    m_delegate;
     
     UIView*         m_buttonBgView;
+    
+    UIButton *        delFriendBtn;
+    UIButton *        addFriendBtn;
+    UIButton *        attentionBtn;
+    UIButton *        attentionOffBtn;
 }
 
 @end
@@ -891,15 +896,15 @@
             [self.view addSubview:editButton];
             [editButton addTarget:self action:@selector(editButtonClick:) forControlEvents:UIControlEventTouchUpInside];
             
-            UIButton* button_left = [CommonControlOrView
+            delFriendBtn = [CommonControlOrView
                                      setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
                                      title:nil
                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
                                      bgImage:KUIImage(@"del_friend_normal")
                                      HighImage:KUIImage(@"del_friend_click")
                                      selectImage:Nil];
-            [button_left addTarget:self action:@selector(deleteFriend:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_left];
+            [delFriendBtn addTarget:self action:@selector(deleteFriend:) forControlEvents:UIControlEventTouchUpInside];
+            [self.view addSubview:delFriendBtn];
             
             UIButton* button_right = [CommonControlOrView
                                       setButtonWithFrame:CGRectMake(0, self.view.bounds.size.height -44, 106, 44)//120
@@ -920,15 +925,15 @@
             [self.view addSubview:editButton];
             [editButton addTarget:self action:@selector(editButtonClick:) forControlEvents:UIControlEventTouchUpInside];
             
-            UIButton* button_left = [CommonControlOrView
+            attentionOffBtn = [CommonControlOrView
                                      setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
                                      title:nil
                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
                                     bgImage:KUIImage(@"Focus_off_normal")
                                      HighImage:KUIImage(@"Focus_off_click")
                                      selectImage:Nil];
-            [button_left addTarget:self action:@selector(cancelAttentionClick:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_left];
+            [attentionOffBtn addTarget:self action:@selector(cancelAttentionClick:) forControlEvents:UIControlEventTouchUpInside];
+            [self.view addSubview:attentionOffBtn];
             
             UIButton* button_right = [CommonControlOrView
                                       setButtonWithFrame:CGRectMake(0, self.view.bounds.size.height -44, 106, 44)//120
@@ -942,15 +947,15 @@
         }  break;
         case VIEW_TYPE_FansPage1:
         {
-            UIButton* button_left = [CommonControlOrView
+            addFriendBtn = [CommonControlOrView
                                      setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
                                      title:nil
                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
                                      bgImage:KUIImage(@"add_friend_normal")
                                      HighImage:KUIImage(@"add_friend_click")
                                      selectImage:Nil];
-            [button_left addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_left];
+            [addFriendBtn addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
+            [self.view addSubview:addFriendBtn];
             
             UIButton* button_right = [CommonControlOrView
                                       setButtonWithFrame:CGRectMake(0, self.view.bounds.size.height -44, 106, 44)//120
@@ -964,15 +969,15 @@
         }break;
         case VIEW_TYPE_STRANGER1:
         {
-            UIButton* button_left = [CommonControlOrView
+            attentionBtn = [CommonControlOrView
                                      setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height-44, 107, 44)//120
                                      title:nil
                                      fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor]
                                      bgImage:KUIImage(@"Focus_on_normal")
                                      HighImage:KUIImage(@"Focus_on_3_click")
                                      selectImage:Nil];
-            [button_left addTarget:self action:@selector(attentionClick:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button_left];
+            [attentionBtn addTarget:self action:@selector(attentionClick:) forControlEvents:UIControlEventTouchUpInside];
+            [self.view addSubview:attentionBtn];
             
             UIButton* button_right = [CommonControlOrView
                                       setButtonWithFrame:CGRectMake(0, self.view.bounds.size.height-44, 106, 44)//120
@@ -994,6 +999,10 @@
 - (void)addFriendClick:(id)sender
 {
     [hud show:YES];
+    addFriendBtn.userInteractionEnabled = NO;
+    delFriendBtn.userInteractionEnabled = NO;
+    attentionBtn.userInteractionEnabled = NO;
+    attentionOffBtn.userInteractionEnabled = NO;
     
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
@@ -1011,7 +1020,11 @@
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         [hud hide:YES];
-        
+        addFriendBtn.userInteractionEnabled = YES;
+        delFriendBtn.userInteractionEnabled = YES;
+        attentionBtn.userInteractionEnabled = YES;
+        attentionOffBtn.userInteractionEnabled = YES;
+
         [DataStoreManager deleteFansWithUserid:self.userId];
         //        [GameCommon shareGameCommon].fansTableChanged = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:kReloadContentKey object:@"2"];
@@ -1051,6 +1064,11 @@
         [self.navigationController popViewControllerAnimated:YES];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
+        addFriendBtn.userInteractionEnabled = YES;
+        delFriendBtn.userInteractionEnabled = YES;
+        attentionBtn.userInteractionEnabled = YES;
+        attentionOffBtn.userInteractionEnabled = YES;
+
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {
@@ -1074,6 +1092,11 @@
     if (alertView.tag == 234) {//删除好友
         if (buttonIndex != alertView.cancelButtonIndex) {
             //后台存储
+            addFriendBtn.userInteractionEnabled = NO;
+            delFriendBtn.userInteractionEnabled = NO;
+            attentionBtn.userInteractionEnabled = NO;
+            attentionOffBtn.userInteractionEnabled = NO;
+
             NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
             NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
             
@@ -1089,7 +1112,11 @@
             
             [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [hud hide:YES];
-                
+                addFriendBtn.userInteractionEnabled = YES;
+                delFriendBtn.userInteractionEnabled = YES;
+                attentionBtn.userInteractionEnabled = YES;
+                attentionOffBtn.userInteractionEnabled = YES;
+
                 //                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];//删除聊天消息
                 [DataStoreManager deleteFriendWithUserId:self.hostInfo.userId];//从表删除
                 
@@ -1113,6 +1140,11 @@
                 [self.navigationController popViewControllerAnimated:YES];
                 
             } failure:^(AFHTTPRequestOperation *operation, id error) {
+                addFriendBtn.userInteractionEnabled = YES;
+                delFriendBtn.userInteractionEnabled = YES;
+                attentionBtn.userInteractionEnabled = YES;
+                attentionOffBtn.userInteractionEnabled = YES;
+
                 if ([error isKindOfClass:[NSDictionary class]]) {
                     if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
                     {
@@ -1128,6 +1160,11 @@
     {
         if (buttonIndex != alertView.cancelButtonIndex) {
             //后台存储
+            addFriendBtn.userInteractionEnabled = NO;
+            delFriendBtn.userInteractionEnabled = NO;
+            attentionBtn.userInteractionEnabled = NO;
+            attentionOffBtn.userInteractionEnabled = NO;
+
             NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
             NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
             
@@ -1143,7 +1180,11 @@
             
             [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [hud hide:YES];
-                
+                addFriendBtn.userInteractionEnabled = YES;
+                delFriendBtn.userInteractionEnabled = YES;
+                attentionBtn.userInteractionEnabled = YES;
+                attentionOffBtn.userInteractionEnabled = YES;
+
                 //                [DataStoreManager deleteThumbMsgWithSender:self.hostInfo.userName];
                 
                 ////////////////////////
@@ -1159,6 +1200,11 @@
                 [self.navigationController popViewControllerAnimated:YES];
                 
             } failure:^(AFHTTPRequestOperation *operation, id error) {
+                addFriendBtn.userInteractionEnabled = YES;
+                delFriendBtn.userInteractionEnabled = YES;
+                attentionBtn.userInteractionEnabled = YES;
+                attentionOffBtn.userInteractionEnabled = YES;
+
                 if ([error isKindOfClass:[NSDictionary class]]) {
                     if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
                     {
@@ -1219,6 +1265,11 @@
 
 - (void)attentionClick:(id)sender
 {
+    addFriendBtn.userInteractionEnabled = NO;
+    delFriendBtn.userInteractionEnabled = NO;
+    attentionBtn.userInteractionEnabled = NO;
+    attentionOffBtn.userInteractionEnabled = NO;
+
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
@@ -1236,6 +1287,11 @@
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"dicresponseObject%@",responseObject);
         [hud hide:YES];
+        addFriendBtn.userInteractionEnabled = YES;
+        delFriendBtn.userInteractionEnabled = YES;
+        attentionBtn.userInteractionEnabled = YES;
+        attentionOffBtn.userInteractionEnabled = YES;
+
         if ([responseObject isKindOfClass:[NSDictionary class]] && [KISDictionaryHaveKey(responseObject, @"shiptype") isEqualToString:@"2"])
         {
             if (self.hostInfo.achievementArray && [self.hostInfo.achievementArray count] != 0) {
@@ -1274,6 +1330,11 @@
         [self.navigationController popViewControllerAnimated:YES];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
+        addFriendBtn.userInteractionEnabled = YES;
+        delFriendBtn.userInteractionEnabled = YES;
+        attentionBtn.userInteractionEnabled = YES;
+        attentionOffBtn.userInteractionEnabled = YES;
+
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {

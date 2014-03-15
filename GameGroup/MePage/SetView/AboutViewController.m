@@ -31,13 +31,8 @@
     logImg.layer.masksToBounds = YES;
     [self.view addSubview:logImg];
     
-//    UILabel *detailLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(0, startX + 100, kScreenWidth, 30) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont systemFontOfSize:13.0] text:[NSString stringWithFormat:@"当前版本号:%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]] textAlignment:NSTextAlignmentCenter];
-//    [self.view addSubview:detailLabel];
-    
-    
-    UILabel *detailLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(0, startX + 100, kScreenWidth, 30) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont systemFontOfSize:13.0] text:[NSString stringWithFormat:@"当前版本号:测试1.8"] textAlignment:NSTextAlignmentCenter];
+    UILabel *detailLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(0, startX + 100, kScreenWidth, 30) textColor:kColorWithRGB(102, 102, 102, 1.0) font:[UIFont systemFontOfSize:13.0] text:[NSString stringWithFormat:@"当前版本号:%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]] textAlignment:NSTextAlignmentCenter];
     [self.view addSubview:detailLabel];
-
     
 }
 
