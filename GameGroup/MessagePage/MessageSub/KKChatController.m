@@ -1157,6 +1157,7 @@
 }
 -(void)sendMsg:(NSString *)message
 {
+    NSLog(@"+++++%@",[message class]);
     if (message.length==0)
     {
         return;

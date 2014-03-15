@@ -66,7 +66,7 @@
         MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
         picker.messageComposeDelegate = self;
         picker.recipients = @[_addressDic[@"mobileid"]];
-        picker.body=[NSString stringWithFormat:@"QQ或YY找不到我的时候, 来陌游找我.下载地址:www.momotalk.com"];
+        picker.body=[NSString stringWithFormat:@"魔兽世界找不到我的时候, 来陌游找我. 下载地址:www.momotalk.com"];
         [self presentViewController:picker animated:YES completion:^{
             
         }];
