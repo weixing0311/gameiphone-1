@@ -253,7 +253,11 @@
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
     
     [paramDict setObject:@"3" forKey:@"type"];
-    [paramDict setObject:self.dynamicTV.text forKey:@"msg"];
+    
+    NSString *trimmedString = [self.dynamicTV.text stringByTrimmingCharactersInSet:
+                               [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    [paramDict setObject:trimmedString forKey:@"msg"];
     [paramDict setObject:imageID forKey:@"img"];
 //    [paramDict setObject:@"" forKey:@"urlLink"];
 

@@ -46,6 +46,7 @@
     [MobClick startWithAppkey:@"52caacec56240b18e2035237"];
 //    [MobClick startWithAppkey:@"xxxxxxxxxxxxxxx" reportPolicy:BATCH   channelId:@""];
     
+    
     [GetDataAfterManager shareManageCommon];
     
     //网络变化

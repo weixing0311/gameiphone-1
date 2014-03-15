@@ -323,6 +323,8 @@
                 str =[NSString stringWithFormat:@"%@分钟",timeStr];
             }
             NSString *indexStr = KISDictionaryHaveKey(responseObject, @"index");
+           // hud.mode =  MBProgressHUDModeIndeterminate;
+            hud.labelText = nil;
             hud.detailsLabelText = [NSString stringWithFormat:@"进入更新队列,目前队列位置：%@，预计更新时间：%@",indexStr,str];
             [hud showAnimated:YES whileExecutingBlock:^{
                 sleep(5);
@@ -331,11 +333,7 @@
         }
             m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
             m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
-            hud.labelText = @"获取成功";
-            hud.detailsLabelText = nil;
-            [hud showAnimated:YES whileExecutingBlock:^{
-                sleep(3);
-            }];
+          [self showMessageWindowWithContent:@"获取成功" imageType:0];
         NSString *changeBtnTitle =[NSString stringWithFormat:@"上次更新时间：%@",[self getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"rankingtime")]]];
         
         [[NSUserDefaults standardUserDefaults]setObject:KISDictionaryHaveKey(responseObject, @"rankingtime") forKey:@"WX_reloadBtnTitle_wx"];
@@ -361,6 +359,7 @@
 {
 //    hud = [[MBProgressHUD alloc] initWithView:self.view];
 //    [self.view addSubview:hud];
+    hud.mode =  MBProgressHUDModeIndeterminate;
      hud.labelText = @"正拼命从英雄榜获取中...";
     hud.detailsLabelText = nil;
     
@@ -495,7 +494,7 @@
         
     }
     
-    if ([cell.rankingLabel.text isEqualToString:@"0"]) {
+    if ([cell.rankingLabel.text isEqualToString:@"0"]||[cell.rankingLabel.text intValue]>100||[cell.rankingLabel.text isEqualToString:@""]) {
         cell.rankingLabel.text =@"--";
         cell.upDowmImgView.hidden = YES;
     }

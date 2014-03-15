@@ -196,7 +196,7 @@
     m_shareButton =[UIButton buttonWithType:UIButtonTypeCustom];
     m_shareButton.frame=CGRectMake(kScreenHeigth - 50, 0, 50, 44);
     [m_shareButton setBackgroundImage:KUIImage(@"share_normal2") forState:UIControlStateNormal];
-    [m_shareButton setBackgroundImage:KUIImage(@"share_click") forState:UIControlStateHighlighted];
+  //  [m_shareButton setBackgroundImage:KUIImage(@"share_click") forState:UIControlStateHighlighted];
     [self.view addSubview:m_shareButton];
     [m_shareButton addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
 }

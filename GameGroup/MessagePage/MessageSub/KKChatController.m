@@ -102,6 +102,7 @@
     bgV.backgroundColor = kColorWithRGB(246, 246, 246, 1.0);
     [self.view addSubview:bgV];
     messages = [[NSMutableArray alloc] initWithArray:[ DataStoreManager qureyCommonMessagesWithUserID:self.chatWithUser FetchOffset:0]];
+    NSLog(@"messages%@",messages);
 //    currentPage = 1;
 //    historyMsg = [[NSArray alloc] initWithArray:[DataStoreManager qureyAllCommonMessages:self.chatWithUser]];
 //    if ([historyMsg count] > 0) {//有记录

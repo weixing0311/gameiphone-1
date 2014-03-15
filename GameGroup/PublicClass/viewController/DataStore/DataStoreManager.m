@@ -579,7 +579,7 @@
 }
 +(NSArray *)qureyAllNewsMessage
 {
-    NSArray * newsMessage = [DSNewsMsgs MR_findAllSortedBy:@"sendtime" ascending:NO];
+    NSArray * newsMessage = [DSNewsMsgs MR_findAllSortedBy:@"sendtime" ascending:YES];
     NSMutableArray* array = [NSMutableArray array];
     for (DSNewsMsgs* news in newsMessage) {
         NSString * str = news.mytitle;
@@ -2624,6 +2624,18 @@
         
         [resultArr addObject:dict];
     }
+    
+    for (int i = 0; i <resultArr.count; i++) {
+        for (int j =0; j<resultArr.count-i; j++) {
+            NSDictionary *dic = [resultArr objectAtIndex:i];
+            NSDictionary *dic1 = [resultArr objectAtIndex:j];
+            if ([KISDictionaryHaveKey(dic, @"messageuuid")isEqualToString:KISDictionaryHaveKey(dic1, @"messageuuid")]) {
+                [resultArr removeObject:dic1];
+            }
+        }
+    }
+    
+    
     return resultArr;
 }
 

@@ -102,6 +102,8 @@
     NSArray  * array= [fruits componentsSeparatedByString:@","];
     self.friendImgStr =[array objectAtIndex:0];
     
+    [[NSUserDefaults standardUserDefaults]setValue:self.friendImgStr forKey:@"friendImgStr_wx"];
+    
     m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
     if (friendDunamicmsgCount && friendDunamicmsgCount !=0)
     {
@@ -158,17 +160,16 @@
     
     m_dynamicBtn = [[EGOImageButton alloc]initWithFrame:CGRectMake(0, 0, 59, 59)];
     m_dynamicBtn.center =CGPointMake(m_meetBtn.center.x-49, m_meetBtn.center.y-125);
-    m_dynamicBtn.placeholderImage = KUIImage(@"正常_03");
-    m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
+    m_dynamicBtn.placeholderImage = KUIImage(@"people_man");
+        m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
+
+//    m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
     
-    
-    
-      
-    
-//    [m_dynamicBtn setBackgroundImage:KUIImage(@"正常_03") forState:UIControlStateNormal];
-//    [m_dynamicBtn setBackgroundImage:KUIImage(@"按下_03") forState:UIControlStateHighlighted];
     m_dynamicBtn.layer.masksToBounds = YES;
     m_dynamicBtn.layer.cornerRadius = 59/2;
+    m_dynamicBtn.layer.borderWidth = 2.0;
+    m_dynamicBtn.layer.borderColor = [[UIColor whiteColor] CGColor];
+
     [m_dynamicBtn addTarget:self action:@selector(didClickenterMeet:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview:m_dynamicBtn];
@@ -188,6 +189,8 @@
     lb.font = [UIFont systemFontOfSize:14.0];
     [m_notibgInfoImageView addSubview:lb];
     
+    
+
     
     if (friendDunamicmsgCount && friendDunamicmsgCount !=0)
     {

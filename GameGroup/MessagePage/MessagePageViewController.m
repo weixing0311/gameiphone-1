@@ -525,7 +525,7 @@
         {
             cell.headImageV.imageURL =nil;
             
-            cell.headImageV.image = KUIImage(@"WOW图标_03");
+            cell.headImageV.image = KUIImage(@"mess_news");
             
             cell.contentLabel.text = [[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msg"];
         }

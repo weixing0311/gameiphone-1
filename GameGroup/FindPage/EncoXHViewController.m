@@ -110,6 +110,7 @@
     sexLabel.hidden = YES;
     sayHelloBtn.hidden =YES;
     promptLabel .hidden = YES;
+    promptView.hidden =YES;
 
 }
 -(void)buildTableView
@@ -174,7 +175,7 @@
    // headImageView.backgroundColor =[UIColor whiteColor];
     headImageView.image = KUIImage(@"许愿池头像");
     headImageView.placeholderImage = KUIImage(@"moren_people");
-
+    headImageView.backgroundColor = [UIColor whiteColor];
     headImageView.layer.borderWidth = 2.0;
     headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
     [headImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(enterToPernsonPage:)]];
@@ -209,18 +210,17 @@
     [backgroundImageView addSubview:sexLabel];
     
     
-    promptView = [[UIView alloc]initWithFrame:CGRectMake(0,318-40, 320, 50)];
-    promptView.backgroundColor =UIColorFromRGBA(0xc3c3c3, 1);
+    promptView = [[UIView alloc]initWithFrame:CGRectMake(0,318-50, 320, 50)];
+    promptView.backgroundColor =[UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];;
     [backgroundImageView addSubview:promptView];
     
     promptLabel = [[UITextView alloc]initWithFrame:CGRectMake(20,0, 280, 50)];
     promptLabel.textColor = UIColorFromRGBA(0xc3c3c3, 1);
-    promptLabel.backgroundColor =[UIColor clearColor];
     promptLabel.textAlignment =NSTextAlignmentCenter;
     promptLabel.userInteractionEnabled = NO;
-    promptLabel.font = [UIFont boldSystemFontOfSize:12];
+    promptLabel.font = [UIFont boldSystemFontOfSize:14];
     promptLabel.text = @"在许愿池你会遇见冥冥之中与你有缘的神奇事物或是有趣之人,点击“换一个”试试手气吧";
-    promptLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];
+    promptLabel.backgroundColor = [UIColor clearColor];
 
     [promptView addSubview:promptLabel];
     
@@ -243,7 +243,6 @@
     
 }
 //换一个的说
-
 - (void)changeOtherOne
 {
     inABtn.selected = YES;
@@ -259,43 +258,13 @@
     [self getSayHelloForNetWithDictionary:paramDict method:@"149" prompt:nil type:1];
 
     promptLabel.text =@"你将一枚金币抛入了许愿池中，然后耐心的等待池水平静下来…";
-}
-
-- (void)refrenshVerCodeTime
-{
-    m_leftTime--;
-    if (m_leftTime == 0) {
-        inABtn.selected = NO;
-     //   [inABtn setTitle:@"重发" forState:UIControlStateNormal];
-        inABtn.userInteractionEnabled = YES;
-        if([m_verCodeTimer isValid])
-        {
-            [m_verCodeTimer invalidate];
-            m_verCodeTimer = nil;
-        }
-    }
-    //else
-       // [inABtn setTitle:@"不行" forState:UIControlStateSelected];
+   int i= promptLabel.text.length/20;
+    promptView.frame = CGRectMake(0, 318-50, 320, 30+15*i);
+    promptLabel.frame = CGRectMake(20, 0, 280, 30+15*i);
 
 }
 
 
--(void)headPhotoAnimation
-{
-//    NickNameLabel.text = nil;
-//    customLabel.text = nil;
-//    promptLabel.text =nil;
-//    sexLabel.text = nil;
-  //  sexLabel.backgroundColor = [UIColor clearColor];
-    // headImageView.frame = CGRectMake(0, 400, 0, 0);
-    NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
-    
-    [paramDict setObject:@"1" forKey:@"gameid"];
-    [paramDict setObject:self.characterId forKey:@"characterid"];
-    
-    [self getSayHelloForNetWithDictionary:paramDict method:@"149" prompt:@"邂逅中..." type:1];
-
-}
 -(void)sayHiToYou:(UIButton *)sender
 {
     sayHelloBtn.enabled = NO;
@@ -399,9 +368,9 @@
             headImageView.animationImages=nil;
 
             
-            i= promptLabel.text.length/23;
-            promptView.frame = CGRectMake(0, 318-40, 320, 30+15*i);
-            promptLabel.frame = CGRectMake(0, 318-40, 320, 30+15*i);
+            i= promptLabel.text.length/20;
+            promptView.frame = CGRectMake(0, 318-50, 320, 30+15*i);
+            promptLabel.frame = CGRectMake(20, 0, 280, 30+15*i);
             
         }
         if (COME_TYPE ==2) {
@@ -435,6 +404,8 @@
                     sexLabel.hidden = NO;
                     sayHelloBtn.hidden =NO;
                     promptLabel .hidden = NO;
+                    promptView.hidden =NO;
+
                     charaterId =KISDictionaryHaveKey([m_characterArray objectAtIndex:0], @"id");
                     [self getEncoXhinfoWithNet:[m_characterArray objectAtIndex:0]];
                 }else{
@@ -483,20 +454,18 @@
                 isWXCeiling =YES;
                 inABtn.enabled = YES;
                 sayHelloBtn.enabled = YES;
-                
+                    headImageView.userInteractionEnabled = YES;
+                    clazzImageView.userInteractionEnabled = YES;
                 //男♀♂
                     sexLabel.text = @"♂";
                     sexLabel.textColor = kColorWithRGB(33, 193, 250, 1.0);
-                promptLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];
+               // promptLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];
                 
                 NickNameLabel.text =@"小衰神";
                 customLabel.text = @" ？？|神 明";
                 
                 promptLabel.text =@"小衰神附体,你ROLL出了1点,什么也没遇到...";
                 headImageView.image = KUIImage(@"roll_0");
-//                headImageView.backgroundColor = [UIColor whiteColor];
-//                headImageView.layer.borderWidth = 2.0;
-//                headImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
 
                 UIImage *image = headImageView.image;
                     
@@ -587,7 +556,8 @@
     sexLabel.hidden = NO;
     sayHelloBtn.hidden =NO;
     promptLabel .hidden = NO;
-        
+    promptView.hidden =NO;
+
     charaterId = KISDictionaryHaveKey([m_characterArray objectAtIndex:indexPath.row], @"id");
         
     [self getEncoXhinfoWithNet:[m_characterArray objectAtIndex:indexPath.row]];
@@ -619,15 +589,17 @@
         promptLabel.text = @"不要触碰神迹! 这有可能会影响你接下来的运气…";
         return;
     }
-    if (isSuccessToshuaishen ==NO) {
+     if (isSuccessToshuaishen ==NO) {
         TestViewController *pv = [[TestViewController alloc]init];
         pv.userId =KISDictionaryHaveKey(getDic, @"userid");
         pv.nickName = KISDictionaryHaveKey(getDic, @"nickname");
         [self.navigationController pushViewController:pv animated:YES];
+        
     }
     else{
         promptLabel.text = @"发现了一只神明，但神明的世界是你无法窥伺的";
-    }
+           }
+    
 }
 #pragma mark--- 查看角色列表
 
@@ -654,7 +626,7 @@
         sexLabel.hidden = YES;
         sayHelloBtn.hidden =YES;
         promptLabel .hidden = YES;
-
+        promptView.hidden = YES;
     }
     else{
         [self showAlertViewWithTitle:@"提示" message:@"你只有一个角色" buttonTitle:@"确定"];
