@@ -10,7 +10,7 @@
 #import "MyHeadView.h"
 #import "InDoduAddressTableViewCell.h"
 #import "OutDodeAddressTableViewCell.h"
-#import "AddSameServerListViewController.h"
+//#import "AddSameServerListViewController.h"
 #import <MessageUI/MessageUI.h>
 @interface AddressListViewController ()<UITableViewDelegate,UITableViewDataSource,DodeAddressCellDelegate,MFMessageComposeViewControllerDelegate>
 {
@@ -204,14 +204,9 @@
 }
 - (void)passUploadAddressBook
 {
-    if ([[TempData sharedInstance] passBindingRole]) {
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
-    }else{
-        AddSameServerListViewController * addSameServerVC = [[AddSameServerListViewController alloc]init];
-        [self.navigationController pushViewController:addSameServerVC animated:YES];
-    }
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 /*
 #pragma mark - Navigation

@@ -9,7 +9,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "AddAddressBookViewController.h"
 #import "AddressListViewController.h"
-#import "AddSameServerListViewController.h"
+//#import "AddSameServerListViewController.h"
 
 @interface AddAddressBookViewController ()<UIAlertViewDelegate>
 
@@ -201,14 +201,8 @@
 }
 - (void)goToNext
 {
-    if ([[TempData sharedInstance] passBindingRole]) {
+    [self dismissViewControllerAnimated:YES completion:^{
         
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
-    }else{
-        AddSameServerListViewController * addSameServerVC = [[AddSameServerListViewController alloc]init];
-        [self.navigationController pushViewController:addSameServerVC animated:YES];
-    }
+    }];
 }
 @end
