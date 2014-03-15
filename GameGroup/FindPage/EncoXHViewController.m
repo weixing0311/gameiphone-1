@@ -250,6 +250,8 @@
     sayHelloBtn.enabled = NO;
     headImageView.userInteractionEnabled = NO;
     clazzImageView.userInteractionEnabled = NO;
+    [sayHelloBtn setBackgroundImage:KUIImage(@"green") forState:UIControlStateNormal];
+
     NSMutableDictionary *paramDict =[[NSMutableDictionary alloc]init];
 
     [paramDict setObject:@"1" forKey:@"gameid"];
@@ -271,6 +273,7 @@
     
     if (isXuyuanchi ==YES) {
         promptLabel.text  =@"你和许愿池打了个招呼, 但是许愿池完全没有鸟你， 点击”换一个”来遇到有缘人吧。" ;
+        [sender setBackgroundImage:KUIImage(@"gray") forState:UIControlStateNormal];
         return;
     }
     

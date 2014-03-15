@@ -150,22 +150,34 @@ static Custom_tabbar *s_tabbar = NULL;
             [view removeFromSuperview];
     }
     if (ifNumber) {
-        UIImageView * notiBgV = [[UIImageView alloc] initWithFrame:CGRectMake(36, 0, 28, 22)];
-        [notiBgV setImage:[UIImage imageNamed:@"redCB.png"]];
+        UIImageView * notiBgV = [[UIImageView alloc] initWithFrame:CGRectMake(46, 4, 18, 18)];
+        
         notiBgV.tag=999;
         [btn addSubview:notiBgV];
-        UILabel * numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(-1, 0, 30, 22)];
+        UILabel * numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 18, 18)];
         [numberLabel setBackgroundColor:[UIColor clearColor]];
         [numberLabel setTextColor:[UIColor whiteColor]];
-        [numberLabel setFont:[UIFont systemFontOfSize:14]];
+        [numberLabel setFont:[UIFont systemFontOfSize:12]];
+        if (number>99) {
+            [notiBgV setImage:[UIImage imageNamed:@"redCB_big.png"]];
+            notiBgV.frame  = CGRectMake(46, 4, 22, 18);
+            numberLabel.frame = CGRectMake(0, 0, 22, 18);
+            [numberLabel setText:@"99+"];
+        }else{
+            [notiBgV setImage:[UIImage imageNamed:@"redCB.png"]];
+            notiBgV.frame  = CGRectMake(46, 4, 18, 18);
+            numberLabel.frame = CGRectMake(0, 0, 18, 18);
+    [numberLabel setText:[NSString stringWithFormat:@"%d",number]];
+            
+        }
         [numberLabel setTextAlignment:NSTextAlignmentCenter];
         [notiBgV addSubview:numberLabel];
-        [numberLabel setText:[NSString stringWithFormat:@"%d",number]];
+        
     }
     else if (dot){
-        UIImageView * dotLabel = [[UIImageView alloc] initWithFrame:CGRectMake(36, 0, 28, 22)];
+        UIImageView * dotLabel = [[UIImageView alloc] initWithFrame:CGRectMake(52, 8, 7, 7)];
         dotLabel.tag = 999;
-        [dotLabel setImage:[UIImage imageNamed:@"redpot.png"]];
+        [dotLabel setImage:[UIImage imageNamed:@"redCB.png"]];
         [btn addSubview:dotLabel];
     }
 }

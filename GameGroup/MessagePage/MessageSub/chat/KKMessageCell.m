@@ -67,7 +67,7 @@
         NSLog(@"fffff%f",self.frame.size.height);
         
 //        self.ifRead = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 15, 15)];
-//        [ifRead setImage:[UIImage imageNamed:@"redpot.png"]];
+//        [ifRead setImage:[UIImage imageNamed:@"redCB.png"]];
 //        [self.contentView addSubview:self.ifRead];
         
         self.playAudioImageV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];

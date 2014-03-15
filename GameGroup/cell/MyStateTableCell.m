@@ -14,14 +14,14 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {//80
-        self.headImageV = [[EGOImageView alloc] initWithFrame:CGRectMake(250, 20, 40, 40)];
+        self.headImageV = [[EGOImageView alloc] initWithFrame:CGRectMake(248, 20, 40, 40)];
         self.headImageV.backgroundColor = [UIColor clearColor];
         self.headImageV.layer.cornerRadius = 5;
         self.headImageV.layer.masksToBounds=YES;
         [self addSubview:self.headImageV];
         
-        self.notiBgV = [[UIImageView alloc] initWithFrame:CGRectMake(275, 10, 28, 22)];
-        [self.notiBgV setImage:[UIImage imageNamed:@"redpot"]];
+        self.notiBgV = [[UIImageView alloc] initWithFrame:CGRectMake(281, 18, 10, 10)];
+        [self.notiBgV setImage:[UIImage imageNamed:@"redCB"]];
         [self addSubview:self.notiBgV];
         self.notiBgV.hidden = YES;
         

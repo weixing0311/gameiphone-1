@@ -179,14 +179,14 @@
     [self.view addSubview:m_dynamicBtn];
    
     
-    m_notibgInfoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(123, 70+startX, 28, 22)];
+    m_notibgInfoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(123, 70+startX, 18, 18)];
      m_notibgInfoImageView.center =CGPointMake(m_meetBtn.center.x-25, m_meetBtn.center.y-140);
     [self.view bringSubviewToFront:m_notibgInfoImageView];
     [m_notibgInfoImageView setImage:[UIImage imageNamed:@"redCB.png"]];
     [self.view addSubview:m_notibgInfoImageView];
      m_notibgInfoImageView.hidden = YES;
     
-    lb = [[UILabel alloc] initWithFrame:CGRectMake(-1, 0, 30, 22)];
+    lb = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 18, 18)];
     [lb setBackgroundColor:[UIColor clearColor]];
     [lb setTextAlignment:NSTextAlignmentCenter];
     [lb setTextColor:[UIColor whiteColor]];

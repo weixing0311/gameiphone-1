@@ -315,9 +315,9 @@
     }
     if (allUnread>0) {
         [[Custom_tabbar showTabBar] notificationWithNumber:YES AndTheNumber:allUnread OrDot:NO WithButtonIndex:0];
-        if (allUnread>99) {
-            [[Custom_tabbar showTabBar] notificationWithNumber:YES AndTheNumber:99 OrDot:NO WithButtonIndex:0];
-        }
+//        if (allUnread>99) {
+//            [[Custom_tabbar showTabBar] notificationWithNumber:YES AndTheNumber:99 OrDot:NO WithButtonIndex:0];
+//        }
     }
     else
     {
@@ -471,7 +471,7 @@
 //            if ([[[allMsgArray objectAtIndex:theIndex] objectForKey:@"msgType"] isEqualToString:@"recommendfriend"] ||
 //                [[[allMsgArray objectAtIndex:theIndex] objectForKey:@"msgType"] isEqualToString:@"sayHello"] ||
 //                [[[allMsgArray objectAtIndex:theIndex] objectForKey:@"msgType"] isEqualToString:@"deletePerson"]) {
-//                cell.notiBgV.image = KUIImage(@"redpot");
+//                cell.notiBgV.image = KUIImage(@"redCB");
 //                cell.unreadCountLabel.hidden = YES;
 //            }
 //            else
@@ -541,18 +541,25 @@
             if ([[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"recommendfriend"] |
                 [[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"sayHello"] ||
                 [[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"deletePerson"]) {
-                cell.notiBgV.image = KUIImage(@"redpot");
+                cell.notiBgV.image = KUIImage(@"redCB");
                 cell.unreadCountLabel.hidden = YES;
             }
             else
             {
                 [cell.unreadCountLabel setText:[allMsgUnreadArray objectAtIndex:indexPath.row]];
-                cell.notiBgV.image = KUIImage(@"redCB.png");
+                
                 if ([[allMsgUnreadArray objectAtIndex:indexPath.row] intValue]>99) {
-                    [cell.unreadCountLabel setText:@"99"];
+                    [cell.unreadCountLabel setText:@"99+"];
+                    cell.notiBgV.image = KUIImage(@"redCB_big");
+                    cell.notiBgV.frame=CGRectMake(40, 8, 22, 18);
+                     cell.unreadCountLabel.frame =CGRectMake(0, 0, 22, 18);
                 }
-                else
+                else{
+                    cell.notiBgV.image = KUIImage(@"redCB.png");
                     [cell.unreadCountLabel setText:[allMsgUnreadArray objectAtIndex:indexPath.row]];
+                    cell.notiBgV.frame=CGRectMake(42, 8, 18, 18);
+                    cell.unreadCountLabel.frame =CGRectMake(0, 0, 18, 18);
+                }
             }
         }
         else
