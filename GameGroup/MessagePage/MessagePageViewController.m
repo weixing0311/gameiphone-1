@@ -658,7 +658,14 @@
         
         return;
     }
+    int allUnread = 0;
+    for (int i = 0; i<allMsgUnreadArray.count; i++) {
+        allUnread = allUnread+[[allMsgUnreadArray objectAtIndex:i] intValue];
+    }
+    MessageCell * cell =(MessageCell*)[self tableView:m_messageTable cellForRowAtIndexPath:indexPath] ;
+    NSInteger no = [cell.unreadCountLabel.text intValue];
     KKChatController * kkchat = [[KKChatController alloc] init];
+    kkchat.unreadNo = allUnread-no;
     kkchat.chatWithUser = [[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"sender"];
     kkchat.nickName = [allNickNameArray objectAtIndex:indexPath.row];
     kkchat.chatUserImg = [allHeadImgArray objectAtIndex:indexPath.row];

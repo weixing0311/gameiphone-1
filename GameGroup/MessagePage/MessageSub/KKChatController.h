@@ -88,6 +88,7 @@ EmojiViewDelegate>
         
     UIMenuController * menu;
 }
+@property (assign, nonatomic)  NSInteger unreadNo;
 @property (strong, nonatomic)  NSString* myHeadImg;
 @property (strong, nonatomic)  UITableView *tView;
 @property (strong, nonatomic)  NSMutableArray *finalMessageArray;

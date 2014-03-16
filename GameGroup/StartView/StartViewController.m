@@ -22,7 +22,7 @@
 #import "TempData.h"
 
 #import "MLNavigationController.h"
-#define kStartViewShowTime  (1.0f) //开机页面 显示时长
+#define kStartViewShowTime  (2.0f) //开机页面 显示时长
 
 @interface StartViewController ()
 {
