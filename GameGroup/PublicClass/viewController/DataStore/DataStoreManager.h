@@ -44,6 +44,7 @@
 +(NSString *)queryMsgHeadImageForUser:(NSString *)userid;
 +(void)blankMsgUnreadCountForUser:(NSString *)userid;
 +(NSArray *)queryUnreadCountForCommonMsg;
++(void)deleteAllNewsMsgs;
 +(void)deleteAllThumbMsg;
 +(void)deleteThumbMsgWithSender:(NSString *)sender;
 +(void)deleteMsgsWithSender:(NSString *)sender Type:(NSString *)senderType;

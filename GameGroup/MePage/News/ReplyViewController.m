@@ -62,17 +62,6 @@
     [super viewDidLoad];
 
     [self setTopViewWithTitle:@"评论" withBackButton:YES];
-    
-//    if (self.isHaveArticle) {
-//        UIButton* goArticle = [[UIButton alloc] initWithFrame:CGRectMake(245, KISHighVersion_7?20:0, 85, 44)];
-//        [goArticle setBackgroundColor:[UIColor clearColor]];
-//        [goArticle setTitle:@"查看原文" forState:UIControlStateNormal];
-//        goArticle.titleLabel.font = [UIFont boldSystemFontOfSize:13.0];
-//        [goArticle setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        [goArticle addTarget:self action:@selector(goArticle:) forControlEvents:UIControlEventTouchUpInside];
-//        [self.view addSubview:goArticle];
-//    }
-    
     m_pageIndex = 0;
     m_dataReply = [[NSMutableArray alloc] initWithCapacity:1];
     

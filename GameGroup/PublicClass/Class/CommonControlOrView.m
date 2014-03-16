@@ -218,7 +218,7 @@
     arrow.backgroundColor = [UIColor clearColor];
     [myView addSubview:arrow];
     
-    UIButton* usedButton = [[UIButton alloc] initWithFrame:CGRectMake(220, 0, 80, 40)];
+    UIButton* usedButton = [[UIButton alloc] initWithFrame:CGRectMake(230, 0, 80, 40)];
     usedButton.backgroundColor = [UIColor clearColor];
     [usedButton setTitle:@"当前头衔" forState:UIControlStateNormal];
     [usedButton setTitleColor:UIColorFromRGBA(0xa7a7a7,1.0) forState:UIControlStateNormal];

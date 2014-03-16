@@ -388,7 +388,6 @@
         [thumbMsgs MR_deleteInContext:localContext];
     }];
 }
-
 +(void)deleteMsgsWithSender:(NSString *)sender Type:(NSString *)senderType
 {
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
@@ -407,7 +406,15 @@
         
     }];
 }
-
++(void)deleteAllNewsMsgs
+{
+    [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+        NSArray * newsMsgs = [DSNewsMsgs MR_findAllInContext:localContext];
+        for (DSNewsMsgs* msg in newsMsgs) {
+            [msg deleteInContext:localContext];
+        }
+    }];
+}
 +(void)deleteAllThumbMsg
 {
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
