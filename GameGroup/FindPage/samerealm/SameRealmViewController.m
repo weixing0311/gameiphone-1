@@ -302,6 +302,13 @@
     m_searchType = 3;
     [m_selectRealmButton setTitle:[m_realmsArray objectAtIndex:buttonIndex] forState:UIControlStateNormal];
     [[NSUserDefaults standardUserDefaults]setObject:[NSString stringWithFormat:@"%d",buttonIndex] forKey:@"wx_buttonTitleOfPage"];
+    if (m_selectRealmButton.titleLabel.text.length>6) {
+        m_selectRealmButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    }else{
+        m_selectRealmButton.titleLabel.font = [UIFont systemFontOfSize:20];
+        
+    }
+
     m_currentPage = 0;
     [m_tabelData removeAllObjects];
     [self getSameRealmDataByNet];
@@ -349,6 +356,14 @@
         [m_selectRealmButton setTitle:currentTitle forState:UIControlStateNormal];
         m_searchType = 3;
     }
+    
+    if (m_selectRealmButton.titleLabel.text.length>6) {
+        m_selectRealmButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    }else{
+        m_selectRealmButton.titleLabel.font = [UIFont systemFontOfSize:20];
+    
+    }
+
     [self getSameRealmDataByNet];
 }
 

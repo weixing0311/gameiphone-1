@@ -33,6 +33,8 @@
     m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth - startX-(KISHighVersion_7?0:20)) style:UITableViewStyleGrouped];
     m_myTableView.delegate = self;
     m_myTableView.dataSource = self;
+    m_myTableView.showsHorizontalScrollIndicator = NO;
+    m_myTableView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:m_myTableView];
     UIView *topVIew = [[UIView alloc]initWithFrame:CGRectMake(0, startX, kScreenWidth, 209)];
     topVIew.backgroundColor = [UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
@@ -143,14 +145,20 @@
             }
             else if (indexPath.row ==1)
             {
-                UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您确认要更新么?" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"取消", nil];
+                if ([[NSUserDefaults standardUserDefaults]objectForKey:@"IOSURL"]==nil) {
+                    [self showAlertViewWithTitle:nil message:@"您已经是最新版本了" buttonTitle:@"确定"];
+                }else{
+                UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"现在有新版本,是否更新?" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                    alert.tag = 11001;
+                    [alert show];
+                }
                 
-                [alert show];
             }
             else if (indexPath.row ==2)
             {
                 ShowTextViewController *textView = [[ShowTextViewController alloc]init];
                 textView.myViewTitle = @"用户协议";
+                textView.fileName = @"protocol";
                 [self.navigationController pushViewController:textView animated:YES];
             }
             else if (indexPath.row ==3)
@@ -205,6 +213,13 @@
         else if(111 == alertView.tag)
         {
             [self loginOutNet];
+        }else if(11001==alertView.tag)
+        {
+            NSURL *url = [NSURL URLWithString:[[NSUserDefaults standardUserDefaults] objectForKey:@"IOSURL"]];
+            if([[UIApplication sharedApplication] canOpenURL:url])
+            {
+                [[UIApplication sharedApplication] openURL:url];
+            }
         }
 
     }

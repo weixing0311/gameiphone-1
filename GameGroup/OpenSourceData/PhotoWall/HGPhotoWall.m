@@ -87,6 +87,9 @@
 
 - (void)setPhotos:(NSArray*)photos
 {
+    if (photos.count>8) {
+        photos  =@[photos[0],photos[1],photos[2],photos[3],photos[4],photos[5],photos[6],photos[7]];
+    }
     if (self.descriptionType==DescriptionTypePet) {
         self.labelDescription.text = @"点击图片查看宠物，点击“+”添加宠物";
     }

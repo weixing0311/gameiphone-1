@@ -38,19 +38,19 @@
 #define appType @"91"//91、appStore
 
 //常量
-//#define BaseClientUrl @"http://58.83.193.120/gamepro/request"//开机联网地址
-//#define BaseUploadImageUrl  @"http://58.83.193.120/gamepro/fileserver/put"
-//#define BaseImageUrl  @"http://58.83.193.120/gamepro/fileserver/get/"
-//#define BaseDeleteImageUrl  @"http://58.83.193.120/gamepro/fileserver/delete/"
-//#define monvbangURL @"http://58.83.193.120/h5/index.html"
-//#define MymonvbangURL @"http://58.83.193.120/h5/index.html?"
+#define BaseClientUrl @"http://58.83.193.120/gamepro/request"//开机联网地址
+#define BaseUploadImageUrl  @"http://58.83.193.120/gamepro/fileserver/put"
+#define BaseImageUrl  @"http://58.83.193.120/gamepro/fileserver/get/"
+#define BaseDeleteImageUrl  @"http://58.83.193.120/gamepro/fileserver/delete/"
+#define monvbangURL @"http://58.83.193.120/h5/index.html"
+#define MymonvbangURL @"http://58.83.193.120/h5/index.html?"
 
-#define BaseClientUrl @"http://58.83.193.119/gamepro/request"//开机联网地址 测试
-#define BaseUploadImageUrl  @"http://58.83.193.119/gamepro/fileserver/put"
-#define BaseImageUrl  @"http://58.83.193.119/gamepro/fileserver/get/"
-#define BaseDeleteImageUrl  @"http://58.83.193.119/gamepro/fileserver/delete/"
-#define monvbangURL @"http://58.83.193.119/h5/index.html"
-#define MymonvbangURL @"http://58.83.193.119/h5/index.html?"
+//#define BaseClientUrl @"http://58.83.193.119/gamepro/request"//开机联网地址 测试
+//#define BaseUploadImageUrl  @"http://58.83.193.119/gamepro/fileserver/put"
+//#define BaseImageUrl  @"http://58.83.193.119/gamepro/fileserver/get/"
+//#define BaseDeleteImageUrl  @"http://58.83.193.119/gamepro/fileserver/delete/"
+//#define monvbangURL @"http://58.83.193.119/h5/index.html"
+//#define MymonvbangURL @"http://58.83.193.119/h5/index.html?"
 
 
 #define NormalRequestTimeout  30.0f//联网最长时间
