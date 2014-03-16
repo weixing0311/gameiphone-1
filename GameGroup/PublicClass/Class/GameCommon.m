@@ -167,7 +167,8 @@ static GameCommon *my_gameCommon = NULL;
 +(NSString *)getCurrentTime{
     
     NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
-    return [NSString stringWithFormat:@"%ld",(long)nowTime];
+    nowTime = nowTime*1000;
+    return [NSString stringWithFormat:@"%lld",(long long)nowTime];
     
 }
 #pragma mark -周

@@ -568,7 +568,7 @@
             cell.notiBgV.hidden = YES;
         }
         cell.nameLabel.text = [allNickNameArray objectAtIndex:indexPath.row];
-        cell.timeLabel.text = [GameCommon CurrentTime:[GameCommon getCurrentTime] AndMessageTime:[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"time"]];
+        cell.timeLabel.text = [GameCommon CurrentTime:[[GameCommon getCurrentTime] substringToIndex:10]AndMessageTime:[[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"time"] substringToIndex:10]];
 //    }
     return cell;
 }

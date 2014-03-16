@@ -745,7 +745,7 @@
 {
     NSMutableDictionary *dict = [messages objectAtIndex:indexPath.row];
     NSString *sender = KISDictionaryHaveKey(dict, @"sender");
-    NSString *time = KISDictionaryHaveKey(dict, @"time");
+    NSString *time = [KISDictionaryHaveKey(dict, @"time") substringToIndex:10];
     NSString *msgType = KISDictionaryHaveKey(dict, @"msgType");
     NSString* status = KISDictionaryHaveKey(dict, @"status");
     NSString* messageuuid = KISDictionaryHaveKey(dict, @"messageuuid");
@@ -1157,6 +1157,7 @@
         [alertView show];
         return;
     }
+    NSString* nowTime = [GameCommon getCurrentTime];
     //生成<body>文档
     NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
     [body setStringValue:message];
@@ -1176,7 +1177,7 @@
     
     [mes addAttributeWithName:@"msgtype" stringValue:@"normalchat"];
     [mes addAttributeWithName:@"fileType" stringValue:@"text"];  //如果发送图片音频改这里
-    [mes addAttributeWithName:@"msgTime" stringValue:[GameCommon getCurrentTime]];
+    [mes addAttributeWithName:@"msgTime" stringValue:nowTime];
     NSString* uuid = [[GameCommon shareGameCommon] uuid];
     [mes addAttributeWithName:@"id" stringValue:uuid];
     NSLog(@"消息uuid ~!~~ %@", uuid);
@@ -1190,7 +1191,7 @@
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     [dictionary setObject:message forKey:@"msg"];
     [dictionary setObject:@"you" forKey:@"sender"];
-    [dictionary setObject:[GameCommon getCurrentTime] forKey:@"time"];
+    [dictionary setObject:nowTime forKey:@"time"];
     [dictionary setObject:self.chatWithUser forKey:@"receiver"];
     [dictionary setObject:self.nickName forKey:@"nickname"];
     [dictionary setObject:self.chatUserImg forKey:@"img"];

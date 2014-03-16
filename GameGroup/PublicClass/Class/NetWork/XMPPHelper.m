@@ -370,9 +370,6 @@
     [dict setObject:msgId forKey:@"msgId"];
     
     //消息接收到的时间
-    if ([msgTime doubleValue]>9999999999) {
-        msgTime = [NSString stringWithFormat:@"%.f", [msgTime doubleValue]/1000];
-    }
     [dict setObject: msgTime forKey:@"time"];
     
     NSLog(@"theDict%@",dict);

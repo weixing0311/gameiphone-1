@@ -113,7 +113,7 @@
     cell.nameLabel.text = [[m_tableData objectAtIndex:indexPath.row] objectForKey:@"myTitle"];
     NSLog(@"cell.nameLabel.text%@",cell.nameLabel.text);
     
-    cell.timeLabel.text = [GameCommon CurrentTime:[GameCommon getCurrentTime] AndMessageTime:KISDictionaryHaveKey([m_tableData objectAtIndex:indexPath.row], @"sendTime")];
+    cell.timeLabel.text = [GameCommon CurrentTime:[[GameCommon getCurrentTime] substringToIndex:10]AndMessageTime:[KISDictionaryHaveKey([m_tableData objectAtIndex:indexPath.row], @"sendTime") substringToIndex:10]];
     return cell;
 }
 
