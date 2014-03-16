@@ -413,6 +413,12 @@
         for (DSNewsMsgs* msg in newsMsgs) {
             [msg deleteInContext:localContext];
         }
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",@"sys00000011"];
+        DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+        if (thumbMsgs)
+        {
+            [thumbMsgs deleteInContext:localContext];
+        }
     }];
 }
 +(void)deleteAllThumbMsg
