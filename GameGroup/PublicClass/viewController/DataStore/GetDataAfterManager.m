@@ -8,7 +8,7 @@
 
 #import "GetDataAfterManager.h"
 #import "NSObject+SBJSON.h"
-
+#import "SoundSong.h"
 @implementation GetDataAfterManager
 
 static GetDataAfterManager *my_getDataAfterManager = NULL;
@@ -60,17 +60,17 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     if([type isEqualToString:@"normalchat"])
     {
         NSLog(@"%@",KISDictionaryHaveKey(messageContent, @"msgId"));
-        AudioServicesPlayAlertSound(1007);
+        [SoundSong soundSong];
         [DataStoreManager storeNewMsgs:messageContent senderType:COMMONUSER];//普通聊天消息
     }
     else if([type isEqualToString:@"payloadchat"])
     {
-        AudioServicesPlayAlertSound(1007);
+        [SoundSong soundSong];
         [DataStoreManager storeNewMsgs:messageContent senderType:PAYLOADMSG];//动态消息
     }
     else if ([type isEqualToString:@"sayHello"] || [type isEqualToString:@"deletePerson"])//关注和取消关注
     {
-        AudioServicesPlayAlertSound(1007);
+        [SoundSong soundSong];;
         
         [DataStoreManager storeNewMsgs:messageContent senderType:SAYHELLOS];//打招呼消息
     }
@@ -85,7 +85,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
             NSLog(@"消息已存在");
             return;
         }
-        AudioServicesPlayAlertSound(1007);
+        [SoundSong soundSong];
         [DataStoreManager storeNewMsgs:messageContent senderType:DAILYNEWS];
     }
 }
@@ -253,7 +253,7 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     [DataStoreManager storeNewMsgs:info senderType:OTHERMESSAGE];//其他消息
     [DataStoreManager saveOtherMsgsWithData:info];
     [[NSNotificationCenter defaultCenter] postNotificationName:kOtherMessage object:nil userInfo:info];
-    AudioServicesPlayAlertSound(1007);
+    [SoundSong soundSong];
 }
 
 #pragma mark 收到推荐好友
