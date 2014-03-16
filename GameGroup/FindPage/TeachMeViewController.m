@@ -79,7 +79,7 @@
     
     UILabel * label6 = [[UILabel alloc]initWithFrame:CGRectMake(10, 640, 300, 20)];
     label6.backgroundColor = [UIColor clearColor];
-    label6.text = @"4.开启小伙伴的通讯录";
+    label6.text = @"4.开启陌游的通讯录";
     label6.textColor = [UIColor grayColor];
     [scrollV addSubview:label6];
     

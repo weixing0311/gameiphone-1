@@ -71,7 +71,7 @@
 
     startX = KISHighVersion_7 ? 64 : 44;
     
-    leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, self.view.bounds.size.height)];
+    leftView = [[UIView alloc]initWithFrame:CGRectMake(0, startX, 10, self.view.bounds.size.height-startX)];
     leftView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:leftView];
     UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(backTolastPage:)];

@@ -110,8 +110,9 @@
     cell.timeLabel.text = [self getDataWithTimeInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"title");
         cell.contentLabel.text = KISDictionaryHaveKey(dic, @"content");
-    [cell.newsOfBtn addTarget:self action:@selector(toViewNews:) forControlEvents:UIControlEventTouchUpInside];
-    cell.newsOfBtn.tag =1000 +indexPath.row;
+   // [cell.newsOfBtn addTarget:self action:@selector(toViewNews:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.topImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(toViewNews:)]];
+    cell.topImageView.tag =1000 +indexPath.row;
     return cell;
 }
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -119,10 +120,10 @@
     return NO;
 }
 
--(void)toViewNews:(UIButton *)sender
+-(void)toViewNews:(UITapGestureRecognizer*)sender
 {
     OnceDynamicViewController* detailVC = [[OnceDynamicViewController alloc] init];
-    detailVC.messageid = [GameCommon getNewStringWithId:KISDictionaryHaveKey([m_tableArray objectAtIndex:sender.tag-1000], @"messageId")];
+    detailVC.messageid = [GameCommon getNewStringWithId:KISDictionaryHaveKey([m_tableArray objectAtIndex:sender.view.tag-1000], @"messageId")];
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 

@@ -91,6 +91,14 @@
     [imageB setBackgroundImage:[UIImage imageNamed:@"picBtn"] forState:UIControlStateNormal];
     [tool addSubview:imageB];
     
+    if (self.isComeFromMe ==YES) {
+        imageB.hidden = NO;
+        tool.hidden = NO;
+    }else{
+        imageB.hidden = YES;
+        tool.hidden = YES;
+    }
+    
     self.placeholderL = [[UILabel alloc]initWithFrame:CGRectMake(23, 28.75+startX, 200, 20)];
     
     

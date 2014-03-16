@@ -71,8 +71,8 @@
     switch (self.viewType) {
         case SEARCH_TYPE_ID:
         {
-            [self setTopViewWithTitle:@"搜索小伙伴ID" withBackButton:YES];
-            warnLabel.text = @"输入小伙伴的ID(可在我的详情页面查看)：";
+            [self setTopViewWithTitle:@"搜索陌游ID" withBackButton:YES];
+            warnLabel.text = @"输入陌游的ID(可在我的详情页面查看)：";
             searchContent.keyboardType = UIKeyboardTypeNumberPad;
         }   break;
         case SEARCH_TYPE_PHONE:
@@ -83,8 +83,8 @@
         }  break;
         case SEARCH_TYPE_NICKNAME:
         {
-            [self setTopViewWithTitle:@"搜索小伙伴昵称" withBackButton:YES];
-            warnLabel.text = @"输入小伙伴的昵称";
+            [self setTopViewWithTitle:@"搜索陌游昵称" withBackButton:YES];
+            warnLabel.text = @"输入陌游的昵称";
         } break;
         default:
             break;
@@ -304,7 +304,7 @@
 //            if ([error isKindOfClass:[NSDictionary class]]) {
 //                NSString* warn = [error objectForKey:kFailMessageKey];
 //                if ([[error objectForKey:kFailErrorCodeKey] isEqualToString:@"200002"]) {//用户不存在， 角色存在
-//                    warn = @"该角色目前尚未在小伙伴注册，快去邀请他吧，这样你们就可以聊天了!";
+//                    warn = @"该角色目前尚未在陌游注册，快去邀请他吧，这样你们就可以聊天了!";
 //                }
 //                if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
 //                {
@@ -409,7 +409,7 @@
         if ([error isKindOfClass:[NSDictionary class]]) {
             NSString* warn = [error objectForKey:kFailMessageKey];
             if ([[error objectForKey:kFailErrorCodeKey] isEqualToString:@"200002"]) {//用户不存在， 角色存在
-                warn = @"该角色目前尚未在小伙伴注册，快去邀请他吧，这样你们就可以聊天了!";
+                warn = @"该角色目前尚未在陌游注册，快去邀请他吧，这样你们就可以聊天了!";
             }
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
             {

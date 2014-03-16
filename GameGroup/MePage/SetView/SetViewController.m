@@ -11,7 +11,8 @@
 #import "EGOCache.h"
 #import "AppDelegate.h"
 #import "AboutViewController.h"
-
+#import "FeedBackViewController.h"
+#import "ShowTextViewController.h"
 @interface SetViewController ()
 {
     UITableView*  m_myTableView;
@@ -26,11 +27,27 @@
     [super viewDidLoad];
 
     [self setTopViewWithTitle:@"设置" withBackButton:YES];
-
+    
+    
+    
     m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth - startX-(KISHighVersion_7?0:20)) style:UITableViewStyleGrouped];
     m_myTableView.delegate = self;
     m_myTableView.dataSource = self;
     [self.view addSubview:m_myTableView];
+    UIView *topVIew = [[UIView alloc]initWithFrame:CGRectMake(0, startX, kScreenWidth, 209)];
+    topVIew.backgroundColor = [UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
+    m_myTableView.tableHeaderView = topVIew;
+    UIImageView *headImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 165)];
+    headImageView.image = KUIImage(@"head_me");
+    [topVIew addSubview:headImageView];
+    
+    UILabel *banbenView = [[UILabel alloc]initWithFrame:CGRectMake(20, 165, 300, 44)];
+    banbenView.backgroundColor = [UIColor clearColor];
+    banbenView.text =[NSString stringWithFormat:@"当前版本:%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]];
+    banbenView.textColor = UIColorFromRGBA(0x666666, 1);
+    banbenView.font = [UIFont systemFontOfSize:16];
+    [topVIew addSubview:banbenView];
+
 }
 
 #pragma mark 表格
@@ -42,7 +59,7 @@
 {
     switch (section) {
         case 0:
-            return 2;
+            return 4;
             break;
         default:
             return 1;
@@ -50,15 +67,6 @@
     }
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 15;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 5;
-}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -71,15 +79,42 @@
     switch (indexPath.section) {
         case 0:
         {
-            if (indexPath.row == 0) {
-                cell.leftImageView.image = KUIImage(@"me_set_info");
-                cell.titleLable.text = @"关于小伙伴";
+//            if (indexPath.row == 0) {
+//                cell.leftImageView.image = KUIImage(@"me_set_info");
+//                cell.titleLable.text = @"关于陌游";
+//            }
+//            else
+//            {
+//                cell.leftImageView.image = KUIImage(@"me_set_delete");
+//                cell.titleLable.text = @"清理缓存";
+//            }
+            
+            switch (indexPath.row) {
+                case 0:
+                    cell.leftImageView.image = KUIImage(@"clean_me");
+                    cell.titleLable.text = @"清理缓存";
+
+                    break;
+                case 1:
+                    cell.leftImageView.image = KUIImage(@"updata_me");
+                    cell.titleLable.text = @"检查更新";
+
+                    break;
+                case 2:
+                    cell.leftImageView.image = KUIImage(@"xieyi_me");
+                    cell.titleLable.text = @"用户协议";
+
+                    break;
+                case 3:
+                    cell.leftImageView.image = KUIImage(@"feedback_me");
+                    cell.titleLable.text = @"意见反馈";
+
+                    break;
+   
+                default:
+                    break;
             }
-            else
-            {
-                cell.leftImageView.image = KUIImage(@"me_set_delete");
-                cell.titleLable.text = @"清理缓存";
-            }
+            
         } break;
         case 1:
         {
@@ -100,16 +135,28 @@
     switch (indexPath.section) {
         case 0:
         {
-            if (indexPath.row == 0) {
-                AboutViewController* VC = [[AboutViewController alloc] init];
-                [self.navigationController pushViewController:VC animated:YES];
-            }
-            else
+            if (indexPath.row ==0)
             {
                 UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您确认要清除所有的缓存吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"清除", nil];
                 
-                alert.tag = 110;
                 [alert show];
+            }
+            else if (indexPath.row ==1)
+            {
+                UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您确认要更新么?" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"取消", nil];
+                
+                [alert show];
+            }
+            else if (indexPath.row ==2)
+            {
+                ShowTextViewController *textView = [[ShowTextViewController alloc]init];
+                textView.title = @"用户协议";
+                [self.navigationController pushViewController:textView animated:YES];
+            }
+            else if (indexPath.row ==3)
+            {
+                FeedBackViewController* VC = [[FeedBackViewController alloc] init];
+                [self.navigationController pushViewController:VC animated:YES];
             }
         } break;
         case 1:

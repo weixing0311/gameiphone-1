@@ -89,7 +89,7 @@
             else
             {
                 cell.leftImageView.image = KUIImage(@"add_id");
-                cell.titleLable.text = @"通过小伙伴ID添加";
+                cell.titleLable.text = @"通过陌游ID添加";
             }
         } break;
         default:

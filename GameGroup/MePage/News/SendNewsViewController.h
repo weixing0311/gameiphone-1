@@ -14,4 +14,5 @@
 @property (nonatomic,weak)id<TableViewDatasourceDidChange>delegate;
 @property (nonatomic, strong)UIImage* titleImage;//分享头衔
 @property (nonatomic, strong)NSString* defaultContent;//分享头衔默认字
+@property (nonatomic,assign)BOOL isComeFromMe;
 @end

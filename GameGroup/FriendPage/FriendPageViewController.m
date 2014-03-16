@@ -590,7 +590,7 @@
 
                 [m_otherSortFansArray removeAllObjects];
                 
-               // [m_myFansTableView reloadData];
+                [m_myFansTableView reloadData];
                 
                 [DataStoreManager cleanFansList];
                 [self parseFansList:[KISDictionaryHaveKey(responseObject, @"3") objectForKey:@"users"]];
