@@ -741,25 +741,27 @@
     //组合
     [mes addChild:body];
     [mes addChild:payload];
-    
+   
     //发送消息
-    [((AppDelegate*)[[UIApplication sharedApplication] delegate]).xmppHelper sendMessage:mes];
-    
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    [dictionary setObject:@"[内容]" forKey:@"msg"];
-    [dictionary setObject:@"you" forKey:@"sender"];
-    [dictionary setObject:[GameCommon getCurrentTime] forKey:@"time"];
-    [dictionary setObject:KISDictionaryHaveKey(self.shareUserDic, @"userid") forKey:@"receiver"];
-    [dictionary setObject:KISDictionaryHaveKey(self.shareUserDic, @"displayName") forKey:@"nickname"];
-    [dictionary setObject:KISDictionaryHaveKey(self.shareUserDic, @"img") forKey:@"img"];
-    [dictionary setObject:[dic JSONFragment] forKey:@"payload"];
-    [dictionary setObject:@"payloadchat" forKey:@"msgType"];
-    [dictionary setObject:uuid forKey:@"messageuuid"];
-    [dictionary setObject:@"2" forKey:@"status"];
-    [DataStoreManager storeMyPayloadmsg:dictionary];
+    if ([((AppDelegate*)[[UIApplication sharedApplication] delegate]).xmppHelper sendMessage:mes]) {
+        [self showMessageWindowWithContent:@"发送成功" imageType:0];
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        [dictionary setObject:@"[内容]" forKey:@"msg"];
+        [dictionary setObject:@"you" forKey:@"sender"];
+        [dictionary setObject:[GameCommon getCurrentTime] forKey:@"time"];
+        [dictionary setObject:KISDictionaryHaveKey(self.shareUserDic, @"userid") forKey:@"receiver"];
+        [dictionary setObject:KISDictionaryHaveKey(self.shareUserDic, @"displayName") forKey:@"nickname"];
+        [dictionary setObject:KISDictionaryHaveKey(self.shareUserDic, @"img") forKey:@"img"];
+        [dictionary setObject:[dic JSONFragment] forKey:@"payload"];
+        [dictionary setObject:@"payloadchat" forKey:@"msgType"];
+        [dictionary setObject:uuid forKey:@"messageuuid"];
+        [dictionary setObject:@"2" forKey:@"status"];
+        [DataStoreManager storeMyPayloadmsg:dictionary];
+    }else{
+        [self showMessageWindowWithContent:@"发送失败" imageType:0];
+    }
     m_shareViewBg.hidden = YES;
     m_shareView.hidden = YES;
-    [self showMessageWindowWithContent:@"发送成功" imageType:0];
 }
 
 #pragma mark 举报 或评论
