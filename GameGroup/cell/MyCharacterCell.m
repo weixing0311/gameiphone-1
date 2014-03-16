@@ -69,13 +69,15 @@
         pveTitle.textColor = UIColorFromRGBA(0xa7a7a7,1.0);
         pveTitle.textAlignment = NSTextAlignmentCenter;
         pveTitle.font = [UIFont boldSystemFontOfSize:13.0];
-        pveTitle.text = @"刷新战斗力";
+        //pveTitle.text = @"刷新战斗力";
+        pveTitle.text = @"PVE战斗力";
+
         [myView addSubview:pveTitle];
         
-        self.refreshPVEbtn = [[UIButton alloc] initWithFrame:CGRectMake(200, 0, 100, 60)];
-        self.refreshPVEbtn.backgroundColor = [UIColor clearColor];
-        [self.refreshPVEbtn addTarget:self action:@selector(refreshPVEbtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.refreshPVEbtn];
+//        self.refreshPVEbtn = [[UIButton alloc] initWithFrame:CGRectMake(200, 0, 100, 60)];
+//        self.refreshPVEbtn.backgroundColor = [UIColor clearColor];
+//        [self.refreshPVEbtn addTarget:self action:@selector(refreshPVEbtnClick:) forControlEvents:UIControlEventTouchUpInside];
+//        [self addSubview:self.refreshPVEbtn];
         
         self.noCharacterLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 5, 255, 60)];
         self.noCharacterLabel.backgroundColor = [UIColor clearColor];

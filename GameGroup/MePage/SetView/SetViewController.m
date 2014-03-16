@@ -49,6 +49,9 @@
     banbenView.textColor = UIColorFromRGBA(0x666666, 1);
     banbenView.font = [UIFont systemFontOfSize:16];
     [topVIew addSubview:banbenView];
+    hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+   
 
 }
 
@@ -140,7 +143,7 @@
             if (indexPath.row ==0)
             {
                 UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您确认要清除所有的缓存吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"清除", nil];
-                
+                alert.tag = 110;
                 [alert show];
             }
             else if (indexPath.row ==1)
@@ -149,7 +152,7 @@
                     [self showAlertViewWithTitle:nil message:@"您已经是最新版本了" buttonTitle:@"确定"];
                 }else{
                 UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"现在有新版本,是否更新?" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-                    alert.tag = 11001;
+                    alert.tag = 111;
                     [alert show];
                 }
                 
@@ -170,7 +173,7 @@
         case 1:
         {
             UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您确认要退出登陆吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"退出", nil];
-            alert.tag = 111;
+            alert.tag = 112;
             [alert show];
         } break;
         default:
@@ -186,13 +189,12 @@
 //            NSFileManager *file_manager = [NSFileManager defaultManager];
 //            NSString *path = [RootDocPath stringByAppendingPathComponent:@"tempImage"];
 //            [file_manager removeItemAtPath:path error:nil];
-            hud = [[MBProgressHUD alloc] initWithView:self.view];
-            [self.view addSubview:hud];
-            hud.labelText = @"清理中...";
+            hud.mode = MBProgressHUDModeIndeterminate;
+             hud.labelText = @"清理中...";
             [hud showAnimated:YES whileExecutingBlock:^{
-                sleep(3);
-                hud.customView = [[UIImageView alloc]initWithImage:KUIImage(@"ok_click")];
-
+                sleep(2);
+                hud.mode = MBProgressHUDModeCustomView;
+                hud.customView = [[UIImageView alloc]initWithImage:KUIImage(@"ok_ok_ok")];
                 hud.labelText = @"清理成功";
                 
                 sleep(1);
@@ -210,10 +212,10 @@
                   
               }
         }
-        else if(111 == alertView.tag)
+        else if(112 == alertView.tag)
         {
             [self loginOutNet];
-        }else if(11001==alertView.tag)
+        }else if(111==alertView.tag)
         {
             NSURL *url = [NSURL URLWithString:[[NSUserDefaults standardUserDefaults] objectForKey:@"IOSURL"]];
             if([[UIApplication sharedApplication] canOpenURL:url])

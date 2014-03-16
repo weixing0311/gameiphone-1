@@ -104,7 +104,7 @@
 
 - (void)FansButtonClick:(id)sender
 {
-    UIAlertView* alter = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"拥有粉丝数量：%@", self.fansLabel.text] delegate:Nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    UIAlertView* alter = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"拥有粉丝数量：%@", self.fansLabel.text] message:@"拥有粉丝数量包含好友数量" delegate:Nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
     [alter show];
 }
 

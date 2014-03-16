@@ -40,6 +40,23 @@
     m_tableArray = [NSMutableArray array];
     [m_tableArray addObjectsFromArray:[DataStoreManager qureyAllNewsMessage]];
     
+   
+    m_myTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, startX-20, self.view.bounds.size.width, self.view.bounds.size.height-startX) style:UITableViewStylePlain];
+    m_myTableView.delegate = self;
+    m_myTableView.dataSource = self;
+    m_myTableView.rowHeight = m_myTableView.bounds.size.height;
+    m_myTableView.contentOffset = CGPointMake(0,m_myTableView.bounds.size.height*(m_tableArray.count-1));
+    [self.view addSubview:m_myTableView];
+    
+    UILabel *headerView = [[UILabel alloc]initWithFrame:CGRectMake(0, 20, 320, 20 )];
+    headerView.backgroundColor = [UIColor whiteColor];
+    headerView.text = @"没有更多的新闻";
+    headerView.font = [UIFont boldSystemFontOfSize:12];
+    headerView.textColor = [UIColor grayColor];
+    headerView.textAlignment = NSTextAlignmentCenter;
+    m_myTableView.tableHeaderView = headerView;
+    
+    
     [self setTopViewWithTitle:@"" withBackButton:YES];
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, KISHighVersion_7 ? 64 : 44)];
     titleLabel.center = CGPointMake(160, KISHighVersion_7 ? 42 : 22);
@@ -53,13 +70,7 @@
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(titleLabel.frame.origin.x-30, KISHighVersion_7 ? 27 : 7, 30, 30)];
     imageView.image = KUIImage(@"WOW图标_03");
     [self.view addSubview:imageView];
-    m_myTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, startX, self.view.bounds.size.width, self.view.bounds.size.height-startX) style:UITableViewStylePlain];
-    m_myTableView.delegate = self;
-    m_myTableView.dataSource = self;
-    m_myTableView.rowHeight = m_myTableView.bounds.size.height;
-    m_myTableView.contentOffset = CGPointMake(0,m_myTableView.bounds.size.height*(m_tableArray.count-1));
-    [self.view addSubview:m_myTableView];
-    
+
 //    _slimeView = [[SRRefreshView alloc] init];
 //    _slimeView.delegate = self;
 //    _slimeView.upInset = 0;

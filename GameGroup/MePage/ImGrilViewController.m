@@ -139,7 +139,7 @@
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    [button setBackgroundImage:info[UIImagePickerControllerOriginalImage]  forState:UIControlStateNormal];
+    [button setBackgroundImage:info[UIImagePickerControllerEditedImage]  forState:UIControlStateNormal];
     self.upDataImage = info[UIImagePickerControllerOriginalImage];
     [self dismissViewControllerAnimated:YES completion:^{
         

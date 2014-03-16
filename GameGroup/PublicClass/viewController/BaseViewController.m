@@ -74,8 +74,9 @@
     leftView = [[UIView alloc]initWithFrame:CGRectMake(0, startX, 10, self.view.bounds.size.height-startX)];
     leftView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:leftView];
-    UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(backTolastPage:)];
+    UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(backTolastPage:)];
     [recognizer delaysTouchesBegan];
+    [recognizer setDirection:UISwipeGestureRecognizerDirectionRight];
     [leftView addGestureRecognizer:recognizer];
     
 }

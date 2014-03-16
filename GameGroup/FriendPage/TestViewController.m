@@ -72,19 +72,19 @@
     else//没有详情 请求
     {
 
-//    if ([[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]!=nil) {//有值 查找用户
-//        self.hostInfo = [[HostInfo alloc] initWithHostInfo:[[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]];
-//        [self buildMainView];
-//        [self setBottomView];
-//        
-//        [self getUserInfoByNet];
-//    }
-//    else//没有详情 请求
-//    {
-       // [self buildInitialize];
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]!=nil) {//有值 查找用户
+        self.hostInfo = [[HostInfo alloc] initWithHostInfo:[[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]];
+        [self buildMainView];
+        [self setBottomView];
         
         [self getUserInfoByNet];
-  //  }
+    }
+    else//没有详情 请求
+    {
+        [self buildInitialize];
+        
+        [self getUserInfoByNet];
+    }
     }
 }
 
@@ -453,7 +453,7 @@
    
     m_titleLabel.text = [DataStoreManager queryRemarkNameForUser:self.userId];//别名或昵称
     if ([m_titleLabel.text isEqualToString:@""]) {//不是好友或关注
-         m_titleLabel.text = self.nickName;
+         m_titleLabel.text = self.hostInfo.nickName;
     }
     m_titleLabel.textAlignment = NSTextAlignmentCenter;
     m_titleLabel.font = [UIFont boldSystemFontOfSize:20];
@@ -688,7 +688,7 @@
 
 - (void)FansButtonClick:(id)sender
 {
-    [self showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"拥有粉丝数量：%@", self.hostInfo.fanNum] buttonTitle:@"确定"];
+    [self showAlertViewWithTitle:[NSString stringWithFormat:@"拥有粉丝数量：%@", self.hostInfo.fanNum] message:@"拥有粉丝数量包含好友数量" buttonTitle:@"确定"];
 }
 
 - (void)stateSelectClick:(id)sender

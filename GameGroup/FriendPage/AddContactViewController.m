@@ -75,7 +75,7 @@
             cell.titleLable.text = @"通过游戏角色添加";
              }
              else{
-            cell.leftImageView.image = KUIImage(@"add_role");
+            cell.leftImageView.image = KUIImage(@"add_nickname");
             cell.titleLable.text = @"通过用户昵称查找";
 
              }

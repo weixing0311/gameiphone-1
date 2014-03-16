@@ -16,6 +16,7 @@
 #import "TestViewController.h"
 #import "CharacterDetailsViewController.h"
 #import "CharacterEditViewController.h"
+#import "AppDelegate.h"
 @interface EncoXHViewController ()
 
 @end
@@ -78,8 +79,15 @@
     //        NSLog(@"空走不走");
     NSMutableDictionary *paramDict = [[NSMutableDictionary alloc]init];
     [paramDict setObject:[DataStoreManager getMyUserID] forKey:@"userid"];
+    AppDelegate *app = [[UIApplication sharedApplication]delegate];
+    if (app.reach.currentReachabilityStatus ==NotReachable) {
+        [self showAlertViewWithTitle:@"提示" message:@"请求数据失败，请检查网络" buttonTitle:@"确定"];
+        return;
+    }
+    else{
+
     [self getSayHelloForNetWithDictionary:paramDict method:@"125" prompt:@"获取中..." type:3];
-    
+    }
     //}else{
     //  m_characterArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"CharacterArrayOfAllForYou"];
     //  }
@@ -219,7 +227,7 @@
     
     promptLabel = [[UITextView alloc]initWithFrame:CGRectMake(20,0, 280, 50)];
     promptLabel.textColor = UIColorFromRGBA(0xc3c3c3, 1);
-    promptLabel.textAlignment =NSTextAlignmentCenter;
+    promptLabel.textAlignment =NSTextAlignmentLeft;
     promptLabel.userInteractionEnabled = NO;
     promptLabel.font = [UIFont boldSystemFontOfSize:14];
     promptLabel.text = @"在许愿池你会遇见冥冥之中与你有缘的神奇事物或是有趣之人,点击“换一个”试试手气吧";
@@ -232,7 +240,7 @@
     inABtn.frame = CGRectMake(20, kScreenHeigth-70, 120, 44);
     [inABtn setBackgroundImage:KUIImage(@"white") forState:UIControlStateNormal];
     [inABtn setBackgroundImage:KUIImage(@"white_onclick") forState:UIControlStateHighlighted];
-    [inABtn setTitle:@"打招呼" forState:UIControlStateNormal];
+    [inABtn setTitle:@"换一个" forState:UIControlStateNormal];
     inABtn.titleLabel.textColor = [UIColor blackColor];
     [inABtn addTarget:self action:@selector(changeOtherOne) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:inABtn];
@@ -335,9 +343,13 @@
             EncoCount = [KISDictionaryHaveKey(getDic, @"playedTime")intValue];
             encoLastCount = [KISDictionaryHaveKey(getDic, @"restrictionTime")intValue];
             
+            if (encoLastCount==-1) {
+                
+            }else{
             [inABtn setTitle:[NSString stringWithFormat:@"换一个(%d)",encoLastCount-EncoCount] forState:UIControlStateNormal];
+            
+            }
             inABtn.titleLabel.textColor = [UIColor blackColor];
-
             //男♀♂
             if ([KISDictionaryHaveKey(getDic, @"gender")isEqualToString:@"1"]) {
                 sexLabel.text = @"♀";
@@ -453,7 +465,7 @@
         inABtn.enabled = YES;
         sayHelloBtn.enabled = YES;
         [hud hide:YES];
-
+        inABtn.titleLabel.textColor = [UIColor blackColor];
         if ([error isKindOfClass:[NSDictionary class]]) {
             
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
