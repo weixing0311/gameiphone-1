@@ -31,8 +31,7 @@
     UIMenuItem *copyItem3;
     BOOL myActive;
     
-    NSArray*   historyMsg;//历史聊天记录
-    NSInteger  currentPage;//聊天消息当前页码 从1->count
+    UILabel* unReadL;
 }
 
 @end
@@ -47,7 +46,14 @@
 @synthesize session;
 @synthesize recorder;
 
-
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _unreadNo = 0;
+    }
+    return self;
+}
 - (void)loadView
 {
     [super loadView];
@@ -191,6 +197,16 @@
     titleLabel.textAlignment=NSTextAlignmentCenter;
     titleLabel.textColor=[UIColor whiteColor];
     [self.view addSubview:titleLabel];
+    
+    [unReadL = [UILabel alloc]initWithFrame:CGRectMake(35, KISHighVersion_7 ? 20 : 0, 40, 42)];
+    if (_unreadNo>0) {
+        unReadL.text = [NSString stringWithFormat:@"%d",_unreadNo];
+    }
+    unReadL.backgroundColor = [UIColor clearColor];
+    unReadL.textColor = [UIColor whiteColor];
+    unReadL.textAlignment = NSTextAlignmentCenter;
+    unReadL.font = [UIFont systemFontOfSize:14];
+    [self.view addSubview:unReadL];
 
 
     float version = [[[UIDevice currentDevice] systemVersion] floatValue];
@@ -257,17 +273,9 @@
             CGSize contentSize = CGSizeZero;
 //            float withF = 0;
             float higF = 0;
-            if (([GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"thumb")].length > 0) && ![KISDictionaryHaveKey(magDic, @"thumb") isEqualToString:@"null"]) {
-                contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"msg")] withThumb:YES];
-//                withF = contentSize.width + 40;
-                higF = MAX(contentSize.height, 40);
-            }
-            else
-            {
-                contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"msg")] withThumb:NO];
-//                withF = contentSize.width;
-                higF = contentSize.height;
-            }
+            contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"msg")] withThumb:YES];
+            //                withF = contentSize.width;
+            higF = contentSize.height;
 //            NSNumber * width = [NSNumber numberWithFloat:MAX(titleSize.width, withF)];
             NSNumber * height = [NSNumber numberWithFloat:((titleSize.height > 0 ? (titleSize.height + 5) : titleSize.height) + higF)];
             
@@ -289,7 +297,7 @@
             [mas setFont:[UIFont systemFontOfSize:15]];
             //            [mas setTextColor:[randomColors objectAtIndex:(idx%5)]];
             [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByWordWrapping];
-            CGSize size = [mas sizeConstrainedToSize:CGSizeMake(220, CGFLOAT_MAX)];
+            CGSize size = [mas sizeConstrainedToSize:CGSizeMake(200, CGFLOAT_MAX)];
             NSNumber * width = [NSNumber numberWithFloat:size.width];
             NSNumber * height = [NSNumber numberWithFloat:size.height];
             [formattedEntries addObject:mas];
@@ -743,7 +751,7 @@
     NSString* messageuuid = KISDictionaryHaveKey(dict, @"messageuuid");
 
     if ([msgType isEqualToString:@"payloadchat"]) {
-        //动态消息 只可能接收
+        //动态消息
         static NSString *identifier = @"newsCell";
         KKNewsCell *cell =(KKNewsCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
         
@@ -763,30 +771,23 @@
         CGSize contentSize = CGSizeZero;
 
         cell.titleLabel.text = KISDictionaryHaveKey(msgDic, @"title");
+        if ([sender isEqualToString:@"you"]) {
+            [cell.thumbImgV setFrame:CGRectMake(54, 15 + titleSize.height , 40, 40)];
+        }
+        else{
+            [cell.thumbImgV setFrame:CGRectMake(70, 15 + titleSize.height , 40, 40)];
+            
+        }
+        contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:YES];
         if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")].length > 0 && ![KISDictionaryHaveKey(msgDic, @"thumb") isEqualToString:@"null"]) {
-            if ([sender isEqualToString:@"you"]) {
-                NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")];
-                NSURL * titleImage = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
-                cell.thumbImgV.hidden = NO;
-                cell.thumbImgV.imageURL = titleImage;
-                [cell.thumbImgV setFrame:CGRectMake(54, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), 40, 40)];
-                contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:YES];
-            }
-            else{
-                NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")];
-                NSURL * titleImage = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
-                cell.thumbImgV.hidden = NO;
-                cell.thumbImgV.imageURL = titleImage;
-                [cell.thumbImgV setFrame:CGRectMake(70, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), 40, 40)];
-                contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:YES];
-
-            }
+            NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")];
+            NSURL * titleImage = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
+            cell.thumbImgV.imageURL = titleImage;
             
         }
         else
         {
-            cell.thumbImgV.hidden = YES;
-            contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:NO];
+            cell.thumbImgV.imageURL = nil;
         }
         cell.contentLabel.text = KISDictionaryHaveKey(msgDic, @"msg");
         
@@ -796,7 +797,7 @@
             [cell.headImgV setFrame:CGRectMake(320-10-40, padding*2-15, 40, 40)];
             [cell.headImgV addTarget:self action:@selector(chatToBtnClicked) forControlEvents:UIControlEventTouchUpInside];
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",self.chatUserImg]];
+            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",self.myHeadImg]];
             cell.headImgV.imageURL = theUrl;
             bgImage = [[UIImage imageNamed:@"bubble_05"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
             
@@ -808,14 +809,8 @@
             
             [cell.arrowImage setFrame:CGRectMake(padding-10+45 + size.width+27 + 10, size.height/2+27, 8, 12)];
             
-            [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
-            if (cell.thumbImgV.hidden) {
-                [cell.contentLabel setFrame:CGRectMake(padding + 50, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
-            }
-            else
-            {
-                [cell.contentLabel setFrame:CGRectMake(padding + 50 +28, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
-            }
+            [cell.titleLabel setFrame:CGRectMake(padding + 80, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
+            [cell.contentLabel setFrame:CGRectMake(padding + 50 +28, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
         }else
         {
             [cell.headImgV setFrame:CGRectMake(10, padding*2-15, 40, 40)];
@@ -825,7 +820,7 @@
             cell.headImgV.imageURL = theUrl;
             bgImage = [[UIImage imageNamed:@"bubble_04.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
             
-            [cell.bgImageView setFrame:CGRectMake(padding-10+45, padding*2-15, size.width+27, size.height + 20)];
+            [cell.bgImageView setFrame:CGRectMake(padding-10+45, padding*2-15, size.width+35, size.height + 20)];
             [cell.bgImageView setBackgroundImage:bgImage forState:UIControlStateNormal];
             [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchBegin:) forControlEvents:UIControlEventTouchDown];
             [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchEnd:) forControlEvents:UIControlEventTouchUpInside];
@@ -833,14 +828,8 @@
             
             [cell.arrowImage setFrame:CGRectMake(padding-10+45 + size.width+27 + 10, size.height/2+27, 8, 12)];
             
-            [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
-            if (cell.thumbImgV.hidden) {
-                [cell.contentLabel setFrame:CGRectMake(padding + 50, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
-            }
-            else
-            {
-                [cell.contentLabel setFrame:CGRectMake(padding + 50 + 45, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
-            }
+            [cell.titleLabel setFrame:CGRectMake(padding + 100, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
+            [cell.contentLabel setFrame:CGRectMake(padding + 50 + 45, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
         }
         
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
@@ -1262,6 +1251,13 @@
         }
         NSString* msgId = KISDictionaryHaveKey(tempDic, @"msgId");
         [self comeBackDisplayed:sender msgId:msgId];//发送已读消息
+    }
+    else
+    {
+        _unreadNo++;
+        if (_unreadNo>0) {
+            unReadL.text = [NSString stringWithFormat:@"%d",_unreadNo];
+        }
     }
 }
 

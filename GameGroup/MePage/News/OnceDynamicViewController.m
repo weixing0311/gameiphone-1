@@ -720,7 +720,7 @@
         NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
         [body setStringValue:@"[内容]"];
         NSXMLElement * payload = [NSXMLElement elementWithName:@"payload"];
-        NSDictionary * dic = @{@"thumb":_dataDic[@"thumb"],@"title":_dataDic[@"title"],@"shiptype": @"1",@"messageid":_dataDic[@"id"],@"msg":_dataDic[@"msg"],@"type": @"3"};
+        NSDictionary * dic = @{@"thumb":_dataDic[@"thumb"],@"title":[NSString stringWithFormat:@"分享了%@的动态",_dataDic[@"nickname"]],@"shiptype": @"1",@"messageid":_dataDic[@"id"],@"msg":_dataDic[@"msg"],@"type": @"3"};
         [payload setStringValue:[dic JSONFragment]];
         //生成XML消息文档
         NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];

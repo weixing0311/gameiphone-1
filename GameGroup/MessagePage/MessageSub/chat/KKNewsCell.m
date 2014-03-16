@@ -41,8 +41,7 @@
         [self.contentView addSubview:self.titleLabel];
         
         self.thumbImgV = [[EGOImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-        self.thumbImgV.placeholderImage = KUIImage(@"have_picture");
-        self.thumbImgV.hidden =YES;
+        self.thumbImgV.placeholderImage = KUIImage(@"dynamicIMG");
         self.thumbImgV.layer.cornerRadius = 5;
         self.thumbImgV.layer.masksToBounds=YES;
         [self.contentView addSubview:self.thumbImgV];
