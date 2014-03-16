@@ -189,15 +189,13 @@
 //            NSFileManager *file_manager = [NSFileManager defaultManager];
 //            NSString *path = [RootDocPath stringByAppendingPathComponent:@"tempImage"];
 //            [file_manager removeItemAtPath:path error:nil];
-            hud.mode = MBProgressHUDModeIndeterminate;
+           // hud.mode = MBProgressHUDModeIndeterminate;
              hud.labelText = @"清理中...";
+           // hud.customView = [[UIImageView alloc]initWithImage:KUIImage(@"37x-Checkmark")];
+            
+
             [hud showAnimated:YES whileExecutingBlock:^{
                 sleep(2);
-                hud.mode = MBProgressHUDModeCustomView;
-                hud.customView = [[UIImageView alloc]initWithImage:KUIImage(@"ok_ok_ok")];
-                hud.labelText = @"清理成功";
-                
-                sleep(1);
             }];
 
             NSString *cache = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0];

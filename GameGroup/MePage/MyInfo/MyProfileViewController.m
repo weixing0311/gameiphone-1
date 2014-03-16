@@ -331,6 +331,8 @@
 {
     [hud show:YES];
     if (waitingUploadImgArray.count>0) {
+        
+       /*
 //        [NetManager uploadImagesWithCompres:waitingUploadImgArray WithURLStr:BaseUploadImageUrl ImageName:waitingUploadStrArray TheController:self Progress:nil Success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {//上传一张压缩图片成功后 上传一张不压缩图片
         
 //            NSDictionary* CompresID = responseObject;//"<local>0_me.jpg" = 8; 8为id
@@ -378,6 +380,8 @@
 //            [hud hide:YES];
 //            [self showAlertViewWithTitle:@"提示" message:@"上传失败" buttonTitle:@"确定"];
 //        }];
+        */
+        [self publishOnePicture:0 image:waitingUploadImgArray imageName:waitingUploadStrArray reponseStrDic:[NSMutableDictionary dictionaryWithCapacity:1]];
         
     }
 //    else if([deleteImageIdArray count] > 0) //有删除
@@ -388,6 +392,41 @@
     else//只是修改顺序
         [self refreshMyInfo];
 }
+
+-(void)publishOnePicture:(NSInteger)picIndex image:(NSArray*)imageArray imageName:(NSArray*)imageNameArray reponseStrDic:(NSMutableDictionary*)reponseStrArray
+{
+    [NetManager uploadImage:[imageArray objectAtIndex:picIndex] WithURLStr:BaseUploadImageUrl ImageName:[imageNameArray objectAtIndex:picIndex] TheController:self Progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite){
+        hud.labelText = [NSString stringWithFormat:@"上传第%d张 %.2f％", picIndex+1,((double)totalBytesWritten/(double)totalBytesExpectedToWrite) * 100];
+    }Success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *response = [GameCommon getNewStringWithId:responseObject];//图片id
+        [reponseStrArray setObject:response forKey:[imageNameArray objectAtIndex:picIndex]];
+        if (reponseStrArray.count != imageArray.count) {
+            NSLog(@"aaaaaaaaa");
+            [self publishOnePicture:(picIndex+1) image:imageArray imageName:imageNameArray reponseStrDic:reponseStrArray];
+        }
+        else
+        {
+            [hud hide:YES];
+            NSLog(@"reponseStrArray %@", reponseStrArray);
+            //self.imageId = [[NSMutableString alloc]init];
+             NSMutableArray * a1 = [NSMutableArray arrayWithArray:self.headImgArray];//压缩图 头像
+            for (NSString*a in reponseStrArray) {
+                    for (int i = 0;i<a1.count;i++) {
+                        if ([[a1 objectAtIndex:i] isEqualToString:a]) {
+                            [a1 replaceObjectAtIndex:i withObject:[reponseStrArray objectForKey:a]];
+                        }
+                    }
+                }
+                self.headImgArray = a1;
+             [self refreshMyInfo];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [hud hide:YES];
+        [self showAlertViewWithTitle:@"提示" message:@"上传图片失败" buttonTitle:@"确定"];
+    }];
+}
+
+
 
 - (void)refreshMyInfo//更新个人头像数据
 {

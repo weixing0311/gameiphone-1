@@ -231,7 +231,7 @@
 {
     //hud.labelText = [NSString stringWithFormat:@"上传第%d张 %.2f％", picIndex+1,((double)totalBytesWritten/(double)totalBytesExpectedToWrite) * 100];
     [NetManager uploadImage:[imageArray objectAtIndex:picIndex] WithURLStr:BaseUploadImageUrl ImageName:[imageNameArray objectAtIndex:picIndex] TheController:self Progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite){
-        hud.labelText = [NSString stringWithFormat:@"图片上传中.. %.2f％",((double)totalBytesWritten/(double)totalBytesExpectedToWrite) * 100];
+        hud.labelText = [NSString stringWithFormat:@"上传第%d张 %.2f％", picIndex+1,((double)totalBytesWritten/(double)totalBytesExpectedToWrite) * 100];
     }Success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString *response = [GameCommon getNewStringWithId:responseObject];//图片id
         [reponseStrArray setObject:response forKey:[imageNameArray objectAtIndex:picIndex]];

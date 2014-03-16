@@ -22,4 +22,5 @@
 @property(nonatomic,strong)UIImageView *topImageView;
 @property(nonatomic,strong)UILabel *topTimeLabel;
 @property(nonatomic,strong)UIButton *newsOfBtn;
+@property(nonatomic,strong)UILabel *bianzheLabel;
 @end

@@ -41,10 +41,11 @@
     [m_tableArray addObjectsFromArray:[DataStoreManager qureyAllNewsMessage]];
     
    
-    m_myTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, startX-20, self.view.bounds.size.width, self.view.bounds.size.height-startX) style:UITableViewStylePlain];
+    m_myTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, startX-20, self.view.bounds.size.width, self.view.bounds.size.height-startX+20) style:UITableViewStylePlain];
     m_myTableView.delegate = self;
     m_myTableView.dataSource = self;
-    m_myTableView.rowHeight = m_myTableView.bounds.size.height;
+    m_myTableView.rowHeight = 440;
+    m_myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     m_myTableView.contentOffset = CGPointMake(0,m_myTableView.bounds.size.height*(m_tableArray.count-1));
     [self.view addSubview:m_myTableView];
     
@@ -115,6 +116,9 @@
     cell.headImageBtn.tag = indexPath.row;
     [cell.headImageBtn addTarget:self action:@selector(enterToPerson:) forControlEvents:UIControlEventTouchUpInside];
         cell.nickNameLabel.text = KISDictionaryHaveKey(dic, @"nickname");
+    
+    cell.nickNameLabel.frame = CGRectMake(62, 15, cell.nickNameLabel.text.length*20, 15);
+    cell.bianzheLabel.frame = CGRectMake(cell.nickNameLabel.frame.size.width+64, 15, 70, 15);
         cell.signatureLabel.text = KISDictionaryHaveKey(dic, @"editorNote");
     cell.bigImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(dic, @"img")]];
         cell.authorLabel.text = KISDictionaryHaveKey(dic, @"imgQuote");
@@ -122,6 +126,14 @@
                              
     cell.timeLabel.text = [self getDataWithTimeInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"title");
+    
+    if (cell.titleLabel.text.length>9) {
+        cell.titleLabel.frame =CGRectMake(100, 280, 190, 45);
+    }else {
+        cell.titleLabel.frame =CGRectMake(100, 280, 190, 20);
+    }
+    cell.contentLabel.frame = CGRectMake(100, cell.titleLabel.frame.origin.y+cell.titleLabel.frame.size.height-5, 190, 70);
+    
         cell.contentLabel.text = KISDictionaryHaveKey(dic, @"content");
     [cell.newsOfBtn addTarget:self action:@selector(toViewNews:) forControlEvents:UIControlEventTouchUpInside];
 //    [cell.topImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(toViewNews:)]];
