@@ -136,8 +136,8 @@
 {
     NSMutableArray * arr = [self getAddressBook];
     if (!arr) {
-        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您是否禁止本应用访问您的通讯录?如果是请打开!" delegate:nil cancelButtonTitle:@"知道啦" otherButtonTitles: nil];
-        [alert show];
+        UIAlertView * alertV = [[UIAlertView alloc]initWithTitle:nil message:@"您可能禁用了通讯录,请在 设置-隐私-通讯录 启用陌游" delegate:self cancelButtonTitle:@"放弃" otherButtonTitles:@"告诉我怎么做", nil];
+        [alertV show];
         return;
     }
     if (arr.count<=0) {
