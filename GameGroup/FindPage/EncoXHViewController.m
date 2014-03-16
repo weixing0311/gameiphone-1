@@ -48,6 +48,9 @@
     BOOL     isSuccessToshuaishen;
     BOOL     isXiaoshuaishen;
     BOOL     isXuyuanchi;//刚开始的时候
+    
+    NSInteger   EncoCount;
+    NSInteger   encoLastCount;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -225,10 +228,12 @@
     [promptView addSubview:promptLabel];
     
     
-    inABtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    inABtn =[[UIButton alloc]init];
     inABtn.frame = CGRectMake(20, kScreenHeigth-70, 120, 44);
     [inABtn setBackgroundImage:KUIImage(@"white") forState:UIControlStateNormal];
     [inABtn setBackgroundImage:KUIImage(@"white_onclick") forState:UIControlStateHighlighted];
+    [inABtn setTitle:@"打招呼" forState:UIControlStateNormal];
+    inABtn.titleLabel.textColor = [UIColor blackColor];
     [inABtn addTarget:self action:@selector(changeOtherOne) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:inABtn];
     
@@ -325,6 +330,14 @@
             getDic = [NSDictionary dictionaryWithDictionary:responseObject];
             NSLog(@"getDic%@",getDic);
             
+            
+            //打招呼次数
+            EncoCount = [KISDictionaryHaveKey(getDic, @"playedTime")intValue];
+            encoLastCount = [KISDictionaryHaveKey(getDic, @"restrictionTime")intValue];
+            
+            [inABtn setTitle:[NSString stringWithFormat:@"换一个(%d)",encoLastCount-EncoCount] forState:UIControlStateNormal];
+            inABtn.titleLabel.textColor = [UIColor blackColor];
+
             //男♀♂
             if ([KISDictionaryHaveKey(getDic, @"gender")isEqualToString:@"1"]) {
                 sexLabel.text = @"♀";

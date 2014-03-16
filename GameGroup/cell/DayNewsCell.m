@@ -73,7 +73,7 @@
         [self.topImageView addSubview:self.NumLabel];
         
         
-        self.timeLabel =[FinderView setLabelWithFrame:CGRectMake(20, 350, 60, 20) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x77777, 1) font:[UIFont systemFontOfSize:12]];
+        self.timeLabel =[FinderView setLabelWithFrame:CGRectMake(20, 350, 60, 20) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x777777, 1) font:[UIFont systemFontOfSize:12]];
         self.timeLabel.textAlignment = NSTextAlignmentCenter;
         [self.topImageView addSubview:self.timeLabel];
 
@@ -90,7 +90,7 @@
         self.titleLabel.frame =CGRectMake(90, 290, 200, 20);
         [self.topImageView addSubview:self.titleLabel];
 
-        self.contentLabel=[FinderView setLabelWithFrame:CGRectMake(85, self.titleLabel.frame.origin.y+self.titleLabel.frame.size.height, 200, 70) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x6d6d6d, 1) font:[UIFont systemFontOfSize:14]];
+        self.contentLabel=[FinderView setLabelWithFrame:CGRectMake(90, self.titleLabel.frame.origin.y+self.titleLabel.frame.size.height, 200, 70) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x6d6d6d, 1) font:[UIFont systemFontOfSize:14]];
         self.contentLabel.userInteractionEnabled = NO;
         self.contentLabel.numberOfLines = 3;
         [self.topImageView addSubview:self.contentLabel];

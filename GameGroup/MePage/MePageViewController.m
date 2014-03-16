@@ -81,6 +81,8 @@
     m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth - 50 - 64)];
     m_myTableView.delegate = self;
     m_myTableView.dataSource = self;
+    m_myTableView.showsVerticalScrollIndicator = NO;
+    m_myTableView.showsHorizontalScrollIndicator = NO;
 //    m_myTableView.contentOffset = CGPointMake(0, 1000);
     [self.view addSubview:m_myTableView];
     

@@ -541,7 +541,7 @@
             if ([[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"recommendfriend"] |
                 [[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"sayHello"] ||
                 [[[allMsgArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"deletePerson"]) {
-                cell.notiBgV.image = KUIImage(@"redCB");
+                cell.notiBgV.image = KUIImage(@"redpot");
                 cell.unreadCountLabel.hidden = YES;
             }
             else

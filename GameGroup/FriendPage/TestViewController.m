@@ -72,19 +72,19 @@
     else//没有详情 请求
     {
 
-    if ([[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]!=nil) {//有值 查找用户
-        self.hostInfo = [[HostInfo alloc] initWithHostInfo:[[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]];
-        [self buildMainView];
-        [self setBottomView];
+//    if ([[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]!=nil) {//有值 查找用户
+//        self.hostInfo = [[HostInfo alloc] initWithHostInfo:[[NSUserDefaults standardUserDefaults]objectForKey:[NSString stringWithFormat:@"swxInPersonoo%@",self.userId]]];
+//        [self buildMainView];
+//        [self setBottomView];
+//        
+//        [self getUserInfoByNet];
+//    }
+//    else//没有详情 请求
+//    {
+       // [self buildInitialize];
         
         [self getUserInfoByNet];
-    }
-    else//没有详情 请求
-    {
-        [self buildInitialize];
-        
-        [self getUserInfoByNet];
-    }
+  //  }
     }
 }
 
@@ -894,10 +894,10 @@
         case VIEW_TYPE_FriendPage1:
         {
             UIButton *editButton=[UIButton buttonWithType:UIButtonTypeCustom];
-            editButton.frame=CGRectMake(270, startX - 44, 50, 44);
-           // [editButton setBackgroundImage:KUIImage(@"edit_normal") forState:UIControlStateNormal];
-           // [editButton setBackgroundImage:KUIImage(@"edit_click") forState:UIControlStateHighlighted];
-            [editButton setTitle:@"备注" forState:UIControlStateNormal];
+            editButton.frame=CGRectMake(270, startX - 38, 40, 30);
+            [editButton setBackgroundImage:KUIImage(@"note_normal") forState:UIControlStateNormal];
+            [editButton setBackgroundImage:KUIImage(@"note_click") forState:UIControlStateHighlighted];
+            //[editButton setTitle:@"备注" forState:UIControlStateNormal];
             editButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
             [self.view addSubview:editButton];
             [editButton addTarget:self action:@selector(editButtonClick:) forControlEvents:UIControlEventTouchUpInside];
