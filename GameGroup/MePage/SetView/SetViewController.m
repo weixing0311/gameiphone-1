@@ -150,7 +150,7 @@
             else if (indexPath.row ==2)
             {
                 ShowTextViewController *textView = [[ShowTextViewController alloc]init];
-                textView.title = @"用户协议";
+                textView.myViewTitle = @"用户协议";
                 [self.navigationController pushViewController:textView animated:YES];
             }
             else if (indexPath.row ==3)
