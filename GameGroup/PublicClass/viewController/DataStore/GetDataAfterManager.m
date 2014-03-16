@@ -246,12 +246,14 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
 #pragma mark - 其他消息 头衔、角色等
 -(void)otherMessageReceived:(NSDictionary *)info
 {
-    AudioServicesPlayAlertSound(1007);
+    if ([DataStoreManager savedOtherMsgWithID:info[@"msgId"]]) {
+        return;
+    }
     NSLog(@"info%@",info);
     [DataStoreManager storeNewMsgs:info senderType:OTHERMESSAGE];//其他消息
     [DataStoreManager saveOtherMsgsWithData:info];
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:kOtherMessage object:nil userInfo:info];
+    AudioServicesPlayAlertSound(1007);
 }
 
 #pragma mark 收到推荐好友

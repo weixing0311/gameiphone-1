@@ -310,9 +310,6 @@
                // XMPPJID *xmppJID = [XMPPJID jidWithString:jid];
                 if ([[item attributeStringValueForName:@"subscription"] isEqualToString:@"both"]||[[item attributeStringValueForName:@"subscription"] isEqualToString:@"to"]) {
                     [self.rosters addObject:sender];
-//                    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:sender,@"username", nil];
-//                    [DataStoreManager addFriendToLocal:sender];
-                    //[DataStoreManager saveUserInfo:dict];
                 }
             }
         }
@@ -424,7 +421,7 @@
             [self.deletePersonDelegate deletePersonReceived:dict];
             [self comeBackDelivered:from msgId:msgId];
         }
-        else if ([msgtype isEqualToString:@"character"] || [msgtype isEqualToString:@"pveScore"] || [msgtype isEqualToString:@"title"])
+        else if ([msgtype isEqualToString:@"character"] || [msgtype isEqualToString:@"pveScore"] || [msgtype isEqualToString:@"title"])//角色信息改变
         {
             [dict setObject:msgtype forKey:@"msgType"];
             NSString *title = [[message elementForName:@"payload"] stringValue];

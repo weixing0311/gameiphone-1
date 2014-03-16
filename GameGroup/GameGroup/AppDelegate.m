@@ -36,7 +36,7 @@
     
     
     
-    [DDLog addLogger:[DDTTYLogger sharedInstance]];//打印xmpp输出
+//    [DDLog addLogger:[DDTTYLogger sharedInstance]];//打印xmpp输出
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.xmppHelper=[[XMPPHelper alloc] init];
 

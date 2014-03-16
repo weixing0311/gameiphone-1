@@ -34,6 +34,14 @@
     }
     return NO;
 }
++ (BOOL)savedOtherMsgWithID:(NSString *)msgID
+{
+    NSArray * array = [DSOtherMsgs MR_findByAttribute:@"messageuuid" withValue:msgID];
+    if (array.count > 0) {
+        return YES;
+    }
+    return NO;
+}
 + (BOOL)savedNewsMsgWithID:(NSString*)msgId//消息是否已存
 {
     NSArray * array = [DSNewsMsgs MR_findByAttribute:@"messageuuid" withValue:msgId];
