@@ -18,6 +18,8 @@
 @property(nonatomic,strong)UILabel  *NumLabel;
 @property(nonatomic,strong)UILabel  *timeLabel;
 @property(nonatomic,strong)UILabel *titleLabel;
-@property(nonatomic,strong)UITextView *contentLabel;
+@property(nonatomic,strong)UILabel *contentLabel;
 @property(nonatomic,strong)UIImageView *topImageView;
+@property(nonatomic,strong)UILabel *topTimeLabel;
+@property(nonatomic,strong)UIButton *newsOfBtn;
 @end

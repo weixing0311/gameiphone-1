@@ -16,7 +16,17 @@
     if (self) {
         // Initialization code
         
-        self.topImageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 20, 310, 400)];
+        self.topTimeLabel = [[UILabel alloc]initWithFrame:CGRectMake(130, 5, 60, 20)];
+        //self.topTimeLabel.center = CGPointMake(160, 15);
+        self.topTimeLabel.backgroundColor = [UIColor colorWithRed:180/225.0f green:180/225.0f blue:180/225.0f alpha:1];
+        self.headImageBtn.layer.cornerRadius = 10;
+        self.headImageBtn.layer.masksToBounds=YES;
+        self.topTimeLabel.textColor = [UIColor whiteColor];
+        self.topTimeLabel.font = [UIFont boldSystemFontOfSize:12];
+        self.topTimeLabel.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:self.topTimeLabel];
+        
+        self.topImageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 30, 310, 400)];
         self.topImageView.image =KUIImage(@"bg_cell");
         self.topImageView.userInteractionEnabled = YES;
         [self  addSubview:self.topImageView];
@@ -35,7 +45,7 @@
         [self.topImageView addSubview:self.nickNameLabel];
         
         
-        UILabel *bianzheLabel = [FinderView setLabelWithFrame:CGRectMake(162, 15, 70, 15) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x868686, 1) font:[UIFont systemFontOfSize:13]];
+        UILabel *bianzheLabel = [FinderView setLabelWithFrame:CGRectMake(152, 15, 70, 15) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x868686, 1) font:[UIFont systemFontOfSize:13]];
         [self.topImageView addSubview:bianzheLabel];
         bianzheLabel.text = @"编者语";
         
@@ -71,11 +81,8 @@
         UIView *shuView = [[UIView alloc]initWithFrame:CGRectMake(80, 283, 1, 90)];
         shuView.backgroundColor = UIColorFromRGBA(0xcecece, 1);
         [self.topImageView addSubview:shuView];
-//        self.newsOfBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.timeLabel.bounds.size.width+10, 300,self.bounds.size.width-30-self.NumLabel.bounds.size.width , 105)];
-//        [self.newsOfBtn setBackgroundImage:KUIImage(@"content_normal") forState:UIControlStateNormal];
-//        
-//        [self.newsOfBtn setBackgroundImage:KUIImage(@"contnet_click") forState:UIControlStateHighlighted];
-//        [imageView addSubview:self.newsOfBtn];
+        self.newsOfBtn = [[UIButton alloc]initWithFrame:CGRectMake(10,300,300,100)];
+        [self.topImageView addSubview:self.newsOfBtn];
         
         
         self.titleLabel =[FinderView setLabelWithFrame:CGRectZero backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x333333, 1) font:[UIFont systemFontOfSize:15]];
@@ -83,12 +90,13 @@
         self.titleLabel.frame =CGRectMake(90, 290, 200, 20);
         [self.topImageView addSubview:self.titleLabel];
 
-        self.contentLabel=[FinderView setTextViewWithFrame:CGRectMake(85, self.titleLabel.frame.origin.y+self.titleLabel.frame.size.height, 200, 80) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x6d6d6d, 1) font:[UIFont systemFontOfSize:14]];
+        self.contentLabel=[FinderView setLabelWithFrame:CGRectMake(85, self.titleLabel.frame.origin.y+self.titleLabel.frame.size.height, 200, 70) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x6d6d6d, 1) font:[UIFont systemFontOfSize:14]];
         self.contentLabel.userInteractionEnabled = NO;
-        if (self.contentLabel.text.length>10) {
-        }
+        self.contentLabel.numberOfLines = 3;
         [self.topImageView addSubview:self.contentLabel];
 
+        
+        
     }
     return self;
 }

@@ -98,6 +98,8 @@
     NSArray  * array= [fruits componentsSeparatedByString:@","];
     NSString*friendImgStr =[array objectAtIndex:0];
 
+    cell.topTimeLabel.text =[self getDataWithTimeMiaoInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
+    cell.topTimeLabel.frame = CGRectMake((320-cell.topTimeLabel.text.length*12)/2, 5, cell.topTimeLabel.text.length*12, 20);
     cell.headImageBtn.imageURL =[NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",friendImgStr]];
     cell.headImageBtn.tag = indexPath.row;
     [cell.headImageBtn addTarget:self action:@selector(enterToPerson:) forControlEvents:UIControlEventTouchUpInside];
@@ -110,9 +112,9 @@
     cell.timeLabel.text = [self getDataWithTimeInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"title");
         cell.contentLabel.text = KISDictionaryHaveKey(dic, @"content");
-   // [cell.newsOfBtn addTarget:self action:@selector(toViewNews:) forControlEvents:UIControlEventTouchUpInside];
-    [cell.topImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(toViewNews:)]];
-    cell.topImageView.tag =1000 +indexPath.row;
+    [cell.newsOfBtn addTarget:self action:@selector(toViewNews:) forControlEvents:UIControlEventTouchUpInside];
+//    [cell.topImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(toViewNews:)]];
+    cell.newsOfBtn.tag =1000 +indexPath.row;
     return cell;
 }
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -120,10 +122,10 @@
     return NO;
 }
 
--(void)toViewNews:(UITapGestureRecognizer*)sender
+-(void)toViewNews:(UIButton*)sender
 {
     OnceDynamicViewController* detailVC = [[OnceDynamicViewController alloc] init];
-    detailVC.messageid = [GameCommon getNewStringWithId:KISDictionaryHaveKey([m_tableArray objectAtIndex:sender.view.tag-1000], @"messageId")];
+    detailVC.messageid = [GameCommon getNewStringWithId:KISDictionaryHaveKey([m_tableArray objectAtIndex:sender.tag-1000], @"messageId")];
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 
@@ -224,6 +226,21 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]];//location设置为中国
     [dateFormatter setDateFormat:@"dd"];
+    
+    double time = [timeStr doubleValue];
+    NSLog(@"%@", [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]]);
+    return [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]];
+}
+
+- (NSString*)getDataWithTimeMiaoInterval:(NSString*)timeInterval
+{
+    if ([NSString stringWithFormat:@"%.f", [timeInterval doubleValue]].length < 10) {
+        return timeInterval;
+    }
+    NSString* timeStr = [timeInterval substringToIndex:timeInterval.length-3];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]];//location设置为中国
+    [dateFormatter setDateFormat:@"HH:mm"];
     
     double time = [timeStr doubleValue];
     NSLog(@"%@", [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]]);
