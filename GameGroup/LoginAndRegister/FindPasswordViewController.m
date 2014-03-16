@@ -104,7 +104,7 @@
     
     m_phoneNumText = [[UITextField alloc] initWithFrame:CGRectMake(20, 55, 280, 40)];
     m_phoneNumText.font = [UIFont boldSystemFontOfSize:15.0];
-    m_phoneNumText.placeholder = @"输入与小伙伴绑定的手机号码";
+    m_phoneNumText.placeholder = @"输入与陌游绑定的手机号码";
     m_phoneNumText.returnKeyType = UIReturnKeyDone;
     m_phoneNumText.delegate = self;
     m_phoneNumText.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;

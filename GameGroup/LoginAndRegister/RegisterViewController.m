@@ -756,7 +756,7 @@ BOOL validateMobile(NSString* mobile) {
 //    topLabel.numberOfLines = 2;
 //    topLabel.font = [UIFont boldSystemFontOfSize:12.0];
 //    topLabel.textColor = kColorWithRGB(128.0, 128, 128, 1.0);
-//    topLabel.text = @"提示：您可以修改用户名，以使得他与您的角色名不一致，这个用户名会用在您在小伙伴里与他人联络时显示用";
+//    topLabel.text = @"提示：您可以修改用户名，以使得他与您的角色名不一致，这个用户名会用在您在陌游里与他人联络时显示用";
 //    [m_step3Scroll addSubview:topLabel];
 //    
 //    UILabel* bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 300, 300, 50)];

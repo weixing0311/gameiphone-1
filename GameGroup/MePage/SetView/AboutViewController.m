@@ -18,7 +18,7 @@
 {
     [super viewDidLoad];
     
-    [self setTopViewWithTitle:@"关于小伙伴" withBackButton:YES];
+    [self setTopViewWithTitle:@"关于陌游" withBackButton:YES];
     
     [self setMainView];
 }

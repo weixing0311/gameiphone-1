@@ -707,6 +707,7 @@
     SendNewsViewController* VC = [[SendNewsViewController alloc] init];
     VC.titleImage = viewImage;
     VC.delegate = self;
+    VC.isComeFromMe = NO;
    // VC.defaultContent = [NSString stringWithFormat:@"分享了%@的角色详情",self.characterName];
     VC.defaultContent = [NSString stringWithFormat:@"分享了%@的数据",m_characterName];
     [self.navigationController pushViewController:VC animated:NO];

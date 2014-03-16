@@ -195,7 +195,7 @@
     m_currentStartY += 30;
     
     
-    UIView* person_id = [CommonControlOrView setTwoLabelViewNameText:@"小伙伴ID" text:self.userId nameTextColor:kColorWithRGB(102, 102, 102, 1.0) textColor:kColorWithRGB(51, 51, 51, 1.0)];
+    UIView* person_id = [CommonControlOrView setTwoLabelViewNameText:@"陌游ID" text:self.userId nameTextColor:kColorWithRGB(102, 102, 102, 1.0) textColor:kColorWithRGB(51, 51, 51, 1.0)];
     
     UIImageView * activeIV = [[UIImageView alloc]initWithFrame:CGRectMake(200, m_currentStartY + 13, 29, 12)];
     
@@ -450,7 +450,11 @@
     m_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, startX - 44, 220, 44)];
     m_titleLabel.textColor = [UIColor whiteColor];
     m_titleLabel.backgroundColor = [UIColor clearColor];
-    m_titleLabel.text = self.nickName;
+   
+    m_titleLabel.text = [DataStoreManager queryRemarkNameForUser:self.userId];//别名或昵称
+    if ([m_titleLabel.text isEqualToString:@""]) {//不是好友或关注
+         m_titleLabel.text = self.nickName;
+    }
     m_titleLabel.textAlignment = NSTextAlignmentCenter;
     m_titleLabel.font = [UIFont boldSystemFontOfSize:20];
     [self.view addSubview:m_titleLabel];
@@ -607,7 +611,7 @@
         [self setOneLineWithY:m_currentStartY];
     }
     
-    UIView* person_id = [CommonControlOrView setTwoLabelViewNameText:@"小伙伴ID" text:self.hostInfo.userId nameTextColor:kColorWithRGB(102, 102, 102, 1.0) textColor:kColorWithRGB(51, 51, 51, 1.0)];
+    UIView* person_id = [CommonControlOrView setTwoLabelViewNameText:@"陌游ID" text:self.hostInfo.userId nameTextColor:kColorWithRGB(102, 102, 102, 1.0) textColor:kColorWithRGB(51, 51, 51, 1.0)];
     UIImageView * activeIV = [[UIImageView alloc]initWithFrame:CGRectMake(200, m_currentStartY + 13, 29, 12)];
     [m_myScrollView addSubview:activeIV];
     if (self.hostInfo.active)
@@ -891,8 +895,10 @@
         {
             UIButton *editButton=[UIButton buttonWithType:UIButtonTypeCustom];
             editButton.frame=CGRectMake(270, startX - 44, 50, 44);
-            [editButton setBackgroundImage:KUIImage(@"edit_normal") forState:UIControlStateNormal];
-            [editButton setBackgroundImage:KUIImage(@"edit_click") forState:UIControlStateHighlighted];
+           // [editButton setBackgroundImage:KUIImage(@"edit_normal") forState:UIControlStateNormal];
+           // [editButton setBackgroundImage:KUIImage(@"edit_click") forState:UIControlStateHighlighted];
+            [editButton setTitle:@"备注" forState:UIControlStateNormal];
+            editButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
             [self.view addSubview:editButton];
             [editButton addTarget:self action:@selector(editButtonClick:) forControlEvents:UIControlEventTouchUpInside];
             

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Reachability.h"
 
 @class StartViewController;
 @class XMPPHelper;
@@ -17,5 +18,5 @@
 
 @property (strong, nonatomic) StartViewController *startViewController;
 @property (nonatomic,strong) XMPPHelper *xmppHelper;
-
+@property(nonatomic,strong)Reachability * reach;
 @end

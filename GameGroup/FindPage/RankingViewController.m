@@ -657,6 +657,7 @@
     SendNewsViewController* VC = [[SendNewsViewController alloc] init];
     VC.titleImage = viewImage;
     VC.delegate = self;
+    VC.isComeFromMe = NO;
     VC.defaultContent = [NSString stringWithFormat:@"分享%@的%@排名",self.characterName,self.titleOfRanking];
     [self.navigationController pushViewController:VC animated:NO];
 }

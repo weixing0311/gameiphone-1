@@ -596,7 +596,7 @@
             else if(indexPath.row == 1)
             {
                 cell.accessoryType = UITableViewCellAccessoryNone;
-                cell.nameLabel.text = @"小伙伴ID";
+                cell.nameLabel.text = @"陌游ID";
                 cell.disLabel.text = self.hostInfo.userId;
                 cell.vAuthImg.hidden = YES;
                 UIImageView * image = [[UIImageView alloc]initWithFrame:CGRectMake(230, 15, 29, 12)];
@@ -651,7 +651,7 @@
         }
         if (indexPath.row == 0) {
             cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.nameLabel.text = @"小伙伴ID";
+            cell.nameLabel.text = @"陌游ID";
             cell.disLabel.text = self.hostInfo.userId;
             UIImageView * image = [[UIImageView alloc]initWithFrame:CGRectMake(230, 15, 29, 12)];
             [cell.contentView addSubview:image];

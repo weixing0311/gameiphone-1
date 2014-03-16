@@ -93,7 +93,7 @@
 //        
 //        [self getNearByDataByNet];
 //    } Failure:^{
-//        [self showAlertViewWithTitle:@"提示" message:@"定位失败，请确认设置->隐私->定位服务中小伙伴的按钮为打开状态" buttonTitle:@"确定"];
+//        [self showAlertViewWithTitle:@"提示" message:@"定位失败，请确认设置->隐私->定位服务中陌游的按钮为打开状态" buttonTitle:@"确定"];
 //    }];
 
     hud = [[MBProgressHUD alloc]initWithView: self.view];

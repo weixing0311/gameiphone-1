@@ -304,6 +304,7 @@
 //    [sheet showInView:self.view];
     SendNewsViewController* sendNews = [[SendNewsViewController alloc] init];
     sendNews.delegate = self;
+    sendNews.isComeFromMe = YES;
     [self.navigationController pushViewController:sendNews animated:YES];
 }
 

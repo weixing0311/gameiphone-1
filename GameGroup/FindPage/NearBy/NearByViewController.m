@@ -10,6 +10,7 @@
 #import "PersonTableCell.h"
 #import "LocationManager.h"
 #import "TestViewController.h"
+#import "AppDelegate.h"
 @interface NearByViewController ()
 {
     UILabel*            m_titleLabel;
@@ -100,8 +101,16 @@
     [self.view addSubview:hud];
     hud.labelText = @"定位中...";
     
-    [hud show:YES];
+    
     //if ([CLLocationManager locationServicesEnabled] && ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined)){} 是否开启了本应用的定位服务
+    
+    AppDelegate *app = [[UIApplication sharedApplication]delegate];
+    if (app.reach.currentReachabilityStatus ==NotReachable) {
+        [self showAlertViewWithTitle:@"提示" message:@"请求数据失败，请检查网络" buttonTitle:@"确定"];
+        return;
+    }
+    else{
+        [hud show:YES];
     [[LocationManager sharedInstance] startCheckLocationWithSuccess:^(double lat, double lon) {
         [[TempData sharedInstance] setLat:lat Lon:lon];
         [hud hide:YES];
@@ -109,8 +118,9 @@
         [self getNearByDataByNet];
     } Failure:^{
         [hud hide:YES];
-        [self showAlertViewWithTitle:@"提示" message:@"定位失败，请确认设置->隐私->定位服务中小伙伴的按钮为打开状态" buttonTitle:@"确定"];
-    }];
+        [self showAlertViewWithTitle:@"提示" message:@"定位失败，请确认设置->隐私->定位服务中陌游的按钮为打开状态" buttonTitle:@"确定"];
+    }
+     ];}
 }
 
 - (void)getNearByDataByNet

@@ -50,10 +50,10 @@
     [GetDataAfterManager shareManageCommon];
     
     //网络变化
-    Reachability * reach = [Reachability reachabilityForInternetConnection];
+//    Reachability * reach = [Reachability reachabilityForInternetConnection];
   
-    
-    [reach startNotifier];
+    self.reach = [Reachability reachabilityForInternetConnection];
+    [_reach startNotifier];
     
     [self.window makeKeyAndVisible];
     

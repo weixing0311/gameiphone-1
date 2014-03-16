@@ -19,5 +19,5 @@
 @property(nonatomic,strong)UILabel  *timeLabel;
 @property(nonatomic,strong)UILabel *titleLabel;
 @property(nonatomic,strong)UITextView *contentLabel;
-@property(nonatomic,strong)UIButton *newsOfBtn;
+@property(nonatomic,strong)UIImageView *topImageView;
 @end

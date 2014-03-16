@@ -272,7 +272,7 @@
                 return 1;
         }break;
         case 4://操作
-            return 2;
+            return 1;
             break;
         default:
             break;
@@ -485,17 +485,9 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-        if (indexPath.row == 0) {
             cell.heardImg.image = KUIImage(@"me_system");
             cell.upLabel.text = @"系统设置";
             cell.downLabel.text = @"进行我的系统设置";
-        }
-        else
-        {
-            cell.heardImg.image = KUIImage(@"me_email");
-            cell.upLabel.text = @"意见反馈";
-            cell.downLabel.text = @"您的声音是鞭策小伙伴前进的动力";
-        }
         return cell;
     }
     return Nil;
@@ -685,17 +677,9 @@
     {
         [[Custom_tabbar showTabBar] hideTabBar:YES];
 
-        if (indexPath.row == 0) {
             SetViewController* VC = [[SetViewController alloc] init];
             [self.navigationController pushViewController:VC animated:YES];
-        }
-        else if(indexPath.row == 1)
-        {
-            FeedBackViewController* VC = [[FeedBackViewController alloc] init];
-            [self.navigationController pushViewController:VC animated:YES];
-        }
     }
-    
 }
 
 #pragma mark - 设置

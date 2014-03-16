@@ -34,7 +34,6 @@
     contentWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, (KISHighVersion_7?20:0), 320, self.view.bounds.size.height-(KISHighVersion_7?20:0))];
     contentWebView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     contentWebView.delegate = self;
-    
     [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@&from_client_ios",[MymonvbangURL stringByAppendingString:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil]]]]]];
 //    [contentWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://58.83.193.119/h5/index.html?0B5DAE32FC15470B862E961E41A8B2E5&from_client_ios"]]];
     
