@@ -273,17 +273,9 @@
             CGSize contentSize = CGSizeZero;
 //            float withF = 0;
             float higF = 0;
-            if (([GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"thumb")].length > 0) && ![KISDictionaryHaveKey(magDic, @"thumb") isEqualToString:@"null"]) {
-                contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"msg")] withThumb:YES];
-//                withF = contentSize.width + 40;
-                higF = MAX(contentSize.height, 40);
-            }
-            else
-            {
-                contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"msg")] withThumb:NO];
-//                withF = contentSize.width;
-                higF = contentSize.height;
-            }
+            contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(magDic, @"msg")] withThumb:YES];
+            //                withF = contentSize.width;
+            higF = contentSize.height;
 //            NSNumber * width = [NSNumber numberWithFloat:MAX(titleSize.width, withF)];
             NSNumber * height = [NSNumber numberWithFloat:((titleSize.height > 0 ? (titleSize.height + 5) : titleSize.height) + higF)];
             
@@ -305,7 +297,7 @@
             [mas setFont:[UIFont systemFontOfSize:15]];
             //            [mas setTextColor:[randomColors objectAtIndex:(idx%5)]];
             [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByWordWrapping];
-            CGSize size = [mas sizeConstrainedToSize:CGSizeMake(220, CGFLOAT_MAX)];
+            CGSize size = [mas sizeConstrainedToSize:CGSizeMake(200, CGFLOAT_MAX)];
             NSNumber * width = [NSNumber numberWithFloat:size.width];
             NSNumber * height = [NSNumber numberWithFloat:size.height];
             [formattedEntries addObject:mas];
@@ -780,24 +772,21 @@
 
         cell.titleLabel.text = KISDictionaryHaveKey(msgDic, @"title");
         if ([sender isEqualToString:@"you"]) {
-            [cell.thumbImgV setFrame:CGRectMake(54, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), 40, 40)];
-            contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:YES];
+            [cell.thumbImgV setFrame:CGRectMake(54, 15 + titleSize.height , 40, 40)];
         }
         else{
-            [cell.thumbImgV setFrame:CGRectMake(70, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), 40, 40)];
-            contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:YES];
+            [cell.thumbImgV setFrame:CGRectMake(70, 15 + titleSize.height , 40, 40)];
             
         }
+        contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:YES];
         if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")].length > 0 && ![KISDictionaryHaveKey(msgDic, @"thumb") isEqualToString:@"null"]) {
             NSString* imgStr = [GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"thumb")];
             NSURL * titleImage = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/30",imgStr]];
-            cell.thumbImgV.hidden = NO;
             cell.thumbImgV.imageURL = titleImage;
             
         }
         else
         {
-            cell.thumbImgV.image = [UIImage imageNamed:@"dynamicIMG"];
             cell.thumbImgV.imageURL = nil;
         }
         cell.contentLabel.text = KISDictionaryHaveKey(msgDic, @"msg");
@@ -820,14 +809,8 @@
             
             [cell.arrowImage setFrame:CGRectMake(padding-10+45 + size.width+27 + 10, size.height/2+27, 8, 12)];
             
-            [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
-            if (cell.thumbImgV.hidden) {
-                [cell.contentLabel setFrame:CGRectMake(padding + 50, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
-            }
-            else
-            {
-                [cell.contentLabel setFrame:CGRectMake(padding + 50 +28, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
-            }
+            [cell.titleLabel setFrame:CGRectMake(padding + 80, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
+            [cell.contentLabel setFrame:CGRectMake(padding + 50 +28, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
         }else
         {
             [cell.headImgV setFrame:CGRectMake(10, padding*2-15, 40, 40)];
@@ -837,7 +820,7 @@
             cell.headImgV.imageURL = theUrl;
             bgImage = [[UIImage imageNamed:@"bubble_04.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
             
-            [cell.bgImageView setFrame:CGRectMake(padding-10+45, padding*2-15, size.width+27, size.height + 20)];
+            [cell.bgImageView setFrame:CGRectMake(padding-10+45, padding*2-15, size.width+35, size.height + 20)];
             [cell.bgImageView setBackgroundImage:bgImage forState:UIControlStateNormal];
             [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchBegin:) forControlEvents:UIControlEventTouchDown];
             [cell.bgImageView addTarget:self action:@selector(offsetButtonTouchEnd:) forControlEvents:UIControlEventTouchUpInside];
@@ -845,14 +828,8 @@
             
             [cell.arrowImage setFrame:CGRectMake(padding-10+45 + size.width+27 + 10, size.height/2+27, 8, 12)];
             
-            [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
-            if (cell.thumbImgV.hidden) {
-                [cell.contentLabel setFrame:CGRectMake(padding + 50, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
-            }
-            else
-            {
-                [cell.contentLabel setFrame:CGRectMake(padding + 50 + 45, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
-            }
+            [cell.titleLabel setFrame:CGRectMake(padding + 100, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
+            [cell.contentLabel setFrame:CGRectMake(padding + 50 + 45, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
         }
         
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
