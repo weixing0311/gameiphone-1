@@ -311,7 +311,7 @@
 
 - (CGSize)getPayloadMsgTitleSize:(NSString*)theTitle
 {
-     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(210, 50)] : CGSizeZero;
+     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(200, 50)] : CGSizeZero;
 }
 - (CGSize)getPayloadMsgContentSize:(NSString*)theContent withThumb:(BOOL)haveThumb
 {
@@ -772,7 +772,7 @@
 
         cell.titleLabel.text = KISDictionaryHaveKey(msgDic, @"title");
         if ([sender isEqualToString:@"you"]) {
-            [cell.thumbImgV setFrame:CGRectMake(50, 40 + titleSize.height , 40, 40)];
+            [cell.thumbImgV setFrame:CGRectMake(55, 40 + titleSize.height , 40, 40)];
         }
         else{
             [cell.thumbImgV setFrame:CGRectMake(70, 40 + titleSize.height , 40, 40)];
@@ -809,7 +809,7 @@
             
             [cell.arrowImage setFrame:CGRectMake(padding-10+45 + size.width+27 + 10, size.height/2+27, 8, 12)];
             
-            [cell.titleLabel setFrame:CGRectMake(padding + 30, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
+            [cell.titleLabel setFrame:CGRectMake(padding + 35, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
             [cell.contentLabel setFrame:CGRectMake(padding + 50 +28, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
         }else
         {
