@@ -184,12 +184,16 @@
     pveTitle.text = @"战斗力";
     pveTitle.backgroundColor = [UIColor clearColor];
     [myView addSubview:pveTitle];
-    
+    UIImageView* authBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
+    authBg.backgroundColor = [UIColor clearColor];
+    [myView addSubview:authBg];
+
     if ([auth isEqualToString:@"1"]) {
-        UIImageView* authBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
-        authBg.backgroundColor = [UIColor clearColor];
-        authBg.image = KUIImage(@"chara_auth");
-        [myView addSubview:authBg];
+        authBg.image = KUIImage(@"chara_auth_1");
+
+    }else{
+        authBg.image = KUIImage(@"chara_auth_2");
+
     }
     
     return myView;

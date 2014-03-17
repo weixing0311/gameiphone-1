@@ -186,17 +186,17 @@
     if (buttonIndex != alertView.cancelButtonIndex) {
         if (110 == alertView.tag) {
             [[EGOCache globalCache] clearCache];
-//            NSFileManager *file_manager = [NSFileManager defaultManager];
-//            NSString *path = [RootDocPath stringByAppendingPathComponent:@"tempImage"];
-//            [file_manager removeItemAtPath:path error:nil];
-           // hud.mode = MBProgressHUDModeIndeterminate;
-             hud.labelText = @"清理中...";
-           // hud.customView = [[UIImageView alloc]initWithImage:KUIImage(@"37x-Checkmark")];
+            hud = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+            [self.navigationController.view addSubview:hud];
             
-
-            [hud showAnimated:YES whileExecutingBlock:^{
-                sleep(2);
-            }];
+            // Set determinate mode
+            hud.mode = MBProgressHUDModeDeterminate;
+            
+            hud.delegate = self;
+            hud.labelText = @"清理中...";
+            
+            // myProgressTask uses the HUD instance to update progress
+            [hud showWhileExecuting:@selector(myProgressTask) onTarget:self withObject:nil animated:YES];
 
             NSString *cache = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0];
             NSFileManager *fm = [NSFileManager defaultManager];
@@ -252,6 +252,18 @@
     [GameCommon loginOut];
     [self.navigationController popViewControllerAnimated:NO];
 }
+-(void)myProgressTask
+{
+    float progress = 0.0f;
+	while (progress < 1.0f) {
+		progress += 0.01f;
+		hud.progress = progress;
+		usleep(50000);
+	}
+
+}
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

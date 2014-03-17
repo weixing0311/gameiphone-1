@@ -104,8 +104,6 @@
     //PVE战斗力  荣誉击杀数  装备等级 成就点数  PVP竞技场）
     titleArray = [NSMutableArray arrayWithObjects:@"PVE战斗力",@"荣誉击杀",@"装备等级",@"成就点数",@"PVP竞技场", nil];
     
-    hud = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:hud];
 
     m_charaDetailsView.reloadingBtn.userInteractionEnabled = NO;
     loginActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -209,14 +207,21 @@
             
             m_charaInfo = [[CharaInfo alloc] initWithCharaInfo:responseObject];
             m_charaDetailsView.NickNameLabel.text = m_charaInfo.roleNickName;
-            m_charaDetailsView.guildLabel.text =[NSString stringWithFormat:@"<%@>", m_charaInfo.guild];
+            NSString *guildStr =[NSString stringWithFormat:@"%@", m_charaInfo.guild];
+            NSString *guilStr = nil;
+            if (guildStr.length>8 ) {
+                guilStr =[NSString stringWithFormat:@"%@..." ,[guildStr substringToIndex:8]];
+                m_charaDetailsView.guildLabel.text = [NSString stringWithFormat:@"<%@>",guilStr];
+            }else{
+                m_charaDetailsView.guildLabel.text = [NSString stringWithFormat:@"<%@>",guildStr];
+            }
             if ([m_charaInfo.guild isEqualToString:@""]) {
                 m_charaDetailsView.guildLabel.text =@"<无工会>";
             }
             //计算view的franme
             NSString *str =[NSString stringWithFormat:@"%@ %@",m_charaInfo.realm,m_charaInfo.sidename];
             m_charaDetailsView.rightPView.frame = CGRectMake(295-str.length*11, 5, str.length*11+20,20 );
-            m_charaDetailsView.realmView.frame = CGRectMake(18, 0, str.length*11, 20);
+            m_charaDetailsView.realmView.frame = CGRectMake(18, 0, str.length*11+5, 20);
             m_serverStr = m_charaInfo.realm;
             m_characterId = m_charaInfo.characterid;
             m_zhiyeId = m_charaInfo.professionalId;
@@ -322,18 +327,31 @@
             }else{
                 str =[NSString stringWithFormat:@"%@分钟",timeStr];
             }
+            
             NSString *indexStr = KISDictionaryHaveKey(responseObject, @"index");
-           // hud.mode =  MBProgressHUDModeIndeterminate;
-            hud.labelText = nil;
-            hud.detailsLabelText = [NSString stringWithFormat:@"进入更新队列,目前队列位置：%@，预计更新时间：%@",indexStr,str];
-            [hud showAnimated:YES whileExecutingBlock:^{
-                sleep(5);
+            MBProgressHUD *  hud1 = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:hud1];
+            hud1.mode =  MBProgressHUDModeIndeterminate;
+            hud1.labelText = nil;
+            hud1.detailsLabelText = [NSString stringWithFormat:@"进入更新队列,目前队列位置：%@，预计更新时间：%@",indexStr,str];
+            [hud1 showAnimated:YES whileExecutingBlock:^{
+                sleep(3);
+                
             }];
             return;
         }
             m_charaDetailsView.reloadingBtn.userInteractionEnabled = YES;
             m_charaInfo = [[CharaInfo alloc] initWithReLoadingInfo:responseObject];
-          [self showMessageWindowWithContent:@"获取成功" imageType:0];
+        MBProgressHUD *  hud2 = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:hud2];
+        hud2.labelText = @"获取成功";
+            hud2.mode =  MBProgressHUDModeCustomView;
+        hud2.customView = [[UIImageView alloc]initWithImage:KUIImage(@"37x-Checkmark")];
+        [hud2 showAnimated:YES whileExecutingBlock:^{
+            sleep(2);
+            
+        }];
+         // [self showMessageWindowWithContent:@"获取成功" imageType:0];
         NSString *changeBtnTitle =[NSString stringWithFormat:@"上次更新时间：%@",[self getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(responseObject, @"rankingtime")]]];
         
         [[NSUserDefaults standardUserDefaults]setObject:KISDictionaryHaveKey(responseObject, @"rankingtime") forKey:@"WX_reloadBtnTitle_wx"];
@@ -357,10 +375,10 @@
 //刷新数据
 -(void)reLoadingUserInfoFromNet
 {
-//    hud = [[MBProgressHUD alloc] initWithView:self.view];
-//    [self.view addSubview:hud];
-    hud.mode =  MBProgressHUDModeIndeterminate;
-     hud.labelText = @"正拼命从英雄榜获取中...";
+    hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    
+    hud.labelText = @"正拼命从英雄榜获取中...";
     hud.detailsLabelText = nil;
     
     m_charaDetailsView.reloadingBtn.userInteractionEnabled =NO;

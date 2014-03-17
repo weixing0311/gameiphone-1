@@ -406,14 +406,10 @@
             if (isWXCeiling ==YES) {
                 NSLog(@"打招呼成功");
                 [self showMessageWindowWithContent:@"打招呼成功" imageType:0];
-               // [self changeOtherOne];
 
             }else{
-                [self showMessageWindowWithContent:@"打招呼失败,邂逅数量已达上限" imageType:0];
-                //sayHelloBtn.enabled = YES;
+                [self showAlertViewWithTitle:nil message:@"打招呼失败,邂逅数量已达上限" buttonTitle:@"确定"];
             }
-            
-            
         }
         if (COME_TYPE ==3) {
             if ([KISDictionaryHaveKey(responseObject, @"1") isKindOfClass:[NSArray class]]) {

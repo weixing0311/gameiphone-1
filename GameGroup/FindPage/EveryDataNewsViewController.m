@@ -59,8 +59,9 @@
     
     
     [self setTopViewWithTitle:@"" withBackButton:YES];
+    
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, KISHighVersion_7 ? 64 : 44)];
-    titleLabel.center = CGPointMake(160, KISHighVersion_7 ? 42 : 22);
+    titleLabel.center = CGPointMake(170, KISHighVersion_7 ? 42 : 22);
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.text = @"每日一闻";
@@ -111,22 +112,26 @@
     NSString*friendImgStr =[array objectAtIndex:0];
 
     cell.topTimeLabel.text =[self getDataWithTimeMiaoInterval: [GameCommon getNewStringWithId:
-[KISDictionaryHaveKey(dic, @"time")substringToIndex:10]]];
+KISDictionaryHaveKey(dic, @"time")]];
     
     cell.topTimeLabel.frame = CGRectMake((320-cell.topTimeLabel.text.length*12)/2, 5, cell.topTimeLabel.text.length*12, 20);
     cell.headImageBtn.imageURL =[NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",friendImgStr]];
     cell.headImageBtn.tag = indexPath.row;
     [cell.headImageBtn addTarget:self action:@selector(enterToPerson:) forControlEvents:UIControlEventTouchUpInside];
-        cell.nickNameLabel.text = KISDictionaryHaveKey(dic, @"nickname");
+    cell.nickNameLabel .text= KISDictionaryHaveKey(dic, @"nickname");
     
-    cell.nickNameLabel.frame = CGRectMake(62, 15, cell.nickNameLabel.text.length*20, 15);
-    cell.bianzheLabel.frame = CGRectMake(cell.nickNameLabel.frame.size.width+64, 15, 70, 15);
+    cell.nickNameLabel.frame = CGRectMake(62, 15, cell.nickNameLabel.text.length*18, 15);
+    cell.nickNameBtn.frame = cell.nickNameLabel.frame;
+    [cell.nickNameBtn addTarget:self action:@selector(enterToPerson:) forControlEvents:UIControlEventTouchUpInside];
+    cell.nickNameBtn.tag = indexPath.row;
+    
+    cell.bianzheLabel.frame = CGRectMake(cell.nickNameBtn.frame.size.width+64, 15, 70, 15);
         cell.signatureLabel.text = KISDictionaryHaveKey(dic, @"editorNote");
     cell.bigImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(dic, @"img")]];
         cell.authorLabel.text = KISDictionaryHaveKey(dic, @"imgQuote");
-        cell.NumLabel.text =[self getDataWithTimeDataInterval: [GameCommon getNewStringWithId:[KISDictionaryHaveKey(dic, @"time")substringToIndex:10]]];
+        cell.NumLabel.text =[self getDataWithTimeDataInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
                              
-    cell.timeLabel.text = [self getDataWithTimeInterval: [GameCommon getNewStringWithId:[KISDictionaryHaveKey(dic, @"time")substringToIndex:10]]];
+    cell.timeLabel.text = [self getDataWithTimeInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"title");
     
     if (cell.titleLabel.text.length>9) {
@@ -137,9 +142,9 @@
     cell.contentLabel.frame = CGRectMake(100, cell.titleLabel.frame.origin.y+cell.titleLabel.frame.size.height-5, 190, 70);
     
         cell.contentLabel.text = KISDictionaryHaveKey(dic, @"content");
-    [cell.newsOfBtn addTarget:self action:@selector(toViewNews:) forControlEvents:UIControlEventTouchUpInside];
-//    [cell.topImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(toViewNews:)]];
-    cell.newsOfBtn.tag =1000 +indexPath.row;
+   // [cell.newsOfBtn addTarget:self action:@selector(toViewNews:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.topImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(toViewNews:)]];
+    cell.topImageView.tag =1000 +indexPath.row;
     return cell;
 }
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -147,10 +152,10 @@
     return NO;
 }
 
--(void)toViewNews:(UIButton*)sender
+-(void)toViewNews:(UIGestureRecognizer*)sender
 {
     OnceDynamicViewController* detailVC = [[OnceDynamicViewController alloc] init];
-    detailVC.messageid = [GameCommon getNewStringWithId:KISDictionaryHaveKey([m_tableArray objectAtIndex:sender.tag-1000], @"messageId")];
+    detailVC.messageid = [GameCommon getNewStringWithId:KISDictionaryHaveKey([m_tableArray objectAtIndex:sender.view.tag-1000], @"messageId")];
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 

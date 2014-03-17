@@ -148,8 +148,8 @@
     
     float currentHeigth = 0;
     
-    UIImageView* topBg7 = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
-    topBg7.image = KUIImage(@"table_heard_bg");
+    UIView* topBg7 = [[UIView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg7.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
     [m_myScrollView addSubview:topBg7];
     
     UILabel* titleLabel7 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"个人动态" textAlignment:NSTextAlignmentLeft];
@@ -185,8 +185,8 @@
     
     m_currentStartY += 50;
     ////////////////////////
-    UIImageView* topBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
-    topBg.image = KUIImage(@"table_heard_bg");
+    UIView* topBg = [[UIView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
     [m_myScrollView addSubview:topBg];
     
     UILabel* titleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"个人资料" textAlignment:NSTextAlignmentLeft];
@@ -269,8 +269,8 @@
     m_currentStartY += 37;
     [self setOneLineWithY:m_currentStartY];
     
-    UIImageView* topBg3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
-    topBg3.image = KUIImage(@"table_heard_bg");
+    UIView* topBg3 = [[UIView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg3.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
     [m_myScrollView addSubview:topBg3];
     
     UILabel* titleLabel3 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"我的角色" textAlignment:NSTextAlignmentLeft];
@@ -278,8 +278,8 @@
     
     m_currentStartY += 30;
     
-    UIImageView* topBg6 = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
-    topBg6.image = KUIImage(@"table_heard_bg");
+    UIView* topBg6 = [[UIView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg6.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
     [m_myScrollView addSubview:topBg6];
     
     UILabel* titleLabel1 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"我的头衔" textAlignment:NSTextAlignmentLeft];
@@ -297,8 +297,8 @@
     [self setOneLineWithY:m_currentStartY];
     
     
-    UIImageView* topBg4 = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
-    topBg4.image = KUIImage(@"table_heard_bg");
+    UIView* topBg4 = [[UIView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg4.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
     [m_myScrollView addSubview:topBg4];
     
     UILabel* titleLabel4 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"其他" textAlignment:NSTextAlignmentLeft];
@@ -502,8 +502,8 @@
     float currentHeigth = 0;
     if ([self.hostInfo.state isKindOfClass:[NSDictionary class]] && [[self.hostInfo.state allKeys] count] != 0) {
         
-        UIImageView* topBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
-        topBg.image = KUIImage(@"table_heard_bg");
+        UIView* topBg = [[UIView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+        topBg.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
         [m_myScrollView addSubview:topBg];
         
         UILabel* titleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"个人动态" textAlignment:NSTextAlignmentLeft];
@@ -588,8 +588,8 @@
     
     m_currentStartY += 50;
     ////////////////////////
-    UIImageView* topBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
-    topBg.image = KUIImage(@"table_heard_bg");
+    UIView* topBg = [[UIView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
     [m_myScrollView addSubview:topBg];
     
     UILabel* titleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"个人资料" textAlignment:NSTextAlignmentLeft];
@@ -703,8 +703,8 @@
 
 - (void)setRoleView
 {
-    UIImageView* topBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
-    topBg.image = KUIImage(@"table_heard_bg");
+    UIView* topBg = [[UIView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
     [m_myScrollView addSubview:topBg];
     
     UILabel* titleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"我的角色" textAlignment:NSTextAlignmentLeft];
@@ -779,8 +779,8 @@
 - (void)setAchievementView
 {
     if ([self.hostInfo.achievementArray isKindOfClass:[NSArray class]] && [self.hostInfo.achievementArray count] != 0) {
-        UIImageView* topBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
-        topBg.image = KUIImage(@"table_heard_bg");
+        UIView* topBg = [[UIView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+        topBg.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
         [m_myScrollView addSubview:topBg];
         
         UILabel* titleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"我的头衔" textAlignment:NSTextAlignmentLeft];
@@ -824,8 +824,8 @@
 
 - (void)setOtherView
 {
-    UIImageView* topBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
-    topBg.image = KUIImage(@"table_heard_bg");
+    UIView* topBg = [[UIView alloc] initWithFrame:CGRectMake(0, m_currentStartY, kScreenWidth, 30)];
+    topBg.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
     [m_myScrollView addSubview:topBg];
     
     UILabel* titleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"其他" textAlignment:NSTextAlignmentLeft];
@@ -894,7 +894,7 @@
         case VIEW_TYPE_FriendPage1:
         {
             UIButton *editButton=[UIButton buttonWithType:UIButtonTypeCustom];
-            editButton.frame=CGRectMake(270, startX - 38, 40, 30);
+            editButton.frame=CGRectMake(270, startX - 38, 37, 30);
             [editButton setBackgroundImage:KUIImage(@"note_normal") forState:UIControlStateNormal];
             [editButton setBackgroundImage:KUIImage(@"note_click") forState:UIControlStateHighlighted];
             //[editButton setTitle:@"备注" forState:UIControlStateNormal];

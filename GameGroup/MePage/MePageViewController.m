@@ -173,7 +173,7 @@
     topBg.image = KUIImage(@"table_heard_bg");
     [heardView addSubview:topBg];
 
-    UIButton* setButton = [CommonControlOrView setButtonWithFrame:CGRectMake(285, 0, 35, 30) title:@"" fontSize:Nil textColor:nil bgImage:KUIImage(@"set_normal") HighImage:KUIImage(@"set_click") selectImage:Nil];
+    UIButton* setButton = [CommonControlOrView setButtonWithFrame:CGRectMake(250, 0, 70, 30) title:@"" fontSize:Nil textColor:nil bgImage:KUIImage(@"set_normal") HighImage:KUIImage(@"set_click") selectImage:Nil];
     setButton.backgroundColor = [UIColor clearColor];
     
     UILabel* titleLabel;

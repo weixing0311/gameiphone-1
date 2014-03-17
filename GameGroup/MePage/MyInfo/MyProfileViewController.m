@@ -407,16 +407,15 @@
         else
         {
             [hud hide:YES];
-            NSLog(@"reponseStrArray %@", reponseStrArray);
-            //self.imageId = [[NSMutableString alloc]init];
-             NSMutableArray * a1 = [NSMutableArray arrayWithArray:self.headImgArray];//压缩图 头像
+            
+            NSMutableArray * a1 = [NSMutableArray arrayWithArray:self.headImgArray];//压缩图 头像
             for (NSString*a in reponseStrArray) {
-                    for (int i = 0;i<a1.count;i++) {
-                        if ([[a1 objectAtIndex:i] isEqualToString:a]) {
-                            [a1 replaceObjectAtIndex:i withObject:[reponseStrArray objectForKey:a]];
-                        }
+                for (int i = 0;i<a1.count;i++) {
+                    if ([[a1 objectAtIndex:i] isEqualToString:a]) {
+                        [a1 replaceObjectAtIndex:i withObject:[reponseStrArray objectForKey:a]];
                     }
                 }
+            }
                 self.headImgArray = a1;
              [self refreshMyInfo];
         }

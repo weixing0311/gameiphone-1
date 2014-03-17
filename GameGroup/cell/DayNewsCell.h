@@ -23,4 +23,5 @@
 @property(nonatomic,strong)UILabel *topTimeLabel;
 @property(nonatomic,strong)UIButton *newsOfBtn;
 @property(nonatomic,strong)UILabel *bianzheLabel;
+@property(nonatomic,strong)UIButton *nickNameBtn;
 @end

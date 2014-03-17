@@ -86,9 +86,10 @@
     _dynamicTV.inputAccessoryView = tool;
     
     UIButton* imageB = [UIButton buttonWithType:UIButtonTypeCustom];
-    imageB.frame = CGRectMake(270, 4, 35, 35);
+    imageB.frame = CGRectMake(270, 4, 35, 30);
     [imageB addTarget:self action:@selector(getAnActionSheet) forControlEvents:UIControlEventTouchUpInside];
-    [imageB setBackgroundImage:[UIImage imageNamed:@"picBtn"] forState:UIControlStateNormal];
+    [imageB setBackgroundImage:[UIImage imageNamed:@"picBtn_normal"] forState:UIControlStateNormal];
+    [imageB setBackgroundImage:[UIImage imageNamed:@"picBtn_click"] forState:UIControlStateHighlighted];
     [tool addSubview:imageB];
     
     if (self.isComeFromMe ==YES) {

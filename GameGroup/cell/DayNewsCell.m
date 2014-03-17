@@ -33,7 +33,7 @@
         
         
         
-        self.headImageBtn = [[EGOImageButton alloc]initWithFrame:CGRectMake(20, 15, 32, 32)];
+        self.headImageBtn = [[EGOImageButton alloc]initWithFrame:CGRectMake(20, 18, 32, 32)];
         self.headImageBtn.layer.cornerRadius = 5;
         self.headImageBtn.layer.masksToBounds=YES;
         [self.headImageBtn setBackgroundImage:KUIImage(@"moren_people") forState:UIControlStateNormal];
@@ -44,8 +44,12 @@
         self.nickNameLabel = [FinderView setLabelWithFrame:CGRectMake(62, 15, 120, 15) backgroundColor:[UIColor clearColor] textColor:[UIColor blackColor] font:[UIFont systemFontOfSize:16]];
         [self.topImageView addSubview:self.nickNameLabel];
         
+        self.nickNameBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.nickNameBtn.frame =CGRectMake(62, 18, 120, 15);
+        self.nickNameBtn.backgroundColor = [UIColor clearColor];
+        [self.topImageView addSubview:self.nickNameBtn];
         
-        self.bianzheLabel = [FinderView setLabelWithFrame:CGRectMake(152, 15, 70, 15) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x868686, 1) font:[UIFont systemFontOfSize:13]];
+        self.bianzheLabel = [FinderView setLabelWithFrame:CGRectMake(152, 19, 70, 15) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x868686, 1) font:[UIFont systemFontOfSize:13]];
         [self.topImageView addSubview:self.bianzheLabel];
         self.bianzheLabel.text = @"编者语";
         
@@ -81,8 +85,8 @@
         UIView *shuView = [[UIView alloc]initWithFrame:CGRectMake(90, 283, 1, 80)];
         shuView.backgroundColor = UIColorFromRGBA(0xe9e9e9, 1);
         [self.topImageView addSubview:shuView];
-        self.newsOfBtn = [[UIButton alloc]initWithFrame:CGRectMake(10,300,300,100)];
-        [self.topImageView addSubview:self.newsOfBtn];
+      //  self.newsOfBtn = [[UIButton alloc]initWithFrame:CGRectMake(10,300,300,100)];
+       // [self.topImageView addSubview:self.newsOfBtn];
         
         
         self.titleLabel =[FinderView setLabelWithFrame:CGRectZero backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x333333, 1) font:[UIFont systemFontOfSize:18]];
