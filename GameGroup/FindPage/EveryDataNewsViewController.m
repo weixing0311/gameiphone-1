@@ -110,7 +110,9 @@
     NSArray  * array= [fruits componentsSeparatedByString:@","];
     NSString*friendImgStr =[array objectAtIndex:0];
 
-    cell.topTimeLabel.text =[self getDataWithTimeMiaoInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
+    cell.topTimeLabel.text =[self getDataWithTimeMiaoInterval: [GameCommon getNewStringWithId:
+[KISDictionaryHaveKey(dic, @"time")substringToIndex:10]]];
+    
     cell.topTimeLabel.frame = CGRectMake((320-cell.topTimeLabel.text.length*12)/2, 5, cell.topTimeLabel.text.length*12, 20);
     cell.headImageBtn.imageURL =[NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",friendImgStr]];
     cell.headImageBtn.tag = indexPath.row;
@@ -122,9 +124,9 @@
         cell.signatureLabel.text = KISDictionaryHaveKey(dic, @"editorNote");
     cell.bigImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(dic, @"img")]];
         cell.authorLabel.text = KISDictionaryHaveKey(dic, @"imgQuote");
-        cell.NumLabel.text =[self getDataWithTimeDataInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
+        cell.NumLabel.text =[self getDataWithTimeDataInterval: [GameCommon getNewStringWithId:[KISDictionaryHaveKey(dic, @"time")substringToIndex:10]]];
                              
-    cell.timeLabel.text = [self getDataWithTimeInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
+    cell.timeLabel.text = [self getDataWithTimeInterval: [GameCommon getNewStringWithId:[KISDictionaryHaveKey(dic, @"time")substringToIndex:10]]];
         cell.titleLabel.text = KISDictionaryHaveKey(dic, @"title");
     
     if (cell.titleLabel.text.length>9) {
