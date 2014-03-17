@@ -426,7 +426,9 @@
             
             NSString *response = [GameCommon getNewStringWithId:responseObject];//图片id
             [reponseStrArray setObject:response forKey:[imageNameArray objectAtIndex:i]];
+            
             picPage =reponseStrArray.count;
+            
             if (reponseStrArray.count==imageArray.count) {
                 if (controller) {
                     success(operation,reponseStrArray);
