@@ -26,6 +26,7 @@
     UILabel*        m_ageLabel;//年龄
     NSTimer *timer;
     BOOL            m_isSort;//图片顺序变化
+    NSInteger     picPage;
 }
 @end
 
@@ -332,10 +333,32 @@
     [hud show:YES];
     if (waitingUploadImgArray.count>0) {
         
-       /*
+       
 //        [NetManager uploadImagesWithCompres:waitingUploadImgArray WithURLStr:BaseUploadImageUrl ImageName:waitingUploadStrArray TheController:self Progress:nil Success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {//上传一张压缩图片成功后 上传一张不压缩图片
         
 //            NSDictionary* CompresID = responseObject;//"<local>0_me.jpg" = 8; 8为id
+        
+        [self uploadImages:waitingUploadImgArray WithURLStr:BaseUploadImageUrl view:self.view ImageName:waitingUploadStrArray TheController:self Progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite){
+            hud.labelText = [NSString stringWithFormat:@"上传第%d张 %.2f％", picPage+1,((double)totalBytesWritten/(double)totalBytesExpectedToWrite) * 100];
+        } Success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+            [hud hide:YES];
+            
+            NSMutableArray * a1 = [NSMutableArray arrayWithArray:self.headImgArray];//压缩图 头像
+            for (NSString*a in responseObject) {
+                for (int i = 0;i<a1.count;i++) {
+                    if ([[a1 objectAtIndex:i] isEqualToString:a]) {
+                        [a1 replaceObjectAtIndex:i withObject:[responseObject objectForKey:a]];
+                    }
+                }
+            }
+            self.headImgArray = a1;
+            [self refreshMyInfo];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [hud hide:YES];
+            [self showAlertViewWithTitle:@"提示" message:@"上传失败" buttonTitle:@"确定"];
+        }];
+        
+      /*
         [NetManager uploadImages:waitingUploadImgArray
                       WithURLStr:BaseUploadImageUrl
                        ImageName:waitingUploadStrArray
@@ -380,9 +403,9 @@
 //            [hud hide:YES];
 //            [self showAlertViewWithTitle:@"提示" message:@"上传失败" buttonTitle:@"确定"];
 //        }];
-        */
-        [self publishOnePicture:0 image:waitingUploadImgArray imageName:waitingUploadStrArray reponseStrDic:[NSMutableDictionary dictionaryWithCapacity:1]];
         
+       // [self publishOnePicture:0 image:waitingUploadImgArray imageName:waitingUploadStrArray reponseStrDic:[NSMutableDictionary dictionaryWithCapacity:1]];
+        */
     }
 //    else if([deleteImageIdArray count] > 0) //有删除
 //    {
@@ -392,6 +415,33 @@
     else//只是修改顺序
         [self refreshMyInfo];
 }
+
+-(void)uploadImages:(NSArray *)imageArray WithURLStr:(NSString *)urlStr view:(UIView*)view ImageName:(NSArray *)imageNameArray TheController:(UIViewController *)controller Progress:(void (^)(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite))block Success:(void (^)(AFHTTPRequestOperation *operation,  NSDictionary *responseObject))success
+            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSMutableDictionary * reponseStrArray = [NSMutableDictionary dictionary];
+    for (int i = 0; i<imageArray.count; i++) {
+       
+        [NetManager uploadImage:[imageArray objectAtIndex:i] WithURLStr:urlStr ImageName:[imageNameArray objectAtIndex:i] TheController:controller Progress:block Success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+            NSString *response = [GameCommon getNewStringWithId:responseObject];//图片id
+            [reponseStrArray setObject:response forKey:[imageNameArray objectAtIndex:i]];
+            picPage =reponseStrArray.count;
+            if (reponseStrArray.count==imageArray.count) {
+                if (controller) {
+                    success(operation,reponseStrArray);
+                }
+                
+            }
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            if (controller) {
+                failure(operation,error);
+            }
+        }];
+    }
+}
+
+/*
 
 -(void)publishOnePicture:(NSInteger)picIndex image:(NSArray*)imageArray imageName:(NSArray*)imageNameArray reponseStrDic:(NSMutableDictionary*)reponseStrArray
 {
@@ -425,7 +475,7 @@
     }];
 }
 
-
+*/
 
 - (void)refreshMyInfo//更新个人头像数据
 {

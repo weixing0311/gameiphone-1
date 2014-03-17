@@ -273,7 +273,7 @@
     topBg3.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
     [m_myScrollView addSubview:topBg3];
     
-    UILabel* titleLabel3 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"我的角色" textAlignment:NSTextAlignmentLeft];
+    UILabel* titleLabel3 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"个人角色" textAlignment:NSTextAlignmentLeft];
     [topBg3 addSubview:titleLabel3];
     
     m_currentStartY += 30;
@@ -282,7 +282,7 @@
     topBg6.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
     [m_myScrollView addSubview:topBg6];
     
-    UILabel* titleLabel1 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"我的头衔" textAlignment:NSTextAlignmentLeft];
+    UILabel* titleLabel1 = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"个人头衔" textAlignment:NSTextAlignmentLeft];
     [topBg6 addSubview:titleLabel1];
     
     m_currentStartY +=topBg.frame.size.height;

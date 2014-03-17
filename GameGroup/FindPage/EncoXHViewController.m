@@ -49,7 +49,7 @@
     BOOL     isSuccessToshuaishen;
     BOOL     isXiaoshuaishen;
     BOOL     isXuyuanchi;//刚开始的时候
-    
+    NSInteger   heightAox;
     NSInteger   EncoCount;
     NSInteger   encoLastCount;
 }
@@ -72,7 +72,12 @@
 {
     [super viewDidLoad];
     
-    
+    if (iPhone5) {
+        heightAox = 0;
+    }
+    else{
+        heightAox = 10;
+    }
     isXuyuanchi =YES;
     isXiaoshuaishen =NO;
     //    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"CharacterArrayOfAllForYou"]==NULL) {
@@ -181,7 +186,7 @@
     
     headImageView.layer.masksToBounds = YES;
     headImageView.layer.cornerRadius = 165/2.0;
-    headImageView.frame = CGRectMake(80, 76-40, 165, 165);
+    headImageView.frame = CGRectMake(80, 76-40-heightAox, 165, 165);
     headImageView.userInteractionEnabled = YES;
    // headImageView.backgroundColor =[UIColor whiteColor];
     headImageView.image = KUIImage(@"许愿池头像");
@@ -195,7 +200,7 @@
     
     
     
-    NickNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0,251-40, 320, 20)];
+    NickNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0,251-40-heightAox, 320, 20)];
     NickNameLabel.backgroundColor = [UIColor clearColor];
     NickNameLabel.font = [UIFont boldSystemFontOfSize:17];
     NickNameLabel.textAlignment = NSTextAlignmentCenter;
@@ -206,7 +211,7 @@
     
 
     
-    customLabel = [[UILabel alloc]initWithFrame:CGRectMake(125, 276-40, 120, 15)];
+    customLabel = [[UILabel alloc]initWithFrame:CGRectMake(125, 276-40-heightAox, 120, 15)];
     customLabel.backgroundColor = [UIColor clearColor];
     customLabel.font = [UIFont boldSystemFontOfSize:13];
     customLabel.textColor = [UIColor whiteColor];
@@ -214,14 +219,14 @@
 
     [backgroundImageView addSubview:customLabel];
     
-    sexLabel = [[UILabel alloc]initWithFrame:CGRectMake(customLabel.frame.origin.x-40, 276-40, 40, 15)];
+    sexLabel = [[UILabel alloc]initWithFrame:CGRectMake(customLabel.frame.origin.x-40, 276-40-heightAox, 40, 15)];
     sexLabel.font = [UIFont fontWithName:@"menlo" size:20];
     sexLabel.backgroundColor =[UIColor clearColor];
     sexLabel.textAlignment = NSTextAlignmentRight;
     [backgroundImageView addSubview:sexLabel];
     
     
-    promptView = [[UIView alloc]initWithFrame:CGRectMake(0,318-50, 320, 50)];
+    promptView = [[UIView alloc]initWithFrame:CGRectMake(0,318-50-heightAox, 320, 50)];
     promptView.backgroundColor =[UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:0.5];;
     [backgroundImageView addSubview:promptView];
     
@@ -274,7 +279,7 @@
 
     promptLabel.text =@"你将一枚金币抛入了许愿池中，然后耐心的等待池水平静下来…";
    int i= promptLabel.text.length/20;
-    promptView.frame = CGRectMake(0, 318-50, 320, 30+15*i);
+    promptView.frame = CGRectMake(0, 318-50-heightAox, 320, 35+15*i);
     promptLabel.frame = CGRectMake(20, 0, 280, 30+15*i);
 
 }
@@ -397,7 +402,7 @@
 
             
             i= promptLabel.text.length/20;
-            promptView.frame = CGRectMake(0, 318-50, 320, 30+15*i);
+            promptView.frame = CGRectMake(0, 318-50-heightAox, 320, 35+15*i);
             promptLabel.frame = CGRectMake(20, 0, 280, 30+15*i);
             
         }

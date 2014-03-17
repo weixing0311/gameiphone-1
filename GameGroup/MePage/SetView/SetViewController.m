@@ -172,7 +172,7 @@
         } break;
         case 1:
         {
-            UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您确认要退出登陆吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"退出", nil];
+            UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil message:@"您确认要退出登陆吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
             alert.tag = 112;
             [alert show];
         } break;

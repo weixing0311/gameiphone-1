@@ -41,7 +41,7 @@
         [self.topImageView addSubview:self.headImageBtn];
         
         
-        self.nickNameLabel = [FinderView setLabelWithFrame:CGRectMake(62, 15, 120, 15) backgroundColor:[UIColor clearColor] textColor:[UIColor blackColor] font:[UIFont systemFontOfSize:16]];
+        self.nickNameLabel = [FinderView setLabelWithFrame:CGRectMake(62, 18, 120, 15) backgroundColor:[UIColor clearColor] textColor:[UIColor blackColor] font:[UIFont systemFontOfSize:16]];
         [self.topImageView addSubview:self.nickNameLabel];
         
         self.nickNameBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -49,7 +49,7 @@
         self.nickNameBtn.backgroundColor = [UIColor clearColor];
         [self.topImageView addSubview:self.nickNameBtn];
         
-        self.bianzheLabel = [FinderView setLabelWithFrame:CGRectMake(152, 19, 70, 15) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x868686, 1) font:[UIFont systemFontOfSize:13]];
+        self.bianzheLabel = [FinderView setLabelWithFrame:CGRectMake(152, 20, 70, 15) backgroundColor:[UIColor clearColor] textColor:UIColorFromRGBA(0x868686, 1) font:[UIFont systemFontOfSize:13]];
         [self.topImageView addSubview:self.bianzheLabel];
         self.bianzheLabel.text = @"编者语";
         

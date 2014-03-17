@@ -100,7 +100,7 @@
     remarkLabel.text = self.remark;
     [self addSubview:remarkLabel];
     
-    UIButton* infoButton = [CommonControlOrView setButtonWithFrame:CGRectMake(10, 200 + remarkSize.height, 60, 20) title:@"了解详情" fontSize:[UIFont boldSystemFontOfSize:13.0] textColor:kColorWithRGB(35, 193, 238, 1.0) bgImage:nil HighImage:nil selectImage:nil];
+    UIButton* infoButton = [CommonControlOrView setButtonWithFrame:CGRectMake(10, 190 + remarkSize.height, 60, 40) title:@"了解详情" fontSize:[UIFont boldSystemFontOfSize:13.0] textColor:kColorWithRGB(35, 193, 238, 1.0) bgImage:nil HighImage:nil selectImage:nil];
     [infoButton addTarget:self action:@selector(infoButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:infoButton];
     
@@ -151,7 +151,10 @@
     contentView.textColor = [UIColor whiteColor];
     [self.showDetailView addSubview:contentView];
     
-    UIButton* btn = [CommonControlOrView setButtonWithFrame:CGRectMake(295, 0, 30, 30) title:@"" fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor whiteColor] bgImage:KUIImage(@"close_normal") HighImage:nil selectImage:nil];
+    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(295, 0, 30, 30)];
+    imageView.image = KUIImage(@"close_normal");
+    [self.showDetailView addSubview:imageView];
+    UIButton* btn = [CommonControlOrView setButtonWithFrame:CGRectMake(285, 0, 50, 50) title:@"" fontSize:[UIFont boldSystemFontOfSize:15.0] textColor:[UIColor clearColor] bgImage:nil HighImage:nil selectImage:nil];
     [btn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.showDetailView addSubview:btn];
     

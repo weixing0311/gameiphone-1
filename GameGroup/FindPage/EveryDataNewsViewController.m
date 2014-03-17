@@ -120,12 +120,12 @@ KISDictionaryHaveKey(dic, @"time")]];
     [cell.headImageBtn addTarget:self action:@selector(enterToPerson:) forControlEvents:UIControlEventTouchUpInside];
     cell.nickNameLabel .text= KISDictionaryHaveKey(dic, @"nickname");
     
-    cell.nickNameLabel.frame = CGRectMake(62, 15, cell.nickNameLabel.text.length*18, 15);
+    cell.nickNameLabel.frame = CGRectMake(62, 18, cell.nickNameLabel.text.length*18, 15);
     cell.nickNameBtn.frame = cell.nickNameLabel.frame;
     [cell.nickNameBtn addTarget:self action:@selector(enterToPerson:) forControlEvents:UIControlEventTouchUpInside];
     cell.nickNameBtn.tag = indexPath.row;
     
-    cell.bianzheLabel.frame = CGRectMake(cell.nickNameBtn.frame.size.width+64, 15, 70, 15);
+    cell.bianzheLabel.frame = CGRectMake(cell.nickNameBtn.frame.size.width+64, 20, 70, 15);
         cell.signatureLabel.text = KISDictionaryHaveKey(dic, @"editorNote");
     cell.bigImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(dic, @"img")]];
         cell.authorLabel.text = KISDictionaryHaveKey(dic, @"imgQuote");
