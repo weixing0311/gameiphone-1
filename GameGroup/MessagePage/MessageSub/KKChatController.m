@@ -277,7 +277,7 @@
             //                withF = contentSize.width;
             higF = contentSize.height;
 //            NSNumber * width = [NSNumber numberWithFloat:MAX(titleSize.width, withF)];
-            NSNumber * height = [NSNumber numberWithFloat:((titleSize.height > 0 ? (titleSize.height + 5) : titleSize.height) + higF)];
+            NSNumber * height = [NSNumber numberWithFloat:(contentSize.height > 40 ? (titleSize.height + contentSize.height + 5) : titleSize.height + 45)];
             
             NSArray * hh = [NSArray arrayWithObjects:[NSNumber numberWithFloat:195],height, nil];
             [heightArray addObject:hh];
@@ -311,11 +311,11 @@
 
 - (CGSize)getPayloadMsgTitleSize:(NSString*)theTitle
 {
-     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(150, 50)] : CGSizeZero;
+     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(210, 50)] : CGSizeZero;
 }
 - (CGSize)getPayloadMsgContentSize:(NSString*)theContent withThumb:(BOOL)haveThumb
 {
-    return (theContent.length > 0)?[theContent sizeWithFont:[UIFont boldSystemFontOfSize:13.0] constrainedToSize:CGSizeMake(haveThumb ? 160 : 180, 80)] : CGSizeZero;
+    return (theContent.length > 0)?[theContent sizeWithFont:[UIFont boldSystemFontOfSize:13.0] constrainedToSize:CGSizeMake(haveThumb ? 150 : 180, 80)] : CGSizeZero;
 }
 
 -(void)emojiBtnClicked:(UIButton *)sender
@@ -772,10 +772,10 @@
 
         cell.titleLabel.text = KISDictionaryHaveKey(msgDic, @"title");
         if ([sender isEqualToString:@"you"]) {
-            [cell.thumbImgV setFrame:CGRectMake(54, 15 + titleSize.height , 40, 40)];
+            [cell.thumbImgV setFrame:CGRectMake(50, 40 + titleSize.height , 40, 40)];
         }
         else{
-            [cell.thumbImgV setFrame:CGRectMake(70, 15 + titleSize.height , 40, 40)];
+            [cell.thumbImgV setFrame:CGRectMake(70, 40 + titleSize.height , 40, 40)];
             
         }
         contentSize = [self getPayloadMsgContentSize:[GameCommon getNewStringWithId:KISDictionaryHaveKey(msgDic, @"msg")] withThumb:YES];
@@ -809,7 +809,7 @@
             
             [cell.arrowImage setFrame:CGRectMake(padding-10+45 + size.width+27 + 10, size.height/2+27, 8, 12)];
             
-            [cell.titleLabel setFrame:CGRectMake(padding + 80, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
+            [cell.titleLabel setFrame:CGRectMake(padding + 30, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
             [cell.contentLabel setFrame:CGRectMake(padding + 50 +28, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
         }else
         {
@@ -828,7 +828,7 @@
             
             [cell.arrowImage setFrame:CGRectMake(padding-10+45 + size.width+27 + 10, size.height/2+27, 8, 12)];
             
-            [cell.titleLabel setFrame:CGRectMake(padding + 100, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
+            [cell.titleLabel setFrame:CGRectMake(padding + 50, 33, titleSize.width, titleSize.height+(contentSize.height > 0 ? 0 : 5))];
             [cell.contentLabel setFrame:CGRectMake(padding + 50 + 45, 35 + titleSize.height + (titleSize.height > 0 ? 5 : 0), contentSize.width, contentSize.height)];
         }
         
