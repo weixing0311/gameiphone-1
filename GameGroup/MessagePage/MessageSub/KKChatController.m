@@ -834,7 +834,7 @@
         
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
         if (indexPath.row>0) {
-            if ([time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]<60) {
+            if ([time intValue]-[[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] substringToIndex:10]intValue]<60) {
                 cell.senderAndTimeLabel.hidden = YES;
             }
             else
@@ -924,7 +924,7 @@
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
         
         if (indexPath.row > 0) {
-            if ([time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]<60) {
+            if ([time intValue]-[[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] substringToIndex:10]intValue]<60) {
                 cell.senderAndTimeLabel.hidden = YES;
             }
             else

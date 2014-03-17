@@ -97,7 +97,7 @@
     
 	self.textView.minNumberOfLines = 1;
 	self.textView.maxNumberOfLines = 6;
-	self.textView.returnKeyType = UIReturnKeyDefault; //just as an example
+	self.textView.returnKeyType = UIReturnKeyDone; //just as an example
 	self.textView.font = [UIFont systemFontOfSize:15.0f];
 	self.textView.delegate = self;
     self.textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
