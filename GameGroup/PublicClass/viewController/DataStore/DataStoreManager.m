@@ -2542,19 +2542,7 @@
     NSString * userid = [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"userid")];
     NSArray* headArr = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"img")] componentsSeparatedByString:@","];
     NSString * headImgID = [headArr count] != 0 ? [headArr objectAtIndex:0] : @"";
-    NSString * fromStr = @"";
-    if([fromID isEqualToString:@"1"])
-    {
-      fromStr = @"手机通讯录";
-    }
-    else if ([fromID isEqualToString:@"2"])
-    {
-        fromStr = userInfoDict[@"superremark"]?userInfoDict[@"superremark"]:@"明星";
-    }
-    else if ([fromID isEqualToString:@"3"])
-    {
-        fromStr = [NSString stringWithFormat:@"%@公会", [GameCommon getNewStringWithId:KISDictionaryHaveKey(userInfoDict, @"guild")]];
-    }
+    NSString * fromStr = userInfoDict[@"recommendMsg"];//推荐理由
     [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
         NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
         DSRecommendList * Recommend = [DSRecommendList MR_findFirstWithPredicate:predicate];
@@ -2567,9 +2555,9 @@
         if ([DataStoreManager ifHaveThisFriend:userName] || [DataStoreManager ifIsAttentionWithUserName:userName]) {
             Recommend.state = @"1";
         }
-        else
+        else{
             Recommend.state = @"0";
-
+        }
         Recommend.headImgID = headImgID;
         Recommend.fromStr = fromStr;
         Recommend.fromID = fromID;

@@ -311,7 +311,7 @@
 
 - (CGSize)getPayloadMsgTitleSize:(NSString*)theTitle
 {
-     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(180, 50)] : CGSizeZero;
+     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(150, 50)] : CGSizeZero;
 }
 - (CGSize)getPayloadMsgContentSize:(NSString*)theContent withThumb:(BOOL)haveThumb
 {
@@ -834,7 +834,7 @@
         
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
         if (indexPath.row>0) {
-            if ([time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]<60) {
+            if ([time intValue]-[[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] substringToIndex:10]intValue]<60) {
                 cell.senderAndTimeLabel.hidden = YES;
             }
             else
@@ -924,7 +924,7 @@
         NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
         
         if (indexPath.row > 0) {
-            if ([time intValue]-[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] intValue]<60) {
+            if ([time intValue]-[[[[messages objectAtIndex:(indexPath.row-1)] objectForKey:@"time"] substringToIndex:10]intValue]<60) {
                 cell.senderAndTimeLabel.hidden = YES;
             }
             else

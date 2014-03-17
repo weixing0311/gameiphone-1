@@ -445,6 +445,18 @@
                     else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"type")] isEqualToString:@"3"]) {
                         dis = [NSString stringWithFormat:@"获得公会好友%@", KISDictionaryHaveKey(dic, @"nickname")];
                     }
+                    else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"type")] isEqualToString:@"4"])
+                    {
+                        dis = [NSString stringWithFormat:@"同服务器激活女性%@", KISDictionaryHaveKey(dic, @"nickname")];
+                    }
+                    else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"type")] isEqualToString:@"5"])
+                    {
+                        dis = [NSString stringWithFormat:@"服务器达人%@", KISDictionaryHaveKey(dic, @"nickname")];
+                    }
+                    else if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"type")] isEqualToString:@"6"])
+                    {
+                        dis = [NSString stringWithFormat:@"激活女性%@", KISDictionaryHaveKey(dic, @"nickname")];
+                    }
                 }
             }
             [dict setObject:dis forKey:@"disStr"];

@@ -124,8 +124,17 @@
     else if ([KISDictionaryHaveKey(tempDic, @"type") isEqualToString:@"2"]) {
         cell.fromImage.image = KUIImage(@"recommend_star");
     }
-    else  {
+    else  if ([KISDictionaryHaveKey(tempDic, @"type") isEqualToString:@"3"]){
         cell.fromImage.image = KUIImage(@"recommend_wow");
+    }
+    else  if ([KISDictionaryHaveKey(tempDic, @"type") isEqualToString:@"4"]){
+        cell.fromImage.image = KUIImage(@"recommend_tongfumeizi");
+    }
+    else  if ([KISDictionaryHaveKey(tempDic, @"type") isEqualToString:@"5"]){
+        cell.fromImage.image = KUIImage(@"recommend_daren");
+    }
+    else  if ([KISDictionaryHaveKey(tempDic, @"type") isEqualToString:@"6"]){
+        cell.fromImage.image = KUIImage(@"recommend_suijimeizi");
     }
     
     cell.fromLabel.text = KISDictionaryHaveKey(tempDic, @"dis");
