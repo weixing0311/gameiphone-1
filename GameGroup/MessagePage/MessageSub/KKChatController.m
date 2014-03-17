@@ -311,7 +311,7 @@
 
 - (CGSize)getPayloadMsgTitleSize:(NSString*)theTitle
 {
-     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(180, 50)] : CGSizeZero;
+     return (theTitle.length > 0)?[theTitle sizeWithFont:[UIFont boldSystemFontOfSize:14.0] constrainedToSize:CGSizeMake(150, 50)] : CGSizeZero;
 }
 - (CGSize)getPayloadMsgContentSize:(NSString*)theContent withThumb:(BOOL)haveThumb
 {
