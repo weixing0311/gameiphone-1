@@ -120,6 +120,7 @@
     
     if ([KISDictionaryHaveKey(tempDic, @"type") isEqualToString:@"1"]) {
         cell.fromImage.image = KUIImage(@"recommend_phone");
+        
     }
     else if ([KISDictionaryHaveKey(tempDic, @"type") isEqualToString:@"2"]) {
         cell.fromImage.image = KUIImage(@"recommend_star");
