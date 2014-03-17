@@ -29,7 +29,6 @@
         
         self.authBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
         self.authBg.backgroundColor = [UIColor clearColor];
-        self.authBg.image = KUIImage(@"chara_auth");
         [self addSubview:self.authBg];
         self.authBg.hidden = YES;
 

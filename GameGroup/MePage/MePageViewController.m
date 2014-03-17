@@ -432,10 +432,12 @@
             }
             if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"auth")] isEqualToString:@"1"]) {//已认证
                 cell.authBg.hidden = NO;
+                cell.authBg.image= KUIImage(@"chara_auth_1");
             }
             else
             {
-                cell.authBg.hidden = YES;
+                cell.authBg.hidden = NO;
+                 cell.authBg.image= KUIImage(@"chara_auth_2");
             }
             cell.rowIndex = indexPath.row;
             cell.myDelegate = self;
