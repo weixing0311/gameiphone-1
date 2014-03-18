@@ -117,7 +117,13 @@
 KISDictionaryHaveKey(dic, @"time")]];
     
     cell.topTimeLabel.frame = CGRectMake((320-cell.topTimeLabel.text.length*12)/2, 5, cell.topTimeLabel.text.length*12, 20);
-    cell.headImageBtn.imageURL =[NSURL URLWithString:[[BaseImageUrl stringByAppendingFormat:@"%@",friendImgStr] stringByAppendingString:@"/80"]];
+    if (friendImgStr) {
+        cell.headImageBtn.imageURL =[NSURL URLWithString:[[BaseImageUrl stringByAppendingFormat:@"%@",friendImgStr] stringByAppendingString:@"/80"]];
+    }else
+    {
+        cell.headImageBtn.imageURL = nil;
+    }
+    
     cell.headImageBtn.tag = indexPath.row;
     [cell.headImageBtn addTarget:self action:@selector(enterToPerson:) forControlEvents:UIControlEventTouchUpInside];
     cell.nickNameLabel .text= KISDictionaryHaveKey(dic, @"nickname");

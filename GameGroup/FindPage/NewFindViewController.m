@@ -103,8 +103,12 @@
     self.friendImgStr =[array objectAtIndex:0];
     
     [[NSUserDefaults standardUserDefaults]setValue:self.friendImgStr forKey:@"preload_img_wx_dongtai"];
-    
-    m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",_friendImgStr]];
+    if (_friendImgStr) {
+         m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",_friendImgStr]];
+    }else{
+        m_dynamicBtn.imageURL = nil;
+    }
+   
     if (friendDunamicmsgCount && friendDunamicmsgCount !=0)
     {
         NSLog(@"-------->>>%d",friendDunamicmsgCount);

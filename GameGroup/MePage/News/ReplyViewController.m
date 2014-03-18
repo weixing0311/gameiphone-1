@@ -387,7 +387,13 @@
     NSString* imageName = [GameCommon getHeardImgId:KISDictionaryHaveKey(tempDic, @"userimg")];
     NSURL * theUrl = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:imageName] stringByAppendingString:@"/80"]];
     cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-    cell.headImageV.imageURL = theUrl;
+    if (imageName) {
+        cell.headImageV.imageURL = theUrl;
+    }else
+    {
+        cell.headImageV.imageURL = nil;
+    }
+    
     
     cell.nickNameLabel.text = [KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(tempDic, @"nickname");
     cell.timeLabel.text = [GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"createDate")]];

@@ -223,7 +223,13 @@
     cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
     NSDictionary * cDict = self.notiArray[indexPath.row];
     NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",[self getHead:[cDict objectForKey:@"fromHeadImg"]]]];
-    cell.headImageV.imageURL = theUrl;
+    if ([self getHead:[cDict objectForKey:@"fromHeadImg"]]) {
+        cell.headImageV.imageURL = theUrl;
+    }else
+    {
+        cell.headImageV.imageURL = nil;
+    }
+    
     // Configure the cell...
     cell.nameLabel.text = [cDict objectForKey:@"fromNickname"];
     cell.timeLabel.text = [GameCommon CurrentTime:[GameCommon getCurrentTime] AndMessageTime:[cDict objectForKey:@"time" ]];

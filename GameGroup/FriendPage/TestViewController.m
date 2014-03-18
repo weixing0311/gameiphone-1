@@ -125,8 +125,13 @@
     self.headImageView.placeholderImage = [UIImage imageNamed:@"people_man.png"];
     NSString * fruits = self.titleImage;
     NSArray  * array= [fruits componentsSeparatedByString:@","];
+    if (array.count>1) {
+        self.headImageView.imageURL =[NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",[array objectAtIndex:0]]];
+    }else
+    {
+        self.headImageView.imageURL =nil;
+    }
     
-    self.headImageView.imageURL =[NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",[array objectAtIndex:0]]];
     
     
     m_currentStartY +=80;
@@ -549,7 +554,14 @@
         if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.hostInfo.state, @"title")] isEqualToString:@""]) {
             tit = [NSString stringWithFormat:@"「%@」", tit];
         }
-        UIView* person_state = [CommonControlOrView setPersonStateViewTime:[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.hostInfo.state, @"createDate")]] nameText:showTitle achievement:tit achievementLevel:@"1" titleImage:[[BaseImageUrl stringByAppendingString:imageId] stringByAppendingString:@"/80"]];
+        UIView* person_state ;
+        if (imageId) {
+            person_state =[CommonControlOrView setPersonStateViewTime:[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.hostInfo.state, @"createDate")]] nameText:showTitle achievement:tit achievementLevel:@"1" titleImage:[[BaseImageUrl stringByAppendingString:imageId] stringByAppendingString:@"/80"]];
+        }else
+        {
+            person_state =[CommonControlOrView setPersonStateViewTime:[GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(self.hostInfo.state, @"createDate")]] nameText:showTitle achievement:tit achievementLevel:@"1" titleImage:nil];
+        }
+        
         currentHeigth = person_state.frame.size.height;
         person_state.frame = CGRectMake(0, m_currentStartY, kScreenWidth, currentHeigth);
         [m_myScrollView addSubview:person_state];

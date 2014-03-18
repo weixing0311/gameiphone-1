@@ -797,8 +797,14 @@
             [cell.headImgV setFrame:CGRectMake(320-10-40, padding*2-15, 40, 40)];
             [cell.headImgV addTarget:self action:@selector(myBtnClicked) forControlEvents:UIControlEventTouchUpInside];
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.myHeadImg]];
-            cell.headImgV.imageURL = theUrl;
+            if (self.myHeadImg) {
+                NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.myHeadImg]];
+                cell.headImgV.imageURL = theUrl;
+            }
+            else{
+                cell.headImgV.imageURL =nil;
+            }
+            
             bgImage = [[UIImage imageNamed:@"bubble_05"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
             
             [cell.bgImageView setFrame:CGRectMake(320-size.width - padding-20-10-30, padding*2-15, size.width+25, size.height+20)];
@@ -816,8 +822,14 @@
             [cell.headImgV setFrame:CGRectMake(10, padding*2-15, 40, 40)];
             [cell.headImgV addTarget:self action:@selector(chatToBtnClicked) forControlEvents:UIControlEventTouchUpInside];
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.chatUserImg]];
-            cell.headImgV.imageURL = theUrl;
+            if (self.chatUserImg) {
+                NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.chatUserImg]];
+                cell.headImgV.imageURL = theUrl;
+            }else
+            {
+                cell.headImgV.imageURL = nil;
+            }
+            
             bgImage = [[UIImage imageNamed:@"bubble_04.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
             
             [cell.bgImageView setFrame:CGRectMake(padding-10+45, padding*2-15, size.width+35, size.height + 20)];
@@ -881,8 +893,14 @@
 
         if ([sender isEqualToString:@"you"]) {
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80", self.myHeadImg]];
-            cell.headImgV.imageURL = theUrl;
+            if (self.myHeadImg) {
+                NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80", self.myHeadImg]];
+                cell.headImgV.imageURL = theUrl;
+            }else
+            {
+                cell.headImgV.imageURL = nil;
+            }
+            
 
             [cell.headImgV setFrame:CGRectMake(320-10-40, padding*2-15, 40, 40)];
             bgImage = [[UIImage imageNamed:@"bubble_02.png"]
@@ -908,8 +926,14 @@
             [cell.chattoHeadBtn setFrame:cell.headImgV.frame];
             [cell.chattoHeadBtn addTarget:self action:@selector(chatToBtnClicked) forControlEvents:UIControlEventTouchUpInside];
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.chatUserImg]];
-            cell.headImgV.imageURL = theUrl;
+            if (self.chatUserImg) {
+                NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.chatUserImg]];
+                cell.headImgV.imageURL = theUrl;
+            }else
+            {
+                cell.headImgV.imageURL = nil;
+            }
+            
             bgImage = [[UIImage imageNamed:@"bubble_01.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
            
             [cell.messageContentView setFrame:CGRectMake(padding+7+45, padding*2-4, size.width, size.height)];

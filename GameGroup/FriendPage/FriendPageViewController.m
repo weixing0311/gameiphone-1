@@ -930,10 +930,11 @@
         cell.ageLabel.backgroundColor = kColorWithRGB(238, 100, 196, 1.0);
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"people_woman.png"];
     }
-
-    cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]] stringByAppendingString:@"/80"]];
-    
-   
+    if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]) {
+        cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]] stringByAppendingString:@"/80"]];
+    }else{
+        cell.headImageV.imageURL = nil;
+    }
     cell.nameLabel.text = [tempDict objectForKey:@"displayName"];
     cell.gameImg_one.image = KUIImage(@"wow");
     cell.distLabel.text = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");

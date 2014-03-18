@@ -192,11 +192,15 @@
     NSString * fruits = KISDictionaryHaveKey(tempDict, @"img");
     NSArray  * array= [fruits componentsSeparatedByString:@","];
     NSString* headURL;
-    if (array.count>0) {
+    if (array.count>1) {
         headURL = [array objectAtIndex:0];
+        cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[[GameCommon getNewStringWithId:headURL] stringByAppendingString:@"/80"]]];
+    }else
+    {
+        cell.headImageV.imageURL =nil;
     }
     
-    cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[[GameCommon getNewStringWithId:headURL] stringByAppendingString:@"/80"]]];
+    
     cell.nameLabel.text = [tempDict objectForKey:@"nickname"];
     cell.gameImg_one.image = KUIImage(@"wow");
     cell.distLabel.text = [KISDictionaryHaveKey(tempDict, @"charactername") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");

@@ -312,9 +312,16 @@
             cell.distLabel.text = KISDictionaryHaveKey(KISDictionaryHaveKey(titleDic, @"titleObj"), @"title");
             cell.distLabel.textColor = [GameCommon getAchievementColorWithLevel:[KISDictionaryHaveKey(KISDictionaryHaveKey(titleDic, @"titleObj"), @"rarenum") integerValue]];
         }
-        else
+        else{
             cell.distLabel.text = @"暂无头衔";
-         cell.headImageV.imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseImageUrl,m_hostInfo.headImgArray.count>0? [m_hostInfo.headImgArray objectAtIndex:0]:@""]];
+        }
+        if (m_hostInfo.headImgArray.count>1) {
+            cell.headImageV.imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@/80",BaseImageUrl,[m_hostInfo.headImgArray objectAtIndex:0]]];
+        }else
+        {
+            cell.headImageV.imageURL = nil;
+        }
+        
         [cell refreshCell];
         return cell;
     }
@@ -332,13 +339,26 @@
         {
             if ([KISDictionaryHaveKey(m_hostInfo.state, @"destUser") isKindOfClass:[NSDictionary class]]) {//目标 别人评论了我
                 NSDictionary* destDic = KISDictionaryHaveKey(m_hostInfo.state, @"destUser");
-                cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getHeardImgId: KISDictionaryHaveKey(destDic, @"userimg")]]];
-                NSLog(@"%@", [GameCommon getHeardImgId: KISDictionaryHaveKey(destDic, @"userimg")]);
+                NSString * imgid = [GameCommon getHeardImgId: KISDictionaryHaveKey(destDic, @"userimg")];
+                if (imgid) {
+                    cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:imgid] stringByAppendingString:@"/80"]];
+                }else
+                {
+                    cell.headImageV.imageURL = nil;
+                }
+                
                 cell.titleLabel.text = [NSString stringWithFormat:@"%@%@",[[GameCommon getNewStringWithId:KISDictionaryHaveKey(destDic, @"alias")] isEqualToString:@""] ? KISDictionaryHaveKey(destDic, @"nickname") : KISDictionaryHaveKey(destDic, @"alias") , KISDictionaryHaveKey(m_hostInfo.state, @"showtitle")];
             }
             else
             {
-                 cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getHeardImgId: KISDictionaryHaveKey(m_hostInfo.state, @"userimg")]]];
+                NSString * imgid = [GameCommon getHeardImgId: KISDictionaryHaveKey(m_hostInfo.state, @"userimg")];
+                if (imgid) {
+                    cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:imgid] stringByAppendingString:@"/80"]];
+                }else
+                {
+                    cell.headImageV.imageURL = nil;
+                }
+                
                 
                 if([KISDictionaryHaveKey(m_hostInfo.state, @"userid") isEqualToString:[DataStoreManager getMyUserID]])
                 {

@@ -100,7 +100,14 @@
     }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-    cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",[self getHead:[[m_tableData objectAtIndex:indexPath.row] objectForKey:@"headImgID"]]]];
+    NSString* imgID = [self getHead:[[m_tableData objectAtIndex:indexPath.row] objectForKey:@"headImgID"]];
+    if (imgID) {
+        cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",imgID]];
+    }else
+    {
+        cell.headImageV.imageURL = nil;
+    }
+    
     cell.contentLabel.text = [[m_tableData objectAtIndex:indexPath.row] objectForKey:@"addtionMsg"];
     
     cell.unreadCountLabel.hidden = YES;

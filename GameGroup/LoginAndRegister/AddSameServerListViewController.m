@@ -84,13 +84,16 @@
         cell.indexPath = indexPath;
         cell.delegate = self;
         NSString* imageID = [_guildArray[indexPath.row] objectForKey:@"img"];
-        if ([imageID componentsSeparatedByString:@","].count>0) {
+        if ([imageID componentsSeparatedByString:@","].count>1) {
             imageID = [[imageID componentsSeparatedByString:@","] objectAtIndex:0];
-            NSLog(@"%@",imageID);
+            cell.headerImage.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",imageID]];
+        }else
+        {
+            cell.headerImage.imageURL = nil;
         }
         cell.nameL.text = [_guildArray[indexPath.row] objectForKey:@"charactername"];
         cell.photoNoL.text =[_guildArray[indexPath.row] objectForKey:@"nickname"];
-        cell.headerImage.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",imageID]];
+        
         if ([[_guildArray[indexPath.row] objectForKey:@"iCare"] integerValue] == 0) {
             [cell.addFriendB setTitle:@"加为好友" forState:UIControlStateNormal];
             cell.addFriendB.userInteractionEnabled = YES;
