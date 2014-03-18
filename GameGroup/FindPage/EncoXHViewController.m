@@ -52,6 +52,7 @@
     NSInteger   heightAox;
     NSInteger   EncoCount;
     NSInteger   encoLastCount;
+    NSInteger   nowCount;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -323,7 +324,7 @@
     
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-
+        NSLog(@"responseObject%@",responseObject);
         inABtn.enabled = YES;
 
         [hud hide:YES];
@@ -347,12 +348,11 @@
             //打招呼次数
             EncoCount = [KISDictionaryHaveKey(getDic, @"playedTime")intValue];
             encoLastCount = [KISDictionaryHaveKey(getDic, @"restrictionTime")intValue];
-            
+            nowCount =encoLastCount-EncoCount;
             if (encoLastCount==-1) {
                 
             }else{
             [inABtn setTitle:[NSString stringWithFormat:@"换一个(%d)",encoLastCount-EncoCount] forState:UIControlStateNormal];
-            
             }
             inABtn.titleLabel.textColor = [UIColor blackColor];
             //男♀♂
@@ -479,8 +479,14 @@
                 
                 if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100042"]) {
  
-                [inABtn setTitle:[NSString stringWithFormat:@"换一个(%d)",encoLastCount-EncoCount-1] forState:UIControlStateNormal];
-                        
+                    NSLog(@"nowCount%d",nowCount);
+                    NSLog(@"nowCount-1%d",nowCount-1);
+                    int i = nowCount-1;
+                    if (nowCount !=0) {
+                        [inABtn setTitle:[NSString stringWithFormat:@"换一个(%d)",i] forState:UIControlStateNormal];
+
+                    }
+
 
                 isSuccessToshuaishen =YES;
                 isWXCeiling =YES;

@@ -15,6 +15,7 @@
     UIImageView* deleteIV;
     NSInteger  m_maxZiShu;//发表字符数量
     UILabel *m_ziNumLabel;//提示文字
+    UIAlertView* alert1;
 }
 @property (nonatomic,strong)UITextView* dynamicTV;
 @property (nonatomic,strong)UILabel* placeholderL;
@@ -151,14 +152,17 @@
 }
 
 
-
+- (void)dealloc
+{
+    alert1.delegate = nil;
+}
 
 - (void)backButtonClick:(id)sender
 {
     if (!KISEmptyOrEnter(self.dynamicTV.text) || self.pictureArray.count>0) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您是否放弃当前编辑？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        alert.tag = 67;
-        [alert show];
+        alert1 = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您是否放弃当前编辑？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alert1.tag = 67;
+        [alert1 show];
     }
     else
         [self.navigationController popViewControllerAnimated:YES];
@@ -183,7 +187,7 @@
 {
     if (_dynamicTV.text.length<=0)
     {
-        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:@"你还没有想好说些什么!" delegate:self cancelButtonTitle:@"知道啦" otherButtonTitles: nil];
+        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:@"你还没有想好说些什么!" delegate:nil cancelButtonTitle:@"知道啦" otherButtonTitles: nil];
         [alert show];
         return;
     }
@@ -351,7 +355,7 @@
                     }];
                 }
                 else {
-                    UIAlertView *cameraAlert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的设备不支持相机" delegate:self cancelButtonTitle:@"好的" otherButtonTitles:nil];
+                    UIAlertView *cameraAlert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的设备不支持相机" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil];
                     [cameraAlert show];
                 }
             }break;
@@ -370,7 +374,7 @@
                     }];
                 }
                 else {
-                    UIAlertView *libraryAlert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的设备不支持相册" delegate:self cancelButtonTitle:@"了解" otherButtonTitles:nil];
+                    UIAlertView *libraryAlert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的设备不支持相册" delegate:nil cancelButtonTitle:@"了解" otherButtonTitles:nil];
                     [libraryAlert show];
                 }
             }break;
