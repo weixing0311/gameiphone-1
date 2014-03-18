@@ -869,16 +869,6 @@
         
         if ([responseObject isKindOfClass:[NSArray class]]) {
          m_tableviewServer.hidden =NO;
-            NSMutableArray *array = [NSMutableArray array];
-            [array addObjectsFromArray:responseObject];
-
-            for (int i = 0; i<array.count; i++) {
-                if ([KISDictionaryHaveKey([array objectAtIndex:i], @"characterid") isEqualToString:self.characterid]&&[KISDictionaryHaveKey([array objectAtIndex:i], @"ranking")intValue]>15) {
-                    
-                   // [array insertObject:@"1111" atIndex:10];
-                }
-            }
-            
             
             
          [m_serverArray addObjectsFromArray:responseObject];

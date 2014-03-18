@@ -264,6 +264,7 @@
 //换一个的说
 - (void)changeOtherOne
 {
+    
     inABtn.selected = YES;
     inABtn.enabled = NO;
     sayHelloBtn.enabled = NO;
@@ -479,12 +480,6 @@
                 
                 if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100042"]) {
  
-                    int i = --nowCount;
-                    if (nowCount >0) {
-                        [inABtn setTitle:[NSString stringWithFormat:@"换一个(%d)",i] forState:UIControlStateNormal];
-
-                    }
-
 
                 isSuccessToshuaishen =YES;
                 isWXCeiling =YES;
