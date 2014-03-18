@@ -387,7 +387,7 @@
             NSLog(@"imageUrl---->%@",headImageView.image);
 
             
-            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:imageStr]]]]];
+            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingString:[[GameCommon getNewStringWithId:imageStr]stringByAppendingString:@"/330" ]]]]];
 
             [headImageView rotate360WithDuration:1.0 repeatCount:1 timingMode:i7Rotate360TimingModeEaseInEaseOut];
             headImageView.animationDuration = 2.0;
@@ -479,10 +479,8 @@
                 
                 if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100042"]) {
  
-                    NSLog(@"nowCount%d",nowCount);
-                    NSLog(@"nowCount-1%d",nowCount-1);
-                    int i = nowCount-1;
-                    if (nowCount !=0) {
+                    int i = --nowCount;
+                    if (nowCount >0) {
                         [inABtn setTitle:[NSString stringWithFormat:@"换一个(%d)",i] forState:UIControlStateNormal];
 
                     }

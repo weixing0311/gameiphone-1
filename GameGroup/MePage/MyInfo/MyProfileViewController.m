@@ -27,6 +27,7 @@
     NSTimer *timer;
     BOOL            m_isSort;//图片顺序变化
     NSInteger     picPage;
+    UIAlertView* alter1;
 }
 @end
 
@@ -112,13 +113,17 @@
     }//动态大图ID数组和小图ID数组
     self.headImgArray = littleHeadArray;//47,39
 }
+- (void)dealloc
+{
+    alter1.delegate = nil;
+}
 #pragma mark 返回
 - (void)backButtonClick:(id)sender
 {
     if ([waitingUploadImgArray count] != 0 || [deleteImageIdArray count] != 0 || m_isSort) {
-        UIAlertView* alter = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您的相册还未保存，确认要退出吗？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
-        alter.tag = 75;
-        [alter show];
+        alter1 = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您的相册还未保存，确认要退出吗？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+        alter1.tag = 75;
+        [alter1 show];
     }
     else
         [self.navigationController popViewControllerAnimated:YES];
