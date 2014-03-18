@@ -479,6 +479,9 @@
                 
                 if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100042"]) {
  
+                [inABtn setTitle:[NSString stringWithFormat:@"换一个(%d)",encoLastCount-EncoCount-1] forState:UIControlStateNormal];
+                        
+
                 isSuccessToshuaishen =YES;
                 isWXCeiling =YES;
                 inABtn.enabled = YES;
