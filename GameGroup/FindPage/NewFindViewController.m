@@ -104,7 +104,7 @@
     
     [[NSUserDefaults standardUserDefaults]setValue:self.friendImgStr forKey:@"preload_img_wx_dongtai"];
     
-    m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
+    m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",_friendImgStr]];
     if (friendDunamicmsgCount && friendDunamicmsgCount !=0)
     {
         NSLog(@"-------->>>%d",friendDunamicmsgCount);
@@ -163,9 +163,9 @@
     m_dynamicBtn.placeholderImage = KUIImage(@"people_man");
     
     if (_friendImgStr ==nil) {
-        m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"preload_img_wx_dongtai"]]];
+        m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",[[NSUserDefaults standardUserDefaults]objectForKey:@"preload_img_wx_dongtai"]]];
     }else{
-        m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
+        m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",_friendImgStr]];
     }
 //    m_dynamicBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",_friendImgStr]];
     

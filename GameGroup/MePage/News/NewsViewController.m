@@ -353,7 +353,7 @@
     if ([KISDictionaryHaveKey(tempDic, @"destUser") isKindOfClass:[NSDictionary class]]) {//目标 别人评论了我
         NSDictionary* destDic = KISDictionaryHaveKey(tempDic, @"destUser");
         NSString* imageName = [GameCommon getHeardImgId:KISDictionaryHaveKey(destDic, @"userimg")];
-        NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:imageName]];
+        NSURL * theUrl = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:imageName] stringByAppendingString:@"/80"]];
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
         cell.headImageV.imageURL = theUrl;
         
@@ -386,7 +386,7 @@
     else
     {
         NSString* imageName = [GameCommon getHeardImgId:KISDictionaryHaveKey(tempDic, @"userimg")];
-        NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:imageName]];
+        NSURL * theUrl = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:imageName] stringByAppendingString:@"/80"]];
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
         
 //        UIImage *getImage = [[EGOImageLoader sharedImageLoader]imageForURL:theUrl shouldLoadWithObserver:nil];//拿到缓存图片

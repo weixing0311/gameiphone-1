@@ -109,13 +109,15 @@
         NSDictionary *dic= [m_tableArray objectAtIndex:indexPath.row];
     NSString * fruits = KISDictionaryHaveKey(dic, @"userImg");
     NSArray  * array= [fruits componentsSeparatedByString:@","];
-    NSString*friendImgStr =[array objectAtIndex:0];
-
+    NSString*friendImgStr;
+    if (array.count>0) {
+        friendImgStr =[array objectAtIndex:0];
+    }
     cell.topTimeLabel.text =[self getDataWithTimeMiaoInterval: [GameCommon getNewStringWithId:
 KISDictionaryHaveKey(dic, @"time")]];
     
     cell.topTimeLabel.frame = CGRectMake((320-cell.topTimeLabel.text.length*12)/2, 5, cell.topTimeLabel.text.length*12, 20);
-    cell.headImageBtn.imageURL =[NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",friendImgStr]];
+    cell.headImageBtn.imageURL =[NSURL URLWithString:[[BaseImageUrl stringByAppendingFormat:@"%@",friendImgStr] stringByAppendingString:@"/80"]];
     cell.headImageBtn.tag = indexPath.row;
     [cell.headImageBtn addTarget:self action:@selector(enterToPerson:) forControlEvents:UIControlEventTouchUpInside];
     cell.nickNameLabel .text= KISDictionaryHaveKey(dic, @"nickname");

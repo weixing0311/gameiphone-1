@@ -190,7 +190,7 @@
         if ([imageID componentsSeparatedByString:@","].count>0) {
             imageID = [[imageID componentsSeparatedByString:@","] objectAtIndex:0];
         }
-        cell.headerImage.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",imageID]];
+        cell.headerImage.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",imageID]];
         if ([[_addressArray[indexPath.row] objectForKey:@"friendShipType"] intValue] == 1) {
             [cell.addFriendB setTitle:@"" forState:UIControlStateNormal];
             cell.addFriendB.userInteractionEnabled = NO;

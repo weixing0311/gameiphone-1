@@ -113,7 +113,7 @@
     NSDictionary* tempDic = [m_tableData objectAtIndex:indexPath.row];
     cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
 
-    NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",[GameCommon getHeardImgId:KISDictionaryHaveKey(tempDic, @"headImgID")]]];
+    NSURL * theUrl = [NSURL URLWithString:[[BaseImageUrl stringByAppendingFormat:@"%@",[GameCommon getHeardImgId:KISDictionaryHaveKey(tempDic, @"headImgID")]] stringByAppendingString:@"/80"]];
     cell.headImageV.imageURL = theUrl;
     
     cell.nameLabel.text = KISDictionaryHaveKey(tempDic, @"nickname");

@@ -931,7 +931,7 @@
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"people_woman.png"];
     }
 
-    cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]]];
+    cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]] stringByAppendingString:@"/80"]];
     
    
     cell.nameLabel.text = [tempDict objectForKey:@"displayName"];

@@ -797,7 +797,7 @@
             [cell.headImgV setFrame:CGRectMake(320-10-40, padding*2-15, 40, 40)];
             [cell.headImgV addTarget:self action:@selector(myBtnClicked) forControlEvents:UIControlEventTouchUpInside];
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",self.myHeadImg]];
+            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.myHeadImg]];
             cell.headImgV.imageURL = theUrl;
             bgImage = [[UIImage imageNamed:@"bubble_05"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
             
@@ -816,7 +816,7 @@
             [cell.headImgV setFrame:CGRectMake(10, padding*2-15, 40, 40)];
             [cell.headImgV addTarget:self action:@selector(chatToBtnClicked) forControlEvents:UIControlEventTouchUpInside];
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",self.chatUserImg]];
+            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.chatUserImg]];
             cell.headImgV.imageURL = theUrl;
             bgImage = [[UIImage imageNamed:@"bubble_04.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
             
@@ -881,7 +881,7 @@
 
         if ([sender isEqualToString:@"you"]) {
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@", self.myHeadImg]];
+            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80", self.myHeadImg]];
             cell.headImgV.imageURL = theUrl;
 
             [cell.headImgV setFrame:CGRectMake(320-10-40, padding*2-15, 40, 40)];
@@ -908,7 +908,7 @@
             [cell.chattoHeadBtn setFrame:cell.headImgV.frame];
             [cell.chattoHeadBtn addTarget:self action:@selector(chatToBtnClicked) forControlEvents:UIControlEventTouchUpInside];
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",self.chatUserImg]];
+            NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.chatUserImg]];
             cell.headImgV.imageURL = theUrl;
             bgImage = [[UIImage imageNamed:@"bubble_01.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
            

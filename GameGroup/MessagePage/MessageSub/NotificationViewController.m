@@ -222,7 +222,7 @@
     }
     cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
     NSDictionary * cDict = self.notiArray[indexPath.row];
-    NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",[self getHead:[cDict objectForKey:@"fromHeadImg"]]]];
+    NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",[self getHead:[cDict objectForKey:@"fromHeadImg"]]]];
     cell.headImageV.imageURL = theUrl;
     // Configure the cell...
     cell.nameLabel.text = [cDict objectForKey:@"fromNickname"];

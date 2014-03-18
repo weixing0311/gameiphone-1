@@ -385,7 +385,7 @@
     cell.accessoryType = UITableViewCellAccessoryNone;
     
     NSString* imageName = [GameCommon getHeardImgId:KISDictionaryHaveKey(tempDic, @"userimg")];
-    NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:imageName]];
+    NSURL * theUrl = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:imageName] stringByAppendingString:@"/80"]];
     cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
     cell.headImageV.imageURL = theUrl;
     
