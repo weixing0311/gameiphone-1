@@ -109,7 +109,7 @@
             imageID = [[imageID componentsSeparatedByString:@","] objectAtIndex:0];
             NSLog(@"%@",imageID);
         }
-        cell.headerImage.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",imageID]];
+        cell.headerImage.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",imageID]];
         if ([[_inDudeArray[indexPath.row] objectForKey:@"iCare"] integerValue] == 0) {
             [cell.addFriendB setTitle:@"加为好友" forState:UIControlStateNormal];
             cell.addFriendB.userInteractionEnabled = YES;

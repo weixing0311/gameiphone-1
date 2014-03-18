@@ -90,7 +90,7 @@
         }
         cell.nameL.text = [_guildArray[indexPath.row] objectForKey:@"charactername"];
         cell.photoNoL.text =[_guildArray[indexPath.row] objectForKey:@"nickname"];
-        cell.headerImage.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@",imageID]];
+        cell.headerImage.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",imageID]];
         if ([[_guildArray[indexPath.row] objectForKey:@"iCare"] integerValue] == 0) {
             [cell.addFriendB setTitle:@"加为好友" forState:UIControlStateNormal];
             cell.addFriendB.userInteractionEnabled = YES;

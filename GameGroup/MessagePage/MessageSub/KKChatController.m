@@ -795,7 +795,7 @@
         
         if ([sender isEqualToString:@"you"]) {
             [cell.headImgV setFrame:CGRectMake(320-10-40, padding*2-15, 40, 40)];
-            [cell.headImgV addTarget:self action:@selector(chatToBtnClicked) forControlEvents:UIControlEventTouchUpInside];
+            [cell.headImgV addTarget:self action:@selector(myBtnClicked) forControlEvents:UIControlEventTouchUpInside];
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
             NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",self.myHeadImg]];
             cell.headImgV.imageURL = theUrl;
