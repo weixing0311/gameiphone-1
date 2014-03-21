@@ -26,52 +26,12 @@ static TempData *sharedInstance=nil;
 -(void)initThis
 {
     self.wxAlreadydidClickniehe = YES;
-    panned = YES;
-    needConnectChatServer = NO;
     serverAddress = @"";
     serverDomain = @"";
     latitude = 0;
     longitude = 0;
-    self.newFriendsReq = NO;
-    loggedIn = NO;
-    ifNeedChat = NO;
-    needChatUserName = @"";
-    opened = NO;
-    self.needDisplayPushNotification = NO;
     self.registerNeedMsg = YES;
     self.passBindingRole = NO;
-}
--(void)setOpened:(BOOL)haveOpened
-{
-    opened = haveOpened;
-}
--(BOOL)ifOpened
-{
-    return opened;
-}
--(void)makeLogged:(BOOL)logged
-{
-    loggedIn = logged;
-}
--(BOOL)LoggedIn
-{
-    return loggedIn;
-}
--(void)Panned:(BOOL)pan
-{
-    panned = pan;
-}
--(void)needConnectChatServer:(BOOL)flag
-{
-    needConnectChatServer = flag;
-}
--(BOOL)ifPanned
-{
-    return panned;
-}
--(BOOL)ifNeedConnectChatServer
-{
-    return needConnectChatServer;
 }
 -(void)SetServer:(NSString *)server TheDomain:(NSString *)idomain
 {
@@ -103,23 +63,6 @@ static TempData *sharedInstance=nil;
 -(double)returnLon
 {
     return longitude;
-}
--(void)setNeedChatToUser:(NSString *)user
-{
-    ifNeedChat = YES;
-    needChatUserName = user;
-}
--(void)setNeedChatNO
-{
-    ifNeedChat = NO;
-}
--(NSString *)getNeedChatUser
-{
-    return needChatUserName;
-}
--(BOOL)needChat
-{
-    return ifNeedChat;
 }
 -(NSString*)getMyUserID
 {

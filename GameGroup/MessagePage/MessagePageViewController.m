@@ -78,18 +78,6 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-//    if ([[TempData sharedInstance] needChat]) {
-//        [[Custom_tabbar showTabBar] hideTabBar:YES];
-//        NSDictionary * theDict = (NSDictionary *)[DataStoreManager queryOneFriendInfoWithUserName:[[TempData sharedInstance] getNeedChatUser]];
-//        KKChatController * kkchat = [[KKChatController alloc] init];
-//        kkchat.chatWithUser = [theDict objectForKey:@"username"];
-//        kkchat.nickName = [[theDict objectForKey:@"nickname"] length]>1?[theDict objectForKey:@"nickname"]:[theDict objectForKey:@"username"];
-//        kkchat.chatUserImg = [DataStoreManager queryFirstHeadImageForUser:[theDict objectForKey:@"username"]];
-//        [self.navigationController pushViewController:kkchat animated:YES];
-//        kkchat.msgDelegate = self;
-//        [[TempData sharedInstance] setNeedChatNO];
-//    }
-
     if (![self isHaveLogin]) {
         [[Custom_tabbar showTabBar] hideTabBar:YES];
 
@@ -504,21 +492,12 @@
         cell = [[MessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     if (indexPath.section ==0) {
-        NSMutableArray *array = [NSMutableArray array];
-        for (int i = 0; i<sayhellocoArray.count; i++) {
-            for (int j =0; j<i+1; j++) {
-                NSDictionary *dic = [sayhellocoArray objectAtIndex:i];
-                NSDictionary *dic1 = [sayhellocoArray objectAtIndex:j];
-                if ([KISDictionaryHaveKey(dic, @"sender")isEqualToString:KISDictionaryHaveKey(dic1, @"sender")]&&i!=j) {
-                    [sayhellocoArray removeObject:dic];
-                }
-            }
-        }
         
         
             cell.headImageV.imageURL =nil;
             [cell.headImageV setImage:KUIImage(@"mess_guanzhu")];
-        cell.nameLabel.text = [NSString stringWithFormat:@"有%d个人和你打了招呼",sayhellocoArray.count];
+     //   cell.nameLabel.text = [NSString stringWithFormat:@"有%d个人和你打了招呼",sayhellocoArray.count];
+        cell.nameLabel.text = @"有n个人和你打招呼";
             cell.contentLabel.text =[NSString stringWithFormat:@"%@:%@",[sayHelloNickNameArray lastObject],[[sayhellocoArray lastObject] objectForKey:@"msg"]];
 
     }else{
@@ -920,8 +899,6 @@
         NSLog(@"登陆成功xmpp");
         [hud hide:YES];
         titleLabel.text = @"消息";
-        
-        [[TempData sharedInstance] setOpened:YES];
         [GameCommon shareGameCommon].connectTimes = 0;//断掉自动连接3次
     }fail:^(NSError *result){
         NSLog(@" localizedDescription %@", result.localizedDescription);
