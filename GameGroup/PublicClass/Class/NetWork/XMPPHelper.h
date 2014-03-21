@@ -27,11 +27,6 @@ typedef void (^CallBackBlock) (void);
 typedef void (^XMPPRosterMemoryStorageCallBack) (XMPPRosterMemoryStorage *rosters);
 typedef void (^CallBackBlockErr) (NSError *result);
 
-typedef enum {
-    reg,
-    login
-}xmppType;
-
 @property (nonatomic,strong) XMPPStream *xmppStream;
 @property (nonatomic,strong) XMPPAutoPing * xmppAutoPing;
 @property (nonatomic,strong) XMPPvCardCoreDataStorage *xmppvCardStorage;
@@ -52,8 +47,6 @@ typedef enum {
 @property (nonatomic,assign) id deletePersonDelegate;
 @property (nonatomic,assign) id otherMsgReceiveDelegate;
 @property (nonatomic,assign) id recommendReceiveDelegate;
-
-@property (nonatomic) xmppType xmpptype;
 
 @property (strong,nonatomic) CallBackBlock success;
 @property (strong,nonatomic) CallBackBlockErr fail;

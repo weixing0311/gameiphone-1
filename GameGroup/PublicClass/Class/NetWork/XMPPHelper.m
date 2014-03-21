@@ -98,7 +98,6 @@
 }
 
 -(void) reg:(NSString *)theaccount password:(NSString *)thepassword host:(NSString *)host success:(CallBackBlock)thesuccess fail:(CallBackBlockErr)thefail{
-    self.xmpptype=reg;
     self.account=[theaccount stringByAppendingString:[[TempData sharedInstance] getDomain]];
     self.password=thepassword;
     self.regsuccess=thesuccess;
@@ -219,27 +218,11 @@
     NSLog(@"connected");
     NSError *error = nil;
     
-    if(self.xmpptype==reg){
-        [[self xmppStream] setMyJID:[XMPPJID jidWithString:self.account]];
-        NSError *error=nil;
-        if (![[self xmppStream] registerWithPassword:self.password error:&error])
-        {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"创建帐号失败"
-                                                                message:[error localizedDescription]
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil];
-            [alertView show];
-        }
-        
-        
-    }else{
-        //验证密码
-        [[self xmppStream] authenticateWithPassword:self.password error:&error];
-        if(error!=nil)
-        {
-            self.fail(error);
-        }
+    //验证密码
+    [[self xmppStream] authenticateWithPassword:self.password error:&error];
+    if(error!=nil)
+    {
+        self.fail(error);
     }
 }
 

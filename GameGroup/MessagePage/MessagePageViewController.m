@@ -864,14 +864,6 @@
     [postDict setObject:[DataStoreManager getMyUserID] forKey:@"userid"];
     [postDict setObject:@"116" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
-//    [postDict setObject:locationDict forKey:@"params"];
-//    if([GameCommon shareGameCommon].isFirst)
-    if([[NSUserDefaults standardUserDefaults] objectForKey:isFirstOpen]){
-        
-    }
-    else{
-       // [hud show:YES];
-    }
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"服务器数据 %@", responseObject);
         [hud hide:YES];
@@ -893,7 +885,6 @@
     }
     titleLabel.text = @"消息(连接中...)";
     self.appDel.xmppHelper.notConnect = self;
-    self.appDel.xmppHelper.xmpptype = login;
 //    [self.appDel.xmppHelper connect:[[SFHFKeychainUtils getPasswordForUsername:ACCOUNT andServiceName:LOCALACCOUNT error:nil]stringByAppendingFormat:@"%@",[[TempData sharedInstance] getDomain]] password:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] host:[[TempData sharedInstance] getServer] success:^(void){
     [self.appDel.xmppHelper connect:[[DataStoreManager getMyUserID] stringByAppendingFormat:@"%@",[[TempData sharedInstance] getDomain]] password:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] host:[[TempData sharedInstance] getServer] success:^(void){
         NSLog(@"登陆成功xmpp");
