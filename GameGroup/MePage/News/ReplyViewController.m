@@ -383,17 +383,18 @@
         cell = [[ReplyCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     cell.accessoryType = UITableViewCellAccessoryNone;
-    
+     cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
     NSString* imageName = [GameCommon getHeardImgId:KISDictionaryHaveKey(tempDic, @"userimg")];
-    NSURL * theUrl = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:imageName] stringByAppendingString:@"/80"]];
-    cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
+    if ([imageName isEqualToString:@""]||[imageName isEqualToString:@" "]) {
+        cell.headImageV.imageURL = nil;
+    }else{
     if (imageName) {
-        cell.headImageV.imageURL = theUrl;
+        cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:imageName] stringByAppendingString:@"/80"]];;
     }else
     {
         cell.headImageV.imageURL = nil;
     }
-    
+    }
     
     cell.nickNameLabel.text = [KISDictionaryHaveKey(tempDic, @"userid") isEqualToString:[DataStoreManager getMyUserID]] ? @"我" :KISDictionaryHaveKey(tempDic, @"nickname");
     cell.timeLabel.text = [GameCommon getTimeWithMessageTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDic, @"createDate")]];

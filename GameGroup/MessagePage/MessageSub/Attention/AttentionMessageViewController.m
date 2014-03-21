@@ -10,11 +10,19 @@
 //#import "MyNormalTableCell.h"
 #import "MessageCell.h"
 #import "TestViewController.h"
+#import "KKChatController.h"
 @interface AttentionMessageViewController ()
 {
     UITableView*  m_myTableView;
     
     NSMutableArray*     m_tableData;
+    NSMutableArray *allHeadImgArray;
+    NSMutableArray * allMsgUnreadArray;
+    
+    NSMutableArray * allNickNameArray;
+    NSMutableArray * allSayHelloArray;//id
+    NSMutableArray * sayhellocoArray;//内容
+
 }
 @end
 
@@ -28,12 +36,37 @@
     }
     return self;
 }
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [m_myTableView reloadData];
+}
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    NSMutableArray *array = (NSMutableArray *)[DataStoreManager qureyAllThumbMessages];
+    [self readAllnickNameAndImage];
+    [self.dataArray removeAllObjects];
+    // NSMutableArray *array = [[NSUserDefaults standardUserDefaults]objectForKey:@"sayHello_wx_info"];
+    for (NSDictionary *dic in array) {
+        if (![[[NSUserDefaults standardUserDefaults]objectForKey:@"sayHello_wx_info"] containsObject:KISDictionaryHaveKey(dic, @"sender")]) {
+            [self.dataArray addObject:dic];
+        }
+    }
+    [self readAllnickNameAndImage];
+    [m_myTableView reloadData];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
     [self setTopViewWithTitle:@"最新关注" withBackButton:YES];
+    self.dataArray = [NSMutableArray array];
+
+    allHeadImgArray = [NSMutableArray array];
+    allSayHelloArray = [NSMutableArray array];
+    allNickNameArray = [NSMutableArray array];
+    allMsgUnreadArray = [NSMutableArray array];
     
 //    [AFImageRequestOperation addAcceptableContentTypes:[NSSet setWithObject:@"multipart/form-data"]];
 
@@ -44,18 +77,19 @@
     [self.view addSubview:deleteButton];
     [deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     
-    m_tableData = (NSMutableArray*)[DataStoreManager queryAllReceivedHellos];
+   // m_tableData = (NSMutableArray*)[DataStoreManager queryAllReceivedHellos];
 
     m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth-startX-(KISHighVersion_7?0:20))];
     m_myTableView.delegate = self;
     m_myTableView.dataSource = self;
 //    m_myTableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:m_myTableView];
+    [self readAllnickNameAndImage];
 }
 
 - (void)backButtonClick:(id)sender
 {
-    m_myTableView.editing = NO;
+   // m_myTableView.editing = NO;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -76,6 +110,27 @@
         }
     }
 }
+
+-(void)readAllnickNameAndImage
+{
+    NSMutableArray * nickName = [NSMutableArray array];
+    NSMutableArray * headimg = [NSMutableArray array];
+    NSMutableArray * pinyin = [NSMutableArray array];
+    for (int i = 0; i<self.dataArray.count; i++) {
+        //        NSString * nickName2 = [DataStoreManager queryRemarkNameForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]];//别名
+        NSString * nickName2 = [DataStoreManager queryMsgRemarkNameForUser:[[self.dataArray objectAtIndex:i] objectForKey:@"sender"]];
+        [nickName addObject:nickName2?nickName2 : @""];
+        NSString * pinyin2 = [[GameCommon shareGameCommon] convertChineseToPinYin:nickName2];
+        [pinyin addObject:[pinyin2 stringByAppendingFormat:@"+%@",nickName2]];
+        //        [headimg addObject:[DataStoreManager queryFirstHeadImageForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]]];
+        [headimg addObject:[DataStoreManager queryMsgHeadImageForUser:[[self.dataArray objectAtIndex:i] objectForKey:@"sender"]]];
+    }
+    allNickNameArray = nickName;
+    allHeadImgArray = headimg;
+}
+
+
+
 #pragma mark 表格
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -83,7 +138,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [m_tableData count];
+    return [self.dataArray count];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -93,28 +148,81 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+//    static NSString *identifier = @"userCell";
+//    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+//    if (cell == nil) {
+//        cell = [[MessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+//    }
+//    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//    cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
+//    NSString* imgID = [self getHead:[[m_tableData objectAtIndex:indexPath.row] objectForKey:@"headImgID"]];
+//    if ([imgID isEqualToString:@""]||[imgID isEqualToString:@" "]) {
+//        cell.headImageV.imageURL = nil;
+//    }else{
+//    if (imgID) {
+//        cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",imgID]];
+//    }else
+//    {
+//        cell.headImageV.imageURL = nil;
+//    }
+//    }
+//    cell.contentLabel.text = [[m_tableData objectAtIndex:indexPath.row] objectForKey:@"addtionMsg"];
+//    
+//    cell.unreadCountLabel.hidden = YES;
+//    cell.notiBgV.hidden = YES;
+//    
+//    cell.nameLabel.text = [[m_tableData objectAtIndex:indexPath.row] objectForKey:@"nickName"];
+//    cell.timeLabel.text = @"";
+    
     static NSString *identifier = @"userCell";
     MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
         cell = [[MessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
     cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-    NSString* imgID = [self getHead:[[m_tableData objectAtIndex:indexPath.row] objectForKey:@"headImgID"]];
-    if (imgID) {
-        cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",imgID]];
-    }else
-    {
+
+    NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",[allHeadImgArray objectAtIndex:indexPath.row]]];
+    if ([[allHeadImgArray objectAtIndex:indexPath.row]isEqualToString:@""]||[[allHeadImgArray objectAtIndex:indexPath.row]isEqualToString:@" "]) {
         cell.headImageV.imageURL = nil;
+    }else{
+        cell.headImageV.imageURL = theUrl;
     }
-    
-    cell.contentLabel.text = [[m_tableData objectAtIndex:indexPath.row] objectForKey:@"addtionMsg"];
-    
-    cell.unreadCountLabel.hidden = YES;
-    cell.notiBgV.hidden = YES;
-    
-    cell.nameLabel.text = [[m_tableData objectAtIndex:indexPath.row] objectForKey:@"nickName"];
-    cell.timeLabel.text = @"";
+    cell.contentLabel.text = [[self.dataArray objectAtIndex:indexPath.row] objectForKey:@"msg"];
+  /*  if ([[allMsgUnreadArray objectAtIndex:indexPath.row] intValue]>0) {
+        cell.unreadCountLabel.hidden = NO;
+        cell.notiBgV.hidden = NO;
+        if ([[[self.dataArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"recommendfriend"] |
+            [[[self.dataArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"sayHello"] ||
+            [[[self.dataArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"deletePerson"]) {
+            cell.notiBgV.image = KUIImage(@"redpot");
+            cell.unreadCountLabel.hidden = YES;
+        }
+        else
+        {
+            [cell.unreadCountLabel setText:[allMsgUnreadArray objectAtIndex:indexPath.row]];
+            
+            if ([[allMsgUnreadArray objectAtIndex:indexPath.row] intValue]>99) {
+                [cell.unreadCountLabel setText:@"99+"];
+                cell.notiBgV.image = KUIImage(@"redCB_big");
+                cell.notiBgV.frame=CGRectMake(40, 8, 22, 18);
+                cell.unreadCountLabel.frame =CGRectMake(0, 0, 22, 18);
+            }
+            else{
+                cell.notiBgV.image = KUIImage(@"redCB.png");
+                [cell.unreadCountLabel setText:[allMsgUnreadArray objectAtIndex:indexPath.row]];
+                cell.notiBgV.frame=CGRectMake(42, 8, 18, 18);
+                cell.unreadCountLabel.frame =CGRectMake(0, 0, 18, 18);
+            }
+        }
+    }*/
+//    else
+//    {
+//        cell.unreadCountLabel.hidden = YES;
+//        cell.notiBgV.hidden = YES;
+//    }
+    cell.nameLabel.text = [allNickNameArray objectAtIndex:indexPath.row];
+    cell.timeLabel.text = [GameCommon CurrentTime:[[GameCommon getCurrentTime] substringToIndex:10]AndMessageTime:[[[self.dataArray objectAtIndex:indexPath.row] objectForKey:@"time"] substringToIndex:10]];
 
     return cell;
 }
@@ -133,18 +241,26 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    [m_myTableView deselectRowAtIndexPath:indexPath animated:YES];
+//    [m_myTableView deselectRowAtIndexPath:indexPath animated:YES];
+//    
+//    NSDictionary* tempDict = [m_tableData objectAtIndex:indexPath.row];
+//    
+//   // PersonDetailViewController* detailVC = [[PersonDetailViewController alloc] init];
+//    TestViewController *detailVC = [[TestViewController alloc]init];
+//    detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
+//    NSLog(@"detailVC.userId%@",detailVC.userId);
+//    detailVC.nickName = KISDictionaryHaveKey(tempDict, @"nickName");
+//    detailVC.isChatPage = NO;
+//    NSLog(@"最新关注获得数据%@",tempDict);
+//    [self.navigationController pushViewController:detailVC animated:YES];
+    KKChatController *kkchat = [[KKChatController alloc]init];
+    kkchat.nickName = [allHeadImgArray objectAtIndex:indexPath.row];
+    kkchat.chatWithUser = [[self.dataArray objectAtIndex:indexPath.row]objectForKey:@"sender"];
+    kkchat.chatUserImg = [allHeadImgArray objectAtIndex:indexPath.row];
+
+    [self.navigationController pushViewController:kkchat animated:YES];
     
-    NSDictionary* tempDict = [m_tableData objectAtIndex:indexPath.row];
     
-   // PersonDetailViewController* detailVC = [[PersonDetailViewController alloc] init];
-    TestViewController *detailVC = [[TestViewController alloc]init];
-    detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
-    NSLog(@"detailVC.userId%@",detailVC.userId);
-    detailVC.nickName = KISDictionaryHaveKey(tempDict, @"nickName");
-    detailVC.isChatPage = NO;
-    NSLog(@"最新关注获得数据%@",tempDict);
-    [self.navigationController pushViewController:detailVC animated:YES];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

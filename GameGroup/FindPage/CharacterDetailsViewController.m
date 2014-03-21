@@ -559,7 +559,7 @@
 
     }
 
-    if (isGoToNextPage ==YES) {
+   // if (isGoToNextPage ==YES) {
         ranking.characterid =m_characterId;
         ranking.custType = m_zhiyeId;
         ranking.server = m_serverStr;
@@ -604,11 +604,11 @@
         NSLog(@"COME_FROM%@",ranking.COME_FROM);
         [self.navigationController pushViewController:ranking animated:YES];
 
-    }else{
-        
-        [self showAlertViewWithTitle:@"提示" message:[NSString stringWithFormat:@"该角色尚未进入“%@”排行",alertTitle] buttonTitle:@"确定"];
-        isGoToNextPage =YES;
-    }
+//    }else{
+//        
+//        [self showAlertViewWithTitle:@"提示" message:[NSString stringWithFormat:@"该角色尚未进入“%@”排行",alertTitle] buttonTitle:@"确定"];
+//        isGoToNextPage =YES;
+//    }
     
     
 }

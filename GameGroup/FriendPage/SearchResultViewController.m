@@ -213,14 +213,19 @@
         cell.ageLabel.backgroundColor = kColorWithRGB(238, 100, 196, 1.0);
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"people_woman.png"];
     }
+    if ([KISDictionaryHaveKey(tempDict, @"img") isEqualToString:@""]||[KISDictionaryHaveKey(tempDict, @"img")isEqualToString:@" "]) {
+        cell.headImageV.imageURL = nil;
+        
+    }else{
+
     NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")] componentsSeparatedByString:@","];
-    if (heardImgArray.count>1) {
+    if (heardImgArray.count>0) {
         cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:[heardImgArray objectAtIndex:0]] stringByAppendingString:@"/80"]];
     }else
     {
         cell.headImageV.imageURL = nil;
     }
-    
+    }
     
     NSDictionary* titleDic = KISDictionaryHaveKey(tempDict, @"title");
     if ([titleDic isKindOfClass:[NSDictionary class]]) {

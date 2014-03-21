@@ -44,7 +44,7 @@
 {
     [super viewDidLoad];
     
-    [self setTopViewWithTitle:@"联系人" withBackButton:YES];
+    [self setTopViewWithTitle:@"分享给" withBackButton:YES];
     
     self.hidesBottomBarWhenPushed = YES;
     
@@ -215,13 +215,16 @@
     }
     
      NSLog(@"tempDic--gender--->%@",tempDict);
+    if ([KISDictionaryHaveKey(tempDict, @"img")isEqualToString:@""]||[KISDictionaryHaveKey(tempDict, @"img")isEqualToString:@" "]) {
+        cell.headImageV.imageURL = nil;;
+    }else{
     if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]) {
         cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]] stringByAppendingString:@"/80"]];
     }else
     {
         cell.headImageV.imageURL = nil;
     }
-    
+}
     cell.nameLabel.text = [tempDict objectForKey:@"displayName"];
     cell.gameImg_one.image = KUIImage(@"wow");
     cell.distLabel.text = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");

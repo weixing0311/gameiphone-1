@@ -9,5 +9,5 @@
 #import "BaseViewController.h"
 
 @interface AttentionMessageViewController : BaseViewController<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
-
+@property(nonatomic,strong)NSMutableArray *dataArray;
 @end

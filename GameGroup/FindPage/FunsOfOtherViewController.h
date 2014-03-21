@@ -7,9 +7,6 @@
 //
 
 #import "BaseViewController.h"
-#import "SRRefreshView.h"
-#import "PullUpRefreshView.h"
-
-@interface FunsOfOtherViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate, SRRefreshDelegate, PullUpDelegate,UIScrollViewDelegate>
+@interface FunsOfOtherViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong)NSString *userId;
 @end

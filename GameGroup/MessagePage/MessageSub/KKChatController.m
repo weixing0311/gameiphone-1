@@ -198,14 +198,17 @@
     titleLabel.textColor=[UIColor whiteColor];
     [self.view addSubview:titleLabel];
     
-    [unReadL = [UILabel alloc]initWithFrame:CGRectMake(35, KISHighVersion_7 ? 20 : 0, 40, 42)];
+    [unReadL = [UILabel alloc]initWithFrame:CGRectMake(35, KISHighVersion_7 ? 20 : 0, 20, 20)];
     if (_unreadNo>0) {
         unReadL.text = [NSString stringWithFormat:@"%d",_unreadNo];
     }
-    unReadL.backgroundColor = [UIColor clearColor];
+    unReadL.backgroundColor = [UIColor redColor];
+    unReadL.layer.cornerRadius = 10;
+    unReadL.layer.masksToBounds=YES;
     unReadL.textColor = [UIColor whiteColor];
     unReadL.textAlignment = NSTextAlignmentCenter;
     unReadL.font = [UIFont systemFontOfSize:14];
+    unReadL.hidden = YES;
     [self.view addSubview:unReadL];
 
 
@@ -797,6 +800,9 @@
             [cell.headImgV setFrame:CGRectMake(320-10-40, padding*2-15, 40, 40)];
             [cell.headImgV addTarget:self action:@selector(myBtnClicked) forControlEvents:UIControlEventTouchUpInside];
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
+            if ([self.myHeadImg isEqualToString:@""]||[self.myHeadImg isEqualToString:@" "]) {
+                 cell.headImgV.imageURL =nil;
+            }else{
             if (self.myHeadImg) {
                 NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.myHeadImg]];
                 cell.headImgV.imageURL = theUrl;
@@ -804,7 +810,7 @@
             else{
                 cell.headImgV.imageURL =nil;
             }
-            
+            }
             bgImage = [[UIImage imageNamed:@"bubble_05"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
             
             [cell.bgImageView setFrame:CGRectMake(320-size.width - padding-20-10-30, padding*2-15, size.width+25, size.height+20)];
@@ -822,6 +828,9 @@
             [cell.headImgV setFrame:CGRectMake(10, padding*2-15, 40, 40)];
             [cell.headImgV addTarget:self action:@selector(chatToBtnClicked) forControlEvents:UIControlEventTouchUpInside];
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
+            if ([self.chatUserImg isEqualToString:@""]||[self.chatUserImg isEqualToString:@" "]) {
+                cell.headImgV.imageURL = nil;
+            }else{
             if (self.chatUserImg) {
                 NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.chatUserImg]];
                 cell.headImgV.imageURL = theUrl;
@@ -829,7 +838,7 @@
             {
                 cell.headImgV.imageURL = nil;
             }
-            
+            }
             bgImage = [[UIImage imageNamed:@"bubble_04.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
             
             [cell.bgImageView setFrame:CGRectMake(padding-10+45, padding*2-15, size.width+35, size.height + 20)];
@@ -893,6 +902,9 @@
 
         if ([sender isEqualToString:@"you"]) {
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
+            if ([self.myHeadImg isEqualToString:@""]||[self.myHeadImg isEqualToString:@" "]) {
+                 cell.headImgV.imageURL = nil;
+            }else{
             if (self.myHeadImg) {
                 NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80", self.myHeadImg]];
                 cell.headImgV.imageURL = theUrl;
@@ -900,7 +912,7 @@
             {
                 cell.headImgV.imageURL = nil;
             }
-            
+            }
 
             [cell.headImgV setFrame:CGRectMake(320-10-40, padding*2-15, 40, 40)];
             bgImage = [[UIImage imageNamed:@"bubble_02.png"]
@@ -926,6 +938,9 @@
             [cell.chattoHeadBtn setFrame:cell.headImgV.frame];
             [cell.chattoHeadBtn addTarget:self action:@selector(chatToBtnClicked) forControlEvents:UIControlEventTouchUpInside];
             cell.headImgV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
+            if ([self.chatUserImg isEqualToString:@""]||[self.chatUserImg isEqualToString:@" "]) {
+                  cell.headImgV.imageURL = nil;
+            }else{
             if (self.chatUserImg) {
                 NSURL * theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",self.chatUserImg]];
                 cell.headImgV.imageURL = theUrl;
@@ -933,7 +948,7 @@
             {
                 cell.headImgV.imageURL = nil;
             }
-            
+            }
             bgImage = [[UIImage imageNamed:@"bubble_01.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:22];
            
             [cell.messageContentView setFrame:CGRectMake(padding+7+45, padding*2-4, size.width, size.height)];
@@ -1235,7 +1250,7 @@
         [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
     self.textView.text = @"";
-    
+    [self getSayHello];
 }
 
 #pragma mark -
@@ -1256,6 +1271,35 @@
         }
     }
 }
+
+-(void)getSayHello
+{
+    NSMutableDictionary * postDict1 = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDict = [NSMutableDictionary dictionary];
+    [paramDict setObject:chatWithUser forKey:@"touserid"];
+    [postDict1 addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict1 setObject:@"153" forKey:@"method"];
+    [postDict1 setObject:paramDict forKey:@"params"];
+    
+    [postDict1 setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    
+    [NetManager requestWithURLStrNoController:BaseClientUrl Parameters:postDict1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+    }];
+    
+//    if (![[[NSUserDefaults standardUserDefaults]objectForKey:@"sayHello_wx_info"] containsObject:chatWithUser]) {
+//        NSMutableArray *array =[[NSUserDefaults standardUserDefaults]objectForKey:@"sayHello_wx_info"];
+//        [array addObject:chatWithUser];
+//        [[[NSUserDefaults standardUserDefaults]objectForKey:@"sayHello_wx_info"] removeAllObjects];
+//        
+//        [[NSUserDefaults standardUserDefaults]setObject:array forKey:@"sayHello_wx_info"];
+//    }
+//
+
+}
+
+
+
 - (void)scrollToOldMassageRang:(NSArray *)array
 {
     [self.tView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:array.count inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
@@ -1279,6 +1323,7 @@
     }
     else
     {
+        unReadL.hidden = NO;
         _unreadNo++;
         if (_unreadNo>0) {
             unReadL.text = [NSString stringWithFormat:@"%d",_unreadNo];

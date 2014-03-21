@@ -9,15 +9,17 @@
 #import "FunsOfOtherViewController.h"
 #import "PersonTableCell.h"
 #import "TestViewController.h"
+#import "MJRefresh.h"
 @interface FunsOfOtherViewController ()
 {
     UITableView * m_myFansTableView;
-    SRRefreshView          *slimeView_fans;
-    PullUpRefreshView      *refreshView;
     NSMutableDictionary*  m_sortTypeDic;
     NSMutableArray * m_otherSortFansArray;
-    NSInteger              m_currentPage;
-    NSInteger                 m_allcurrentPage;
+    NSInteger        m_currentPage;
+    NSInteger        m_allcurrentPage;
+    MJRefreshHeaderView *m_fansheader;
+    MJRefreshFooterView *m_fansfooter;
+
 }
 
 @end
@@ -49,30 +51,12 @@
     m_myFansTableView.delegate = self;
     [self.view addSubview:m_myFansTableView];
     
-    slimeView_fans = [[SRRefreshView alloc] init];
-    slimeView_fans.delegate = self;
-    slimeView_fans.upInset = 0;
-    slimeView_fans.slimeMissWhenGoingBack = NO;
-    slimeView_fans.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    slimeView_fans.slime.skinColor = [UIColor whiteColor];
-    slimeView_fans.slime.lineWith = 1;
-    slimeView_fans.slime.shadowBlur = 4;
-    slimeView_fans.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    [m_myFansTableView addSubview:slimeView_fans];
-    
-    refreshView = [[PullUpRefreshView alloc] initWithFrame:CGRectMake(0, kScreenHeigth - startX-(KISHighVersion_7?0:20), 320, REFRESH_HEADER_HEIGHT)];//上拉加载
-    [m_myFansTableView addSubview:refreshView];
-    refreshView.pullUpDelegate = self;
-    refreshView.myScrollView = m_myFansTableView;
-    [refreshView stopLoading:NO];
-    
-    
-    
-    
-    hud = [[MBProgressHUD alloc]initWithView:self.view];
-    hud.labelText = @"获取中";
-    [self.view addSubview:hud];
-    [self getFansBySort];
+    [self addFooter];
+    [self addHeader];
+//    hud = [[MBProgressHUD alloc]initWithView:self.view];
+//    hud.labelText = @"获取中";
+//    [self.view addSubview:hud];
+//    //[self getFansBySort];
 	// Do any additional setup after loading the view.
 }
 
@@ -102,8 +86,6 @@
         
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             if ((m_currentPage != 0 && ![KISDictionaryHaveKey(responseObject, @"3") isKindOfClass:[NSArray class]]) || (m_currentPage == 0 && ![KISDictionaryHaveKey(responseObject, @"3") isKindOfClass:[NSDictionary class]] )) {
-                [refreshView stopLoading:YES];
-                [slimeView_fans endRefresh];
                 return;
             }
 
@@ -120,18 +102,17 @@
             
             m_currentPage ++;//从0开始
             [m_myFansTableView reloadData];
-            [refreshView stopLoading:NO];
-            [refreshView setRefreshViewFrame];
-            
-            [slimeView_fans endRefresh];
+            [m_fansheader endRefreshing];
+            [m_fansfooter endRefreshing];
         }else{
             
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         [hud hide:YES];
-        [refreshView stopLoading:NO];
-        [slimeView_fans endRefresh];
+        [m_fansheader endRefreshing];
+        [m_fansfooter endRefreshing];
+
     }];
 }
 -(void)parseFansList:(id)fansList
@@ -147,7 +128,6 @@
         m_otherSortFansArray = [DataStoreManager queryAllFansWithOtherSortType:@"distance" ascend:YES];
         dispatch_async(dispatch_get_main_queue(), ^{
             [m_myFansTableView reloadData];
-            [refreshView setRefreshViewFrame];
         });
     });
     //上拉加载
@@ -190,17 +170,19 @@
     }
     
     NSString * fruits = KISDictionaryHaveKey(tempDict, @"img");
+    if ([fruits isEqualToString:@""]||[fruits isEqualToString:@" "]) {
+        cell.headImageV.imageURL =nil;
+    }else{
     NSArray  * array= [fruits componentsSeparatedByString:@","];
     NSString* headURL;
-    if (array.count>1) {
+    if (array.count>0) {
         headURL = [array objectAtIndex:0];
         cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[[GameCommon getNewStringWithId:headURL] stringByAppendingString:@"/80"]]];
     }else
     {
         cell.headImageV.imageURL =nil;
     }
-    
-    
+    }
     cell.nameLabel.text = [tempDict objectForKey:@"nickname"];
     cell.gameImg_one.image = KUIImage(@"wow");
     cell.distLabel.text = [KISDictionaryHaveKey(tempDict, @"charactername") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
@@ -255,63 +237,35 @@
 
 
 
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+- (void)addFooter
 {
-    if (m_myFansTableView.contentSize.height < m_myFansTableView.frame.size.height) {
-        refreshView.viewMaxY = 0;
-    }
-    else
-        refreshView.viewMaxY = m_myFansTableView.contentSize.height - m_myFansTableView.frame.size.height;
-    [refreshView viewdidScroll:scrollView];
-    [slimeView_fans scrollViewDidScroll];
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = m_myFansTableView;
+    footer.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
+        if (m_currentPage<m_allcurrentPage) {
+            NSLog(@"加载更多");
+            [self getFansBySort];
+        }
+    };
+    m_fansfooter = footer;
+
 }
-
-
-
-#pragma mark pull up refresh
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+- (void)addHeader
 {
-    if(scrollView == m_myFansTableView)
-    {
-        [refreshView viewWillBeginDragging:scrollView];
-    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if(scrollView == m_myFansTableView)
-    {
-        [refreshView didEndDragging:scrollView];
-        [slimeView_fans scrollViewDidEndDraging];
-        
-    }
-}
-
-- (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
-{
-    NSLog(@"start");
-    if (m_currentPage<m_allcurrentPage) {
-        NSLog(@"加载更多");
+    MJRefreshHeaderView *header = [MJRefreshHeaderView header];
+    header.scrollView = m_myFansTableView;
+    header.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
+        m_currentPage = 0;
         [self getFansBySort];
-    }else{
+    };
+    header.endStateChangeBlock = ^(MJRefreshBaseView *refreshView) {
         
-    }
-}
-
-#pragma mark - slimeRefresh delegate
-- (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
-{
-    m_currentPage = 0;
-    
-    [self getFansBySort];
-}
-
--(void)endRefresh
-{
-    [slimeView_fans endRefreshFinish:^{
+    };
+    header.refreshStateChangeBlock = ^(MJRefreshBaseView *refreshView, MJRefreshState state) {
         
-    }];
+    };
+    [header beginRefreshing];
+    m_fansheader = header;
 }
 
 - (void)didReceiveMemoryWarning
@@ -321,43 +275,3 @@
 }
 
 @end
-/*
- 
- {
- active = 2;
- age = 27;
- alias = " ";
- appType = " ";
- backgroundImg = " ";
- birthdate = 19860821;
- city = " ";
- constellation = "\U72ee\U5b50\U5ea7";
- createTime = " ";
- deviceToken = " ";
- distance = "15.929373176287228";
- email = "306750047@qq.com";
- fan = 55;
- gender = 0;
- hobby = " ";
- id = 10110207;
- ifFraudulent = " ";
- img = "1635,28313,41068,41069,41077,41078,";
- lastForbiddenTime = " ";
- latitude = "39.982788";
- longitude = "116.304398";
- modTime = 1394593408000;
- nickname = "\U53ef\U4e50";
- password = "lueSGJZetyySpUndWjMBEg==";
- phoneNumber = " ";
- rarenum = 4;
- realname = " ";
- remark = " ";
- signature = " ";
- state = 0;
- superremark = ll;
- superstar = 1;
- updateUserLocationDate = 1394698915202;
- username = 18000109959;
- }
- 
- */

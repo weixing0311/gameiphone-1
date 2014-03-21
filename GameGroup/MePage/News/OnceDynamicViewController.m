@@ -255,6 +255,7 @@
     EGOImageButton* headBtn = [[EGOImageButton alloc] initWithFrame:CGRectMake(10, 10 + startX, 40, 40)];
     headBtn.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
     headBtn.imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseImageUrl,[GameCommon getHeardImgId:KISDictionaryHaveKey(self.dataDic, @"userimg")]]];
+    
     headBtn.layer.cornerRadius = 5;
     headBtn.layer.masksToBounds=YES;
     [headBtn addTarget:self action:@selector(heardImgClick:) forControlEvents:UIControlEventTouchUpInside];

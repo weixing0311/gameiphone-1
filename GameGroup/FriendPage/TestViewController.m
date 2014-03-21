@@ -124,6 +124,10 @@
     self.headImageView.layer.masksToBounds=YES;
     self.headImageView.placeholderImage = [UIImage imageNamed:@"people_man.png"];
     NSString * fruits = self.titleImage;
+    if ([fruits isEqualToString:@""]||[fruits isEqualToString:@" "]) {
+        self.headImageView.imageURL =nil;
+
+    }else{
     NSArray  * array= [fruits componentsSeparatedByString:@","];
     if (array.count>1) {
         self.headImageView.imageURL =[NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",[array objectAtIndex:0]]];
@@ -131,7 +135,7 @@
     {
         self.headImageView.imageURL =nil;
     }
-    
+    }
     
     
     m_currentStartY +=80;
@@ -476,7 +480,7 @@
     m_photoWall = [[HGPhotoWall alloc] initWithFrame:CGRectZero];
     m_photoWall.descriptionType = DescriptionTypeImage;
     [m_photoWall setPhotos:[self imageToURL:self.hostInfo.headImgArray]];
-    m_photoWall.delegate = self;
+    m_photoWall.delegate = self; 
     [m_myScrollView addSubview:m_photoWall];
     m_photoWall.backgroundColor = kColorWithRGB(105, 105, 105, 1.0);
     m_currentStartY += m_photoWall.frame.size.height;
@@ -719,7 +723,7 @@
     topBg.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
     [m_myScrollView addSubview:topBg];
     
-    UILabel* titleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"我的角色" textAlignment:NSTextAlignmentLeft];
+    UILabel* titleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"个人角色" textAlignment:NSTextAlignmentLeft];
     [topBg addSubview:titleLabel];
     
     m_currentStartY += 30;
@@ -795,7 +799,7 @@
         topBg.backgroundColor = UIColorFromRGBA(0xe8e8e8, 1);
         [m_myScrollView addSubview:topBg];
         
-        UILabel* titleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"我的头衔" textAlignment:NSTextAlignmentLeft];
+        UILabel* titleLabel = [CommonControlOrView setLabelWithFrame:CGRectMake(10, 0, 100, 25) textColor:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:12.0] text:@"个人头衔" textAlignment:NSTextAlignmentLeft];
         [topBg addSubview:titleLabel];
         
         m_currentStartY += 30;
@@ -901,7 +905,6 @@
     //    UIImageView* image_bottom = [[UIImageView alloc] initWithFrame:CGRectMake(0, kScreenHeigth - 50 -(KISHighVersion_7 ? 0 : 20), kScreenWidth, 50)];
     //    image_bottom.image = KUIImage(@"inputbg");
     //    [self.view addSubview:image_bottom];
-    
     switch (self.viewType) {
         case VIEW_TYPE_FriendPage1:
         {
@@ -937,9 +940,9 @@
         case VIEW_TYPE_AttentionPage1:
         {
             UIButton *editButton=[UIButton buttonWithType:UIButtonTypeCustom];
-            editButton.frame=CGRectMake(270, startX - 44, 50, 44);
-            [editButton setBackgroundImage:KUIImage(@"edit_normal") forState:UIControlStateNormal];
-            [editButton setBackgroundImage:KUIImage(@"edit_click") forState:UIControlStateHighlighted];
+            editButton.frame=CGRectMake(270, startX - 38, 37, 30);
+            [editButton setBackgroundImage:KUIImage(@"note_normal") forState:UIControlStateNormal];
+            [editButton setBackgroundImage:KUIImage(@"note_click") forState:UIControlStateHighlighted];
             [self.view addSubview:editButton];
             [editButton addTarget:self action:@selector(editButtonClick:) forControlEvents:UIControlEventTouchUpInside];
             
@@ -965,6 +968,7 @@
         }  break;
         case VIEW_TYPE_FansPage1:
         {
+            
             addFriendBtn = [CommonControlOrView
                                      setButtonWithFrame:CGRectMake(106, self.view.bounds.size.height -44, 107, 44)//120
                                      title:nil

@@ -7,10 +7,8 @@
 //
 
 #import "BaseViewController.h"
-#import "SRRefreshView.h"
-#import "PullUpRefreshView.h"
 
-@interface FriendPageViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UIActionSheetDelegate, SRRefreshDelegate, PullUpDelegate>
+@interface FriendPageViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UIActionSheetDelegate>
 
 @end
 /*

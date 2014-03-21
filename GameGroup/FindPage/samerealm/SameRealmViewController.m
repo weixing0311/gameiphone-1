@@ -9,6 +9,7 @@
 #import "SameRealmViewController.h"
 #import "PersonTableCell.h"
 #import "TestViewController.h"
+#import "MJRefresh.h"
 @interface SameRealmViewController ()
 {
     UIButton*           m_selectRealmButton;
@@ -24,10 +25,12 @@
     NSInteger           m_totalPage;
     NSInteger           m_currentPage;//0开始
     
-    PullUpRefreshView      *refreshView;
-    SRRefreshView   *_slimeView;
     NSMutableArray *m_imgArray;
     NSInteger       sealmPage;
+    
+    MJRefreshHeaderView *m_header;
+    MJRefreshFooterView *m_footer;
+
 }
 
 @end
@@ -67,22 +70,6 @@
     
 //    m_myTableView.frame = CGRectMake(0, 64, kScreenWidth, kScreenHeigth - startX);
 
-    _slimeView = [[SRRefreshView alloc] init];
-    _slimeView.delegate = self;
-    _slimeView.upInset = 0;
-    _slimeView.slimeMissWhenGoingBack = NO;
-    _slimeView.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    _slimeView.slime.skinColor = [UIColor whiteColor];
-    _slimeView.slime.lineWith = 1;
-    _slimeView.slime.shadowBlur = 4;
-    _slimeView.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    [m_myTableView addSubview:_slimeView];
-    
-    refreshView = [[PullUpRefreshView alloc] initWithFrame:CGRectMake(0, kScreenHeigth - startX-(KISHighVersion_7?0:20), 320, REFRESH_HEADER_HEIGHT)];//上拉加载
-    [m_myTableView addSubview:refreshView];
-    refreshView.pullUpDelegate = self;
-    refreshView.myScrollView = m_myTableView;
-    [refreshView stopLoading:NO];
     
     m_selectRealmButton = [[UIButton alloc] initWithFrame:CGRectMake(60, KISHighVersion_7 ? 20 : 0, 200, 44)];
     [m_selectRealmButton setImage:KUIImage(@"toparrow_down") forState:UIControlStateNormal];
@@ -111,7 +98,9 @@
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
     hud.labelText = @"查询中...";
-    
+    [self addHeader];
+    [self addFooter];
+
     [self getRealmsDataByNet];//所有服务器名
     
 }
@@ -134,7 +123,7 @@
          
 //         if ([responseObject isEqualToString:@""]) {
 //             [self showAlertViewWithTitle:nil message:@"你还没有角色呢" buttonTitle:@"确定"];
-//             [hud hide: YES];
+             [hud hide: YES];
 //             return ;
 //         }
         if ([KISDictionaryHaveKey(responseObject, @"1") isKindOfClass:[NSArray class]])
@@ -229,17 +218,13 @@
     [postDict setObject:@"121" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     
-    [hud show:YES];
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        NSLog(@"同服的人 %@", responseObject);
-        [hud hide:YES];
 
         if ((m_currentPage ==0 && ![responseObject isKindOfClass:[NSDictionary class]]) || (m_currentPage != 0 && ![responseObject isKindOfClass:[NSArray class]])) {
-            [refreshView stopLoading:YES];
-            [_slimeView endRefresh];
-            
+            [m_header endRefreshing];
+            [m_footer endRefreshing];
             return;
         }
         if (m_currentPage == 0) {
@@ -256,12 +241,11 @@
         
         [m_myTableView reloadData];
 
-        [refreshView stopLoading:NO];
 
         m_currentPage ++;//从0开始
         
-        [refreshView setRefreshViewFrame];
-        [_slimeView endRefresh];
+        [m_header endRefreshing];
+        [m_footer endRefreshing];
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
@@ -271,8 +255,8 @@
                 [alert show];
             }
         }
-        [refreshView stopLoading:NO];
-        [_slimeView endRefresh];
+        [m_header endRefreshing];
+        [m_footer endRefreshing];
 
         [hud hide:YES];
     }];
@@ -374,10 +358,6 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (m_tabelData.count ==0) {
-        NSLog(@"数组为空");
-        return 1;
-    }
     return [m_tabelData count];
 }
 
@@ -393,20 +373,7 @@
     if (cell == nil) {
         cell = [[PersonTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    if (m_tabelData.count==0) {
-        NSLog(@"数组为空");
-        cell.textLabel.text = @"暂无玩家信息";
-        cell.textLabel.textAlignment = NSTextAlignmentCenter;
-        cell.nameLabel.text =nil;
-        cell.gameImg_one.image = nil;
-        cell.headImageV.image = nil;
-        cell.ageLabel.text = nil;
-        cell.distLabel.text =nil;
-        cell.timeLabel.text =nil;
-        cell.ageLabel.backgroundColor = [UIColor clearColor];
-    }else{
-        cell.textLabel.text =nil;
-        
+    
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     NSDictionary* tempDict = [m_tabelData objectAtIndex:indexPath.row];
     
@@ -429,15 +396,20 @@
         cell.ageLabel.backgroundColor = kColorWithRGB(238, 100, 196, 1.0);
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"people_woman.png"];
     }
+    if ([KISDictionaryHaveKey(tempDict, @"img")isEqualToString:@""]||[KISDictionaryHaveKey(tempDict, @"img")isEqualToString:@" "]) {
+            cell.headImageV.imageURL = nil;
+        }else{
+        
     NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")] componentsSeparatedByString:@","];
-        if (heardImgArray.count > 1) {
+        if (heardImgArray.count > 0) {
             cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:[heardImgArray objectAtIndex:0]] stringByAppendingString:@"/80"]];
+            NSLog(@"-------===---%@",[[BaseImageUrl stringByAppendingString:[heardImgArray objectAtIndex:0]] stringByAppendingString:@"/80"]);
         }else
         {
             cell.headImageV.imageURL = nil;
         }
     
-        
+        }
 
     NSDictionary* titleDic = KISDictionaryHaveKey(tempDict, @"title");
     if ([titleDic isKindOfClass:[NSDictionary class]]) {
@@ -454,7 +426,7 @@
     
     [cell refreshCell];
     
-    }
+    
     return cell;
 }
 
@@ -498,68 +470,34 @@
     [self.navigationController pushViewController:VC animated:YES];
 }
 
-#pragma mark  scrollView  delegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+#pragma mark --加载刷新
+- (void)addFooter
 {
-    if(scrollView == m_myTableView)
-    {
-        if (m_myTableView.contentSize.height < m_myTableView.frame.size.height) {
-            refreshView.viewMaxY = 0;
-        }
-        else
-            refreshView.viewMaxY = m_myTableView.contentSize.height - m_myTableView.frame.size.height;
-        [refreshView viewdidScroll:scrollView];
-        [_slimeView scrollViewDidScroll];
-
-    }
-}
-
-
-#pragma mark pull up refresh
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if(scrollView == m_myTableView)
-    {
-        [refreshView viewWillBeginDragging:scrollView];
-    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if(scrollView == m_myTableView)
-    {
-        [refreshView didEndDragging:scrollView];
-        [_slimeView scrollViewDidEndDraging];
-
-    }
-}
-
-- (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
-{
-    NSLog(@"start");
-    if(m_currentPage < m_totalPage)//从0开始记录页码
-    {
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = m_myTableView;
+    footer.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
         [self getSameRealmDataByNet];
-    }
-}
-
-#pragma mark - slimeRefresh delegate
-- (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
-{
-    //    [self performSelector:@selector(endRefresh)
-    //               withObject:nil
-    //               afterDelay:2
-    //                  inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
-    m_currentPage = 0;
-    
-    [self getSameRealmDataByNet];
-}
-
--(void)endRefresh
-{
-    [_slimeView endRefreshFinish:^{
         
-    }];
+    };
+    m_footer = footer;
+    
+}
+- (void)addHeader
+{
+    MJRefreshHeaderView *header = [MJRefreshHeaderView header];
+    header.scrollView = m_myTableView;
+    header.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
+        m_currentPage = 0;
+        [self getSameRealmDataByNet];
+    };
+    header.endStateChangeBlock = ^(MJRefreshBaseView *refreshView) {
+        
+    };
+    header.refreshStateChangeBlock = ^(MJRefreshBaseView *refreshView, MJRefreshState state) {
+        
+    };
+    //[header beginRefreshing];
+    m_header = header;
 }
 
 

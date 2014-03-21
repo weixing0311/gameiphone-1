@@ -99,6 +99,9 @@
     
     [[Custom_tabbar showTabBar] notificationWithNumber:NO AndTheNumber:0 OrDot:YES WithButtonIndex:2];
     NSString * fruits = KISDictionaryHaveKey(sender.userInfo, @"img");
+    if ([fruits isEqualToString:@""]) {
+        m_dynamicBtn.imageURL =nil;
+    }else{
     NSArray  * array= [fruits componentsSeparatedByString:@","];
     self.friendImgStr =[array objectAtIndex:0];
     
@@ -108,7 +111,7 @@
     }else{
         m_dynamicBtn.imageURL = nil;
     }
-   
+    }
     if (friendDunamicmsgCount && friendDunamicmsgCount !=0)
     {
         NSLog(@"-------->>>%d",friendDunamicmsgCount);

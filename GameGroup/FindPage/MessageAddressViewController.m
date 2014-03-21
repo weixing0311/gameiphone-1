@@ -187,6 +187,9 @@
         cell.nameL.text = [_addressArray[indexPath.row] objectForKey:@"nickname"];
         cell.photoNoL.text = [NSString stringWithFormat:@"手机联系人:%@",[_addressArray[indexPath.row] objectForKey:@"addressName"]];
         NSString* imageID = [_addressArray[indexPath.row] objectForKey:@"img"];
+        if ([imageID isEqualToString:@""]||[imageID isEqualToString:@" "]) {
+            cell.headerImage.imageURL = nil;
+        }else{
         if ([imageID componentsSeparatedByString:@","].count>0) {
             imageID = [[imageID componentsSeparatedByString:@","] objectAtIndex:0];
         }
@@ -196,7 +199,7 @@
         {
             cell.headerImage.imageURL = nil;
         }
-        
+        }
         if ([[_addressArray[indexPath.row] objectForKey:@"friendShipType"] intValue] == 1) {
             [cell.addFriendB setTitle:@"" forState:UIControlStateNormal];
             cell.addFriendB.userInteractionEnabled = NO;

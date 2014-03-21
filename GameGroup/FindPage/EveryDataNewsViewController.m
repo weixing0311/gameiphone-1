@@ -135,7 +135,7 @@ KISDictionaryHaveKey(dic, @"time")]];
     
     cell.bianzheLabel.frame = CGRectMake(cell.nickNameBtn.frame.size.width+64, 20, 70, 15);
         cell.signatureLabel.text = KISDictionaryHaveKey(dic, @"editorNote");
-    cell.bigImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",KISDictionaryHaveKey(dic, @"img")]];
+    cell.bigImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/540/360",KISDictionaryHaveKey(dic, @"img")]];
         cell.authorLabel.text = KISDictionaryHaveKey(dic, @"imgQuote");
         cell.NumLabel.text =[self getDataWithTimeDataInterval: [GameCommon getNewStringWithId:KISDictionaryHaveKey(dic, @"time")]];
                              

@@ -290,7 +290,7 @@
         if (cell == nil) {
             cell = [[PersonTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
         }
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         cell.nameLabel.text = m_hostInfo.nickName;
@@ -315,8 +315,8 @@
         else{
             cell.distLabel.text = @"暂无头衔";
         }
-        if (m_hostInfo.headImgArray.count>1) {
-            cell.headImageV.imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@/80",BaseImageUrl,[m_hostInfo.headImgArray objectAtIndex:0]]];
+        if (m_hostInfo.headImgArray.count>0) {
+            cell.headImageV.imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseImageUrl,[m_hostInfo.headImgArray objectAtIndex:0]]];
         }else
         {
             cell.headImageV.imageURL = nil;
@@ -341,7 +341,7 @@
                 NSDictionary* destDic = KISDictionaryHaveKey(m_hostInfo.state, @"destUser");
                 NSString * imgid = [GameCommon getHeardImgId: KISDictionaryHaveKey(destDic, @"userimg")];
                 if (imgid) {
-                    cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:imgid] stringByAppendingString:@"/80"]];
+                    cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:imgid]];
                 }else
                 {
                     cell.headImageV.imageURL = nil;
@@ -352,14 +352,17 @@
             else
             {
                 NSString * imgid = [GameCommon getHeardImgId: KISDictionaryHaveKey(m_hostInfo.state, @"userimg")];
+                if ([imgid isEqualToString:@""]||[imgid isEqualToString:@" "]) {
+                     cell.headImageV.imageURL = nil;
+                }else{
                 if (imgid) {
-                    cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:imgid] stringByAppendingString:@"/80"]];
+                    cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:imgid]];
                 }else
                 {
                     cell.headImageV.imageURL = nil;
                 }
                 
-                
+                }
                 if([KISDictionaryHaveKey(m_hostInfo.state, @"userid") isEqualToString:[DataStoreManager getMyUserID]])
                 {
                     if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(m_hostInfo.state, @"type")] isEqualToString:@"3"]) {
@@ -406,7 +409,7 @@
             cell = [[MyCharacterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryType = UITableViewCellAccessoryNone;
 
         NSArray* characterArray = KISDictionaryHaveKey(m_hostInfo.characters, @"1");//魔兽世界
         [[NSUserDefaults standardUserDefaults]setObject:characterArray forKey:@"CharacterArrayOfAllForYou"];
@@ -484,7 +487,7 @@
             cell.nameLabel.textColor = [UIColor blackColor];
             return cell;
         }
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryType = UITableViewCellAccessoryNone;
 
         NSDictionary* infoDic = [m_hostInfo.achievementArray objectAtIndex:indexPath.row];
         NSString* rarenum = [NSString stringWithFormat:@"rarenum_small_%@", [GameCommon getNewStringWithId:KISDictionaryHaveKey(KISDictionaryHaveKey(infoDic, @"titleObj") , @"rarenum")]];
@@ -506,7 +509,7 @@
         if (cell == nil) {
             cell = [[MyNormalTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
         }
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
             cell.heardImg.image = KUIImage(@"me_system");

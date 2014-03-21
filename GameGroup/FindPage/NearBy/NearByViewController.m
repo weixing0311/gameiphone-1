@@ -11,6 +11,7 @@
 #import "LocationManager.h"
 #import "TestViewController.h"
 #import "AppDelegate.h"
+#import "MJRefresh.h"
 @interface NearByViewController ()
 {
     UILabel*            m_titleLabel;
@@ -23,9 +24,10 @@
     NSInteger           m_totalPage;
     NSInteger           m_currentPage;//0开始
     
-    PullUpRefreshView      *refreshView;
-    SRRefreshView   *_slimeView;
     NSMutableArray *m_imgArray;
+    MJRefreshHeaderView *m_header;
+    MJRefreshFooterView *m_footer;
+
 }
 @end
 
@@ -77,30 +79,14 @@
     m_myTableView.delegate = self;
     [self.view addSubview:m_myTableView];
     
-    _slimeView = [[SRRefreshView alloc] init];
-    _slimeView.delegate = self;
-    _slimeView.upInset = 0;
-    _slimeView.slimeMissWhenGoingBack = NO;
-    _slimeView.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    _slimeView.slime.skinColor = [UIColor whiteColor];
-    _slimeView.slime.lineWith = 1;
-    _slimeView.slime.shadowBlur = 4;
-    _slimeView.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    [m_myTableView addSubview:_slimeView];
-    
-    refreshView = [[PullUpRefreshView alloc] initWithFrame:CGRectMake(0, kScreenHeigth - startX-(KISHighVersion_7?0:20), 320, REFRESH_HEADER_HEIGHT)];//上拉加载
-    [m_myTableView addSubview:refreshView];
-    refreshView.pullUpDelegate = self;
-    refreshView.myScrollView = m_myTableView;
-    [refreshView stopLoading:NO];
     
     m_totalPage = 0;
     m_currentPage = 0;
     
-    hud = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:hud];
-    hud.labelText = @"定位中...";
-    
+//    hud = [[MBProgressHUD alloc] initWithView:self.view];
+//    [self.view addSubview:hud];
+//    hud.labelText = @"定位中...";
+//    
     
     //if ([CLLocationManager locationServicesEnabled] && ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined)){} 是否开启了本应用的定位服务
     
@@ -110,21 +96,27 @@
         return;
     }
     else{
-        [hud show:YES];
-    [[LocationManager sharedInstance] startCheckLocationWithSuccess:^(double lat, double lon) {
-        [[TempData sharedInstance] setLat:lat Lon:lon];
-        [hud hide:YES];
-
-        [self getNearByDataByNet];
-    } Failure:^{
-        [hud hide:YES];
-        [self showAlertViewWithTitle:@"提示" message:@"定位失败，请确认设置->隐私->定位服务中陌游的按钮为打开状态" buttonTitle:@"确定"];
+      //  [hud show:YES];
+//    [[LocationManager sharedInstance] startCheckLocationWithSuccess:^(double lat, double lon) {
+//        [[TempData sharedInstance] setLat:lat Lon:lon];
+//        [hud hide:YES];
+//
+//        [self getNearByDataByNet];
+//    } Failure:^{
+//        [hud hide:YES];
+//        [self showAlertViewWithTitle:@"提示" message:@"定位失败，请确认设置->隐私->定位服务中陌游的按钮为打开状态" buttonTitle:@"确定"];
+//    }
+//     ];
+        [self addFooter];
+        [self addHeader];
+       // [self getNearByDataByNet];
     }
-     ];}
+    
 }
 
 - (void)getNearByDataByNet
 {
+    [[NSUserDefaults standardUserDefaults]setBool:YES forKey:@"isGetNearByDataByNet"];
     NSMutableDictionary * paramDict = [NSMutableDictionary dictionary];
     NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
    
@@ -145,12 +137,13 @@
     [hud show:YES];
     
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [hud hide:YES];
       
         NSLog(@"附近的人 %@", responseObject);
         if ((m_currentPage ==0 && ![responseObject isKindOfClass:[NSDictionary class]]) || (m_currentPage != 0 && ![responseObject isKindOfClass:[NSArray class]])) {
-            [refreshView stopLoading:YES];
-            [_slimeView endRefresh];
+            
+            [[NSUserDefaults standardUserDefaults]setBool:NO forKey:@"isGetNearByDataByNet"];
+            [m_footer endRefreshing];
+            [m_header endRefreshing];
             return;
         }
         if (m_currentPage == 0) {
@@ -167,19 +160,10 @@
         
         [m_myTableView reloadData];
         
-//        if(m_currentPage == m_totalPage/10)
-//        {
-//            [refreshView stopLoading:YES];
-//        }
-//        else
-//        {
-            [refreshView stopLoading:NO];
-//        }
         m_currentPage ++;//从0开始
         
-        [refreshView setRefreshViewFrame];
-        [_slimeView endRefresh];
-        
+        [m_header endRefreshing];
+        [m_footer endRefreshing];
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         if ([error isKindOfClass:[NSDictionary class]]) {
             if (![[GameCommon getNewStringWithId:KISDictionaryHaveKey(error, kFailErrorCodeKey)] isEqualToString:@"100001"])
@@ -188,17 +172,10 @@
                 [alert show];
             }
         }
-        else
-        {
-            UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请求数据失败，请检查网络！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-            alert.tag = 56;
-            [alert show];
-        }
         
-        [refreshView stopLoading:NO];
-        [_slimeView endRefresh];
+        [m_header endRefreshing];
+        [m_footer endRefreshing];
 
-        [hud hide:YES];
     }];
     //////
 
@@ -288,13 +265,18 @@
         cell.ageLabel.backgroundColor = kColorWithRGB(238, 100, 196, 1.0);
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"people_woman.png"];
     }
+    if ([KISDictionaryHaveKey(tempDict, @"img") isEqualToString:@""]||[KISDictionaryHaveKey(tempDict, @"img")isEqualToString:@" "]) {
+        cell.headImageV.imageURL = nil;
+       
+    }else{
     NSArray* heardImgArray = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")] componentsSeparatedByString:@","];
-    if (heardImgArray.count>1) {
+
+    if (heardImgArray.count>0&&(![[heardImgArray objectAtIndex:0] isEqualToString:@""]||![KISDictionaryHaveKey(tempDict, @"img")isEqualToString:@" "])) {
         cell.headImageV.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",[heardImgArray objectAtIndex:0]]];
     }else{
         cell.headImageV.imageURL = nil;
     }
-    
+    }
     NSDictionary* titleDic = KISDictionaryHaveKey(tempDict, @"title");
     if ([titleDic isKindOfClass:[NSDictionary class]]) {
         cell.distLabel.text = [[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"title")] isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(KISDictionaryHaveKey(titleDic, @"titleObj"), @"title");
@@ -349,65 +331,42 @@
     VC.titleImage = [BaseImageUrl stringByAppendingString:[heardImgArray count] != 0 ? [heardImgArray objectAtIndex:0] : @""];
     [self.navigationController pushViewController:VC animated:YES];
 }
-#pragma mark  scrollView  delegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+#pragma mark --加载刷新
+- (void)addFooter
 {
-    if (m_myTableView.contentSize.height < m_myTableView.frame.size.height) {
-        refreshView.viewMaxY = 0;
-    }
-    else
-        refreshView.viewMaxY = m_myTableView.contentSize.height - m_myTableView.frame.size.height;
-    [refreshView viewdidScroll:scrollView];
-    [_slimeView scrollViewDidScroll];
-}
-
-#pragma mark pull up refresh
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if(scrollView == m_myTableView)
-    {
-        [refreshView viewWillBeginDragging:scrollView];
-    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if(scrollView == m_myTableView)
-    {
-        [refreshView didEndDragging:scrollView];
-        [_slimeView scrollViewDidEndDraging];
-
-    }
-}
-
-- (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
-{
-    NSLog(@"start");
-    if(m_currentPage < m_totalPage)//从0开始记录页码
-    {
-        [self getNearByDataByNet];
-    }
-}
-
-#pragma mark - slimeRefresh delegate
-- (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
-{
-    //    [self performSelector:@selector(endRefresh)
-    //               withObject:nil
-    //               afterDelay:2
-    //                  inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
-    m_currentPage = 0;
-    
-    [self getNearByDataByNet];
-}
-
--(void)endRefresh
-{
-    [_slimeView endRefreshFinish:^{
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = m_myTableView;
+    footer.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
+            [self getNearByDataByNet];
         
-    }];
+    };
+    m_footer = footer;
+    
+}
+- (void)addHeader
+{
+    MJRefreshHeaderView *header = [MJRefreshHeaderView header];
+    header.scrollView = m_myTableView;
+    header.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
+        m_currentPage = 0;
+        [self getNearByDataByNet];
+    };
+    header.endStateChangeBlock = ^(MJRefreshBaseView *refreshView) {
+        
+    };
+    header.refreshStateChangeBlock = ^(MJRefreshBaseView *refreshView, MJRefreshState state) {
+        
+    };
+    [header beginRefreshing];
+    m_header = header;
 }
 
+
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [self.view removeFromSuperview];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

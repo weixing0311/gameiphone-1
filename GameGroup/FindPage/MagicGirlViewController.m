@@ -46,7 +46,7 @@
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
     hud.delegate = self;
-    hud.labelText = @"正在加载网页...";
+    hud.labelText = @"正在加载魔女榜...";
     // Do any additional setup after loading the view.
 
 
@@ -62,7 +62,7 @@
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     [hud hide:YES];
     [webView stopLoading];
-    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"网页加载失败" delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:@"重新加载", nil];
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"加载失败" delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:@"重新加载", nil];
     [alert show];
 }
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

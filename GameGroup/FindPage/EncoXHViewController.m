@@ -375,10 +375,14 @@
             
             NSLog(@"%@",headImageView.image);
             NSString *imageStr =nil;
+            UIImage *  image;
+            if ([KISDictionaryHaveKey(getDic, @"img")isEqualToString:@""]||[KISDictionaryHaveKey(getDic, @"ing")isEqualToString:@" "]) {
+                headImageView.imageURL = nil;
+            }else{
+
             if([KISDictionaryHaveKey(getDic, @"img") rangeOfString:@","].location !=NSNotFound) {
                 NSString * fruits = KISDictionaryHaveKey(getDic, @"img");
                 NSArray  * array= [fruits componentsSeparatedByString:@","];
-                NSLog(@"array%@",[array objectAtIndex:0]);
                
             imageStr =[array objectAtIndex:0];
             }else{
@@ -386,10 +390,9 @@
             }
             NSLog(@"imageUrl--->%@",headImageView.imageURL);
             NSLog(@"imageUrl---->%@",headImageView.image);
-
             
-            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingString:[[GameCommon getNewStringWithId:imageStr]stringByAppendingString:@"/330" ]]]]];
-
+         image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingString:[NSString stringWithFormat:@"%@/330",imageStr]]]]];
+            }
             [headImageView rotate360WithDuration:1.0 repeatCount:1 timingMode:i7Rotate360TimingModeEaseInEaseOut];
             headImageView.animationDuration = 2.0;
             headImageView.animationImages =
@@ -398,10 +401,13 @@
              nil];
             headImageView.animationRepeatCount = 1;
             [headImageView startAnimating];
-            headImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:imageStr]]];
-            headImageView.animationImages=nil;
-
             
+            if ([KISDictionaryHaveKey(getDic, @"img")isEqualToString:@""]||[KISDictionaryHaveKey(getDic, @"ing")isEqualToString:@" "]) {
+                headImageView.imageURL = nil;
+            }else{
+            headImageView.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingString:[NSString stringWithFormat:@"%@/330",imageStr]]];
+            headImageView.animationImages=nil;
+            }
             i= promptLabel.text.length/20;
             promptView.frame = CGRectMake(0, 318-50-heightAox, 320, 35+15*i);
             promptLabel.frame = CGRectMake(20, 0, 280, 30+15*i);
@@ -516,9 +522,7 @@
                 UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@", [error objectForKey:kFailMessageKey]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
 
-                
             }
-            
         }
 
     }];

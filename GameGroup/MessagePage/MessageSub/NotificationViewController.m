@@ -271,7 +271,7 @@
         if ([[cDict objectForKey:@"picID"] length]>1) {
             cell.contentImageV.hidden = NO;
             cell.contentLabel.hidden = YES;
-            [cell.contentImageV setImageWithURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@",[self getHead:[cDict objectForKey:@"picID"]]]]];
+            [cell.contentImageV setImageWithURL:[NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",[self getHead:[cDict objectForKey:@"picID"]]]]];
         }
         else
         {

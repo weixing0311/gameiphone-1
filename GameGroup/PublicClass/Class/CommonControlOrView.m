@@ -107,7 +107,11 @@
     [myView addSubview:thereLabel];
     
     EGOImageView* img = [[EGOImageView alloc] initWithFrame:CGRectMake(250, 20, 40, 40)];
+    if ([titleImage isEqualToString:[BaseImageUrl stringByAppendingString:@"/80"]]) {
+        img.imageURL = nil;
+    }else{
     img.imageURL = [NSURL URLWithString:titleImage];
+    }
     img.layer.cornerRadius = 5;
     img.layer.masksToBounds = YES;
     [myView addSubview:img];

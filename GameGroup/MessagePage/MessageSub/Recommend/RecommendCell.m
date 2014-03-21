@@ -32,7 +32,7 @@
         self.fromImage.backgroundColor = [UIColor clearColor];
         [self addSubview:self.fromImage];
         
-        self.fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 40, 100, 20)];
+        self.fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 40, 150, 20)];
         [self.fromLabel setTextAlignment:NSTextAlignmentLeft];
         [self.fromLabel setFont:[UIFont boldSystemFontOfSize:13.0]];
         [self.fromLabel setBackgroundColor:[UIColor clearColor]];

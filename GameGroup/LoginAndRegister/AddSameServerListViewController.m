@@ -84,13 +84,18 @@
         cell.indexPath = indexPath;
         cell.delegate = self;
         NSString* imageID = [_guildArray[indexPath.row] objectForKey:@"img"];
-        if ([imageID componentsSeparatedByString:@","].count>1) {
+        if ([imageID isEqualToString:@""]||[imageID isEqualToString:@" "]) {
+            cell.headerImage.imageURL = nil;
+        }else{
+
+        if ([imageID componentsSeparatedByString:@","].count>0) {
             imageID = [[imageID componentsSeparatedByString:@","] objectAtIndex:0];
             cell.headerImage.imageURL = [NSURL URLWithString:[NSString stringWithFormat:BaseImageUrl@"%@/80",imageID]];
         }else
         {
             cell.headerImage.imageURL = nil;
         }
+    }
         cell.nameL.text = [_guildArray[indexPath.row] objectForKey:@"charactername"];
         cell.photoNoL.text =[_guildArray[indexPath.row] objectForKey:@"nickname"];
         

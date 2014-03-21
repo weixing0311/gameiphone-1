@@ -114,11 +114,14 @@
     cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
 
     NSURL * theUrl = nil;
+    if ([KISDictionaryHaveKey(tempDic, @"headImgID") isEqualToString:@""]||[KISDictionaryHaveKey(tempDic, @"headImgID")isEqualToString:@" "]) {
+        cell.headImageV.imageURL = nil;
+    }else{
     if ([GameCommon getHeardImgId:KISDictionaryHaveKey(tempDic, @"headImgID")]) {
         theUrl = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",[GameCommon getHeardImgId:KISDictionaryHaveKey(tempDic, @"headImgID")]]];
     }
     cell.headImageV.imageURL = theUrl;
-    
+    }
     cell.nameLabel.text = KISDictionaryHaveKey(tempDic, @"nickname");
     
     if ([KISDictionaryHaveKey(tempDic, @"type") isEqualToString:@"1"]) {

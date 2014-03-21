@@ -11,7 +11,7 @@
 #import "TestViewController.h"
 //#import "ContactsCell.h"
 #import "PersonTableCell.h"
-
+#import "MJRefresh.h"
 #define kSegmentFrinds    (0)
 #define kSegmentAttention (1)
 #define kSegmentFans      (2)
@@ -30,32 +30,26 @@
     NSInteger  m_segmentClickIndex;
     
     UITableView*  m_myTableView;
-    SRRefreshView          *slimeView_friend;
-
     UITableView*  m_myAttentionsTableView;
-    SRRefreshView          *slimeView_attention;
-
     UITableView*  m_myFansTableView;
-    SRRefreshView          *slimeView_fans;
-    PullUpRefreshView      *refreshView;
     NSInteger              m_currentPage;
     
     UISearchBar * searchBar;
     UISearchDisplayController * searchDisplay;
     NSArray *     searchResultArray;
-
+    
     NSMutableArray * m_friendsArray;
     NSMutableDictionary * m_friendDict;
-
+    
     NSMutableArray * m_attentionsArray;
     NSMutableDictionary * m_attentionDict;
     NSMutableArray *m_imgArray;
-//    NSMutableArray * m_fansArray;
-//    NSMutableDictionary * m_fansDict;
+    //    NSMutableArray * m_fansArray;
+    //    NSMutableDictionary * m_fansDict;
     
     NSMutableArray * m_sectionArray_friend;
     NSMutableArray * m_sectionIndexArray_friend;
-
+    
     NSMutableArray * m_sectionArray_attention;
     NSMutableArray * m_sectionIndexArray_attention;
     
@@ -63,6 +57,15 @@
     NSMutableArray * m_otherSortAttentionArray;//除按字母排序外 其他排序使用
     
     NSMutableArray * m_otherSortFansArray;
+    MJRefreshHeaderView *m_Friendheader;
+    MJRefreshFooterView *m_Friendfooter;
+    MJRefreshHeaderView *m_attentionheader;
+    MJRefreshFooterView *m_attentionfooter;
+
+    MJRefreshHeaderView *m_fansheader;
+    MJRefreshFooterView *m_fansfooter;
+
+    
 }
 
 @end
@@ -72,7 +75,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    
     [[Custom_tabbar showTabBar] hideTabBar:NO];
     
     if (![self isHaveLogin]) {
@@ -90,8 +93,8 @@
 
 - (void)refreshSortType:(NSInteger)tabIndex
 {
-     NSString* sort_1 = [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_1] ? [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_1] : @"1";
-     NSString* sort_2 = [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_2] ? [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_2] : @"1";
+    NSString* sort_1 = [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_1] ? [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_1] : @"1";
+    NSString* sort_2 = [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_2] ? [[NSUserDefaults standardUserDefaults] objectForKey:sorttype_2] : @"1";
     [m_sortTypeDic setObject:sort_1 forKey:sorttype_1];
     [m_sortTypeDic setObject:sort_2 forKey:sorttype_2];
     
@@ -116,12 +119,12 @@
     titleLabel.text = @"好友";
     [self.view addSubview:titleLabel];
     
-    m_menuButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    m_menuButton.frame=CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30);
-    [m_menuButton setBackgroundImage:KUIImage(@"menu_button_normal") forState:UIControlStateNormal];
-    [m_menuButton setBackgroundImage:KUIImage(@"menu_button_click") forState:UIControlStateHighlighted];
-    [self.view addSubview:m_menuButton];
-    [m_menuButton addTarget:self action:@selector(menuButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+//    m_menuButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    m_menuButton.frame=CGRectMake(5, KISHighVersion_7 ? 27 : 7, 37, 30);
+//    [m_menuButton setBackgroundImage:KUIImage(@"menu_button_normal") forState:UIControlStateNormal];
+//    [m_menuButton setBackgroundImage:KUIImage(@"menu_button_click") forState:UIControlStateHighlighted];
+//    [self.view addSubview:m_menuButton];
+//    [m_menuButton addTarget:self action:@selector(menuButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     
     m_sortTypeDic = [NSMutableDictionary dictionary];
     
@@ -131,8 +134,8 @@
     m_attentionsArray = [NSMutableArray array];
     m_attentionDict = [NSMutableDictionary dictionary];
     
-//    m_fansArray = [NSMutableArray array];
-//    m_fansDict = [NSMutableDictionary dictionary];
+    //    m_fansArray = [NSMutableArray array];
+    //    m_fansDict = [NSMutableDictionary dictionary];
     m_otherSortFansArray = [NSMutableArray array];
     
     m_sectionArray_friend = [NSMutableArray array];
@@ -141,9 +144,9 @@
     m_sectionArray_attention = [NSMutableArray array];
     m_sectionIndexArray_attention = [NSMutableArray array];
     
-//    m_sectionArray_fans = [NSMutableArray array];
-//    m_sectionIndexArray_fans = [NSMutableArray array];
-
+    //    m_sectionArray_fans = [NSMutableArray array];
+    //    m_sectionIndexArray_fans = [NSMutableArray array];
+    
     searchResultArray = [NSMutableArray array];
     
     m_otherSortFriendArray = [NSMutableArray array];
@@ -163,33 +166,13 @@
     m_myTableView.delegate = self;
     [self.view addSubview:m_myTableView];
     
-    slimeView_friend = [[SRRefreshView alloc] init];
-    slimeView_friend.delegate = self;
-    slimeView_friend.upInset = 0;
-    slimeView_friend.slimeMissWhenGoingBack = NO;
-    slimeView_friend.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    slimeView_friend.slime.skinColor = [UIColor whiteColor];
-    slimeView_friend.slime.lineWith = 1;
-    slimeView_friend.slime.shadowBlur = 4;
-    slimeView_friend.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    [m_myTableView addSubview:slimeView_friend];
-
+    
     m_myAttentionsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40, 320, self.view.frame.size.height - (40 + 50 + startX)) style:UITableViewStylePlain];
     m_myAttentionsTableView.dataSource = self;
     m_myAttentionsTableView.delegate = self;
-//    [self.view addSubview:m_myAttentionsTableView];//提前add会导致好友的索引无法点击
+    //    [self.view addSubview:m_myAttentionsTableView];//提前add会导致好友的索引无法点击
     m_myAttentionsTableView.hidden = YES;
     
-    slimeView_attention = [[SRRefreshView alloc] init];
-    slimeView_attention.delegate = self;
-    slimeView_attention.upInset = 0;
-    slimeView_attention.slimeMissWhenGoingBack = NO;
-    slimeView_attention.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    slimeView_attention.slime.skinColor = [UIColor whiteColor];
-    slimeView_attention.slime.lineWith = 1;
-    slimeView_attention.slime.shadowBlur = 4;
-    slimeView_attention.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    [m_myAttentionsTableView addSubview:slimeView_attention];
     
     m_myFansTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX + 40, 320, self.view.frame.size.height - (40 + 50 + startX)) style:UITableViewStylePlain];
     m_myFansTableView.dataSource = self;
@@ -197,36 +180,13 @@
     [self.view addSubview:m_myFansTableView];
     m_myFansTableView.hidden = YES;
     
-    slimeView_fans = [[SRRefreshView alloc] init];
-    slimeView_fans.delegate = self;
-    slimeView_fans.upInset = 0;
-    slimeView_fans.slimeMissWhenGoingBack = NO;
-    slimeView_fans.slime.bodyColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    slimeView_fans.slime.skinColor = [UIColor whiteColor];
-    slimeView_fans.slime.lineWith = 1;
-    slimeView_fans.slime.shadowBlur = 4;
-    slimeView_fans.slime.shadowColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-    [m_myFansTableView addSubview:slimeView_fans];
-    
-    refreshView = [[PullUpRefreshView alloc] initWithFrame:CGRectMake(0, kScreenHeigth - startX-(KISHighVersion_7?0:20), 320, REFRESH_HEADER_HEIGHT)];//上拉加载
-    [m_myFansTableView addSubview:refreshView];
-    refreshView.pullUpDelegate = self;
-    refreshView.myScrollView = m_myFansTableView;
-    [refreshView stopLoading:NO];
-    
-//    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, startX + 40, 320, 44)];
-//    searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
-//    searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-//    searchBar.placeholder = @"搜索联系人";
-//    searchBar.delegate = self;
-//    [self.view addSubview:searchBar];
-//    
-//    searchDisplay = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
-//    searchDisplay.delegate = self;
-//    searchDisplay.searchResultsDataSource = self;
-//    searchDisplay.searchResultsDelegate = self;
     
     [self refreshSortType:kSegmentFrinds];
+    [self addHeader];
+    [self addHeader1];
+    [self addHeader2];
+    // 3.2.上拉加载更多
+    [self addFooter];
     
     hud = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
@@ -283,11 +243,11 @@
         m_segmentClickIndex = kSegmentFrinds;
         m_menuButton.hidden = NO;
         
-//        m_myAttentionsTableView.hidden = YES;
+        //        m_myAttentionsTableView.hidden = YES;
         m_myTableView.hidden = NO;
         [m_myAttentionsTableView removeFromSuperview];
         m_myFansTableView.hidden = YES;
-
+        
         if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"])
         {
             if ([[m_friendDict allKeys] count] == 0) {
@@ -297,7 +257,7 @@
         else
         {
             if ([m_otherSortFriendArray count] == 0) {
-                 [self refreshFriendList:kSegmentFrinds];
+                [self refreshFriendList:kSegmentFrinds];
             }
         }
     }
@@ -308,12 +268,12 @@
         m_fansButton.selected = NO;
         m_segmentClickIndex = kSegmentAttention;
         m_menuButton.hidden = NO;
-
+        
         m_myTableView.hidden = YES;
         m_myAttentionsTableView.hidden = NO;
-
+        
         [self.view addSubview:m_myAttentionsTableView];
-
+        
         m_myFansTableView.hidden = YES;
         
         if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"])
@@ -325,7 +285,7 @@
         else
         {
             if ([m_otherSortAttentionArray count] == 0) {
-                 [self refreshFriendList:kSegmentAttention];
+                [self refreshFriendList:kSegmentAttention];
             }
         }
     }
@@ -336,7 +296,7 @@
         m_fansButton.selected = YES;
         m_segmentClickIndex = kSegmentFans;
         m_menuButton.hidden = YES;
-
+        
         m_myTableView.hidden = YES;
         m_myAttentionsTableView.hidden = YES;
         m_myFansTableView.hidden = NO;
@@ -346,7 +306,7 @@
         }
     }
     [searchDisplay setActive:NO animated:NO];
-
+    
     [self refreshTopLabel];
 }
 
@@ -412,12 +372,14 @@
             [self parseFriendsList:KISDictionaryHaveKey(responseObject, @"1")];
         }
         
-//        [hud hide:YES];
-        [slimeView_friend endRefresh];
-
+        //        [hud hide:YES];
+        // [slimeView_friend endRefresh];
+        [m_Friendheader endRefreshing];
+        
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         [hud hide:YES];
-        [slimeView_friend endRefresh];
+        [m_Friendheader endRefreshing];
+        //  [slimeView_friend endRefresh];
     }];
 }
 
@@ -430,7 +392,7 @@
             NSArray* keyArr = [friendsList allKeys];
             for (NSString* key in keyArr) {
                 for (NSMutableDictionary * dict in [friendsList objectForKey:key]) {
-//                    [dict setObject:key forKey:@"nameindex"];
+                    //                    [dict setObject:key forKey:@"nameindex"];
                     [DataStoreManager saveUserInfo:dict];
                 }
             }
@@ -451,7 +413,7 @@
         m_friendsArray = [NSMutableArray arrayWithArray:[m_friendDict allKeys]];
         [m_friendsArray sortUsingSelector:@selector(compare:)];
         
-//        [m_otherSortFriendArray removeAllObjects];
+        //        [m_otherSortFriendArray removeAllObjects];
         if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"2"]) {
             m_otherSortFriendArray = [DataStoreManager queryAllFriendsWithOtherSortType:@"distance" ascend:YES];
         }
@@ -461,7 +423,7 @@
         if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"4"]) {
             m_otherSortFriendArray = [DataStoreManager queryAllFriendsWithOtherSortType:@"refreshTime" ascend:NO];
         }
-       
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [hud hide:YES];
             [m_myTableView reloadData];
@@ -486,7 +448,7 @@
     [postDict setObject:@"111" forKey:@"method"];
     [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
     [paramDict setObject:sort forKey:@"sorttype_2"];
-
+    
     [self.view bringSubviewToFront:hud];
     //[hud show:YES];
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -499,12 +461,12 @@
             [self parseAttentionsList:KISDictionaryHaveKey(responseObject, @"2")];
         }
         
-//        [hud hide:YES];
-        [slimeView_attention endRefresh];
-        
+        //        [hud hide:YES];
+        [m_attentionheader endRefreshing];
     } failure:^(AFHTTPRequestOperation *operation, id error) {
         [hud hide:YES];
-        [slimeView_attention endRefresh];
+        [m_attentionheader endRefreshing];
+
     }];
 }
 
@@ -517,7 +479,7 @@
             NSArray* keyArr = [attentionList allKeys];
             for (NSString* key in keyArr) {
                 for (NSMutableDictionary * dict in [attentionList objectForKey:key]) {
-//                    [dict setObject:key forKey:@"nameindex"];
+                    //                    [dict setObject:key forKey:@"nameindex"];
                     [DataStoreManager saveUserAttentionInfo:dict];
                 }
             }
@@ -537,7 +499,7 @@
         m_attentionsArray = [NSMutableArray arrayWithArray:[m_attentionDict allKeys]];
         [m_attentionsArray sortUsingSelector:@selector(compare:)];
         
-//        [m_otherSortAttentionArray removeAllObjects];
+        //        [m_otherSortAttentionArray removeAllObjects];
         if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"2"]) {
             m_otherSortAttentionArray = [DataStoreManager queryAllAttentionWithOtherSortType:@"distance" ascend:YES];
         }
@@ -577,17 +539,17 @@
     [NetManager requestWithURLStr:BaseClientUrl Parameters:postDict TheController:self success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         [hud hide:YES];
-
+        
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
             if ((m_currentPage != 0 && ![KISDictionaryHaveKey(responseObject, @"3") isKindOfClass:[NSArray class]]) || (m_currentPage == 0 && ![KISDictionaryHaveKey(responseObject, @"3") isKindOfClass:[NSDictionary class]] )) {
-                [refreshView stopLoading:YES];
-                [slimeView_fans endRefresh];
+                //  [refreshView stopLoading:YES];
+                // [slimeView_fans endRefresh];
                 return;
             }
             if (m_currentPage == 0) {//默认展示存储的
-//                [m_fansArray removeAllObjects];
-//                [m_fansDict removeAllObjects];
-
+                //                [m_fansArray removeAllObjects];
+                //                [m_fansDict removeAllObjects];
+                
                 [m_otherSortFansArray removeAllObjects];
                 
                 [m_myFansTableView reloadData];
@@ -600,50 +562,46 @@
             }
             else
                 [self parseFansList:KISDictionaryHaveKey(responseObject, @"3")];
-
-            m_currentPage ++;//从0开始
-                        
-            [refreshView stopLoading:NO];
-            [refreshView setRefreshViewFrame];
             
-            [slimeView_fans endRefresh];
+            m_currentPage ++;//从0开始
+            
+            [m_fansheader endRefreshing];
+            [m_fansfooter endRefreshing];
         }
         
     } failure:^(AFHTTPRequestOperation *operation, id error) {
-        [hud hide:YES];
-        [refreshView stopLoading:NO];
-        [slimeView_fans endRefresh];
+        [m_fansheader endRefreshing];
+        [m_fansfooter endRefreshing];
     }];
 }
 -(void)parseFansList:(id)fansList
 {
-//    [DataStoreManager cleanFansList];//先清 再存
+    //    [DataStoreManager cleanFansList];//先清 再存
     dispatch_queue_t queue = dispatch_queue_create("com.living.game", NULL);
     dispatch_async(queue, ^{
-//        if ([fansList isKindOfClass:[NSDictionary class]]) {
-//            NSArray* keyArr = [fansList allKeys];
-//            for (NSString* key in keyArr) {
-//                for (NSMutableDictionary * dict in [fansList objectForKey:key]) {
-////                    [dict setObject:key forKey:@"nameindex"];
-//                    [DataStoreManager saveUserFansInfo:dict];
-//                }
-//            }
-//        }
-//        else
+        //        if ([fansList isKindOfClass:[NSDictionary class]]) {
+        //            NSArray* keyArr = [fansList allKeys];
+        //            for (NSString* key in keyArr) {
+        //                for (NSMutableDictionary * dict in [fansList objectForKey:key]) {
+        ////                    [dict setObject:key forKey:@"nameindex"];
+        //                    [DataStoreManager saveUserFansInfo:dict];
+        //                }
+        //            }
+        //        }
+        //        else
         if([fansList isKindOfClass:[NSArray class]]){
             for (NSDictionary * dict in fansList) {
                 [DataStoreManager saveUserFansInfo:dict];
             }
         }
         //先存后取
-//        m_fansDict = [DataStoreManager queryAllFans];
-//        m_fansArray = [NSMutableArray arrayWithArray:[m_fansDict allKeys]];
-//        [m_fansArray sortUsingSelector:@selector(compare:)];
+        //        m_fansDict = [DataStoreManager queryAllFans];
+        //        m_fansArray = [NSMutableArray arrayWithArray:[m_fansDict allKeys]];
+        //        [m_fansArray sortUsingSelector:@selector(compare:)];
         m_otherSortFansArray = [DataStoreManager queryAllFansWithOtherSortType:@"distance" ascend:YES];
         dispatch_async(dispatch_get_main_queue(), ^{
             [m_myFansTableView reloadData];
             [self refreshTopLabel];
-            [refreshView setRefreshViewFrame];
         });
     });
     //上拉加载
@@ -666,7 +624,7 @@
         else
         {
             if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"2"]) {
-            m_otherSortFriendArray = [DataStoreManager queryAllFriendsWithOtherSortType:@"distance" ascend:YES];
+                m_otherSortFriendArray = [DataStoreManager queryAllFriendsWithOtherSortType:@"distance" ascend:YES];
             }
             if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"3"]) {
                 m_otherSortFriendArray = [DataStoreManager queryAllFriendsWithOtherSortType:@"achievementLevel" ascend:YES];
@@ -677,20 +635,20 @@
         }
         [m_myTableView reloadData];
     }
-   else if(kSegmentAttention == tabIndex)
-   {
+    else if(kSegmentAttention == tabIndex)
+    {
         if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"]) {
-           m_attentionDict = [DataStoreManager queryAllAttention];
-           m_sectionArray_attention = [DataStoreManager queryAttentionSections];
-           [m_sectionIndexArray_attention removeAllObjects];
-           for (int i = 0; i < m_sectionArray_attention.count; i++) {
-               [m_sectionIndexArray_attention addObject:[[m_sectionArray_attention objectAtIndex:i] objectAtIndex:0]];
-           }
-           m_attentionsArray = [NSMutableArray arrayWithArray:[m_attentionDict allKeys]];
-           [m_attentionsArray sortUsingSelector:@selector(compare:)];
+            m_attentionDict = [DataStoreManager queryAllAttention];
+            m_sectionArray_attention = [DataStoreManager queryAttentionSections];
+            [m_sectionIndexArray_attention removeAllObjects];
+            for (int i = 0; i < m_sectionArray_attention.count; i++) {
+                [m_sectionIndexArray_attention addObject:[[m_sectionArray_attention objectAtIndex:i] objectAtIndex:0]];
+            }
+            m_attentionsArray = [NSMutableArray arrayWithArray:[m_attentionDict allKeys]];
+            [m_attentionsArray sortUsingSelector:@selector(compare:)];
         }
-       else
-       {
+        else
+        {
             if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"2"]) {
                 m_otherSortAttentionArray = [DataStoreManager queryAllAttentionWithOtherSortType:@"distance" ascend:YES];
             }
@@ -700,21 +658,21 @@
             if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"4"]) {
                 m_otherSortAttentionArray = [DataStoreManager queryAllAttentionWithOtherSortType:@"refreshTime" ascend:NO];
             }
-       }
-       [m_myAttentionsTableView reloadData];
-   }
+        }
+        [m_myAttentionsTableView reloadData];
+    }
     else if(kSegmentFans == tabIndex)
     {
-//        m_fansDict = [DataStoreManager queryAllFans];
-//        m_fansArray = [NSMutableArray arrayWithArray:[m_fansDict allKeys]];
-//        [m_fansArray sortUsingSelector:@selector(compare:)];
-    
+        //        m_fansDict = [DataStoreManager queryAllFans];
+        //        m_fansArray = [NSMutableArray arrayWithArray:[m_fansDict allKeys]];
+        //        [m_fansArray sortUsingSelector:@selector(compare:)];
+        
         m_otherSortFansArray = [DataStoreManager queryAllFansWithOtherSortType:@"distance" ascend:YES];
         
         [m_myFansTableView reloadData];
-        [refreshView setRefreshViewFrame];
+        // [refreshView setRefreshViewFrame];
     }
-
+    
     [self refreshTopLabel];
 }
 
@@ -757,41 +715,41 @@
 #pragma mark - 搜索
 -(void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
-//    if (KISHighVersion_7) {
-//        [searchBar setFrame:CGRectMake(0, 20, 320, 44)];
-//        searchBar.backgroundImage = [UIImage imageNamed:@"top.png"];
-//        [UIView animateWithDuration:0.3 animations:^{
-////            [m_messageTable setFrame:CGRectMake(0, 20, 320, self.view.frame.size.height- 50 - startX)];
-////            m_messageTable.contentOffset = CGPointMake(0, -20);
-//        } completion:^(BOOL finished) {
-//
-//        }];
-//    }
+    //    if (KISHighVersion_7) {
+    //        [searchBar setFrame:CGRectMake(0, 20, 320, 44)];
+    //        searchBar.backgroundImage = [UIImage imageNamed:@"top.png"];
+    //        [UIView animateWithDuration:0.3 animations:^{
+    ////            [m_messageTable setFrame:CGRectMake(0, 20, 320, self.view.frame.size.height- 50 - startX)];
+    ////            m_messageTable.contentOffset = CGPointMake(0, -20);
+    //        } completion:^(BOOL finished) {
+    //
+    //        }];
+    //    }
 }
 
 -(void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
 {
-
+    
 }
 
 -(void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
 {
-//    if (KISHighVersion_7) {
-//        [UIView animateWithDuration:0.2 animations:^{
-//            [searchBar setFrame:CGRectMake(0, 0, 320, 44)];
-//            //            [m_messageTable setFrame:CGRectMake(0, startX, 320, self.view.frame.size.height - 50 - startX)];
-//        } completion:^(BOOL finished) {
-//            searchBar.backgroundImage = nil;
-//        }];
-//    }
+    //    if (KISHighVersion_7) {
+    //        [UIView animateWithDuration:0.2 animations:^{
+    //            [searchBar setFrame:CGRectMake(0, 0, 320, 44)];
+    //            //            [m_messageTable setFrame:CGRectMake(0, startX, 320, self.view.frame.size.height - 50 - startX)];
+    //        } completion:^(BOOL finished) {
+    //            searchBar.backgroundImage = nil;
+    //        }];
+    //    }
 }
 -(void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView
 {
-//    if (KISHighVersion_7) {
-//        //        tableView.backgroundColor = [UIColor grayColor];
-//        [tableView setFrame:CGRectMake(0, 64, 320, self.view.frame.size.height - 50 - 64)];
-//        //        [tableView setContentOffset:CGPointMake(0, 20)];
-//    }
+    //    if (KISHighVersion_7) {
+    //        //        tableView.backgroundColor = [UIColor grayColor];
+    //        [tableView setFrame:CGRectMake(0, 64, 320, self.view.frame.size.height - 50 - 64)];
+    //        //        [tableView setContentOffset:CGPointMake(0, 20)];
+    //    }
 }
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView
@@ -804,8 +762,8 @@
         return 1;
     }
     if (tableView == m_myTableView) {
-      if(![[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {
-          return 1;
+        if(![[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {
+            return 1;
         }
         return m_sectionIndexArray_friend.count;
     }
@@ -817,42 +775,42 @@
         return m_sectionIndexArray_attention.count;
     }
     else
-      return 1;
+        return 1;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"SELF contains[cd] %@",searchBar.text];
-//    NSLog(@"%@",searchBar.text);
-//    switch (m_segmentClickIndex) {
-//        case kSegmentFrinds:
-//            searchResultArray = [m_friendsArray filteredArrayUsingPredicate:resultPredicate];
-//            break;
-//        case kSegmentAttention:
-//            searchResultArray = [m_attentionsArray filteredArrayUsingPredicate:resultPredicate];
-//            break;
-//        case kSegmentFans:
-//            searchResultArray = [m_fansArray filteredArrayUsingPredicate:resultPredicate];
-//            break;
-//        default:
-//            break;
-//    }
-//    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-//        return [searchResultArray count];
-//    }
+    //    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"SELF contains[cd] %@",searchBar.text];
+    //    NSLog(@"%@",searchBar.text);
+    //    switch (m_segmentClickIndex) {
+    //        case kSegmentFrinds:
+    //            searchResultArray = [m_friendsArray filteredArrayUsingPredicate:resultPredicate];
+    //            break;
+    //        case kSegmentAttention:
+    //            searchResultArray = [m_attentionsArray filteredArrayUsingPredicate:resultPredicate];
+    //            break;
+    //        case kSegmentFans:
+    //            searchResultArray = [m_fansArray filteredArrayUsingPredicate:resultPredicate];
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
+    //        return [searchResultArray count];
+    //    }
     if (tableView == m_myTableView) {
-       if(![[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"])
-       {
-           return [m_otherSortFriendArray count];
-       }
-       else
+        if(![[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"])
+        {
+            return [m_otherSortFriendArray count];
+        }
+        else
             return [[[m_sectionArray_friend objectAtIndex:section] objectAtIndex:1] count];//0 为index 1为nameKey数组
     }
     else if(tableView == m_myAttentionsTableView)
     {
-//        if ([m_sectionArray_attention count] == 0) {//首次进入无数据
-//            return 0;
-//        }
+        //        if ([m_sectionArray_attention count] == 0) {//首次进入无数据
+        //            return 0;
+        //        }
         if(![[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"])
             return [m_otherSortAttentionArray count];
         else
@@ -879,45 +837,45 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     NSDictionary * tempDict;
     /*
-//    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-//        switch (m_segmentClickIndex) {
-//            case kSegmentFrinds:
-//                tempDict = [m_friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-//                break;
-//            case kSegmentAttention:
-//                tempDict = [m_attentionDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-//                break;
-//            case kSegmentFans:
-//                tempDict = [m_fansDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-//    else
-//    {
-    */
-        if (tableView == m_myTableView) {
-            if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {//按字母排
-                 tempDict = [m_friendDict objectForKey:[[[m_sectionArray_friend objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
-            }
-            else
-                tempDict = [m_otherSortFriendArray objectAtIndex:indexPath.row];
-        }
-        else if(tableView == m_myAttentionsTableView)
-        {
-            if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"]) {//按字母排
-                tempDict = [m_attentionDict objectForKey:[[[m_sectionArray_attention objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
-                NSLog(@"tempDict%@",tempDict);
-            }
-            else
-                tempDict = [m_otherSortAttentionArray objectAtIndex:indexPath.row];
+     //    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
+     //        switch (m_segmentClickIndex) {
+     //            case kSegmentFrinds:
+     //                tempDict = [m_friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+     //                break;
+     //            case kSegmentAttention:
+     //                tempDict = [m_attentionDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+     //                break;
+     //            case kSegmentFans:
+     //                tempDict = [m_fansDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+     //                break;
+     //            default:
+     //                break;
+     //        }
+     //    }
+     //    else
+     //    {
+     */
+    if (tableView == m_myTableView) {
+        if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {//按字母排
+            tempDict = [m_friendDict objectForKey:[[[m_sectionArray_friend objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
         }
         else
-        {
-            tempDict = [m_otherSortFansArray objectAtIndex:indexPath.row];
+            tempDict = [m_otherSortFriendArray objectAtIndex:indexPath.row];
+    }
+    else if(tableView == m_myAttentionsTableView)
+    {
+        if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"]) {//按字母排
+            tempDict = [m_attentionDict objectForKey:[[[m_sectionArray_attention objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
+            NSLog(@"tempDict%@",tempDict);
         }
-//    }
+        else
+            tempDict = [m_otherSortAttentionArray objectAtIndex:indexPath.row];
+    }
+    else
+    {
+        tempDict = [m_otherSortFansArray objectAtIndex:indexPath.row];
+    }
+    //    }
     
     if ([[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"sex")] isEqualToString:@"0"]) {//男♀♂
         cell.ageLabel.text = [@"♂ " stringByAppendingString:[GameCommon getNewStringWithId:[tempDict objectForKey:@"age"]]];
@@ -930,16 +888,20 @@
         cell.ageLabel.backgroundColor = kColorWithRGB(238, 100, 196, 1.0);
         cell.headImageV.placeholderImage = [UIImage imageNamed:@"people_woman.png"];
     }
-    if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]) {
-        cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]] stringByAppendingString:@"/80"]];
-    }else{
+    if ([KISDictionaryHaveKey(tempDict, @"img")isEqualToString:@""]||[KISDictionaryHaveKey(tempDict, @"img")isEqualToString:@" "]) {
         cell.headImageV.imageURL = nil;
+    }else{
+        if ([GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]) {
+            cell.headImageV.imageURL = [NSURL URLWithString:[[BaseImageUrl stringByAppendingString:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"img")]] stringByAppendingString:@"/80"]];
+        }else{
+            cell.headImageV.imageURL = nil;
+        }
     }
     cell.nameLabel.text = [tempDict objectForKey:@"displayName"];
     cell.gameImg_one.image = KUIImage(@"wow");
     cell.distLabel.text = [KISDictionaryHaveKey(tempDict, @"achievement") isEqualToString:@""] ? @"暂无头衔" : KISDictionaryHaveKey(tempDict, @"achievement");
     cell.distLabel.textColor = [GameCommon getAchievementColorWithLevel:[KISDictionaryHaveKey(tempDict, @"achievementLevel") integerValue]];
-
+    
     cell.timeLabel.text = [GameCommon getTimeAndDistWithTime:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"updateUserLocationDate")] Dis:[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"distance")]];
     
     
@@ -947,65 +909,65 @@
     return cell;
 }
 /*
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
-{
-    [m_myTableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSDictionary * tempDict;
-    [[Custom_tabbar showTabBar] hideTabBar:YES];
-    PersonDetailViewController* detailVC = [[PersonDetailViewController alloc] init];
-
-//    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-//        switch (m_segmentClickIndex) {
-//            case kSegmentFrinds:
-//                tempDict = [m_friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-//                break;
-//            case kSegmentAttention:
-//                tempDict = [m_attentionDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-//                break;
-//            case kSegmentFans:
-//                tempDict = [m_fansDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-//    else
-//    {
-        switch (m_segmentClickIndex) {
-            case kSegmentFrinds:
-            {
-                if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {//按字母排
-                    tempDict = [m_friendDict objectForKey:[[[m_sectionArray_friend objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
-                }
-                else
-                    tempDict = [m_otherSortFriendArray objectAtIndex:indexPath.row];
-                detailVC.viewType = VIEW_TYPE_FriendPage;
-            }  break;
-            case kSegmentAttention:
-            {
-                if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"]) {//按字母排
-                    tempDict = [m_attentionDict objectForKey:[[[m_sectionArray_attention objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
-                }
-                else
-                    tempDict = [m_otherSortAttentionArray objectAtIndex:indexPath.row];
-                detailVC.viewType = VIEW_TYPE_AttentionPage;
-            }  break;
-            case kSegmentFans:
-            {
-                tempDict = [m_otherSortFansArray objectAtIndex:indexPath.row];
-
-                detailVC.viewType = VIEW_TYPE_FansPage;
-            } break;
-            default:
-                break;
-        }
-//    }
-    detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
-    detailVC.nickName = KISDictionaryHaveKey(tempDict, @"displayName");
-    detailVC.isChatPage = NO;
-    [self.navigationController pushViewController:detailVC animated:YES];
-}
-*/
+ - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+ {
+ [m_myTableView deselectRowAtIndexPath:indexPath animated:YES];
+ NSDictionary * tempDict;
+ [[Custom_tabbar showTabBar] hideTabBar:YES];
+ PersonDetailViewController* detailVC = [[PersonDetailViewController alloc] init];
+ 
+ //    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
+ //        switch (m_segmentClickIndex) {
+ //            case kSegmentFrinds:
+ //                tempDict = [m_friendDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+ //                break;
+ //            case kSegmentAttention:
+ //                tempDict = [m_attentionDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+ //                break;
+ //            case kSegmentFans:
+ //                tempDict = [m_fansDict objectForKey:[searchResultArray objectAtIndex:indexPath.row]];
+ //                break;
+ //            default:
+ //                break;
+ //        }
+ //    }
+ //    else
+ //    {
+ switch (m_segmentClickIndex) {
+ case kSegmentFrinds:
+ {
+ if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {//按字母排
+ tempDict = [m_friendDict objectForKey:[[[m_sectionArray_friend objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
+ }
+ else
+ tempDict = [m_otherSortFriendArray objectAtIndex:indexPath.row];
+ detailVC.viewType = VIEW_TYPE_FriendPage;
+ }  break;
+ case kSegmentAttention:
+ {
+ if ([[m_sortTypeDic objectForKey:sorttype_2] isEqualToString:@"1"]) {//按字母排
+ tempDict = [m_attentionDict objectForKey:[[[m_sectionArray_attention objectAtIndex:indexPath.section] objectAtIndex:1] objectAtIndex:indexPath.row]];
+ }
+ else
+ tempDict = [m_otherSortAttentionArray objectAtIndex:indexPath.row];
+ detailVC.viewType = VIEW_TYPE_AttentionPage;
+ }  break;
+ case kSegmentFans:
+ {
+ tempDict = [m_otherSortFansArray objectAtIndex:indexPath.row];
+ 
+ detailVC.viewType = VIEW_TYPE_FansPage;
+ } break;
+ default:
+ break;
+ }
+ //    }
+ detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
+ detailVC.nickName = KISDictionaryHaveKey(tempDict, @"displayName");
+ detailVC.isChatPage = NO;
+ [self.navigationController pushViewController:detailVC animated:YES];
+ }
+ */
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
@@ -1052,7 +1014,7 @@
     detailVC.ageStr = [GameCommon getNewStringWithId:[tempDict objectForKey:@"age"]];
     detailVC.constellationStr =KISDictionaryHaveKey(tempDict, @"constellation");
     NSLog(@"vc.VC.constellationStr%@",detailVC.constellationStr);
-
+    
     detailVC.userId = KISDictionaryHaveKey(tempDict, @"userid");
     detailVC.nickName = KISDictionaryHaveKey(tempDict, @"displayName");
     detailVC.timeStr =[GameCommon getNewStringWithId:KISDictionaryHaveKey(tempDict, @"updateUserLocationDate")];
@@ -1064,7 +1026,7 @@
     else{
         detailVC.isActiveAc =NO;
     }
-
+    
     detailVC.isChatPage = NO;
     [self.navigationController pushViewController:detailVC animated:YES];
 }
@@ -1078,7 +1040,7 @@
     if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
         return @"";
     }
-
+    
     if (tableView == m_myTableView) {
         if ([m_sectionIndexArray_friend count] == 0 || ![[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {
             return @"";
@@ -1098,9 +1060,6 @@
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-//    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-//        return nil;
-//    }
     if (tableView == m_myTableView) {
         if ([[m_sortTypeDic objectForKey:sorttype_1] isEqualToString:@"1"]) {
             return m_sectionIndexArray_friend;
@@ -1119,84 +1078,70 @@
 }
 
 #pragma mark  scrollView  delegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+- (void)addFooter
 {
-    if (scrollView == m_myFansTableView) {
-        if (m_myFansTableView.contentSize.height < m_myFansTableView.frame.size.height) {
-            refreshView.viewMaxY = 0;
-        }
-        else
-            refreshView.viewMaxY = m_myFansTableView.contentSize.height - m_myFansTableView.frame.size.height;
-        [refreshView viewdidScroll:scrollView];
-    }
-    
-    [slimeView_friend scrollViewDidScroll];
-    [slimeView_attention scrollViewDidScroll];
-    [slimeView_fans scrollViewDidScroll];
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = m_myFansTableView;
+    footer.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
+        m_currentPage = 0;
+        [self getFansBySort:@""];
+
+    };
+    m_fansfooter = footer;
 }
 
-
-#pragma mark pull up refresh
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+- (void)addHeader
 {
-    if(scrollView == m_myFansTableView)
-    {
-        [refreshView viewWillBeginDragging:scrollView];
-    }
+    MJRefreshHeaderView *header = [MJRefreshHeaderView header];
+
+
+    header.scrollView = m_myTableView;
+        header.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
+                    [self getFriendBySort:[m_sortTypeDic objectForKey:sorttype_1]];
+        };
+        header.endStateChangeBlock = ^(MJRefreshBaseView *refreshView) {
+            
+        };
+        header.refreshStateChangeBlock = ^(MJRefreshBaseView *refreshView, MJRefreshState state) {
+            
+        };
+    //}
+    m_Friendheader = header;
 }
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+- (void)addHeader1
 {
-    if(scrollView == m_myFansTableView)
-    {
-        [refreshView didEndDragging:scrollView];
-    }
-    [slimeView_friend scrollViewDidEndDraging];
-    [slimeView_attention scrollViewDidEndDraging];
-    [slimeView_fans scrollViewDidEndDraging];
-}
-
-- (void)PullUpStartRefresh:(PullUpRefreshView *)refreshView
-{
-    NSLog(@"start");
-  
-    [self getFansBySort:@""];
-}
-
-#pragma mark - slimeRefresh delegate
-- (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
-{
-    switch (m_segmentClickIndex) {
-        case kSegmentFrinds:
-            [self getFriendBySort:[m_sortTypeDic objectForKey:sorttype_1]];
-            break;
-        case kSegmentAttention:
-            [self getAttentionBySort:[m_sortTypeDic objectForKey:sorttype_2]];
-            break;
-        case kSegmentFans:
-        {
-            m_currentPage = 0;
-            [self getFansBySort:@""];
-        } break;
-        default:
-            break;
-    }
-}
-
--(void)endRefresh
-{
-    [slimeView_friend endRefreshFinish:^{
+    MJRefreshHeaderView *header = [MJRefreshHeaderView header];
+    header.scrollView = m_myAttentionsTableView;
+    header.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
+        [self getAttentionBySort:[m_sortTypeDic objectForKey:sorttype_2]];
+    };
+    header.endStateChangeBlock = ^(MJRefreshBaseView *refreshView) {
         
-    }];
-    [slimeView_attention endRefreshFinish:^{
+    };
+    header.refreshStateChangeBlock = ^(MJRefreshBaseView *refreshView, MJRefreshState state) {
         
-    }];
-    [slimeView_fans endRefreshFinish:^{
-        
-    }];
+    };
+    m_attentionheader = header;
 }
 
-    
+- (void)addHeader2
+{
+    MJRefreshHeaderView *header = [MJRefreshHeaderView header];
+    header.scrollView = m_myFansTableView;
+    header.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
+        m_currentPage = 0;
+        [self getFansBySort:@""];
+    };
+    header.endStateChangeBlock = ^(MJRefreshBaseView *refreshView) {
+        
+    };
+    header.refreshStateChangeBlock = ^(MJRefreshBaseView *refreshView, MJRefreshState state) {
+        
+    };
+    m_fansheader = header;
+}
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

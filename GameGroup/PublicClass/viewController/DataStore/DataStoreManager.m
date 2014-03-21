@@ -903,6 +903,9 @@
     if ([userName isEqualToString:@"123456789"]) {
         return @"no";
     }
+    if ([userName isEqualToString:@""]) {
+        return @"no";
+    }
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"userName==[c]%@",userName];
     DSAttentions * dFriend = [DSAttentions MR_findFirstWithPredicate:predicate];
     if (dFriend.headImgID) {
