@@ -101,6 +101,11 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     NSRange range = [[messageContent objectForKey:@"sender"] rangeOfString:@"@"];
     NSString * sender = [[messageContent objectForKey:@"sender"] substringToIndex:range.location];
     NSString* msgId = KISDictionaryHaveKey(messageContent, @"msgId");
+    //获取你说过话的用户id
+    NSMutableArray *array = [NSMutableArray array];
+    [self getSayHiUserIdWithNetGetArray:array];
+    
+    
     if ([DataStoreManager savedMsgWithID:KISDictionaryHaveKey(messageContent, @"msgId")]) {
         NSLog(@"消息已存在");
         return;
@@ -349,6 +354,30 @@ static GetDataAfterManager *my_getDataAfterManager = NULL;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
     }];
+}
+#pragma mark --获取你和谁说过话
+-(void)getSayHiUserIdWithNetGetArray:(NSMutableArray *)array
+{
+    NSMutableDictionary * postDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDict = [NSMutableDictionary dictionary];
+    [paramDict setObject:@"" forKey:@"touserid"];
+    [postDict addEntriesFromDictionary:[[GameCommon shareGameCommon] getNetCommomDic]];
+    [postDict setObject:@"154" forKey:@"method"];
+    [postDict setObject:paramDict forKey:@"params"];
+    
+    [postDict setObject:[SFHFKeychainUtils getPasswordForUsername:LOCALTOKEN andServiceName:LOCALACCOUNT error:nil] forKey:@"token"];
+    
+    [NetManager requestWithURLStrNoController:BaseClientUrl Parameters:postDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [[NSUserDefaults standardUserDefaults]setObject:responseObject forKey:@"sayHello_wx_info"];
+        
+        if ([responseObject isKindOfClass:[NSArray class]]) {
+            [array addObjectsFromArray:responseObject];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, id error) {
+        NSLog(@"deviceToken fail");
+        
+    }];
+    
 }
 
 @end

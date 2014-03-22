@@ -17,8 +17,6 @@
 
 @property(nonatomic, strong) NSString* deviceToken;
 
-@property(nonatomic, assign) int connectTimes;//连接次数 3
-
 + (NSString*)getNewStringWithId:(id)oldString;//剔除json里的空格字段
 
 + (GameCommon*)shareGameCommon;

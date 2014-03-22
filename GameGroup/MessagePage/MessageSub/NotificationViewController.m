@@ -141,7 +141,6 @@
 
 -(void)backButton
 {
-    [[TempData sharedInstance] Panned:NO];
     [self.navigationController popViewControllerAnimated:YES];
 }
 -(void)clearAll

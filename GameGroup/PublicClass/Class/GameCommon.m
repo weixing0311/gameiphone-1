@@ -23,7 +23,6 @@ static GameCommon *my_gameCommon = NULL;
     if (self) {
 
         self.deviceToken = @"";
-        self.connectTimes = 3;
         
         self.wow_realms = [NSMutableDictionary dictionaryWithCapacity:1];
         self.wow_clazzs = [NSMutableArray arrayWithCapacity:1];

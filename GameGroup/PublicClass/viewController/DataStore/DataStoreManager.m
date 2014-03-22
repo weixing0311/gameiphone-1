@@ -129,23 +129,23 @@
     }
     else if([sendertype isEqualToString:SAYHELLOS])//关注 或取消关注
     {
-        [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
-            
-            NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",@"1234"];
-            
-            DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
-            if (!thumbMsgs)
-                thumbMsgs = [DSThumbMsgs MR_createInContext:localContext];
-            thumbMsgs.sender = @"1234";
-            thumbMsgs.senderNickname = @"有新关注信息";
-            thumbMsgs.msgContent = msgContent;
-            thumbMsgs.sendTime = sendTime;
-            thumbMsgs.senderType = sendertype;
-            thumbMsgs.msgType = msgType;
-            thumbMsgs.unRead = @"1";
-            thumbMsgs.messageuuid = msgId;
-            thumbMsgs.status = @"1";//已发送
-        }];
+//        [MagicalRecord saveUsingCurrentThreadContextWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+//            
+//            NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",@"1234"];
+//            
+//            DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
+//            if (!thumbMsgs)
+//                thumbMsgs = [DSThumbMsgs MR_createInContext:localContext];
+//            thumbMsgs.sender = @"1234";
+//            thumbMsgs.senderNickname = @"有新关注信息";
+//            thumbMsgs.msgContent = msgContent;
+//            thumbMsgs.sendTime = sendTime;
+//            thumbMsgs.senderType = sendertype;
+//            thumbMsgs.msgType = msgType;
+//            thumbMsgs.unRead = @"1";
+//            thumbMsgs.messageuuid = msgId;
+//            thumbMsgs.status = @"1";//已发送
+//        }];
     }
     else if([sendertype isEqualToString:OTHERMESSAGE])//头衔、角色、战斗力
     {
@@ -343,6 +343,9 @@
     if ([userid isEqualToString:@"1"]) {
         return @"有新的角色动态";
     }
+    if ([userid isEqualToString:@"1234567"]) {
+        return @"有新的打招呼信息";
+    }
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"sender==[c]%@",userid];
     DSThumbMsgs * thumbMsgs = [DSThumbMsgs MR_findFirstWithPredicate:predicate];
     if (thumbMsgs) {
@@ -410,8 +413,6 @@
                 [rH MR_deleteInContext:localContext];
             }
         }
-
-        
     }];
 }
 +(void)deleteAllNewsMsgs

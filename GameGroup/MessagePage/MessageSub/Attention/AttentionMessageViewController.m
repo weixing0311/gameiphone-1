@@ -47,10 +47,11 @@
     NSMutableArray *array = (NSMutableArray *)[DataStoreManager qureyAllThumbMessages];
     [self readAllnickNameAndImage];
     [self.dataArray removeAllObjects];
-    // NSMutableArray *array = [[NSUserDefaults standardUserDefaults]objectForKey:@"sayHello_wx_info"];
     for (NSDictionary *dic in array) {
         if (![[[NSUserDefaults standardUserDefaults]objectForKey:@"sayHello_wx_info"] containsObject:KISDictionaryHaveKey(dic, @"sender")]) {
-            [self.dataArray addObject:dic];
+            if (![KISDictionaryHaveKey(dic, @"msgType")isEqualToString:@"sayHello"]) {
+                [self.dataArray addObject:dic];
+            }
         }
     }
     [self readAllnickNameAndImage];
@@ -60,7 +61,7 @@
 {
     [super viewDidLoad];
 
-    [self setTopViewWithTitle:@"最新关注" withBackButton:YES];
+    [self setTopViewWithTitle:@"打招呼" withBackButton:YES];
     self.dataArray = [NSMutableArray array];
 
     allHeadImgArray = [NSMutableArray array];
@@ -68,21 +69,10 @@
     allNickNameArray = [NSMutableArray array];
     allMsgUnreadArray = [NSMutableArray array];
     
-//    [AFImageRequestOperation addAcceptableContentTypes:[NSSet setWithObject:@"multipart/form-data"]];
-
-    UIButton *deleteButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    deleteButton.frame=CGRectMake(320-42, KISHighVersion_7?27:7, 37, 30);
-    [deleteButton setBackgroundImage:KUIImage(@"delete_normal") forState:UIControlStateNormal];
-    [deleteButton setBackgroundImage:KUIImage(@"delete_click") forState:UIControlStateHighlighted];
-    [self.view addSubview:deleteButton];
-    [deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    
-   // m_tableData = (NSMutableArray*)[DataStoreManager queryAllReceivedHellos];
 
     m_myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, startX, kScreenWidth, kScreenHeigth-startX-(KISHighVersion_7?0:20))];
     m_myTableView.delegate = self;
     m_myTableView.dataSource = self;
-//    m_myTableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:m_myTableView];
     [self readAllnickNameAndImage];
 }
@@ -117,12 +107,10 @@
     NSMutableArray * headimg = [NSMutableArray array];
     NSMutableArray * pinyin = [NSMutableArray array];
     for (int i = 0; i<self.dataArray.count; i++) {
-        //        NSString * nickName2 = [DataStoreManager queryRemarkNameForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]];//别名
         NSString * nickName2 = [DataStoreManager queryMsgRemarkNameForUser:[[self.dataArray objectAtIndex:i] objectForKey:@"sender"]];
         [nickName addObject:nickName2?nickName2 : @""];
         NSString * pinyin2 = [[GameCommon shareGameCommon] convertChineseToPinYin:nickName2];
         [pinyin addObject:[pinyin2 stringByAppendingFormat:@"+%@",nickName2]];
-        //        [headimg addObject:[DataStoreManager queryFirstHeadImageForUser:[[allMsgArray objectAtIndex:i] objectForKey:@"sender"]]];
         [headimg addObject:[DataStoreManager queryMsgHeadImageForUser:[[self.dataArray objectAtIndex:i] objectForKey:@"sender"]]];
     }
     allNickNameArray = nickName;
@@ -148,31 +136,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    static NSString *identifier = @"userCell";
-//    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-//    if (cell == nil) {
-//        cell = [[MessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-//    }
-//    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//    cell.headImageV.placeholderImage = [UIImage imageNamed:@"moren_people.png"];
-//    NSString* imgID = [self getHead:[[m_tableData objectAtIndex:indexPath.row] objectForKey:@"headImgID"]];
-//    if ([imgID isEqualToString:@""]||[imgID isEqualToString:@" "]) {
-//        cell.headImageV.imageURL = nil;
-//    }else{
-//    if (imgID) {
-//        cell.headImageV.imageURL = [NSURL URLWithString:[BaseImageUrl stringByAppendingFormat:@"%@/80",imgID]];
-//    }else
-//    {
-//        cell.headImageV.imageURL = nil;
-//    }
-//    }
-//    cell.contentLabel.text = [[m_tableData objectAtIndex:indexPath.row] objectForKey:@"addtionMsg"];
-//    
-//    cell.unreadCountLabel.hidden = YES;
-//    cell.notiBgV.hidden = YES;
-//    
-//    cell.nameLabel.text = [[m_tableData objectAtIndex:indexPath.row] objectForKey:@"nickName"];
-//    cell.timeLabel.text = @"";
     
     static NSString *identifier = @"userCell";
     MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
@@ -189,38 +152,6 @@
         cell.headImageV.imageURL = theUrl;
     }
     cell.contentLabel.text = [[self.dataArray objectAtIndex:indexPath.row] objectForKey:@"msg"];
-  /*  if ([[allMsgUnreadArray objectAtIndex:indexPath.row] intValue]>0) {
-        cell.unreadCountLabel.hidden = NO;
-        cell.notiBgV.hidden = NO;
-        if ([[[self.dataArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"recommendfriend"] |
-            [[[self.dataArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"sayHello"] ||
-            [[[self.dataArray objectAtIndex:indexPath.row] objectForKey:@"msgType"] isEqualToString:@"deletePerson"]) {
-            cell.notiBgV.image = KUIImage(@"redpot");
-            cell.unreadCountLabel.hidden = YES;
-        }
-        else
-        {
-            [cell.unreadCountLabel setText:[allMsgUnreadArray objectAtIndex:indexPath.row]];
-            
-            if ([[allMsgUnreadArray objectAtIndex:indexPath.row] intValue]>99) {
-                [cell.unreadCountLabel setText:@"99+"];
-                cell.notiBgV.image = KUIImage(@"redCB_big");
-                cell.notiBgV.frame=CGRectMake(40, 8, 22, 18);
-                cell.unreadCountLabel.frame =CGRectMake(0, 0, 22, 18);
-            }
-            else{
-                cell.notiBgV.image = KUIImage(@"redCB.png");
-                [cell.unreadCountLabel setText:[allMsgUnreadArray objectAtIndex:indexPath.row]];
-                cell.notiBgV.frame=CGRectMake(42, 8, 18, 18);
-                cell.unreadCountLabel.frame =CGRectMake(0, 0, 18, 18);
-            }
-        }
-    }*/
-//    else
-//    {
-//        cell.unreadCountLabel.hidden = YES;
-//        cell.notiBgV.hidden = YES;
-//    }
     cell.nameLabel.text = [allNickNameArray objectAtIndex:indexPath.row];
     cell.timeLabel.text = [GameCommon CurrentTime:[[GameCommon getCurrentTime] substringToIndex:10]AndMessageTime:[[[self.dataArray objectAtIndex:indexPath.row] objectForKey:@"time"] substringToIndex:10]];
 
